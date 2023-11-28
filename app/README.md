@@ -87,6 +87,43 @@ Options:
   -- edit: .eslintignore file add update src/* to src/*.js
   -- run: npm run lint and resolve the issue you are facing refer : https://vuejs.github.io/eslint-plugin-vue/rules/ 
 ```
+
+# Steps to remove primevue from project 
+1. Remove `primevue` package dependencies from package.json file.
+2. Remove import statement from main.js file
+```
+import primeVue from 'primevue/config'
+Import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
+import '../node_modules/primevue/resources/primevue.min.css'
+vm.use(primeVue)
+```
+3. Remove import statements from clientData.vue file and component registration part too.
+```
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+```
+
+# Steps to remove formkit,DaisyUI and Tailwind from project
+1. remove package dependencies from package.json file
+  - @formkit/addons : "^1.3.0",
+  - @formkit/icons : "^1.3.0",
+  - @formkit/vue : "^1.3.0"
+  - "daisyui": "^2.51.6"
+  - "tailwind-scrollbar": "^3.0.4",
+  - "tailwindcss": "^3.3.2",
+
+
+2. Remove the import statements from the main.js file
+  - import { plugin, defaultConfig } from '@formkit/vue'
+  - import formKitConfig from './formkit.config'
+  - vm.use(plugin, defaultConfig(formKitConfig))
+3. Delete the files from project
+  - postcss.config.js
+  - tailwind.config.js
+  - /src/formkit.config.js
+  - /src/index.css
+4. Remove the all <FormKit></FormKit> tags and respective code from all vuejs pages and components.
+
 # Gulp task for 'en.json' and 'dv.json' creation
 
 Note: 'dv.json' is created for identifying which labels or places are left/skipped by developers for i18n changes.
