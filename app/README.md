@@ -6,7 +6,7 @@
 # DaisyUI version 2.51.6
 # TailwindCSS version 3.3.2
 # Pinia version 2.1.3
-
+# Primevue version 3.41.0
 # Kindly do rename yor application in package.json name
 # Pre-requisite
 - NPM and/or Yarn installed
