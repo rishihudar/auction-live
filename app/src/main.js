@@ -9,7 +9,6 @@ import '/assets/plugins/bootstrap/bootstrap-grid.min.css'
 import '/assets/plugins/bootstrap/bootstrap-utilities.min.css'
 import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
-import "./index.css"
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import { createPinia } from 'pinia'
