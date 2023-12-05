@@ -1,5 +1,6 @@
 # Node and npm environement:
   Updated and tested with latest dependencies using node 18.12.1 and npm 8.19.2
+  Provided Option API example in FormkitCustomOption.vue file.
 # Vue Client app (Vue3 CompositionAPI)
 # Vite CLI version 4.2.3
 # FormKit version 0.17.2
