@@ -28,7 +28,6 @@ var vm = createApp({
 })
 window.app = vm
 vm.use(piniaStore)
-vm.$router = router
 vm.use(i18n)
 vm.use(router)
 vm.use(primeVue)
