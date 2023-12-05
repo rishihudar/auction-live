@@ -1,5 +1,5 @@
 <template>
-  <div class="box-footer">
+  <div class="box-footer bg-white">
     <div class="bxf-container">
         <img src="../../assets/logo_mkcl.svg" alt="MKCL Logo">
         <div class="bxf-container-info">
