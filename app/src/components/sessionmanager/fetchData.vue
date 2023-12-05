@@ -1,6 +1,6 @@
 <template>
   <div id="fetchData" class="container-fluid">
-    <h2 class="title alt">Fetch Data in Session</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center">Fetch Data in Session</h2>
     <div class="row justify-content-center">
       <div class="col-auto">
         <div class="box-login">

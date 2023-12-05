@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid" id="downloadFileInner">
-    <h2 class="title alt">Download File</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center">Download File</h2>
     <div class="row justify-content-center">
       <div class="col-6">
         <div class="box-login">

@@ -1,6 +1,6 @@
 <template>
   <div id="deleteData" class="container-fluid">
-    <h2 class="title alt">Delete Data from Session</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center">Delete Data from Session</h2>
     <div class="row justify-content-center">
       <div class="col-auto">
         <div class="box-login">

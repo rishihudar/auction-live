@@ -1,6 +1,6 @@
 <template>
   <div id="uploadFile" class="container-fluid">
-    <h2 class="title alt">Upload File</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center">Upload File</h2>
     <div class="row">
       <div class="col-6">
         <div class="box-login">

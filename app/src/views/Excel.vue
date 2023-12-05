@@ -1,6 +1,6 @@
 <template>
 	<div class="container-fluid" id="excel">
-		<h2 class="title alt">
+		<h2 class="text-xl font-bold flex gap-2 items-center">
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
 			Excel Plugins
 		</h2>

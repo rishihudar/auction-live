@@ -69,6 +69,7 @@ img {
         background-color: $orange;
     }
 }
+
 // Home
 .box {
     .title {
@@ -85,113 +86,73 @@ img {
         margin-bottom: 2.5rem;
     }
     .bx-card {
-        margin-bottom: 1.5rem;
-        .p-card {
-            height: 350px;
-            border-radius: 12px;
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            cursor: pointer;
-            }
-            .icon-holder {
-                margin-left: -0.5rem;
-                .isax {
-                    font-size: 3rem;
-                    color: #212121;
-                }
-            }
-            &-name {
-                font-size: 1.5rem;
-                font-weight: 700;
-                color: var(--bluegray-900);
-                margin-top: auto;
-                transition: transform 0.3s ease;
-                transform: translateY(66px);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                .isax {
-                    font-size: 2rem;
-                    transition: transform 0.3s ease;
-                    transform: translateX(350px);
-                }
-            }
-            &-desc {
+        padding: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px 0 rgba(#212121, 0.1);
+        cursor: pointer;
+        // .p-card {
+        //     height: 350px;
+        //     border-radius: 12px;
+        //     padding: 3rem;
+        //     display: flex;
+        //     flex-direction: column;
+        //     overflow: hidden;
+        //     cursor: pointer;
+        // }
+        .icon-holder {
+            .isax {
+                font-size: 1.8rem;
                 color: #212121;
-                font-weight: 500;
-                line-height: 1.6;
-                font-size: 0.875rem;
-                transition: transform 0.3s ease;
-                transform: translateY(450px);
-            }
-            &:hover {
-                .bx-card-name {
-                    transform: translateY(-16px);
-                    .isax {
-                        transform: translateX(0);
-                    }
-                }
-                .bx-card-desc {
-                    transform: translateY(0);
-                }
             }
         }
-        .col-3 {
-                $colors: $blue, $yellow, $pink, $green,$indigo, $orange;
-                $repeat: 26;
-                @for $i from 1 through $repeat {
-                    &:nth-child(#{length($colors)}n + #{$i}) {
-                        .bx-card {
-                            .p-card {
-                                background-color: (nth($colors, random(length($colors))));
-                                box-shadow: 0 24px 50px rgba(#212121, 0.08);
-                            }
-                        }
-                    }
-                }
-
-                // &:nth-child(2n+2) {
-                //     .bx-card {
-                //         .p-card {
-                //             background-color: $blue;
-                //             box-shadow: 0 24px 50px rgba($blue, 0.3);
-                //         }
-                //     }
-                // }
-
-
-                // &:nth-child(3n+3) {
-                //     .bx-card {
-                //         .p-card {
-                //             background-color: $yellow;
-                //             box-shadow: 0 24px 50px rgba($yellow, 0.3);
-                //         }
-                //     }
-                // }
-
-
-                // &:nth-child(5n+5) {
-                //     .bx-card {
-                //         .p-card {
-                //             background-color: $green;
-                //             box-shadow: 0 24px 50px rgba($green, 0.3);
-                //         }
-                //     }
-                // }
-
-                // &:nth-child(7n+7) {
-                //     .bx-card {
-                //         .p-card {
-                //             background-color: $orange;
-                //             box-shadow: 0 24px 50px rgba($orange, 0.3);
-                //         }
-                //     }
-                // }
-
+        &-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--bluegray-900);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+            justify-content: space-between;
+            .isax {
+                font-size: 1.6rem;
             }
+        }
+        &-desc {
+            display: none;
+            // color: #212121;
+            // font-weight: 500;
+            // line-height: 1.6;
+            // font-size: 0.875rem;
+            // transition: transform 0.3s ease;
+            // transform: translateY(450px);
+        }
+        // &:hover {
+        //     .bx-card-name {
+        //         transform: translateY(-16px);
+        //         .isax {
+        //             transform: translateX(0);
+        //         }
+        //     }
+        //     .bx-card-desc {
+        //         transform: translateY(0);
+        //     }
+        // }
     }
+
+    .bx-card {
+        $colors: $blue, $yellow, $pink, $green,$indigo, $orange;
+        $repeat: 26;
+        @for $i from 1 through $repeat {
+            &:nth-child(#{length($colors)}n + #{$i}) {
+                background-color: (nth($colors, random(length($colors))));
+            }
+        }
+    }
+}
 
 // Login
 .title.alt {
@@ -202,7 +163,7 @@ img {
         font-size: 2rem;
         cursor: pointer;
     }
-    }
+}
 .box-login {
     margin-top: 2.5rem;
 
@@ -225,7 +186,6 @@ img {
             font-size: 1.125rem;
             font-weight: 700;
         }
-
 
         .data {
             display: flex;
@@ -377,6 +337,7 @@ img {
         margin-top: 1rem;
     }
 }
+
 // Footer
 .box-footer {
     padding: 0.25rem 1rem;
@@ -393,9 +354,6 @@ img {
         &-info {
             font-size: 0.8125rem;
             color: var(--gray-500);
-            p + p {
-                margin-top: 0.25rem;
-            }
         }
     }
 }
