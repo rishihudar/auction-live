@@ -1,6 +1,15 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tailwind-base, tailwind-utilities, primevue;
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer tailwind-utilities {
+    @tailwind components;
+    @tailwind utilities;
+}
+
+@import '../../node_modules/primevue/resources/themes/lara-light-blue/theme';
 
 
 // Variables
@@ -14,16 +23,20 @@ $orange: #F6D7A7;
 $red : #FFB3B3;
 $gray-lighter: #5e5a49;
 
-// Reset
-*, *::after, *::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+    --font-family           : 'DM Sans', sans-serif;
 }
+
+// Reset
+// *, *::after, *::before {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+// }
 
 // Body
 body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-family);
 }
 
 // Img
@@ -47,7 +60,7 @@ img {
     border: 0;
     border-radius: 8px;
     outline: none;
-    background-color: transparent;
+    // background-color: transparent;
     display: inline-flex;
     align-items: center;
     color: #212121;
@@ -196,6 +209,7 @@ img {
                 margin-top: 0;
             }
             &.alt {
+                display: block;
                 background-color: #f8f8f8;
                 padding: 1rem 2rem;
                 border-radius: 8px;
