@@ -1,44 +1,38 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Static Messages
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  v-model="msg.number"
-                  class="p-inputtext p-component"
-                  :class="msg.number ? 'p-filled' : ''"
-                  id="number"
-                />
-                <label for="number">Enter mobile number</label>
-              </div>
-              <div class="mt-1">
-                <small
-                  ><b>{{ text }}</b></small
-                >
-              </div>
-              <div class="mt-1">
-                <small
-                  ><b>{{ alert }}</b></small
-                >
-              </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div class="p-float-label">
+            <input
+                type="text"
+                v-model="msg.number"
+                class="p-inputtext p-component"
+                :class="msg.number ? 'p-filled' : ''"
+                id="number"
+            />
+            <label for="number">Enter mobile number</label>
             </div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click.prevent="mysms">
-                <i class="isax isax-bold-sms"></i>
-                Send
-              </button>
+            <div class="mt-1">
+            <small
+                ><b>{{ text }}</b></small
+            >
             </div>
-          </div>
+            <div class="mt-1">
+            <small
+                ><b>{{ alert }}</b></small
+            >
+            </div>
         </div>
-      </div>
+        <div class="btn-wrapper">
+            <button class="btn btn-submit" @click.prevent="mysms">
+            <i class="isax isax-bold-sms"></i>
+            Send
+            </button>
+        </div>
     </div>
   </div>
 </template>

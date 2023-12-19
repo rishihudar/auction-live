@@ -15,31 +15,27 @@
 	}
 </script>
 <template>
-	<div id="masterAxios" class="container-fluid">
+	<div id="masterAxios">
 		<h2 class="text-xl font-bold flex gap-2 items-center">
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
-			Dashboard
+			FormKit Options API
 		</h2>
-		<div class="row justify-content-center">
-			<div class="col-6">
-				<div class="box-login">
-					<FormKit type="form" v-model="values">
-						<FormKit
-							:type="multiselect"
-							label="Multiple Data Select"
-							validation="required"
-							validation-visibility="live"
-						></FormKit>
-						<FormKit
-							:type="dateRangePickrC"
-							label="Date Range Select"
-							validation="required"
-							validation-visibility="live"
-						></FormKit>
-						{{ values }}
-					</FormKit>
-				</div>
-			</div>
+		<div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <FormKit type="form" v-model="values">
+                <FormKit
+                    :type="multiselect"
+                    label="Multiple Data Select"
+                    validation="required"
+                    validation-visibility="live"
+                ></FormKit>
+                <FormKit
+                    :type="dateRangePickrC"
+                    label="Date Range Select"
+                    validation="required"
+                    validation-visibility="live"
+                ></FormKit>
+                {{ values }}
+            </FormKit>
 		</div>
 	</div>
 </template>

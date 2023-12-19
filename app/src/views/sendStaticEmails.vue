@@ -1,35 +1,29 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Static Email
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="email"
-                  v-model="email.to"
-                  class="p-inputtext p-component"
-                  :class="email.to ? 'p-filled' : ''"
-                  id="email"
-                  required
-                />
-                <label for="email">Enter Email ID</label>
-              </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div class="p-float-label">
+            <input
+                type="email"
+                v-model="email.to"
+                class="p-inputtext p-component"
+                :class="email.to ? 'p-filled' : ''"
+                id="email"
+                required
+            />
+            <label for="email">Enter Email ID</label>
             </div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click.prevent="sendemail">
-                <i class="isax isax-bold-sms"></i>
-                Send Email
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="btn-wrapper">
+            <button class="btn btn-submit" @click.prevent="sendemail">
+            <i class="isax isax-bold-sms"></i>
+            Send Email
+            </button>
+        </div>
     </div>
   </div>
 </template>

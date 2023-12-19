@@ -1,36 +1,29 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Clipboard Demo
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div>
-                <textarea
-                  class="p-inputtext p-component"
-                  v-model="content"
-                  rows="5"
-                  cols="90"
-                />
-              </div>
+    <div class="box-login mx-auto p-8 max-w-4xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div>
+            <textarea
+                class="p-inputtext p-component w-full"
+                v-model="content"
+                rows="5"
+            />
             </div>
-            <div class="btn-wrapper">
-              <button
-                ref="container"
-                class="btn btn-submit"
-                @click="copyContent()"
-              >
-                <i class="isax isax-bold-copy"></i>
-                Copy
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="btn-wrapper">
+            <button
+            ref="container"
+            class="btn btn-submit"
+            @click="copyContent()"
+            >
+            <i class="isax isax-bold-copy"></i>
+            Copy
+            </button>
+        </div>
     </div>
   </div>
 </template>

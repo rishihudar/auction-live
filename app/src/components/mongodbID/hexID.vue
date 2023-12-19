@@ -1,40 +1,34 @@
 <template>
-  <div id="hexID" class="container-fluid">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
+  <div id="hexID">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Insert Custom Hex MongoDB ID
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div class="p-float-label">
-                <input type="text" v-model="hobj._id" class="p-inputtext p-component" :class="hobj._id ? 'p-filled' : ''" id="hexObject">
-                <label for="hexObject">Enter Hex Object ID</label>
-              </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div class="p-float-label">
+            <input type="text" v-model="hobj._id" class="p-inputtext p-component" :class="hobj._id ? 'p-filled' : ''" id="hexObject">
+            <label for="hexObject">Enter Hex Object ID</label>
             </div>
-            <div class="field">
-              <div class="p-float-label">
-                <input type="text" v-model="hobj.name" class="p-inputtext p-component" :class="hobj.name ? 'p-filled' : ''" id="name">
-                <label for="name">Enter name</label>
-              </div>
-            </div>
-            <div class="field">
-              <div class="p-float-label">
-                <input type="text" v-model="hobj.address" class="p-inputtext p-component" :class="hobj.address ? 'p-filled' : ''" id="address">
-                <label for="address">Enter address</label>
-              </div>
-            </div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click.prevent="saveCustomHexId">
-              <i class="isax isax-bold-tick-circle"></i>
-                Submit
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="field">
+            <div class="p-float-label">
+            <input type="text" v-model="hobj.name" class="p-inputtext p-component" :class="hobj.name ? 'p-filled' : ''" id="name">
+            <label for="name">Enter name</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="p-float-label">
+            <input type="text" v-model="hobj.address" class="p-inputtext p-component" :class="hobj.address ? 'p-filled' : ''" id="address">
+            <label for="address">Enter address</label>
+            </div>
+        </div>
+        <div class="btn-wrapper">
+            <button class="btn btn-submit" @click.prevent="saveCustomHexId">
+            <i class="isax isax-bold-tick-circle"></i>
+            Submit
+            </button>
+        </div>
     </div>
   </div>
 

@@ -1,5 +1,5 @@
 <template>
-	<div class="container-fluid">
+	<div>
 		<h2 class="text-xl font-bold flex gap-2 items-center">
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
 			Save client data
@@ -7,33 +7,27 @@
 		<div class="subtext">
 			This client data is saved in "Employee" collection of "cs playground" database using for loop plugin
 		</div>
-		<div class="row justify-content-center">
-			<div class="col-6">
-				<div class="box-login">
-					<div class="p-card p-component">
-						<table class="table w-full" v-if="empList && empList.length > 0">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Address</th>
-									<th>age</th>
-								</tr>
-							</thead>
-							<tbody v-for="(item, index) in empList" v-bind:key="index">
-								<tr>
-									<th>{{ item.name }}</th>
-									<th>{{ item.address }}</th>
-									<td>{{ item.age }}</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="empty-state" v-else>Records not found</div>
-						<div class="btn-wrapper">
-							<FormKit @click="saveClientDataUsingForLoop" type="submit" label="Save" />
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <table class="table w-full" v-if="empList && empList.length > 0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>age</th>
+                    </tr>
+                </thead>
+                <tbody v-for="(item, index) in empList" v-bind:key="index">
+                    <tr>
+                        <th>{{ item.name }}</th>
+                        <th>{{ item.address }}</th>
+                        <td>{{ item.age }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="empty-state" v-else>Records not found</div>
+            <div class="btn-wrapper">
+                <FormKit @click="saveClientDataUsingForLoop" type="submit" label="Save" />
+            </div>
 		</div>
 	</div>
 </template>

@@ -1,13 +1,11 @@
 <template>
-  <div id="updateUser" class="container-fluid">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
+  <div id="updateUser">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Update User
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+    <div class="grid gap-4 grid-cols-2">
+        <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <div class="field">
               <div class="p-float-label">
                 <input type="text" required v-model="obj.name" id="name" class="p-inputtext p-component w-100" :class="obj.name ? 'p-filled': ''">
@@ -32,12 +30,8 @@
                 Update Data
               </button>
             </div>
-          </div>
-      </div>
-      </div>
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+        </div>
+        <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <h3>
               Note
             </h3>
@@ -50,9 +44,7 @@
             <div class="mt-2">
               <json-viewer :value="result" boxed :expanded="true"></json-viewer>
             </div>
-          </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

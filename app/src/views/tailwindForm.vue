@@ -2,7 +2,7 @@
 	<div>
 		<h2 class="text-xl font-bold flex gap-2 items-center">
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
-			Dashboard
+			Tailwind
 		</h2>
 		<h1>Table 1</h1>
 		<div class="relative overflow-x-auto">

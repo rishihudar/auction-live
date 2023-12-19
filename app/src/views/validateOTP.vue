@@ -1,46 +1,40 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Verify OTP
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  class="p-inputtext p-component"
-                  :class="otp.number ? 'p-filled' : ''"
-                  id="number"
-                  v-model="otp.number"
-                />
-                <label for="number">Enter mobile number</label>
-              </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div class="p-float-label">
+            <input
+                type="text"
+                class="p-inputtext p-component"
+                :class="otp.number ? 'p-filled' : ''"
+                id="number"
+                v-model="otp.number"
+            />
+            <label for="number">Enter mobile number</label>
             </div>
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  class="p-inputtext p-component"
-                  :class="otp.result ? 'p-filled' : ''"
-                  id="result"
-                  v-model="otp.result"
-                />
-                <label for="result">Enter generated otp</label>
-              </div>
-            </div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click.prevent="validateOTP">
-                <i class="isax isax-bold-message-edit"></i>
-                Verify
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="field">
+            <div class="p-float-label">
+            <input
+                type="text"
+                class="p-inputtext p-component"
+                :class="otp.result ? 'p-filled' : ''"
+                id="result"
+                v-model="otp.result"
+            />
+            <label for="result">Enter generated otp</label>
+            </div>
+        </div>
+        <div class="btn-wrapper">
+            <button class="btn btn-submit" @click.prevent="validateOTP">
+            <i class="isax isax-bold-message-edit"></i>
+            Verify
+            </button>
+        </div>
     </div>
   </div>
 </template>

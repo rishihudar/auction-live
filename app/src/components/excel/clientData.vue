@@ -1,32 +1,26 @@
 <template>
-  <div class="container-fluid" id="clientData">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
+  <div id="clientData">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Save Client Data
     </h2>
-    <div class="subtext">
+    <div class="subtext text-center">
       This client data is saved in "Employee" collection of "cs playground"
       database.
     </div>
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <DataTable :value="empList" v-if="empList && empList.length > 0">
-              <Column field="name" header="name"></Column>
-              <Column field="age" header="age"></Column>
-              <Column field="address" header="address"></Column>
-            </DataTable>
-            <div class="empty-state" v-else>Records not found</div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click="saveClientDataUsingExcel">
-                <i class="isax isax-bold-tick-circle"></i>
-                Save Data
-              </button>
-            </div>
-          </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <DataTable :value="empList" v-if="empList && empList.length > 0">
+            <Column field="name" header="name"></Column>
+            <Column field="age" header="age"></Column>
+            <Column field="address" header="address"></Column>
+        </DataTable>
+        <div class="empty-state" v-else>Records not found</div>
+        <div class="btn-wrapper">
+            <button class="btn btn-submit" @click="saveClientDataUsingExcel">
+            <i class="isax isax-bold-tick-circle"></i>
+            Save Data
+            </button>
         </div>
-      </div>
     </div>
   </div>
 </template>

@@ -1,13 +1,11 @@
 <template>
-  <div class="container-fluid" id="saveData">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
+  <div id="saveData">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Save excel data
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+    <div class="grid gap-4 grid-cols-2">
+        <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <div class="field">
               <label for="text">Activity</label>
               <input
@@ -25,12 +23,8 @@
                 Save excel data
               </button>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+        <div class="box-login mx-auto p-8 rounded-xl bg-white shadow">
             <h4>Testing CDN File</h4>
             <div class="mt-3">
               <a
@@ -39,9 +33,7 @@
                 https://testcdncs.mkcl.org/1TxYD2KhMcczFlxXntsueOYN46J/demoFolder/Test.xlsx
               </a>
             </div>
-          </div>
         </div>
-      </div>
     </div>
   </div>
 </template>
