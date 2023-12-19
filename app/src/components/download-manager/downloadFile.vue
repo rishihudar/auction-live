@@ -1,73 +1,65 @@
 <template>
-  <div class="container-fluid" id="downloadFileInner">
+  <div id="downloadFileInner">
     <h2 class="text-xl font-bold flex gap-2 items-center">Download File</h2>
-    <div class="row justify-content-center">
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+    <div class="grid gap-4 grid-cols-2">
+        <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <div class="field">
-              <FormKit
+                <FormKit
                 type="text"
                 label="Enter Base Url"
                 help="Enter Base Url”."
                 placeholder="Enter Base Url"
                 validation="required"
                 v-model="download.cdnBaseUrl"
-              />
+                />
             </div>
             <div class="field">
-              <FormKit
+                <FormKit
                 type="text"
                 label="Enter Download File Url"
                 help="Enter Download File Url”."
                 placeholder="Enter Download File Url"
                 validation="required"
                 v-model="download.downloadFileUrl"
-              />
+                />
             </div>
             <div class="field">
-              <FormKit
+                <FormKit
                 type="text"
                 label="Enter Destination Url"
                 help="Enter Destination Url”."
                 placeholder="Enter Destination Url"
                 validation="required"
                 v-model="download.destinationFileUrl"
-              />
+                />
             </div>
             <div class="btn-wrapper">
-              <FormKit
+                <FormKit
                 type="submit"
                 label="Download File"
                 @click="downloadFile"
-              />
+                />
             </div>
-          </div>
         </div>
-      </div>
-      <div class="col-6">
-        <div class="box-login">
-          <div class="p-card p-component">
+        <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <h4>Testing Parameters</h4>
             <ul class="list">
-              <li>
+                <li>
                 Base URL
                 <div>https://csdev.mkcl.org/</div>
-              </li>
-              <li>
+                </li>
+                <li>
                 Download File URL
                 <div>
-                  server/sls/ProjectConfigBackup/1Mg6VkbM1MQhhKh8z2qGSa42HIY/02_04_2021/1Mg6VkbM1MQhhKh8z2qGSa42HIY_1617343458.json
+                    server/sls/ProjectConfigBackup/1Mg6VkbM1MQhhKh8z2qGSa42HIY/02_04_2021/1Mg6VkbM1MQhhKh8z2qGSa42HIY_1617343458.json
                 </div>
-              </li>
-              <li>
+                </li>
+                <li>
                 Destination File URL
                 <div>02_04_2021/</div>
-              </li>
+                </li>
             </ul>
-          </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

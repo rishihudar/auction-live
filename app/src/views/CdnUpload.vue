@@ -1,91 +1,85 @@
 <template>
-  <div id="cdnUpload" class="container-fluid">
+  <div id="cdnUpload">
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       MarketPlace Applications
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-4">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <h3>Upload File</h3>
-            <div class="field mt-5">
-              <FormKit
-                type="form"
-                id="cdn-upload-example"
-                :form-class="submitted ? 'hide' : 'show'"
-                submit-label="cdn Upload"
-                @submit="cdnProfileUpload"
-                :actions="false"
-              >
-                <FormKit
-                  type="text"
-                  name="inputFileName"
-                  label="Input File Name"
-                  v-model="inputFileName"
-                  placeholder="File name"
-                  help="Enter file name"
-                  validation="required"
-                />
-                <FormKit
-                  type="file"
-                  label="Your files"
-                  help="This input starts with files already “attached”."
-                  multiple="true"
-                  :value="file_2"
-                  v-model="file"
-                  validation="required"
-                /><FormKit type="submit" label="Upload" />
-              </FormKit>
-            </div>
-            <div v-if="uploadedFilePath">
-              <h3>cdnServer</h3>
-              <div class="field">
-                <p>{{ uploadedFilePath.cdnServer }}</p>
-              </div>
-              <h3>File Path</h3>
-              <p>{{ uploadedFilePath.filePath }}</p>
-            </div>
-            <h3>Download File</h3>
-            <div class="field mt-5">
-              <FormKit
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <h3>Upload File</h3>
+        <div class="field mt-5">
+            <FormKit
+            type="form"
+            id="cdn-upload-example"
+            :form-class="submitted ? 'hide' : 'show'"
+            submit-label="cdn Upload"
+            @submit="cdnProfileUpload"
+            :actions="false"
+            >
+            <FormKit
                 type="text"
                 name="inputFileName"
-                label="Uploaded File Name"
-                v-model="fileURL"
-                placeholder="File path"
-                help="Enter File URI for Download"
-              /><FormKit @click="downloadFile" type="submit" label="Download" />
-            </div>
-            <h3>Delete File</h3>
-            <FormKit
-              type="form"
-              id="cdn-delete-example"
-              :form-class="submitted ? 'hide' : 'show'"
-              submit-label="Delete"
-              @submit="cdnFileDelete"
-              :actions="false"
-            >
-              <FormKit
-                type="text"
-                name="deleteFilePath"
-                label="Delete File Path"
-                v-model="deleteFilePath"
-                placeholder="File path"
-                help="Enter file path"
+                label="Input File Name"
+                v-model="inputFileName"
+                placeholder="File name"
+                help="Enter file name"
                 validation="required"
-              />
-              <FormKit type="submit" label="Delete" />
+            />
+            <FormKit
+                type="file"
+                label="Your files"
+                help="This input starts with files already “attached”."
+                multiple="true"
+                :value="file_2"
+                v-model="file"
+                validation="required"
+            /><FormKit type="submit" label="Upload" />
             </FormKit>
-            <div class="field" v-if="uploadedFilePath.filePath">
-              <h3>Show Image</h3>
-              <img
-                :src="'https://testcdncs.mkcl.org/' + uploadedFilePath.filePath"
-              />
-            </div>
-          </div>
         </div>
-      </div>
+        <div v-if="uploadedFilePath">
+            <h3>cdnServer</h3>
+            <div class="field">
+            <p>{{ uploadedFilePath.cdnServer }}</p>
+            </div>
+            <h3>File Path</h3>
+            <p>{{ uploadedFilePath.filePath }}</p>
+        </div>
+        <h3>Download File</h3>
+        <div class="field mt-5">
+            <FormKit
+            type="text"
+            name="inputFileName"
+            label="Uploaded File Name"
+            v-model="fileURL"
+            placeholder="File path"
+            help="Enter File URI for Download"
+            /><FormKit @click="downloadFile" type="submit" label="Download" />
+        </div>
+        <h3>Delete File</h3>
+        <FormKit
+            type="form"
+            id="cdn-delete-example"
+            :form-class="submitted ? 'hide' : 'show'"
+            submit-label="Delete"
+            @submit="cdnFileDelete"
+            :actions="false"
+        >
+            <FormKit
+            type="text"
+            name="deleteFilePath"
+            label="Delete File Path"
+            v-model="deleteFilePath"
+            placeholder="File path"
+            help="Enter file path"
+            validation="required"
+            />
+            <FormKit type="submit" label="Delete" />
+        </FormKit>
+        <div class="field" v-if="uploadedFilePath.filePath">
+            <h3>Show Image</h3>
+            <img
+            :src="'https://testcdncs.mkcl.org/' + uploadedFilePath.filePath"
+            />
+        </div>
     </div>
   </div>
 </template>

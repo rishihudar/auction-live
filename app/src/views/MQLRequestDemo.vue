@@ -1,22 +1,18 @@
 <template>
-	<div id="masterAxios" class="container-fluid">
+	<div id="masterAxios">
 		<h2 class="text-xl font-bold flex gap-2 items-center">
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
 			MQL Request
 		</h2>
-		<div class="row justify-content-center">
-			<div class="col-6">
-				<div class="box-login">
-					<div class="data">
-						<h3>MQL Data</h3>
-						<FormKit type="button" prefix-icon="check" @click="GetAllPosts"> MQL Request </FormKit>
-					</div>
-					<div class="json-wrapper">
-						<json-viewer :value="result" boxed :expanded="true"></json-viewer>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <div class="data">
+                <h3>MQL Data</h3>
+                <FormKit type="button" prefix-icon="check" @click="GetAllPosts"> MQL Request </FormKit>
+            </div>
+            <div class="json-wrapper">
+                <json-viewer :value="result" boxed :expanded="true"></json-viewer>
+            </div>
+        </div>
 	</div>
 </template>
 

@@ -3,30 +3,24 @@
 		<h2 class="text-xl font-bold flex gap-2 items-center">
 			Check Progress
 		</h2>
-		<div class="row justify-content-center">
-			<div class="col-6">
-				<div class="box-login">
-					<div class="p-card p-component">
-						<FormKit
-							type="text"
-							label="Enter Download Id"
-							help="Enter Download Id”."
-							placeholder="Enter Download Id"
-							validation="required"
-							v-model="downloadId"
-						/>
-						<div class="btn-wrapper">
-							<FormKit type="submit" label="Check Progress" @click="checkDownloadProgress" />
-						</div>
-						<div class="field mt-4">
-							<h3>Result</h3>
-							<div class="json-wrapper">
-								<json-viewer :value="progressResult" boxed :expanded="true"></json-viewer>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="box-login mx-auto p-8 rounded-xl bg-white shadow">
+            <FormKit
+                type="text"
+                label="Enter Download Id"
+                help="Enter Download Id”."
+                placeholder="Enter Download Id"
+                validation="required"
+                v-model="downloadId"
+            />
+            <div class="btn-wrapper">
+                <FormKit type="submit" label="Check Progress" @click="checkDownloadProgress" />
+            </div>
+            <div class="field mt-4">
+                <h3>Result</h3>
+                <div class="json-wrapper">
+                    <json-viewer :value="progressResult" boxed :expanded="true"></json-viewer>
+                </div>
+            </div>
 		</div>
 	</div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div id="tableDemo" class="container-fluid">
+  <div id="tableDemo">
     <h2 class="text-xl font-bold flex gap-2 items-center">
       <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Table
