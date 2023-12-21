@@ -47,11 +47,8 @@ body {
 // }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
+    @apply p-10 flex flex-col overflow-y-auto;
     height: calc(100vh - 72px);
-    padding: 2.5rem;
-    overflow-y: auto;
 }
 
 // Buttons
@@ -295,18 +292,18 @@ body {
 .field {}
 
 .p-inputtext {
-    @apply
-    w-full;
+    @apply w-full;
 }
 
 .p-float-label {
-    @apply
-    mt-8
-    mb-3;
+    @apply mt-8 mb-3;
 }
 .p-label {
-    @apply
-    mb-3;
+    @apply mb-3;
+}
+
+select.formkit-input {
+    @apply leading-6;
 }
 
 
@@ -364,39 +361,17 @@ body {
     }
 }
 
-// custom floating label
-// .p-float-label {position: relative; margin-top: 30px;
-//     label {position: absolute; top: -20px; left: 8px; font-size: 14px;}
-//     input {
-//         &:placeholder-shown + label {top: 13px; left: 14px; font-size: 16px;}
-//         &:focus + label {top: -20px; left: 8px; font-size: 14px;}
-//     }
-// }
-
-// Accordion
-.p-accordion-tab {
-    margin-bottom: 0;
-    & + .p-accordion-tab {
-        margin-top: 1rem;
-    }
-}
-
 // Footer
 .box-footer {
-    padding: 0.25rem 1rem;
+    @apply px-4 py-1 mt-auto;
     box-shadow: 0 -8px 16px rgba(#212121, 0.04);
-    margin-top: auto;
     .bxf-container {
-        display: flex;
-        align-items: center;
+        @apply flex items-center;
         img {
-            width: 64px;
-            height: 64px;
-            margin-right: 1rem;
+            @apply w-16 h-16 mr-4;
         }
         &-info {
-            font-size: 0.8125rem;
-            color: var(--gray-500);
+            @apply text-[0.8125rem] text-[var(--gray-500)];
         }
     }
 }
