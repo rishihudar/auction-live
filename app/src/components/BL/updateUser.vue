@@ -8,19 +8,19 @@
         <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <div class="field">
               <div class="p-float-label">
-                <input type="text" required v-model="obj.name" id="name" class="p-inputtext p-component w-100" :class="obj.name ? 'p-filled': ''">
+                <InputText v-model="obj.name" id="name" :class="obj.name ? 'p-filled': ''" />
                 <label for="name">Enter name</label>
               </div>
             </div>
             <div class="field">
               <div class="p-float-label">
-                <input type="text" required v-model="obj.age" id="age" class="p-inputtext p-component w-100" :class="obj.age ? 'p-filled': ''">
+                <InputText v-model="obj.age" id="age" :class="obj.age ? 'p-filled': ''" />
                 <label for="age">Enter age</label>
               </div>
             </div>
             <div class="field">
               <div class="p-float-label">
-                <input type="text" required v-model="obj.address" id="address" class="p-inputtext p-component w-100" :class="obj.address ? 'p-filled': ''">
+                <InputText v-model="obj.address" id="address" :class="obj.address ? 'p-filled': ''" />
                 <label for="address">Enter address</label>
               </div>
             </div>

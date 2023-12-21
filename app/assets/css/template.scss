@@ -13,15 +13,15 @@
 
 
 // Variables
-$gray-lightest: #85858d;
-$blue: #B7CADB;
-$yellow: #FAF4B7;
-$pink: #F2D1D1;
-$green: #C4DFAA;
-$indigo: #D9D7F1;
-$orange: #F6D7A7;
-$red : #FFB3B3;
-$gray-lighter: #5e5a49;
+$gray-lightest          : #85858d;
+$blue                   : #B7CADB;
+$yellow                 : #FAF4B7;
+$pink                   : #F2D1D1;
+$green                  : #C4DFAA;
+$indigo                 : #D9D7F1;
+$orange                 : #F6D7A7;
+$red                    : #FFB3B3;
+$gray-lighter           : #5e5a49;
 
 :root {
     --font-family           : 'DM Sans', sans-serif;
@@ -39,12 +39,12 @@ body {
     font-family: var(--font-family);
 }
 
-// Img
-img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-}
+// Images
+// img {
+//     display: block;
+//     max-width: 100%;
+//     height: auto;
+// }
 
 .wrapper {
     display: flex;
@@ -290,6 +290,26 @@ img {
     }
 }
 
+
+// form controls
+.field {}
+
+.p-inputtext {
+    @apply
+    w-full;
+}
+
+.p-float-label {
+    @apply
+    mt-8
+    mb-3;
+}
+.p-label {
+    @apply
+    mb-3;
+}
+
+
 // Validator
 #validator {
     .box-login {
@@ -344,6 +364,15 @@ img {
     }
 }
 
+// custom floating label
+// .p-float-label {position: relative; margin-top: 30px;
+//     label {position: absolute; top: -20px; left: 8px; font-size: 14px;}
+//     input {
+//         &:placeholder-shown + label {top: 13px; left: 14px; font-size: 16px;}
+//         &:focus + label {top: -20px; left: 8px; font-size: 14px;}
+//     }
+// }
+
 // Accordion
 .p-accordion-tab {
     margin-bottom: 0;
@@ -373,16 +402,16 @@ img {
 }
 
 // Custom Scrollbar
-::-webkit-scrollbar {
-    width: 6px;
-    background-color: transparent;
-}
+// ::-webkit-scrollbar {
+//     width: 6px;
+//     background-color: transparent;
+// }
 
-::-webkit-scrollbar-track {
-    border-radius: 16px;
-}
+// ::-webkit-scrollbar-track {
+//     border-radius: 16px;
+// }
 
-::-webkit-scrollbar-thumb {
-    border-radius: 16px;
-    background: #f8f9fa;
-}
+// ::-webkit-scrollbar-thumb {
+//     border-radius: 16px;
+//     background: #f8f9fa;
+// }

@@ -7,15 +7,13 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="email"
-                v-model="email.to"
-                class="p-inputtext p-component"
-                :class="email.to ? 'p-filled' : ''"
-                id="email"
-                required
-            />
-            <label for="email">Enter Email ID</label>
+                <InputText
+                    v-model="email.to"
+                    :class="email.to ? 'p-filled' : ''"
+                    id="email"
+                    required
+                />
+                <label for="email">Enter Email ID</label>
             </div>
         </div>
         <div class="btn-wrapper">

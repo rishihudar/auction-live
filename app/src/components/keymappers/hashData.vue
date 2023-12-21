@@ -7,8 +7,8 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input type="text" class="p-inputtext p-component" v-model="name" id="hashName" :class="name ? 'p-filled': ''">
-            <label for="hashName">Enter data to hash</label>
+                <InputText v-model="name" id="hashName" :class="name ? 'p-filled': ''" />
+                <label for="hashName">Enter data to hash</label>
             </div>
         </div>
         <div class="btn-wrapper">

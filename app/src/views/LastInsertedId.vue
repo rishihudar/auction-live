@@ -7,9 +7,7 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
+            <InputText
                 :class="emp.name ? 'p-filled' : ''"
                 v-model="emp.name"
                 id="name"
@@ -20,9 +18,7 @@
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
+            <InputText
                 :class="emp.age ? 'p-filled' : ''"
                 v-model="emp.age"
                 id="age"
@@ -33,9 +29,7 @@
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
+            <InputText
                 :class="emp.address ? 'p-filled' : ''"
                 v-model="emp.address"
                 id="address"

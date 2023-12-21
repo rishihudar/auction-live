@@ -8,6 +8,9 @@ import Toaster from '@meforma/vue-toaster'
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
+import InputText from 'primevue/inputtext';
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -27,6 +30,12 @@ vm.$router = router
 vm.use(i18n)
 vm.use(router)
 vm.use(primeVue)
+vm.use(InputText)
+vm.component('InputText', InputText)
+vm.use(Accordion)
+vm.component('Accordion', Accordion)
+vm.use(AccordionTab)
+vm.component('AccordionTab', AccordionTab)
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())

@@ -8,12 +8,10 @@
 		<div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
             <div class="field">
                 <div class="p-float-label">
-                    <input
-                        type="text"
+                    <InputText
                         v-model="autobl.name"
                         :class="autobl.name ? 'p-filled' : ''"
                         id="bl"
-                        class="p-inputtext p-component"
                     />
                     <label for="bl">Enter string</label>
                 </div>

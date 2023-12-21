@@ -7,9 +7,7 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component"
+            <InputText
                 :class="otp.number ? 'p-filled' : ''"
                 id="number"
                 v-model="otp.number"

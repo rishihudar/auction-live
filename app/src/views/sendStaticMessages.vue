@@ -7,14 +7,12 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                v-model="msg.number"
-                class="p-inputtext p-component"
-                :class="msg.number ? 'p-filled' : ''"
-                id="number"
-            />
-            <label for="number">Enter mobile number</label>
+                <InputText
+                    v-model="msg.number"
+                    :class="msg.number ? 'p-filled' : ''"
+                    id="number"
+                />
+                <label for="number">Enter mobile number</label>
             </div>
             <div class="mt-1">
             <small

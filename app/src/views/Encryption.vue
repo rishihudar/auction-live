@@ -4,47 +4,50 @@
 			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
 			Encryption
 		</h2>
-		<div class="box-login mx-auto p-8 max-w-5xl rounded-xl bg-white shadow">
-            <div class="flex flex-col w-full lg:flex-row">
-                <div class="grid flex-grow h-50 card bg-base-300 rounded-box place-items-center">
-                    <h3 class="text-center mb-4">Plain Text Encryption / Decryption</h3>
-                    <div class="flex flex-col w-full">
-                        <div class="grid h-50 card bg-base-300 rounded-box place-items-center">
-                            <FormKit
-                                type="text"
-                                name="encryptInputText"
-                                label="Encrypt Input Text"
-                                v-model="encryptInputText"
-                                placeho
-                                lder="Enter text for encryption"
-                                help="Enter text for encryption"
-                                validation="required"
-                            />
-                            <FormKit type="button" @click="encryptText" label="Encrypt" />
-                            {{ encryptOutputText }}
-                        </div>
-                        <div class="divider"></div>
-                        <div class="grid h-50 card bg-base-300 rounded-box place-items-center">
-                            <FormKit
-                                type="text"
-                                name="decryptionInputText"
-                                label="Decrypt Input Text"
-                                v-model="decryptInputText"
-                                placeho
-                                lder="Enter text for decryption"
-                                help="Enter text for decryption"
-                                validation="required"
-                            />
-                            <FormKit type="button" @click="decryptText" label="Decrypt Text" />
-                            {{ decryptOutputText }}
+        <div class="grid gap-4 grid-cols-2">
+            <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
+                <div class="flex flex-col w-full lg:flex-row">
+                    <div class="grid flex-grow h-50 card bg-slate-200 rounded-box place-items-center">
+                        <h3 class="text-center mt-5 mb-4 text-lg font-bold">Plain Text Encryption / Decryption</h3>
+                        <div class="flex flex-col w-full">
+                            <div class="grid h-50 card bg-slate-200 rounded-box place-items-center">
+                                <FormKit
+                                    type="text"
+                                    name="encryptInputText"
+                                    label="Encrypt Input Text"
+                                    v-model="encryptInputText"
+                                    placeho
+                                    lder="Enter text for encryption"
+                                    help="Enter text for encryption"
+                                    validation="required"
+                                />
+                                <FormKit type="button" @click="encryptText" label="Encrypt" />
+                                {{ encryptOutputText }}
+                            </div>
+                            <div class="divider"></div>
+                            <div class="grid h-50 card bg-slate-200 rounded-box place-items-center">
+                                <FormKit
+                                    type="text"
+                                    name="decryptionInputText"
+                                    label="Decrypt Input Text"
+                                    v-model="decryptInputText"
+                                    placeho
+                                    lder="Enter text for decryption"
+                                    help="Enter text for decryption"
+                                    validation="required"
+                                />
+                                <FormKit type="button" @click="decryptText" label="Decrypt Text" />
+                                {{ decryptOutputText }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="divider lg:divider-horizontal">OR</div>
-                <div class="grid flex-grow h-50 card bg-base-300 rounded-box place-items-center">
-                    <h3>Object encryption/decryption</h3>
-                    <div class="flex flex-col w-full mt-4">
-                        <div class="grid h-50 card bg-base-300 rounded-box place-items-center">
+            </div>
+            <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
+                <div class="grid flex-grow h-50 card bg-slate-200 rounded-box place-items-center">
+                    <h3 class="text-center mt-5 mb-4 text-lg font-bold">Object encryption/decryption</h3>
+                    <div class="flex flex-col w-full">
+                        <div class="grid h-50 card bg-slate-200 rounded-box place-items-center">
                             <FormKit
                                 type="text"
                                 name="decryptionInputText"
@@ -59,7 +62,7 @@
                             {{ encryptOutputObject }}
                         </div>
                         <div class="divider"></div>
-                        <div class="grid h-50 card bg-base-300 rounded-box place-items-center">
+                        <div class="grid h-50 card bg-slate-200 rounded-box place-items-center">
                             <FormKit
                                 type="text"
                                 name="decryptionInputText"
@@ -76,7 +79,7 @@
                     </div>
                 </div>
             </div>
-		</div>
+        </div>
 	</div>
 </template>
 <script setup>

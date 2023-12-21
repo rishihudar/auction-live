@@ -12,47 +12,38 @@
         </div>
         <div class="field mt-4">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
-                :class="sobj.name ? 'p-filled' : ''"
-                v-model="sobj.name"
-                id="name"
-            />
-            <label for="name">Enter name</label>
+                <InputText
+                    v-model="sobj.name"
+                    id="name"
+                />
+                <label for="name">Enter name</label>
             </div>
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
-                :class="sobj.age ? 'p-filled' : ''"
-                v-model="sobj.age"
-                id="age"
-            />
-            <label for="age">Enter age</label>
+                <InputText
+                    v-model="sobj.age"
+                    id="age"
+                />
+                <label for="age">Enter age</label>
             </div>
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component w-100"
-                :class="sobj.address ? 'p-filled' : ''"
-                v-model="sobj.address"
-                id="address"
-            />
-            <label for="address">Enter address</label>
+                <InputText
+                    v-model="sobj.address"
+                    id="address"
+                />
+                <label for="address">Enter address</label>
             </div>
         </div>
         <div class="btn-wrapper">
             <button
-            class="btn btn-submit"
-            @click.prevent="updateObjectUsingBLAndSave"
+                class="btn btn-submit"
+                @click.prevent="updateObjectUsingBLAndSave"
             >
-            <i class="isax isax-bold-document-upload"></i>
-            Update and Save
+                <i class="isax isax-bold-document-upload"></i>
+                Update and Save
             </button>
         </div>
     </div>

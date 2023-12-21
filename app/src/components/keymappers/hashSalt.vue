@@ -7,9 +7,7 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component"
+            <InputText
                 :class="sname ? 'active' : ''"
                 v-model="sname"
                 id="sname"
@@ -19,9 +17,7 @@
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input
-                type="text"
-                class="p-inputtext p-component"
+            <InputText
                 :class="saltKey ? 'active' : ''"
                 v-model="saltKey"
                 id="saltKey"

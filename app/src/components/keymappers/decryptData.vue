@@ -7,8 +7,7 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input type="text"  v-model="dname" class="p-inputtext p-component" id="dname" :class="dname ? 'p-filled': ''"
-            >
+                <InputText v-model="dname" id="dname" :class="dname ? 'p-filled': ''" />
                 <label for="dname">Decrypt Data</label>
             </div>
         </div>

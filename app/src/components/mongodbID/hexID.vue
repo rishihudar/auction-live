@@ -7,20 +7,20 @@
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
         <div class="field">
             <div class="p-float-label">
-            <input type="text" v-model="hobj._id" class="p-inputtext p-component" :class="hobj._id ? 'p-filled' : ''" id="hexObject">
-            <label for="hexObject">Enter Hex Object ID</label>
+                <InputText v-model="hobj._id" :class="hobj._id ? 'p-filled' : ''" id="hexObject" />
+                <label for="hexObject">Enter Hex Object ID</label>
             </div>
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input type="text" v-model="hobj.name" class="p-inputtext p-component" :class="hobj.name ? 'p-filled' : ''" id="name">
-            <label for="name">Enter name</label>
+                <InputText v-model="hobj.name" :class="hobj.name ? 'p-filled' : ''" id="name" />
+                <label for="name">Enter name</label>
             </div>
         </div>
         <div class="field">
             <div class="p-float-label">
-            <input type="text" v-model="hobj.address" class="p-inputtext p-component" :class="hobj.address ? 'p-filled' : ''" id="address">
-            <label for="address">Enter address</label>
+                <InputText v-model="hobj.address" :class="hobj.address ? 'p-filled' : ''" id="address" />
+                <label for="address">Enter address</label>
             </div>
         </div>
         <div class="btn-wrapper">
