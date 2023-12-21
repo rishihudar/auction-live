@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <h2>Component 2</h2>
-    <h4 class="mt-2 mb-3">
-      <b>{{ $t('component2.title') }}</b>
-    </h4>
-    <button class="btn btn-primary" @click="changeLanguage('en')">English</button>
-    <button class="btn btn-secondary" @click="changeLanguage('hi')">Hindi</button>
-    <button class="btn btn-warning" @click="changeLanguage('mr')" >Marathi</button>
-  </div>
+    <div>
+        <h2>Component 2</h2>
+        <h4 class="mt-2 mb-3">
+            <b>{{ $t('component2.title') }}</b>
+        </h4>
+        <div class="flex gap-2 flex-wrap">
+            <button class="btn btn-primary" @click="changeLanguage('en')">English</button>
+            <button class="btn btn-secondary" @click="changeLanguage('hi')">Hindi</button>
+            <button class="btn btn-warning" @click="changeLanguage('mr')" >Marathi</button>
+        </div>
+    </div>
 </template>
 
 <script>
