@@ -1,7 +1,6 @@
 <template>
   <div id="clientData">
     <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Save Client Data
     </h2>
     <div class="subtext text-center">
@@ -15,7 +14,7 @@
             <Column field="address" header="address"></Column>
         </DataTable>
         <div class="empty-state" v-else>Records not found</div>
-        <div class="btn-wrapper">
+        <div class="btn-wrapper mt-4">
             <button class="btn btn-submit" @click="saveClientDataUsingExcel">
             <i class="isax isax-bold-tick-circle"></i>
             Save Data
@@ -67,8 +66,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.subtext {
-  margin-top: 0.25rem;
-  margin-left: 48px;
-}
 </style>

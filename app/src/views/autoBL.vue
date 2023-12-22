@@ -1,7 +1,7 @@
 <template>
 	<div id="autoBL">
 		<h2 class="text-xl font-bold flex gap-2 items-center">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Auto BL
 		</h2>
 		<div class="subtext">To check positive condition write "CoreStudio" string in input box</div>
@@ -56,8 +56,4 @@
 </script>
 
 <style lang="scss" scoped>
-	.subtext {
-		margin-left: 3rem;
-		margin-top: 0.75rem;
-	}
 </style>

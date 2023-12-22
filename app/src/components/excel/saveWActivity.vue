@@ -1,7 +1,6 @@
 <template>
   <div id="saveData">
     <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Save excel data
     </h2>
     <div class="grid gap-4 grid-cols-2">
@@ -14,7 +13,7 @@
                 id="activity"
               />
             </div>
-            <div class="btn-wrapper">
+            <div class="btn-wrapper mt-4">
               <button
                 class="btn btn-submit"
                 @click.prevent="saveExcelDataUsingActivity"
@@ -68,11 +67,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.subtext {
-  margin-top: 0.75rem;
-  margin-left: 3rem;
-}
-
 h4 + div {
   word-break: break-word;
 }

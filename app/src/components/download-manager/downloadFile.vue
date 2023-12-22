@@ -1,6 +1,6 @@
 <template>
   <div id="downloadFileInner">
-    <h2 class="text-xl font-bold flex gap-2 items-center">Download File</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">Download File</h2>
     <div class="grid gap-4 grid-cols-2">
         <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <div class="field">

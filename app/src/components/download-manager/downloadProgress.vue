@@ -1,6 +1,6 @@
 <template>
 	<div class="container-fluid" id="downloadFIleProgress">
-		<h2 class="text-xl font-bold flex gap-2 items-center">
+		<h2 class="text-xl font-bold flex gap-2 items-center justify-center">
 			Check Progress
 		</h2>
 		<div class="box-login mx-auto p-8 rounded-xl bg-white shadow">

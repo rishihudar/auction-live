@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid">
     <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Encrypt Data
     </h2>
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">

@@ -1,6 +1,6 @@
 <template>
   <div id="uploadFile" class="container-fluid">
-    <h2 class="text-xl font-bold flex gap-2 items-center">Upload File</h2>
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">Upload File</h2>
     <div class="grid gap-4 grid-cols-2">
         <div class="box-login mx-auto p-8 w-full rounded-xl bg-white shadow">
             <FormKit

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-xl font-bold flex gap-2 items-center">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       OTP
     </h2>
     <div class="grid gap-4 grid-cols-2">

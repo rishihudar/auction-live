@@ -4,7 +4,7 @@
 			<template v-slot:title="{ content }">{{ content ? `${content}` : "" }}</template>
 		</metainfo>
 		<div id="app-loader" v-if="mainStore.isPageBlocked">
-			<div class="fixed z-50 bg-gray-200 bg-opacity-60 w-full min-h-screen flex justify-center items-center">
+			<div class="fixed z-50 bg-gray-200 bg-opacity-70 w-full min-h-screen flex justify-center items-center">
 				<div class="flex min-h-screen w-full items-center justify-center">
 					<div
 						class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 animate-spin"

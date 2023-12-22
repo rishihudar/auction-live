@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2 class="text-xl font-bold flex gap-2 items-center">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Save client data
 		</h2>
 		<div class="subtext">
@@ -25,7 +25,7 @@
                 </tbody>
             </table>
             <div class="empty-state" v-else>Records not found</div>
-            <div class="btn-wrapper">
+            <div class="btn-wrapper mt-4">
                 <FormKit @click="saveClientDataUsingForLoop" type="submit" label="Save" />
             </div>
 		</div>
@@ -57,9 +57,6 @@
 			})
 	}
 </script>
+
 <style lang="scss" scoped>
-	.subtext {
-		margin-top: 0.75rem;
-		margin-left: 3rem;
-	}
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div id="updateData">
     <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
       Update Data
     </h2>
     <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
@@ -25,7 +24,7 @@
             required
             />
         </div>
-        <div class="btn-wrapper">
+        <div class="btn-wrapper mt-4">
             <button class="btn btn-submit" @click.prevent="updateData">
             <i class="isax isax-bold-tick-circle"></i>
             Submit

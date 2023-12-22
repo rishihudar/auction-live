@@ -1,7 +1,7 @@
 <template>
 	<div id="serverSidePagination">
 		<h2 class="text-xl font-bold flex gap-2 items-center">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Server Side Pagination
 		</h2>
 		<div class="subtext">This report shows per page 3 documents</div>
@@ -25,7 +25,7 @@
                 </tbody>
             </table>
             <div class="empty-state" v-else>Records Not Found</div>
-            <div class="btn-wrapper flex justify-between">
+            <div class="btn-wrapper mt-5 flex justify-between">
                 <FormKit type="submit" label="Prev" v-if="pageNo > 1" @click="prevClick" />
                 <FormKit
                     type="submit"
@@ -33,6 +33,7 @@
                     v-if="items && items.length > 0"
                     :disabled="items == undefined || items.length == 0"
                     @click="nextClick"
+                    outer-class="$reset ml-auto"
                 />
             </div>
 		</div>
@@ -83,8 +84,4 @@
 </script>
 
 <style lang="scss" scoped>
-	.subtext {
-		margin-top: 0.25rem;
-		margin-left: 3rem;
-	}
 </style>

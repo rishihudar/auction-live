@@ -45,6 +45,9 @@ body {
     height: calc(100vh - 72px);
 }
 
+.subtext {
+    @apply mt-0.5 ml-6 mb-6 text-slate-600;
+}
 
 // Buttons
 .btn {
