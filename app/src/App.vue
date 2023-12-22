@@ -14,7 +14,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="wrapper">
+		<div class="wrapper p-10 flex flex-col overflow-y-auto">
 			<router-view :key="$route.fullPath" />
 		</div>
 		<Footer></Footer>

@@ -5,7 +5,7 @@
       OTP
     </h2>
     <div class="grid gap-4 grid-cols-2">
-        <div class="box-login mx-auto p-8 w-full flex gap-4 rounded-xl bg-white shadow clickable" @click.prevent="generated">
+        <div class="box-login mx-auto p-8 w-full flex gap-4 rounded-xl bg-white shadow cursor-pointer" @click.prevent="generated">
             <div class="icon-holder">
                 <i class="isax isax-bold-message text-2xl"></i>
             </div>
@@ -13,7 +13,7 @@
                 Generate OTP Example
             </div>
         </div>
-        <div class="box-login mx-auto p-8 w-full flex gap-4 rounded-xl bg-white shadow clickable" @click.prevent="verified">
+        <div class="box-login mx-auto p-8 w-full flex gap-4 rounded-xl bg-white shadow cursor-pointer" @click.prevent="verified">
             <div class="icon-holder">
                 <i class="isax isax-bold-message-edit text-2xl"></i>
             </div>
