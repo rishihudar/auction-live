@@ -13,7 +13,7 @@
 					>Updated and Save to Database</a
 				>
 			</div>
-			<div class="mt-3">
+			<div class="mt-8">
 				<update-user v-if="active == 0"></update-user>
 				<update-db-save v-if="active == 1"></update-db-save>
 			</div>

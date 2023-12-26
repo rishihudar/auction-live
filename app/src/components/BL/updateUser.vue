@@ -1,7 +1,6 @@
 <template>
   <div id="updateUser">
     <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
-      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       Update User
     </h2>
     <div class="grid gap-4 grid-cols-2">

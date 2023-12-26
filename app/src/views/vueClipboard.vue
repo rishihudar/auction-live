@@ -6,7 +6,7 @@
     </h2>
     <div class="box-login mx-auto p-8 max-w-4xl rounded-xl bg-white shadow">
         <div class="field">
-            <div>
+            <div class="p-label">
             <textarea
                 class="p-inputtext p-component w-full"
                 v-model="content"

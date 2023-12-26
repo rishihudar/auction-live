@@ -14,7 +14,7 @@
 				>
 			</div>
 		</div>
-		<div class="mt-3">
+		<div class="mt-8">
 			<customID v-if="active == 0"></customID>
 			<hexID v-if="active == 1"></hexID>
 		</div>
