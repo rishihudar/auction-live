@@ -1,22 +1,16 @@
 <template>
-	<div class="container-fluid" id="vueMeta">
-		<h2 class="title alt">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+	<div id="vueMeta">
+		<h2 class="text-xl font-bold flex gap-2 items-center">
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Vue-Meta
 		</h2>
-		<div class="row justify-content-center">
-			<div class="col-4">
-				<div class="box-login">
-					<div class="p-card p-component">
-						<h3>
-							{{ response.name }}
-						</h3>
-						<p>
-							{{ response.description }}
-						</p>
-					</div>
-				</div>
-			</div>
+		<div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <h3>
+                {{ response.name }}
+            </h3>
+            <p>
+                {{ response.description }}
+            </p>
 		</div>
 	</div>
 </template>

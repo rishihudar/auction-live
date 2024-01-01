@@ -1,38 +1,34 @@
 <template>
-  <div id="fetchData" class="container-fluid">
-    <h2 class="title alt">Fetch Data in Session</h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <FormKit
+  <div id="fetchData">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">Fetch Data in Session</h2>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <FormKit
             type="form"
             id="registration-example"
             :form-class="submitted ? 'hide' : 'show'"
             submit-label="Register"
             @submit="fetchSessionData"
             :actions="false"
-          >
+        >
             <FormKit
-              type="text"
-              name="sessionName"
-              label="Session Key"
-              v-model="fetchKey"
-              placeholder="Session Key"
-              help="Enter Session Key"
-              validation="required"
+                type="text"
+                name="sessionName"
+                label="Session Key"
+                v-model="fetchKey"
+                placeholder="Session Key"
+                help="Enter Session Key"
+                validation="required"
             />
             <FormKit type="submit" label="Save" />
-          </FormKit>
-          <div class="field">
+        </FormKit>
+        <div class="field">
             <h3>Result</h3>
             <json-viewer
-              :value="sessionResult"
-              boxed
-              :expanded="true"
+                :value="sessionResult"
+                boxed
+                :expanded="true"
             ></json-viewer>
-          </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

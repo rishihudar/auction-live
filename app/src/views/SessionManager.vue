@@ -1,33 +1,33 @@
 <template>
-  <div id="sessionManager" class="container-fluid">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div id="sessionManager">
+    <h2 class="text-xl font-bold flex gap-2 items-center">
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       Session Manager
     </h2>
-    <div class="row justify-content-center">
-      <div class="tabs">
+    <div class="mt-5 mx-auto">
+      <div class="flex gap-2 justify-center">
         <a
-          class="tab tab-bordered"
+          class="tab tab-bordered px-5 py-2 h-auto rounded bg-white [&.tab-active]:bg-blue-600 [&.tab-active]:text-white"
           :class="active == 0 ? 'tab-active' : ''"
           @click.prevent="active = 0"
         >
           Store Data</a
         >
         <a
-          class="tab tab-bordered"
+          class="tab tab-bordered px-5 py-2 h-auto rounded bg-white [&.tab-active]:bg-blue-600 [&.tab-active]:text-white"
           :class="active == 1 ? 'tab-active' : ''"
           @click.prevent="active = 1"
           >Fetch Data</a
         >
         <a
-          class="tab tab-bordered"
+          class="tab tab-bordered px-5 py-2 h-auto rounded bg-white [&.tab-active]:bg-blue-600 [&.tab-active]:text-white"
           :class="active == 2 ? 'tab-active' : ''"
           @click.prevent="active = 2"
           >Delete Data</a
         >
       </div>
     </div>
-    <div class="mt-3">
+    <div class="mt-8">
       <store-data v-if="active == 0"></store-data>
       <fetch-data v-if="active == 1"></fetch-data>
       <delete-data v-if="active == 2"></delete-data>

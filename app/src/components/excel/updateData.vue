@@ -1,42 +1,35 @@
 <template>
-  <div class="container-fluid" id="updateData">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div id="updateData">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">
       Update Data
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <label for="name">Enter name</label>
-              <input
-                type="text"
-                class="p-inputtext p-component w-100 mt-2"
-                id="name"
-                v-model="excel.name"
-                required
-              />
-            </div>
-            <div class="field">
-              <label for="mobile">Enter age</label>
-              <input
-                type="text"
-                class="p-inputtext p-component w-100 mt-2"
-                id="mobile"
-                v-model="excel.age"
-                required
-              />
-            </div>
-            <div class="btn-wrapper">
-              <button class="btn btn-submit" @click.prevent="updateData">
-                <i class="isax isax-bold-tick-circle"></i>
-                Submit
-              </button>
-            </div>
-          </div>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <label for="name">Enter name</label>
+            <input
+            type="text"
+            class="p-inputtext p-component w-100 mt-2"
+            id="name"
+            v-model="excel.name"
+            required
+            />
         </div>
-      </div>
+        <div class="field">
+            <label for="mobile">Enter age</label>
+            <input
+            type="text"
+            class="p-inputtext p-component w-100 mt-2"
+            id="mobile"
+            v-model="excel.age"
+            required
+            />
+        </div>
+        <div class="btn-wrapper mt-4">
+            <button class="btn btn-submit" @click.prevent="updateData">
+            <i class="isax isax-bold-tick-circle"></i>
+            Submit
+            </button>
+        </div>
     </div>
   </div>
 </template>

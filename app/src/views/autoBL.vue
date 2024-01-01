@@ -1,39 +1,31 @@
 <template>
-	<div class="container-fluid" id="autoBL">
-		<h2 class="title alt">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+	<div id="autoBL">
+		<h2 class="text-xl font-bold flex gap-2 items-center">
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Auto BL
 		</h2>
 		<div class="subtext">To check positive condition write "CoreStudio" string in input box</div>
-		<div class="row justify-content-center">
-			<div class="col-auto">
-				<div class="box-login">
-					<div class="p-card p-component">
-						<div class="field">
-							<div class="p-float-label">
-								<input
-									type="text"
-									v-model="autobl.name"
-									:class="autobl.name ? 'p-filled' : ''"
-									id="bl"
-									class="p-inputtext p-component"
-								/>
-								<label for="bl">Enter string</label>
-							</div>
-						</div>
-						<div class="btn-wrapper">
-							<button class="btn btn-submit" @click.prevent="autoblDemo">
-								<i class="isax isax-bold-tick-circle"></i>
-								Test
-							</button>
-						</div>
-						<div class="field mt-4">
-							<h3>Result</h3>
-							<json-viewer :value="autoblResult" boxed :expanded="true"></json-viewer>
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <div class="field">
+                <div class="p-float-label">
+                    <InputText
+                        v-model="autobl.name"
+                        :class="autobl.name ? 'p-filled' : ''"
+                        id="bl"
+                    />
+                    <label for="bl">Enter string</label>
+                </div>
+            </div>
+            <div class="btn-wrapper">
+                <button class="btn btn-submit" @click.prevent="autoblDemo">
+                    <i class="isax isax-bold-tick-circle"></i>
+                    Test
+                </button>
+            </div>
+            <div class="field mt-4">
+                <h3>Result</h3>
+                <json-viewer :value="autoblResult" boxed :expanded="true"></json-viewer>
+            </div>
 		</div>
 	</div>
 </template>
@@ -64,8 +56,4 @@
 </script>
 
 <style lang="scss" scoped>
-	.subtext {
-		margin-left: 3rem;
-		margin-top: 0.75rem;
-	}
 </style>

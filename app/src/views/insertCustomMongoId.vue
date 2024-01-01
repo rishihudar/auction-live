@@ -1,20 +1,20 @@
 <template>
-	<div id="customMongoID" class="container-fluid">
-		<h2 class="title alt">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+	<div id="customMongoID">
+		<h2 class="text-xl font-bold flex gap-2 items-center">
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
 			Insert Any Custom MongoDB ID
 		</h2>
-		<div class="row justify-content-center">
-			<div class="tabs">
-				<a class="tab tab-bordered" :class="active == 0 ? 'tab-active' : ''" @click.prevent="active = 0">
+		<div class="mt-5 mx-auto">
+			<div class="flex gap-2 justify-center">
+				<a class="tab tab-bordered px-5 py-2 h-auto rounded bg-white [&.tab-active]:bg-blue-600 [&.tab-active]:text-white" :class="active == 0 ? 'tab-active' : ''" @click.prevent="active = 0">
 					Custom ID Example</a
 				>
-				<a class="tab tab-bordered" :class="active == 1 ? 'tab-active' : ''" @click.prevent="active = 1">
+				<a class="tab tab-bordered px-5 py-2 h-auto rounded bg-white [&.tab-active]:bg-blue-600 [&.tab-active]:text-white" :class="active == 1 ? 'tab-active' : ''" @click.prevent="active = 1">
 					Hex ID Example</a
 				>
 			</div>
 		</div>
-		<div class="mt-3">
+		<div class="mt-8">
 			<customID v-if="active == 0"></customID>
 			<hexID v-if="active == 1"></hexID>
 		</div>

@@ -1,16 +1,13 @@
 <template>
-  <div id="i18" class="container-fluid">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div id="i18">
+    <h2 class="text-xl font-bold flex gap-2 items-center">
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       Internationalization
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-10">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="data">
-              <h3>Change Language (i18)</h3>
-              <FormKit
+    <div class="box-login mx-auto p-8 rounded-xl bg-white shadow">
+        <div class="flex item-center justify-between">
+            <h3>Change Language (i18)</h3>
+            <FormKit
                 type="select"
                 placeholder="Change Language"
                 name="salutation"
@@ -18,19 +15,16 @@
                 @change="changeLanguage(lang)"
                 v-model="lang"
                 value="lang"
-              />
-            </div>
-            <h2>
-              <strong> *** {{ $t("home.homeTitle") }} *** </strong>
-            </h2>
-            <div class="data alt">
-              <component1 class="my-3" />
-              <component2 />
-            </div>
-          </div>
+            />
         </div>
-      </div>
-    </div>
+        <h2 class="mb-5">
+            <strong> *** {{ $t("home.homeTitle") }} *** </strong>
+        </h2>
+        <div class="grid gap-x-5 grid-cols-2">
+            <component1 class="p-6 rounded-lg bg-slate-100" />
+            <component2 class="p-6 rounded-lg bg-slate-100" />
+        </div>
+        </div>
   </div>
 </template>
 

@@ -5,19 +5,17 @@ import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
 import { createMetaManager } from "vue-meta";
 import Toaster from '@meforma/vue-toaster'
-import '/assets/plugins/bootstrap/bootstrap-grid.min.css'
-import '/assets/plugins/bootstrap/bootstrap-utilities.min.css'
-import '../assets/fonts/iconsax/style.css'
-import '../assets/css/template.scss'
-import "./index.css"
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
+import primeVue from 'primevue/config'
+import InputText from 'primevue/inputtext';
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
+// import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
+import '../assets/fonts/iconsax/style.css'
+import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import primeVue from 'primevue/config'
-
-import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
-import '../node_modules/primevue/resources/primevue.min.css'
 
 const piniaStore = createPinia()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -31,6 +29,12 @@ vm.use(piniaStore)
 vm.use(i18n)
 vm.use(router)
 vm.use(primeVue)
+vm.use(InputText)
+vm.component('InputText', InputText)
+vm.use(Accordion)
+vm.component('Accordion', Accordion)
+vm.use(AccordionTab)
+vm.component('AccordionTab', AccordionTab)
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())

@@ -1,61 +1,49 @@
 <template>
-  <div class="container-fluid">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div>
+    <h2 class="text-xl font-bold flex gap-2 items-center">
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       Dynamic Messages
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  class="p-inputtext p-component"
-                  v-model="sms.number"
-                  id="number"
-                  :class="sms.number ? 'p-filled' : ''"
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <div class="field">
+            <div class="p-float-label">
+                <InputText
+                    v-model="sms.number"
+                    id="number"
+                    :class="sms.number ? 'p-filled' : ''"
                 />
                 <label for="number">Enter mobile number</label>
-              </div>
             </div>
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  class="p-inputtext p-component"
-                  v-model="sms.message"
-                  id="message"
-                  :class="sms.message ? 'p-filled' : ''"
+        </div>
+        <div class="field">
+            <div class="p-float-label">
+                <InputText
+                    v-model="sms.message"
+                    id="message"
+                    :class="sms.message ? 'p-filled' : ''"
                 />
                 <label for="number">Enter message</label>
-              </div>
             </div>
-            <div class="field">
-              <div class="p-float-label">
-                <input
-                  type="text"
-                  class="p-inputtext p-component"
-                  v-model="sms.templateId"
-                  id="templateId"
-                  :class="sms.templateId ? 'p-filled' : ''"
+        </div>
+        <div class="field">
+            <div class="p-float-label">
+                <InputText
+                    v-model="sms.templateId"
+                    id="templateId"
+                    :class="sms.templateId ? 'p-filled' : ''"
                 />
                 <label for="templateId">Enter template Id</label>
-              </div>
             </div>
-            <div class="btn-wrapper">
-              <button
-                class="btn btn-submit"
-                @click.prevent="sendDynamicMessages"
-              >
-                <i class="isax isax-bold-sms"></i>
-                Send
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="btn-wrapper">
+            <button
+            class="btn btn-submit"
+            @click.prevent="sendDynamicMessages"
+            >
+            <i class="isax isax-bold-sms"></i>
+            Send
+            </button>
+        </div>
     </div>
   </div>
 </template>

@@ -1,81 +1,75 @@
 <template>
-  <div id="assetFDB" class="container-fluid">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div id="assetFDB">
+    <h2 class="text-xl font-bold flex gap-2 items-center">
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       MQL Request For Asset FDB
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-4">
-        <div class="box-login">
-          <div class="p-card p-component">
-            <h3>Upload File</h3>
-            <div class="field mt-5">
-              <FormKit
-                type="file"
-                label="Your files"
-                help="This input starts with files already attached."
-                multiple="true"
-                :value="file_2"
-                v-model="file"
-              />
-              <FormKit type="submit" label="Upload File" @click="uploadFile" />
-            </div>
-            <div class="field mt-5">
-              <h3 class="mb-5">Asset File</h3>
-              <FormKit
-                type="text"
-                name="assetPath"
-                label="assetPath"
-                v-model="assetPath"
-                placeholder="Enter Asset File Path"
-                help="Asset File Path"
-                validation="required"
-              />
-            </div>
-            <div class="field mt-5">
-              <h3 class="mb-5">Update File</h3>
-              <FormKit
-                type="text"
-                name="recordId"
-                label="recordId"
-                v-model="recordId"
-                placeholder="Enter recordId"
-                help="Record Id"
-                validation="required"
-              />
-            </div>
-            <div class="field mt-5">
-              <FormKit
-                type="file"
-                label="Your files"
-                help="This input starts with files already attached."
-                multiple="true"
-                :value="file_2"
-                v-model="file"
-              />
-            </div>
-            <div class="field mt-5">
-              <h3 class="mb-3">Updated Asset Path</h3>
-              <p v-if="!updatedAssetPath">Asset path not updated</p>
-              <p v-else>
-                {{ updatedAssetPath }}
-              </p>
-            </div>
-            <!-- <div class="btn-wrapper text-center"> -->
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <h3>Upload File</h3>
+        <div class="field mt-5">
             <FormKit
-              type="submit"
-              @click.stop.prevent="downloadFile"
-              label="Download Asset"
+            type="file"
+            label="Your files"
+            help="This input starts with files already attached."
+            multiple="true"
+            :value="file_2"
+            v-model="file"
             />
-            <FormKit
-              type="submit"
-              @click.stop.prevent="renderFile"
-              label="Render Asset"
-            />
-            <!-- </div> -->
-          </div>
+            <FormKit type="submit" label="Upload File" @click="uploadFile" />
         </div>
-      </div>
+        <div class="field mt-5">
+            <h3 class="mb-5">Asset File</h3>
+            <FormKit
+            type="text"
+            name="assetPath"
+            label="assetPath"
+            v-model="assetPath"
+            placeholder="Enter Asset File Path"
+            help="Asset File Path"
+            validation="required"
+            />
+        </div>
+        <div class="field mt-5">
+            <h3 class="mb-5">Update File</h3>
+            <FormKit
+            type="text"
+            name="recordId"
+            label="recordId"
+            v-model="recordId"
+            placeholder="Enter recordId"
+            help="Record Id"
+            validation="required"
+            />
+        </div>
+        <div class="field mt-5">
+            <FormKit
+            type="file"
+            label="Your files"
+            help="This input starts with files already attached."
+            multiple="true"
+            :value="file_2"
+            v-model="file"
+            />
+        </div>
+        <div class="field mt-5">
+            <h3 class="mb-3">Updated Asset Path</h3>
+            <p v-if="!updatedAssetPath">Asset path not updated</p>
+            <p v-else>
+            {{ updatedAssetPath }}
+            </p>
+        </div>
+        <!-- <div class="btn-wrapper text-center"> -->
+        <FormKit
+            type="submit"
+            @click.stop.prevent="downloadFile"
+            label="Download Asset"
+        />
+        <FormKit
+            type="submit"
+            @click.stop.prevent="renderFile"
+            label="Render Asset"
+        />
+        <!-- </div> -->
     </div>
   </div>
 </template>

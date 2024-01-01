@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<h2 class="title alt">
-			<i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
-			Dashboard
+		<h2 class="text-xl font-bold flex gap-2 items-center">
+			<i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
+			Tailwind
 		</h2>
 		<h1>Table 1</h1>
 		<div class="relative overflow-x-auto">

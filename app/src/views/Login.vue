@@ -1,23 +1,20 @@
 <template>
-  <div id="login" class="container-fluid">
-    <h2 class="title alt">
-      <i class="isax isax-bold-arrow-left-2" @click="$router.go(-1)"></i>
+  <div id="login">
+    <h2 class="text-xl font-bold flex gap-2 items-center">
+      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
       Login Form
     </h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <div class="p-card p-component">
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <FormKit
+            type="form"
+            id="login-example"
+            :form-class="submitted ? 'hide' : 'show'"
+            submit-label="Register"
+            @submit="authenticate"
+            :actions="false"
+            #default="{ value }"
+        >
             <FormKit
-              type="form"
-              id="login-example"
-              :form-class="submitted ? 'hide' : 'show'"
-              submit-label="Register"
-              @submit="authenticate"
-              :actions="false"
-              #default="{ value }"
-            >
-              <FormKit
                 type="text"
                 name="username"
                 label="User Name"
@@ -25,28 +22,25 @@
                 placeholder="User Name"
                 help="Enter User Name"
                 validation="required"
-              />
-              <div class="double">
+            />
+            <div class="double">
                 <FormKit
-                  type="password"
-                  name="password"
-                  label="Password"
-                  validation="required|length:6|matches:/[^a-zA-Z]/"
-                  :validation-messages="{
+                    type="password"
+                    name="password"
+                    label="Password"
+                    validation="required|length:6|matches:/[^a-zA-Z]/"
+                    :validation-messages="{
                     matches: 'Please include at least one symbol',
-                  }"
-                  v-model="password"
-                  placeholder="Your password"
-                  help="Choose a password"
+                    }"
+                    v-model="password"
+                    placeholder="Your password"
+                    help="Choose a password"
                 />
-              </div>
+            </div>
 
-              <FormKit type="submit" label="Login" />
-              <pre wrap>{{ value }}</pre>
-            </FormKit>
-          </div>
-        </div>
-      </div>
+            <FormKit type="submit" label="Login" />
+            <pre wrap>{{ value }}</pre>
+        </FormKit>
     </div>
   </div>
 </template>

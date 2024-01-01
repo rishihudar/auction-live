@@ -1,32 +1,28 @@
 <template>
-  <div id="deleteData" class="container-fluid">
-    <h2 class="title alt">Delete Data from Session</h2>
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <div class="box-login">
-          <FormKit
+  <div id="deleteData">
+    <h2 class="text-xl font-bold flex gap-2 items-center justify-center">Delete Data from Session</h2>
+    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+        <FormKit
             type="form"
             id="registration-example"
             :form-class="submitted ? 'hide' : 'show'"
             submit-label="Register"
             @submit="deleteSessionData"
             :actions="false"
-          >
+        >
             <FormKit
-              type="text"
-              name="sessionName"
-              label="Session Key"
-              v-model="deleteKey"
-              placeholder="Session Key"
-              help="Enter Session Key"
-              validation="required"
+                type="text"
+                name="sessionName"
+                label="Session Key"
+                v-model="deleteKey"
+                placeholder="Session Key"
+                help="Enter Session Key"
+                validation="required"
             />
             <button class="btn btn-error" type="submit" label="Delete">
-              Delete
+                Delete
             </button>
-          </FormKit>
-        </div>
-      </div>
+        </FormKit>
     </div>
   </div>
 </template>
