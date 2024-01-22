@@ -1,92 +1,158 @@
-# vue3-template
+# Node and npm environement:
+  Updated and tested with latest dependencies using node 18.12.1 and npm 8.19.2
+  Provided Option API example in FormkitCustomOption.vue file.
+# Vue Client app (Vue3 CompositionAPI)
+# Vite CLI version 4.2.3
+# FormKit version 0.17.2
+# DaisyUI version 2.51.6
+# TailwindCSS version 3.3.2
+# Pinia version 2.1.3
+# Primevue version 3.41.0
+# Kindly do rename yor application in package.json name
+# Pre-requisite
+- NPM and/or Yarn installed
+# Steps
+- Install vue cli 3 [VUE CLI 3](https://cli.vuejs.org/guide/installation.html) 
+```sh
+    npm install -g @vue/cli
+    # OR
+    yarn global add @vue/cli
+    # Check using
+    vue --version
+```
+- Navigate to project client/app and execute
+```sh
+    npm install
+```
+- execute below command it start browser which help for run, build, testing etc
+```sh
+    vue ui
+```
+- You can also use cmd for executing
+```sh
+    "serve": "vite",
+    "build": "vite build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e"
+```
+- once vue ui started click on import and add your app (it emit error if node_module not installed )
+- go to tasks menu and click on Serve (for running app) 
+- Other option like build , analyzer, plugin installation etc.
+- You can also updating serve execution script in package.json by adding
+```sh
+Usage: vue-cli-service serve [options] [entry]
 
+Options:
+  --open    open browser on server start
+  --copy    copy url to clipboard on server start
+  --mode    specify env mode (default: development)
+  --host    specify host (default: 0.0.0.0)
+  --port    specify port (default: 8080)
+  --https   use https (default: false)
+```
+  VSCode Setting:
+  Install eslint extension
+  This is for vue client application formatting you can add your other plugins related to Golang, Python, todo Highlight, theme etc
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+  {
+  "editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "workbench.colorTheme": "Visual Studio Dark",
+  "nativescript.analytics.enabled": false,
+  "window.zoomLevel": 0,
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.validate": [
+    {
+      "language": "vue",
+      "autoFix": true
+    },
+    {
+      "language": "html",
+      "autoFix": true
+    },
+    {
+      "language": "javascript",
+      "autoFix": true
+    }
+  ],
+}
+  Ctrl + S => shall format your code (multiple save action may require)
 
 ```
-cd existing_repo
-git remote add origin https://corelab.mkcl.org/public-templates/vue-templates/vue3-template.git
-git branch -M main
-git push -uf origin main
+  -- edit: .eslintrc.js file update "plugin:vue/recommended" to "plugin:vue/strongly-recommended"
+  -- edit: .eslintignore file add update src/* to src/*.js
+  -- run: npm run lint and resolve the issue you are facing refer : https://vuejs.github.io/eslint-plugin-vue/rules/ 
 ```
 
-## Integrate with your tools
+# Steps to remove primevue from project 
+1. Remove `primevue` package dependencies from package.json file.
+2. Remove import statement from main.js file
+```
+import primeVue from 'primevue/config'
+Import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
+import '../node_modules/primevue/resources/primevue.min.css'
+vm.use(primeVue)
+```
+3. Remove import statements from clientData.vue file and component registration part too.
+```
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+```
 
-- [ ] [Set up project integrations](https://corelab.mkcl.org/public-templates/vue-templates/vue3-template/-/settings/integrations)
+# Steps to remove formkit,DaisyUI and Tailwind from project
+1. remove package dependencies from package.json file
+  - @formkit/addons : "^1.3.0",
+  - @formkit/icons : "^1.3.0",
+  - @formkit/vue : "^1.3.0"
+  - "daisyui": "^2.51.6"
+  - "tailwind-scrollbar": "^3.0.4",
+  - "tailwindcss": "^3.3.2",
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+2. Remove the import statements from the main.js file
+  - import { plugin, defaultConfig } from '@formkit/vue'
+  - import formKitConfig from './formkit.config'
+  - vm.use(plugin, defaultConfig(formKitConfig))
+3. Delete the files from project
+  - postcss.config.js
+  - tailwind.config.js
+  - /src/formkit.config.js
+  - /src/index.css
+4. Remove the all <FormKit></FormKit> tags and respective code from all vuejs pages and components.
 
-## Test and Deploy
+# Gulp task for 'en.json' and 'dv.json' creation
 
-Use the built-in continuous integration in GitLab.
+Note: 'dv.json' is created for identifying which labels or places are left/skipped by developers for i18n changes.
+Steps To perform:-
+1. While doing i18n, developers should do it with following mentioned pattern:-
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+    i. If i18n is done in curly braces like :-
+        <button>{{ $t('btn_confirm') }}</button>
+    Then it should be done with pattern:-
+        <button>{{ $t('##btn_confirm##@@Confirm@@') }}</button>
 
-***
+    ii. If i18n is done at attribute level in element like :-
+        <button :label="$t('btn_confirm')"></button>
+    Then it should be done with pattern:-
+        <button :label="$t('##btn_confirm##@@Confirm@@')"></button>
 
-# Editing this README
+    iii. If i18n is done at script level like :-
+        this.$toast.error(this.$t('invalidUsername'), {
+            theme: 'bubble',
+            duration: 6000
+        })
+    Then it should be done with pattern:-
+        this.$toast.error(this.$t('##invalidUsername##@@User name is invalid@@'), {
+            theme: 'bubble',
+            duration: 6000
+        })
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+2. After this just run command 'npm run geni18n'
+3. This will create backup of current 'en.json'
+4. Create new 'en.json' and 'dv.json'
+5. Further the 'en.json' can be used to do i18n in any language at 'https://cs.mkcl.org'
