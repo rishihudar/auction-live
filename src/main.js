@@ -5,6 +5,11 @@ import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
 import { createMetaManager } from "vue-meta";
 import Toaster from '@meforma/vue-toaster'
+//import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+// import 'primevue/resources/themes/saga-blue/theme.css'; // Choose your preferred theme
+// import 'primevue/resources/primevue.min.css';
+// import 'primeicons/primeicons.css';
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
@@ -28,6 +33,8 @@ window.app = vm
 vm.use(piniaStore)
 vm.use(i18n)
 vm.use(router)
+//vm.component('Toast', Toast);
+vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue)
 vm.use(InputText)
 vm.component('InputText', InputText)

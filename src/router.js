@@ -4,6 +4,10 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadMastersView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/master/${view}.vue`);
+}
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -12,6 +16,36 @@ export default createRouter({
       name: "home",
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/master",
+      name: "master",
+      component: loadMastersView("master"),
+      meta: { title: "master", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/CountryMaster",
+      name: "CountryMaster",
+      component: loadMastersView("CountryMaster"),
+      meta: { title: "CountryMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/StateMaster",
+      name: "StateMaster",
+      component: loadMastersView("StateMaster"),
+      meta: { title: "StateMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/DistrictMaster",
+      name: "DistrictMaster",
+      component: loadMastersView("DistrictMaster"),
+      meta: { title: "DistrictMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/TalukaMaster",
+      name: "TalukaMaster",
+      component: loadMastersView("TalukaMaster"),
+      meta: { title: "TalukaMaster", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
       path: "/about",
