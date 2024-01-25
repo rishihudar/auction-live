@@ -48,6 +48,12 @@ export default createRouter({
       meta: { title: "TalukaMaster", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
+      path: "/ExcelViewer",
+      name: "ExcelViewer",
+      component: loadMastersView("ExcelViewer"),
+      meta: { title: "ExcelViewer", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
       path: "/about",
       name: "about",
       component: loadView("About"),

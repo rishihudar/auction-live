@@ -246,12 +246,13 @@ export default {
       const submitForm = (countryData) => {
         // Check for null values in countryData
 
-        if (hasNullValues(countryData)) {
+        if (countryData.vsCountryName=="") {
+            
             showError
             //showToastError('Form contains null values.');
             return;
-        }
-
+        }else{
+           
         // Perform form submission logic here
         new MQL()
             .setActivity('o.[InsertCountry]')
@@ -270,12 +271,14 @@ export default {
             }
             loading.value = false; // Move loading to here
             })
-
+        
             .catch((error) => {
                 showError
             //showToastError('An error occurred during form submission.');
             loading.value = false;
             });
+
+        }
             };
 
 

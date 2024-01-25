@@ -190,11 +190,11 @@ export default {
       const submitForm = (districtData) => {
 
         // Check for null values in countryData
-        if (hasNullValues(districtData)) {
-            showError
+        if (districtData.vsDistrictName=="") {
+            showError()
             //showToastError('Form contains null values.');
             return;
-        }
+        }else{
         
         // Perform form submission logic here
         new MQL()
@@ -205,11 +205,11 @@ export default {
             let res = rs.getActivity('InsertDistrict', true);
             if (rs.isValid('InsertDistrict')) {
                 // Show success toast
-                showSuccess
+                rs.showSuccess("data submmitted")
                 //showToastSuccess('Form Submitted Successfully.', res.result);
             } else {
                 // Show error toast
-                showError
+                showError()
                 //rs.showErrorToast('InsertCoInsertDistrictuntry');
             }
             loading.value = false; // Move loading to here
@@ -221,6 +221,7 @@ export default {
            // showToastError('An error occurred during form submission.');
             loading.value = false;
             });
+        }
             };
 
 
