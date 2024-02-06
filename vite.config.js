@@ -47,7 +47,7 @@ export default defineConfig({
     port: 8080,
     proxy: {
       "/server": {
-        target: "https://cs.mkcl.org/1JFfwe3g8vHuNOtxk2BsH09pBA5",
+        target: "https://cs.mkcl.org/2ZnbEg2SCTvOZwAFylfCVFdMOlz",
         ws: true,
         secure: false,
         changeOrigin: true,

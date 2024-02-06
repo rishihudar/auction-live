@@ -13,6 +13,15 @@
                 </div>
                 <div class="bx-card-desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ullam, rerum.</div>
             </div>
+            <div class="bx-card" @click="$router.push({ name: 'inventoryMaster' })">
+                <div class="icon-holder">
+                    <i class="isax isax-bold-edit-2"></i>
+                </div>
+                <div class="bx-card-name">
+                    Inventory Master
+                    <i class="isax isax-bold-arrow-right"></i>
+                </div>
+            </div>
             <div class="bx-card" @click="$router.push({ name: 'registration' })">
                 <div class="icon-holder">
                     <i class="isax isax-bold-edit-2"></i>
