@@ -4,6 +4,10 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadMastersVue(view){
+return()=>
+import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
+}
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -333,5 +337,21 @@ export default createRouter({
       component: loadView("validateOTP"),
       meta: { title: "validateOTP", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    {
+      path: "/StateMaster",
+      component: loadMastersVue("StateMaster"),
+      meta: { title: "stateMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/TalukaMaster",
+      component: loadMastersVue("TalukaMaster"),
+      meta: { title: "talukaMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/EntityRegistration",
+      component: loadView("EntityRegistration"),
+      meta: { title: "EntityRegistration", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    
   ],
 });

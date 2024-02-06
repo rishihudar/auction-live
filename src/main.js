@@ -5,12 +5,17 @@ import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
 import { createMetaManager } from "vue-meta";
 import Toaster from '@meforma/vue-toaster'
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
 import InputText from 'primevue/inputtext';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -28,13 +33,19 @@ window.app = vm
 vm.use(piniaStore)
 vm.use(i18n)
 vm.use(router)
+vm.use(ConfirmationService);
+vm.use(ToastService);
 vm.use(primeVue)
+vm.component('ConfirmDialog', ConfirmDialog);
+vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('InputText', InputText)
 vm.use(Accordion)
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
+vm.use(Toast)
+vm.component('Toast', Toast);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())
