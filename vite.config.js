@@ -54,8 +54,8 @@ export default defineConfig({
         rewrite: (p) => p.replace(/^\/server/, ""),
       },
       "/cdnserver": {
-        // target: "https://testcdncs.mkcl.org",
-        target: "http://localhost:3032",
+        target: "https://testcdncs.mkcl.org",
+        // target: "http://localhost:3032",
         ws: true,
         secure: false,
         changeOrigin: true,
