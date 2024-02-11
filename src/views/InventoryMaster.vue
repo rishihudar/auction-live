@@ -224,7 +224,7 @@ const columnTempNames = ref();
 function fetchInventoryTempColumns() {
   new MQL()
     .setActivity("o.[FetchInventoryTemplateColumns]")
-    .setData({ pklInventoryCategoryId: selectedCategory.value })
+    .setData({ inventoryCategoryId: selectedCategory.value })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("FetchInventoryTemplateColumns", true);
