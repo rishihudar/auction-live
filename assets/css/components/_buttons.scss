@@ -1,0 +1,5 @@
+.btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;}
+
+.btn-primary {@apply text-white bg-primary-400; box-shadow: 0 10px 20px -10px rgb(var(--primary-400) / 0.6);
+    &:hover, &:focus {@apply bg-primary-600; box-shadow: 0 10px 20px -10px rgb(var(--primary-400) / 0);}
+}
