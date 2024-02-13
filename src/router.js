@@ -4,11 +4,14 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadUI(view) {
+    return () => import(/* webpackChunkName: "view-[request]" */ `@/views/ui/${view}.vue`)
+}
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
@@ -20,7 +23,7 @@ export default createRouter({
       meta: { title: "About", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
-      path: "/login",
+      path: "/",
       name: "login",
       component: loadView("Login"),
       meta: { title: "Login", lang: "mr", icon: "mdi mdi-account" },
@@ -333,5 +336,12 @@ export default createRouter({
       component: loadView("validateOTP"),
       meta: { title: "validateOTP", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    // UI
+    {
+        path: "/ui/datatable",
+        name: "Datatable",
+        component: loadUI("datatable"),
+        meta: { title: "Datatable", lang: "mr", icon: "mdi mdi-account-edit" },
+    }
   ],
 });

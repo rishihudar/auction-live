@@ -1,22 +1,31 @@
 <template>
-    <div class="box-footer mt-auto px-4 py-1 bg-white">
-        <div class="bxf-container flex items-center">
-            <img class="w-16 h-16 mr-4" src="../../assets/logo_mkcl.svg" alt="MKCL Logo">
-            <div class="bxf-container-info text-[0.8125rem] text-[var(--gray-500)]">
-                <p>
-                    &copy; Maharashtra Knowledge Corporation Limited.
-                </p>
-                <p>
-                    All Rights Reserved.
-                </p>
+    <div class="box-footer" v-if="name == 'box'">
+        &copy; {{ new Date().getFullYear() }} Haryana Knowledge Corporation Limited. All Rights Reserved.
+    </div>
+    <footer id="footer" v-else>
+        <div class="ft-copyright">
+            <img src="../../../assets/images/logo_hkcl.webp" alt="HKCL logo">
+            <div class="ft-copyright-text">
+                <p>&copy; {{ new Date().getFullYear() }} Haryana Knowledge Corporation Limited.</p>
+                <p>All Rights Reserved.</p>
             </div>
         </div>
-    </div>
+    </footer>
 </template>
 
 <script>
 export default {
-}
+    name: 'Footer',
+    props: {
+        name: {
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {}
+    }
+};
 </script>
 
 <style>
