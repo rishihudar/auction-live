@@ -13,7 +13,7 @@
         dataKey="id"
         filterDisplay="row" 
         :loading="loading" 
-        :globalFilterFields="['fklStateId', 'vsDistrictName']">
+        :globalFilterFields="['stateId', 'districtName']">
 
             <template #header>
                 <div class="flex justify-content-between">
@@ -43,9 +43,9 @@
 
             <template #loading>Loading District data. Please wait.</template>
             
-            <Column field="vsDistrictName" header="District Name" style="min-width: 12rem">
+            <Column field="districtName" header="District Name" style="min-width: 12rem">
                 <template #body="{ data }">
-                    {{ data.vsDistrictName }}
+                    {{ data.districtName }}
                 </template>
                 <template #filter="{ filterModel, filterCallback }">
                     <InputText v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
@@ -73,40 +73,69 @@
 <template v-else-if="flag === 1">
   <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
     
-    <div class="form-row">
-        <div class="card flex justify-content-center">
-            <Dropdown v-model="districtData.fklStateId"  option-value="pklStateId" :options="state" optionLabel="vsStateName" placeholder="Select a City" class="w-full md:w-14rem" />
+    <div class="fm-row">
+        <div class="w-1/2">
+            <div class="fm-group">
+                <div class="card flex justify-content-center">
+                    <Dropdown v-model="districtData.stateId"  option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" class="w-full md:w-14rem" />
+                </div>
+            </div>
+        </div>
+
+        <div class="w-1/2">
+            <div class="fm-group">
+                <label for="districtName">District Name</label>
+                <InputText id="districtName" v-model="districtData.districtName" />
+                <small id="username-help">Enter District name E.g Nandurbar</small>
+            </div>
         </div>
     </div>
-   
-    <div class="form-row">
-      <label for="districtName">District Name</label>
-      <InputText id="districtName" v-model="districtData.vsDistrictName" />
-      <small id="username-help">Enter District name E.g Nandurbar</small>
+    <div class="fm-row">
+        <div class="w-1/2">
+            <div class="fm-group">
+                <Button @click="submitForm(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
+            </div>
+        </div>
+        <div class="w-1/2">
+            <div class="fm-group">
+                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+            </div>
+        </div>
     </div>
-
-    <Button @click="submitForm(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-    <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
-
   </div>
 </template>
 <template v-else-if="flag === 2">
   <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
     
-    <div class="form-row">
-        <div class="card flex justify-content-center">
-            <Dropdown v-model="districtData.fklStateId"  option-value="pklStateId" :options="state" optionLabel="vsStateName" placeholder="Select a City" class="w-full md:w-14rem" />
+    <div class="fm-row">
+        <div class="w-1/2">
+            <div class="fm-group">
+                <div class="card flex justify-content-center">
+                    <Dropdown v-model="districtData.stateId"  option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" class="w-full md:w-14rem" />
+                </div>
+            </div>
+        </div>
+    
+        <div class="w-1/2">
+            <div class="fm-group">
+                <label for="districtName">District Name</label>
+                <InputText id="districtName" v-model="districtData.districtName" />
+                <small id="username-help">Enter District name E.g Nandurbar</small>
+            </div>
         </div>
     </div>
-    
-    <div class="form-row">
-      <label for="districtName">District Name</label>
-      <InputText id="districtName" v-model="districtData.vsDistrictName" />
-      <small id="username-help">Enter District name E.g Nandurbar</small>
+    <div class="fm-row">
+        <div class="w-1/2">
+            <div class="fm-group">
+                <Button @click="updateData(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
+            </div>
+        </div>
+        <div class="w-1/2">
+            <div class="fm-group">
+                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+            </div>
+        </div>
     </div>
-
-    <Button @click="updateData(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-    <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
   </div>
 </template>
 </div>
@@ -148,14 +177,14 @@ export default {
 
         const filters = ref({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            fklStateId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-            vsDistrictName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+            stateId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+            districtName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 
         });
 
         const districtData = ref({
-                fklStateId: '',
-                vsDistrictName: '',
+                stateId: '',
+                districtName: '',
             });
 
 
@@ -169,7 +198,7 @@ export default {
                 // Perform form Edit logic here
                 new MQL()
                     .setActivity('o.[UpdateDistrictById]')
-                    .setData({fklStateId: districtData.fklStateId, vsDistrictName: districtData.vsDistrictName, pklDistrictId: districtData.pklDistrictId})
+                    .setData({stateId: districtData.stateId, districtName: districtData.districtName, districtId: districtData.districtId})
                     .fetch()
                     .then((rs) => {
                     let res = rs.getActivity('UpdateDistrictById', true);
@@ -190,7 +219,7 @@ export default {
       const submitForm = (districtData) => {
 
         // Check for null values in countryData
-        if (districtData.vsDistrictName=="") {
+        if (districtData.districtName=="") {
             showError()
             //showToastError('Form contains null values.');
             return;
@@ -199,7 +228,7 @@ export default {
         // Perform form submission logic here
         new MQL()
             .setActivity('o.[InsertDistrict]')
-            .setData({fklStateId: districtData.fklStateId, vsDistrictName: districtData.vsDistrictName})
+            .setData({stateId: districtData.stateId, districtName: districtData.districtName})
             .fetch()
             .then((rs) => {
             let res = rs.getActivity('InsertDistrict', true);

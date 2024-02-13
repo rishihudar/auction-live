@@ -6,7 +6,7 @@ function loadView(view) {
 }
 function loadMastersView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/master/${view}.vue`);
+    import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
 }
 export default createRouter({
   history: createWebHashHistory(),
@@ -52,6 +52,12 @@ export default createRouter({
       name: "ExcelViewer",
       component: loadMastersView("ExcelViewer"),
       meta: { title: "ExcelViewer", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/UserManagement",
+      name: "UserManagement",
+      component: loadMastersView("UserManagement"),
+      meta: { title: "UserManagement", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
       path: "/about",

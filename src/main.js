@@ -5,7 +5,7 @@ import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
 import { createMetaManager } from "vue-meta";
 import Toaster from '@meforma/vue-toaster'
-//import Toast from 'primevue/toast';
+import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 // import 'primevue/resources/themes/saga-blue/theme.css'; // Choose your preferred theme
 // import 'primevue/resources/primevue.min.css';
@@ -16,6 +16,11 @@ import primeVue from 'primevue/config'
 import InputText from 'primevue/inputtext';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
+import Dialog from 'primevue/dialog';
+import DialogService from 'primevue/dialogservice'
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -33,10 +38,15 @@ window.app = vm
 vm.use(piniaStore)
 vm.use(i18n)
 vm.use(router)
-//vm.component('Toast', Toast);
+vm.use(DialogService);
+vm.use(ConfirmationService);
+vm.component('Toast', Toast);
 vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue)
 vm.use(InputText)
+vm.component('ConfirmDialog', ConfirmDialog);
+vm.component('ConfirmPopup', ConfirmPopup);
+vm.component('Dialog', Dialog);
 vm.component('InputText', InputText)
 vm.use(Accordion)
 vm.component('Accordion', Accordion)
