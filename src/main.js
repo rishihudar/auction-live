@@ -1,5 +1,7 @@
 import { createApp, h } from 'vue'
 import App from './App.vue'
+import Button from 'primevue/button';
+import Card from 'primevue/card';
 import router from './router'
 import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
@@ -40,6 +42,8 @@ vm.use(i18n)
 vm.use(router)
 vm.use(DialogService);
 vm.use(ConfirmationService);
+vm.component('Button', Button);
+vm.component('Card', Card);
 vm.component('Toast', Toast);
 vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue)

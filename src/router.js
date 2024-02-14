@@ -4,9 +4,21 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadAdminView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
+}
+function loadDashboardView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/Dashboard/${view}.vue`);
+}
 function loadMastersView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
+}
+function loadManagementView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/management/${view}.vue`);
 }
 export default createRouter({
   history: createWebHashHistory(),
@@ -16,6 +28,78 @@ export default createRouter({
       name: "home",
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/admin/auction-preparation",
+      name: "ROLE_MAKER",
+      component: loadAdminView("AuctionPreparation"),
+      meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/AuctionCheckerDashboard",
+      name: "ROLE_CHECKER",
+      component: loadDashboardView("AuctionCheckerComponent"),
+      meta: { title: "AuctionCheckerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/AdminDashboard",
+      name: "ROLE_ADMIN",
+      component: loadDashboardView("AdminComponent"),
+      meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    // {
+    //   path: "/AuctionMakerDashboard",
+    //   name: "ROLE_MAKER",
+    //   component: loadDashboardView("AuctionMakerComponent"),
+    //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    // },
+    {
+      path: "/BidderDashboard",
+      name: "ROLE_BIDDER",
+      component: loadDashboardView("BidderComponent"),
+      meta: { title: "BidderComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/SuperAdminDashboard",
+      name: "ROLE_SUPERADMIN",
+      component: loadDashboardView("SuperAdminComponent"),
+      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/OrganizationAdminDashboard",
+      name: "ROLE_ORGANIZATION_ADMIN",
+      component: loadDashboardView("OrganizationAdminComponent"),
+      meta: { title: "OrganizationAdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/ApproverDashboard",
+      name: "ROLE_APPROVER",
+      component: loadDashboardView("ApproverComponent"),
+      meta: { title: "ApproverComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/PublisherDashboard",
+      name: "ROLE_PUBLISHER",
+      component: loadDashboardView("PublisherComponent"),
+      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/SchedulerDashboard",
+      name: "ROLE_SCHEDULER",
+      component: loadDashboardView("SchedulerComponent"),
+      meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/WatcherDashboard",
+      name: "ROLE_WATCHER",
+      component: loadDashboardView("WatcherComponent"),
+      meta: { title: "WatcherComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/LandingPage",
+      name: "LandingPage",
+      component: loadView("LandingPage"),
+      meta: { title: "LandingPage", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
       path: "/master",
@@ -56,8 +140,14 @@ export default createRouter({
     {
       path: "/UserManagement",
       name: "UserManagement",
-      component: loadMastersView("UserManagement"),
+      component: loadManagementView("UserManagement"),
       meta: { title: "UserManagement", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/RoleManagement",
+      name: "RoleManagement",
+      component: loadManagementView("RoleManagement"),
+      meta: { title: "RoleManagement", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
       path: "/about",
