@@ -24,6 +24,12 @@ export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
+      path: "/inventoryMaster",
+      name: "inventoryMaster",
+      component: loadView("InventoryMaster"),
+      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
       path: "/",
       name: "home",
       component: loadView("Home"),
