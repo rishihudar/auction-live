@@ -1,54 +1,48 @@
 <template>
-  <div id="login">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
-      <i class="isax isax-bold-arrow-left-2 cursor-pointer" @click="$router.go(-1)"></i>
-      Login Form
-    </h2>
-    <div class="box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-        <FormKit
-            type="form"
-            id="login-example"
-            :form-class="submitted ? 'hide' : 'show'"
-            submit-label="Register"
-            @submit="authenticate"
-            :actions="false"
-            #default="{ value }"
-        >
-            <FormKit
-                type="text"
-                name="username"
-                label="User Name"
-                v-model="username"
-                placeholder="User Name"
-                help="Enter User Name"
-                validation="required"
-            />
-            <div class="double">
-                <FormKit
-                    type="password"
-                    name="password"
-                    label="Password"
-                    validation="required|length:6|matches:/[^a-zA-Z]/"
-                    :validation-messages="{
-                    matches: 'Please include at least one symbol',
-                    }"
-                    v-model="password"
-                    placeholder="Your password"
-                    help="Choose a password"
-                />
+    <div id="login" class="box-login-holder">
+        <div class="card-login">
+            <div class="page-header">
+                <div class="ph-media">
+                    <img src="../../assets/images/logo_dulb.webp" alt="DULB logo" width="956" height="193">
+                </div>
+                <h1 class="title">
+                    Login
+                </h1>
             </div>
-
-            <FormKit type="submit" label="Login" />
-            <pre wrap>{{ value }}</pre>
-        </FormKit>
+            <form class="form-login form-grid">
+                <div class="fm-group">
+                    <label for="username">Username</label>
+                    <InputText id="username" v-model="value" aria-describedby="username-help" placeholder="Enter Your Username" />
+                    <small id="username-help">Your username will be unique across the entire application and it will be used across the entire application.</small>
+                </div>
+                <div class="fm-group">
+                    <label for="password">Password</label>
+                    <Password id="password" v-model="value" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled>
+                        <!-- <template #hideicon>
+                            test
+                        </template>
+                        <template #showicon>
+                            test
+                        </template> -->
+                    </Password>
+                </div>
+                <div class="fm-action">
+                    <Button label="Login" @click="$router.push({ name: 'home' })" />
+                </div>
+                <div class="fm-action-link">
+                    <router-link to="/registration">New User? Register here</router-link>
+                </div>
+            </form>
+            <Footer name="box"></Footer>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { login } from "../store/modules/login.js";
 import { createToaster } from "@meforma/vue-toaster";
+import Footer from "@/components/common/Footer.vue"
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
 let username = ref("");

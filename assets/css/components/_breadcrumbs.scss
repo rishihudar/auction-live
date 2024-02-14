@@ -1,0 +1,8 @@
+.box-breadcrumb {@apply mt-1;}
+.breadcrumb {@apply flex items-center;
+    &-separator {@apply px-2;
+        svg {@apply mt-[1px] *:fill-[var(--neutral-200)];}
+    }
+    &-link {@apply text-[var(--neutral-300)] transition-colors duration-200 hover:text-[var(--neutral-600)];}
+    span.breadcrumb-link {@apply text-[var(--neutral-600)];}
+}
