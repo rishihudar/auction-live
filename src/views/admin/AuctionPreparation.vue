@@ -54,7 +54,7 @@
       </div>
     </div>
   </template>
-  
+
   <script setup>
   import { ref, computed } from 'vue';
   import Step1 from '@/views/admin/AuctionPreparation/Step1.vue';
@@ -62,8 +62,18 @@
   import Step3 from '@/views/admin/AuctionPreparation/Step3.vue';
   import Step4 from '@/views/admin/AuctionPreparation/Step4.vue';
  
-  
-  const auctionPreparation = ref({
+//   const items = ref([
+//     {
+//         label: 'Personal Info'
+//     },
+//     {
+//         label: 'Reservation'
+//     },
+//     {
+//         label: 'Review'
+//     }
+// ]);
+   const auctionPreparation = ref({
     auctionMethodId: 1,
     stepPosition: 0
   });

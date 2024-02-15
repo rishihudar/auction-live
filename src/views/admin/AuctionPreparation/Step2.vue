@@ -114,12 +114,12 @@
         </div>
         <div class="ml-auto">
             <span class="p-buttonset">
-                <Button label="Back" @click="" icon="pi pi-trash" />
+                <Button label="Back" @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-trash" />
             </span>
         </div>
         <div class="ml-auto">
             <span class="p-buttonset">
-                <Button label="Next" @click="" icon="pi pi-trash" />
+                <Button label="Next" @click=" $router.push({ name: 'Step3' })" icon="pi pi-trash" />
             </span>
         </div>
     </div>

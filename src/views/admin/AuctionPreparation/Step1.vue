@@ -159,7 +159,7 @@ onMounted(() => {
         </div>
         <div class="ml-auto">
             <span class="p-buttonset">
-                <Button label="Next" @click="validateForm" icon="pi pi-trash" />
+                <Button label="Next" @click="validateForm, $router.push({ name: 'step2' })" icon="pi pi-trash" />
             </span>
         </div>
     </div>

@@ -13,6 +13,7 @@ import ToastService from 'primevue/toastservice';
 // import 'primevue/resources/primevue.min.css';
 // import 'primeicons/primeicons.css';
 import { plugin, defaultConfig } from '@formkit/vue'
+import Column from 'primevue/column';
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
 import InputText from 'primevue/inputtext';

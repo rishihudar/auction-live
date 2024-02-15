@@ -26,7 +26,7 @@
                 </div>
                 <div class="ml-auto">
                     <span class="p-buttonset">
-                        <Button label="Back" @click="" icon="pi pi-trash" />
+                        <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" />
                     </span>
                 </div>
                 <Toast />
@@ -35,7 +35,7 @@
                     <Button @click="confirm1()" label="Next" outlined></Button>
 
                 </div>
-               
+
             </div>
         </template>
         <template v-else-if="flag === 1">
@@ -44,16 +44,17 @@
                     <div class="fm-group">
                         <label for="step1">District<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedDistrict" variant="filled" :options="districts" optionLabel="inventoryName"
-                            placeholder="Select Auction Type" class="w-full md:w-14rem" />
+                        <Dropdown v-model="selectedDistrict" variant="filled" :options="districts"
+                            optionLabel="inventoryName" placeholder="Select Auction Type" class="w-full md:w-14rem" />
+
                     </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
                         <label for="step1">MC Name<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedEntities.parentInventoryId" variant="filled" :options="entities" optionLabel="inventoryName"
-                            placeholder="Select MC Type" class="w-full md:w-14rem" />
+                        <Dropdown v-model="selectedEntities.parentInventoryId" variant="filled" :options="MCs"
+                            optionLabel="inventoryName" placeholder="Select MC Type" class="w-full md:w-14rem" />
 
                     </div>
                 </div>
@@ -61,7 +62,7 @@
                     <div class="fm-group">
                         <label for="step1">Location<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedCity" variant="filled" :options="locations" optionLabel="name"
+                        <Dropdown v-model="selectedCity" variant="filled" :options="locations" optionLabel="inventoryName"
                             placeholder="Select Location" class="w-full md:w-14rem" />
 
                     </div>
@@ -72,7 +73,7 @@
                     <div class="fm-group">
                         <label for="step1">Area<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedCity" variant="filled" :options="areas" optionLabel="name"
+                        <Dropdown v-model="selectedCity" variant="filled" :options="areas" optionLabel="inventoryName"
                             placeholder="Select Area" class="w-full md:w-14rem" />
 
                     </div>
@@ -118,16 +119,15 @@
                     <div class="fm-group">
                         <label for="step2">Modifier Value Change<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedModifierValueChange" variant="filled" :options="modifiervaluechanges" optionLabel="modifierValueChangeName"
-                            placeholder="Enter Modifier Value" class="w-full md:w-14rem" />
+                        <Dropdown v-model="selectedModifierValueChange" variant="filled" :options="modifiervaluechanges"
+                            optionLabel="modifierValueChangeName" placeholder="Enter Modifier Value"
+                            class="w-full md:w-14rem" />
                     </div>
                 </div>
             </div>
-            <div class="fm-row"
-            v-if="selectedModifierValueChange.modifierValueChangeName == 'After Extension'">
+            <div class="fm-row" v-if="selectedModifierValueChange.modifierValueChangeName == 'After Extension'">
                 <div class="w-1/2">
-                    <div class="fm-group"
-                    >
+                    <div class="fm-group">
                         <label for="step1">Modifier Value After No. Of Extensions<span class="text-danger">*</span></label>
 
                         <InputNumber v-model="modifierValue2" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
@@ -160,21 +160,13 @@
                 </FileUpload>
             </div>
             <div class="fm-row">
-        <button
-          class="btn btn-danger-light danger-color"
-          @click="changeFlag(0)"
-        >
-          Close
-        </button>
-        <button
-          
-          class="btn btn-primary-light pri-color"
-          @click="addItem()"
-          v-if="itemAreaCount!=0"
-        >
-          ADD
-        </button>
-      </div>
+                <button class="btn btn-danger-light danger-color" @click="changeFlag(0)">
+                    Close
+                </button>
+                <button class="btn btn-primary-light pri-color" @click="addItem()" v-if="itemAreaCount != 0">
+                    ADD
+                </button>
+            </div>
 
         </template>
 
@@ -205,12 +197,12 @@ const confirm1 = () => {
         icon: 'pi pi-exclamation-triangle',
         rejectClass: 'p-button-secondary p-button-outlined',
         rejectLabel: 'Save',
-        acceptLabel: 'Send For Approval',
+        acceptLabel: 'Send For Checking',
         accept: () => {
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have drafted', life: 3000 });
+            toast.add({ severity: 'error', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
         }
     });
 };
@@ -232,32 +224,35 @@ const products = ref();
 const selectedCity = ref([]);
 const selectedModifierValueChange = ref([]);
 const districts = ref([]);
-const MC = ref([]);
-const locations = ref([]);
+
+const locations = ref([{ inventoryName: "Ambala Central" }]);
 const modifierValue1 = ref();
 const modifierValue2 = ref();
 const modifierValue3 = ref();
-const areas = ref([]);
-const entities = ref([]);
+const areas = ref([{ inventoryName: "1000 SQM" }]);
+const MC = ref([]);
+const MCs = ref([{ inventoryName: " Muncipal Corporation Ambala" }]);
 const selectedEntities = ref({
-    inventoryName:'',
-    parentInventoryId:'', 
-    inventoryCategoryId:'',}
+    inventoryName: '',
+    parentInventoryId: '',
+    inventoryCategoryId: '',
+}
 );
 const modifiervaluechanges = ref([]);
- const selectedDistrict=ref([]);
- const inventoryCategoryId = 1
- const parentInventoryId=0
-function FetchPropertiesFromInventoryMaster(inventoryCategoryId,parentInventoryId) {
+const selectedDistrict = ref([]);
+const inventoryCategoryId = 1
+const parentInventoryId = 0
+function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
     new MQL()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId , parentInventoryId: parentInventoryId })
+        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentInventoryId })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
             if (rs.isValid('FetchPropertiesFromInventoryMaster')) {
                 console.log(res.result);
                 districts.value = res.result;
+                console.log("districts", districts)
             } else {
                 rs.showErrorToast('ErrorFetchPropertiesFromInventoryMaster');
             }
@@ -278,25 +273,25 @@ function FetchAllModifierValueChange() {
             }
         });
 }
-function FetchInventoryMCNamefromInventoryMaster() {
-    new MQL()
-        .setActivity('o.[FetchInventoryMCNamefromInventoryMaster]')
-        .setData()
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('FetchInventoryMCNamefromInventoryMaster', true);
-            if (rs.isValid('FetchInventoryMCNamefromInventoryMaster')) {
-                console.log(res.result);
-                MC.value = res.result;
-            } else {
-                rs.showErrorToast('ErrorFetchInventoryMCNamefromInventoryMaster');
-            }
-        });
-}
+// function FetchInventoryMCNamefromInventoryMaster() {
+//     new MQL()
+//         .setActivity('o.[FetchInventoryMCNamefromInventoryMaster]')
+//         .setData()
+//         .fetch()
+//         .then((rs) => {
+//             let res = rs.getActivity('FetchInventoryMCNamefromInventoryMaster', true);
+//             if (rs.isValid('FetchInventoryMCNamefromInventoryMaster')) {
+//                 console.log(res.result);
+//                 MC.value = res.result;
+//             } else {
+//                 rs.showErrorToast('ErrorFetchInventoryMCNamefromInventoryMaster');
+//             }
+//         });
+// }
 
-onMounted (() => {
-    FetchPropertiesFromInventoryMaster(inventoryCategoryId,parentInventoryId);
+onMounted(() => {
+    FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
     FetchAllModifierValueChange();
-    FetchInventoryMCNamefromInventoryMaster ();
+    //FetchInventoryMCNamefromInventoryMaster();
 })
 </script>

@@ -6,7 +6,7 @@ function loadView(view) {
 }
 function loadAdminView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
 }
 function loadDashboardView(view) {
   return () =>
@@ -35,12 +35,12 @@ export default createRouter({
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
     },
-    {
-      path: "/admin/auction-preparation",
-      name: "ROLE_MAKER",
-      component: loadAdminView("AuctionPreparation"),
-      meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
-    },
+    // {
+    //   path: "/admin/auction-preparation",
+    //   name: "ROLE_MAKER",
+    //   component: loadAdminView("AuctionPreparation"),
+    //   meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
+    // },
     {
       path: "/AuctionCheckerDashboard",
       name: "ROLE_CHECKER",
@@ -502,16 +502,19 @@ export default createRouter({
     },
     {
       path: "/Step1",
+      name:"ROLE_MAKER",
       component: loadAdminView("Step1"),
       meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step2",
+      name:"step2",
       component: loadAdminView("Step2"),
       meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step3",
+      name: "Step3",
       component: loadAdminView("Step3"),
       meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
     },
