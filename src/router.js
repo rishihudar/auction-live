@@ -4,10 +4,15 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
-function loadMastersVue(view){
+function loadMastersView(view){
 return()=>
 import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
 }
+function loadAdminView(view){
+  return()=>
+  import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
+  }
+
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -339,12 +344,12 @@ export default createRouter({
     },
     {
       path: "/StateMaster",
-      component: loadMastersVue("StateMaster"),
+      component: loadMastersView("StateMaster"),
       meta: { title: "stateMaster", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
       path: "/TalukaMaster",
-      component: loadMastersVue("TalukaMaster"),
+      component: loadMastersView("TalukaMaster"),
       meta: { title: "talukaMaster", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
@@ -352,6 +357,32 @@ export default createRouter({
       component: loadView("EntityRegistration"),
       meta: { title: "EntityRegistration", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    {
+      path: "/admin/auction-preparation",
+      component: loadAdminView("AuctionPreparation"),
+      meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/admin/test",
+      component: loadAdminView("test"),
+      meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step1",
+      component: loadAdminView("Step1"),
+      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step2",
+      component: loadAdminView("Step2"),
+      meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step3",
+      component: loadAdminView("Step3"),
+      meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+
     
   ],
 });

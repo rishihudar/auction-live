@@ -11,11 +11,14 @@ import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
 import InputText from 'primevue/inputtext';
+import Steps from 'primevue/steps';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
+import Column from 'primevue/column';
+
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -41,11 +44,13 @@ vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('InputText', InputText)
 vm.use(Accordion)
+vm.component('Column', Column);
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
 vm.use(Toast)
 vm.component('Toast', Toast);
+vm.component('Steps', Steps);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())

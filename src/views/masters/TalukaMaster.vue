@@ -48,45 +48,74 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
-            <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-                <div class="card flex justify-content-center">
-                    <!-- Bind the selected district to talukaData.fklDistrictId -->
-                    <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
-                        optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="districtName">District Name</label>
+                        <!-- Bind the selected district to talukaData.fklDistrictId -->
+                        <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
+                            optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
+                    </div>
                 </div>
-                <div class="form-row">
-                    <label for="talukaName">Taluka Name</label>
-                    <!-- Bind the state name to talukaData.vsStateName -->
-                    <InputText id="talukaName" v-model="talukaData.talukaName" />
-                    <small id="talukaName-help">Enter Taluka Name (e.g., Nandurbar)</small>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="talukaName">Taluka Name</label>
+                        <!-- Bind the state name to talukaData.vsStateName -->
+                        <InputText id="talukaName" v-model="talukaData.talukaName" />
+                        <small id="talukaName-help">Enter Taluka Name (e.g., Nandurbar)</small>
+                    </div>
                 </div>
-                <Button @click="insertTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+            </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="insertTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check"
+                            label="Submit"></Button>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    </div>
+                </div>
             </div>
         </template>
 
         <template v-else-if="flag === 2">
-            <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-                <div class="card flex justify-content-center">
-                    <!-- Bind the selected district to talukaData.fklDistrictId -->
-                    <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
-                        optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="districtName">District Name</label>
+                        <!-- Bind the selected district to talukaData.fklDistrictId -->
+                        <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
+                            optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
+                    </div>
                 </div>
-                <div class="form-row">
-                    <label for="talukaName">taluka Name</label>
-                    <InputText id="talukaName" v-model="talukaData.talukaName" />
-                    <small id="talukaName-help">Enter Taluka name E.g Nandurbar</small>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="talukaName">taluka Name</label>
+                        <InputText id="talukaName" v-model="talukaData.talukaName" />
+                        <small id="talukaName-help">Enter Taluka name E.g Nandurbar</small>
+                    </div>
                 </div>
-
-                <!-- <div>
+            </div>
+            <!-- <div>
                     <h1>{{ talukaData }}</h1>
                 </div> -->
-                <Button @click=" updateTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check"
-                    label="Submit"></Button>
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click=" updateTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check"
+                            label="Submit"></Button>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    </div>
+                </div>
             </div>
         </template>
-
 
     </div>
 </template>
@@ -157,26 +186,26 @@ function FetchTalukaName() {
         });
 }
 function insertTaluka(talukaData) {
-    if(talukaData.talukaName==""){
+    if (talukaData.talukaName == "") {
         console.log("Please provide all Details")
 
-    }else{
-    new MQL()
-        .setActivity('o.[InsertTaluka]')
-        .setData(talukaData)
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('InsertTaluka', true);
-            if (rs.isValid('InsertTaluka')) {
-                console.log(res.result);
-                console.log("talukaData from Insert", talukaData);
-                // Optionally, you can reload the page or update the state list after insertion
-               // FetchTalukaName()
-            } else {
-                rs.showErrorToast('ErrorInsertState');
-            }
-            loading.value = false;
-        });
+    } else {
+        new MQL()
+            .setActivity('o.[InsertTaluka]')
+            .setData(talukaData)
+            .fetch()
+            .then((rs) => {
+                let res = rs.getActivity('InsertTaluka', true);
+                if (rs.isValid('InsertTaluka')) {
+                    console.log(res.result);
+                    console.log("talukaData from Insert", talukaData);
+                    // Optionally, you can reload the page or update the state list after insertion
+                    // FetchTalukaName()
+                } else {
+                    rs.showErrorToast('ErrorInsertState');
+                }
+                loading.value = false;
+            });
     }
 }
 function updateTaluka(talukaData) {
@@ -189,7 +218,7 @@ function updateTaluka(talukaData) {
             if (rs.isValid('UpdateTalukaById')) {
                 console.log(res.result);
                 console.log("stateData update", talukaData);
-            
+
             } else {
                 rs.showErrorToast('ErrorUpdateState');
             }
@@ -236,6 +265,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
 }
+
 .gap-2 {
     gap: 2rem;
     /* Adjust the gap as needed */

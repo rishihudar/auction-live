@@ -54,7 +54,7 @@
                             <span class="p-buttonset">
                                 <Button label="Edit" @click="editState(data), changeFlag(2)" icon="pi pi-trash" />
                             </span>
-                              <!-- <span class="p-buttonset">
+                            <!-- <span class="p-buttonset">
                                 <Button label="Delete" @click="deleteState(data),reloadPage()" icon="pi pi-trash" />
                             </span> -->
 
@@ -64,70 +64,112 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
-            <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-                <div class="card flex justify-content-center">
-                    <!-- Bind the selected country to stateData.fklCountryId -->
-                    <Dropdown v-model="stateData.countryId" optionValue="countryId" editable :options="countries"
-                        optionLabel="countryName" placeholder="Select a Country" class="w-full md:w-14rem" />
-                </div>
-                <div class="form-row">
-                    <label for="stateName">State Name</label>
-                    <!-- Bind the state name to stateData.vsStateName -->
-                    <InputText id="stateName" v-model="stateData.stateName" />
-                    <small id="stateName-help">Enter State name (e.g., Uttar Pradesh)</small>
-                </div>
+            <div class="fm-row">
+                <div class="w-1/4">
 
-                <div class="form-row">
-                    <label for="stateCode">State Code</label>
-                    <!-- Bind the state code to stateData.vsStateCode -->
-                    <InputText id="stateCode" v-model="stateData.stateCode" />
-                    <small id="stateCode-help">Enter State Code (e.g., AN)</small>
-                </div>
-
-                <div class="form-row">
-                    <label for="unionTerritories">Union Territories</label>
-                    <!-- Directly include the Checkbox component in the template -->
-                    <div class="card flex justify-content-center">
-                        <Checkbox v-model="stateData.isUnionTerritories" :binary="true" />
+                    <div class="fm-group">
+                        <label for="countryName">Country Name</label>
+                        <!-- Bind the selected country to stateData.fklCountryId -->
+                        <Dropdown v-model="stateData.countryId" optionValue="countryId" editable :options="countries"
+                            optionLabel="countryName" placeholder="Select a Country" class="w-full md:w-14rem" />
                     </div>
                 </div>
 
-                <Button @click="insertState(stateData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="stateName">State Name</label>
+                        <!-- Bind the state name to stateData.vsStateName -->
+                        <InputText id="stateName" v-model="stateData.stateName" />
+                        <small id="stateName-help">Enter State name (e.g., Uttar Pradesh)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="stateCode">State Code</label>
+                        <!-- Bind the state code to stateData.vsStateCode -->
+                        <InputText id="stateCode" v-model="stateData.stateCode" />
+                        <small id="stateCode-help">Enter State Code (e.g., AN)</small>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="unionTerritories">Union Territories</label>
+                        <!-- Directly include the Checkbox component in the template -->
+                        <div class="card flex justify-content-center">
+                            <Checkbox v-model="stateData.isUnionTerritories" :binary="true" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="insertState(stateData), changeFlag(0), reloadPage()" icon="pi pi-check"
+                            label="Submit"></Button>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    </div>
+                </div>
             </div>
         </template>
 
         <template v-else-if="flag === 2">
-            <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-                <div class="card flex justify-content-center">
-                    <!-- Bind the selected country to stateData.fklCountryId -->
-                    <Dropdown v-model="stateData.countryId" optionValue="countryId" :options="countries"
-                        optionLabel="countryName" placeholder="Select a City" class="w-full md:w-14rem" />
-                </div>
-                <div class="form-row">
-                    <label for="stateName">State Name</label>
-                    <InputText id="stateName" v-model="stateData.stateName" />
-                    <small id="username-help">Enter State name E.g UttarPradesh</small>
-                </div>
-
-                <div class="form-row">
-                    <label for="stateCode">State Code</label>
-                    <InputText id="stateCode" v-model="stateData.stateCode" />
-                    <small id="username-help">Enter State Code E.g 91</small>
-                </div>
-
-                <div class="form-row">
-                    <label for="unionTerritories">Union Territories</label>
-                    <!-- Directly include the Checkbox component in the template -->
-                    <div class="card flex justify-content-center">
-                        <Checkbox v-model="stateData.isUnionTerritories" :binary="true" />
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="countryName">Country Name</label>
+                        <!-- Bind the selected country to stateData.fklCountryId -->
+                        <Dropdown v-model="stateData.countryId" optionValue="countryId" :options="countries"
+                            optionLabel="countryName" placeholder="Select a City" class="w-full md:w-14rem" />
                     </div>
                 </div>
-                <div>
-                    <h1>{{ stateData }}</h1>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="stateName">State Name</label>
+                        <InputText id="stateName" v-model="stateData.stateName" />
+                        <small id="username-help">Enter State name E.g UttarPradesh</small>
+                    </div>
                 </div>
-                <Button @click=" updateState(stateData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+            </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="stateCode">State Code</label>
+                        <InputText id="stateCode" v-model="stateData.stateCode" />
+                        <small id="username-help">Enter State Code E.g 91</small>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="unionTerritories">Union Territories</label>
+                        <!-- Directly include the Checkbox component in the template -->
+                        <div class="card flex justify-content-center">
+                            <Checkbox v-model="stateData.isUnionTerritories" :binary="true" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div>
+                <h1>{{ stateData }}</h1>
+            </div> -->
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click=" updateState(stateData), changeFlag(0), reloadPage()" icon="pi pi-check"
+                            label="Submit"></Button>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    </div>
+                </div>
             </div>
         </template>
 
@@ -155,7 +197,7 @@ const stateData = ref({
     stateName: '',
     stateCode: '',
     isUnionTerritories: false,
-    countryId: '',
+  //  countryId: '',
 
 });
 
@@ -212,27 +254,27 @@ function FetchCountryName() {
         });
 }
 function insertState(stateData) {
-    if(stateData.stateName==""){
+    if (stateData.stateName == "") {
         console.log("Please provide all Details")
 
-    }else {
+    } else {
 
 
-    new MQL()
-        .setActivity('o.[InsertState]')
-        .setData(stateData)
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('InsertState', true);
-            if (rs.isValid('InsertState')) {
-                console.log(res.result);
-                console.log("stateData from Insert", stateData);
-            } else {
-                rs.showErrorToast('ErrorInsertState');
-            }
-            loading.value = false;
-        });
-}
+        new MQL()
+            .setActivity('o.[InsertState]')
+            .setData(stateData)
+            .fetch()
+            .then((rs) => {
+                let res = rs.getActivity('InsertState', true);
+                if (rs.isValid('InsertState')) {
+                    console.log(res.result);
+                    console.log("stateData from Insert", stateData);
+                } else {
+                    rs.showErrorToast('ErrorInsertState');
+                }
+                loading.value = false;
+            });
+    }
 }
 function updateState(stateData) {
     new MQL()
@@ -245,7 +287,7 @@ function updateState(stateData) {
                 console.log(res.result);
                 console.log("stateData update", stateData);
                 // Optionally, you can reload the page or update the state list after insertion
-           
+
             } else {
                 rs.showErrorToast('ErrorUpdateState');
             }

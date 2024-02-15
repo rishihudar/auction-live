@@ -4,7 +4,7 @@
             <div class="card">
                 <DataTable responsiveLayout="scroll" v-model:filters="filters" :value="entities" paginator :rows="10"
                     dataKey="id" filterDisplay="row" :loading="loading"
-                    :globalFilterFields="['entityId','entityName', 'entityShortName', 'entityAddress', 'entityContactNumber']">
+                    :globalFilterFields="['entityId', 'entityName', 'entityShortName', 'entityAddress', 'entityContactNumber']">
                     <template #header>
                         <div class="flex justify-content-end">
                             <span class="p-input-icon-left">
@@ -40,129 +40,149 @@
                     </Column>
                     <Column field="entityAddress" header="Entity Address" style="min-width: 12rem">
                         <template #body="{ data }">
-                            {{ data.entityAddress}}
+                            {{ data.entityAddress }}
                         </template>
 
                     </Column>
-               
+
                     <Column field=" entityContactNumber" header="Entity Contact Number" style="min-width: 12rem">
                         <template #body="{ data }">
-                            {{ data. entityContactNumber }}
+                            {{ data.entityContactNumber }}
                         </template>
                     </Column>
                     <Column header="Actions" style="min-width:12rem">
 
                         <template #body="{ data }">
-                               <span class="p-buttonset">
+                            <span class="p-buttonset">
                                 <Button label="Edit" @click="editEntity(data), changeFlag(2)" icon="pi pi-trash" />
                             </span>
                             <!-- <span class="p-buttonset">
                                 <Button label="Delete" @click="deleteEntity(data),reloadPage()" icon="pi pi-trash" />
                             </span> -->
                             <ConfirmDialog></ConfirmDialog>
-            <div class="w-1/2">
-                <div class="fm-group">
-                    <Button @click="confirmDelete(data)" type="submit" class="p-button p-button-primary">Delete</Button>
-                </div>
-            </div>
+                            <div class="w-1/2">
+                                <div class="fm-group">
+                                    <Button @click="confirmDelete(data)" type="submit"
+                                        class="p-button p-button-primary">Delete</Button>
+                                </div>
+                            </div>
                         </template>
                     </Column>
                 </DataTable>
             </div>
         </template>
         <template v-else-if="flag === 1">
-            <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
 
-                <div class="card flex justify-content-center">
-                    <!-- Bind the selected country to entityData.fklENtityTypeId -->
-                    <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" 
-                        :options="entitytype" optionLabel="entityTypeName" placeholder="Select a Entity Type"
-                        class="w-full md:w-14rem" />
-                </div>
-                <div class="form-row">
-                    <label for="entityName">Entity Name</label>
-                    <InputText id="entityName" v-model="entityData.entityName" />
-                    <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
-                </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
 
-                <div class="form-row">
-                    <label for="entityShortName">Entity Short Name</label>
-                    <InputText id="entityShortName" v-model="entityData.entityShortName" />
-                    <small id="username-help">Enter Entity Short Name E.g MCF</small>
+                        <!-- Bind the selected country to entityData.fklENtityTypeId -->
+                        <label for="entityName">Entity Type</label>
+                        <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
+                            optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
+                    </div>
                 </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityName">Entity Name</label>
+                        <InputText id="entityName" v-model="entityData.entityName" />
+                        <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
+                    </div>
+                </div>
+            </div>
 
-                <div class="form-row">
-                    <label for="entityAddress">Entity Address</label>
-                    <InputText id="entityAddress" v-model="entityData.entityAddress" />
-                    <small id="username-help">Enter Entity Address E.g MCF</small>
-                </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityShortName">Entity Short Name</label>
+                        <InputText id="entityShortName" v-model="entityData.entityShortName" />
+                        <small id="username-help">Enter Entity Short Name E.g MCF</small>
 
-                <div class="form-row">
-                    <label for="entityContactNumber">Entity Contact Number</label>
-                    <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
-                    <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+                    </div>
                 </div>
-               
-                <Toast />
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityAddress">Entity Address</label>
+                        <InputText id="entityAddress" v-model="entityData.entityAddress" />
+                        <small id="username-help">Enter Entity Address E.g MCF</small>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-row">
+                <div class="w-1/4">
+                    <div class="fm-group">
+                <label for="entityContactNumber">Entity Contact Number</label>
+                <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
+                <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+            </div>
+        </div>
+        <div class="w-1/4">
+            <div class="fm-group">
+            <Toast />
             <ConfirmDialog></ConfirmDialog>
             <div class="card flex flex-wrap gap-2 justify-content-center">
                 <Button @click="confirmADD(entityData)" icon="pi pi-check" label="Submit"></Button>
                 <Button @click="changeFlag(0), reloadPage()" icon="pi pi-times" label="Cancel" severity="danger"></Button>
             </div>
-                <!-- <Button @click="insertEntity(entityData), changeFlag(0), reloadPage()" icon="pi pi-check"
+        </div>
+    </div>
+    </div>
+            <!-- <Button @click="insertEntity(entityData), changeFlag(0), reloadPage()" icon="pi pi-check"
                     label="Submit"></Button> -->
-                <!-- <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button> -->
-            </div>
+            <!-- <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button> -->
+
         </template>
 
         <template v-else-if="flag === 2">
             <div class="fm-row">
                 <div class="w-1/2">
                     <div class="fm-group">
-                    <label for="entityName">Entity Type</label>
-                    <!-- Bind the selected country to entityData.eNtityTypeId -->
-                    <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
-                        optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
-                </div>
+                        <label for="entityName">Entity Type</label>
+                        <!-- Bind the selected entitytype to entityData.entityTypeId -->
+                        <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
+                            optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
+                    </div>
                 </div>
                 <div class="w-1/2">
                     <div class="fm-group">
-                    <label for="entityName">Entity Name</label>
-                    <InputText id="entityName" v-model="entityData.entityName" />
-                    <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
-                </div>
+                        <label for="entityName">Entity Name</label>
+                        <InputText id="entityName" v-model="entityData.entityName" />
+                        <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
+                    </div>
                 </div>
             </div>
-                <div class="w-1/2">
-                    <label for="entityShortName">Entity Short Name</label>
-                    <InputText id="entityShortName" v-model="entityData.entityShortName" />
-                    <small id="username-help">Enter Entity Short Name E.g MCF</small>
-                </div>
+            <div class="w-1/2">
+                <label for="entityShortName">Entity Short Name</label>
+                <InputText id="entityShortName" v-model="entityData.entityShortName" />
+                <small id="username-help">Enter Entity Short Name E.g MCF</small>
+            </div>
 
-                <div class="w-1/2">
-                    <label for="entityAddress">Entity Address</label>
-                    <InputText id="entityAddress" v-model="entityData.entityAddress" />
-                    <small id="username-help">Enter Entity Address E.g MCF</small>
-                </div>
+            <div class="w-1/2">
+                <label for="entityAddress">Entity Address</label>
+                <InputText id="entityAddress" v-model="entityData.entityAddress" />
+                <small id="username-help">Enter Entity Address E.g MCF</small>
+            </div>
 
-                <div class="w-1/2">
-                    <label for="entityContactNumber">Entity Contact Number</label>
-                    <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
-                    <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
-                </div>
+            <div class="w-1/2">
+                <label for="entityContactNumber">Entity Contact Number</label>
+                <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
+                <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+            </div>
 
 
-          
+
             <Toast />
             <ConfirmDialog></ConfirmDialog>
             <div class="w-1/2">
                 <div class="fm-group">
                     <Button @click="confirmEdit(entityData)" type="submit" class="p-button p-button-primary">Submit</Button>
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-times" label="Cancel" severity="danger"></Button>
+                    <Button @click="changeFlag(0), reloadPage()" icon="pi pi-times" label="Cancel"
+                        severity="danger"></Button>
                 </div>
-               
+
             </div>
-            
+
         </template>
 
     </div>
@@ -191,7 +211,7 @@ const entityData = ref({
     entityAddress: '',
     entityContactNumber: '',
     entityTypeId: '',
-   organizationId:''
+    organizationId: ''
 });
 
 const organizationId = 1
@@ -288,7 +308,7 @@ function reloadPage() {
 
 function editEntity(data) {
     console.log("Before edit: ", data);
-    
+
     // Set entityData to the values of the selected state
     entityData.value = {
         ...data,
@@ -302,9 +322,9 @@ function editEntity(data) {
 }
 
 
-const confirmEdit= (entityData) => {
+const confirmEdit = (entityData) => {
     confirm.require({
-        message: 'Are you sure you want to proceed?',
+        message: 'Are you sure you want to edit Entity?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
@@ -319,11 +339,11 @@ const confirmEdit= (entityData) => {
 
 const confirmADD = (entityData) => {
     confirm.require({
-        message: 'Are you sure you want to proceed?',
+        message: 'Are you sure you want to add Entity?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            insertEntity(entityData), changeFlag(0),reloadPage()
+            insertEntity(entityData), changeFlag(0), reloadPage()
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {
@@ -334,11 +354,11 @@ const confirmADD = (entityData) => {
 
 const confirmDelete = (data) => {
     confirm.require({
-        message: 'Are you sure you want to proceed?',
+        message: 'Are you sure you want to delete Entity?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            deleteEntity(data), changeFlag(0),reloadPage()
+            deleteEntity(data), changeFlag(0), reloadPage()
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {
@@ -389,5 +409,4 @@ onMounted(() => {
 .form-row {
     margin-bottom: 1rem;
     /* Adjust the margin as needed */
-}
-</style>
+}</style>
