@@ -1,0 +1,6 @@
+#footer {@apply mt-auto px-5 py-2 text-[var(--neutral-300)]; box-shadow: inset 0 2px 0 0 var(--separator-color);}
+.ft-copyright {@apply flex gap-3 items-center text-[13px] leading-5;
+    img {@apply h-14;}
+}
+
+.box-footer {@apply mt-10 pb-6 text-sm leading-[20px] text-center; color: var(--neutral-300);}

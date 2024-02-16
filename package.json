@@ -27,7 +27,8 @@
     "readline-sync": "^1.4.10",
     "register-service-worker": "^1.6.2",
     "sass": "^1.54.4",
-    "sweetalert2": "^11.6.13",
+    "simplebar-vue": "^2.3.3",
+    "sweetalert2": "^11.7.5",
     "vee-validate": "^4.5.4",
     "vue": "^3.3.1",
     "vue-i18n": "^9.4.1",
@@ -71,8 +72,9 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-eslint": "1.8.1",
     "vite-plugin-linter": "^1.2.0",
-    "vite-plugin-require": "^0.0.3",
-    "vite-plugin-vue-devtools": "0.0.20"
+    "vite-plugin-require": "0.0.8",
+    "vite-plugin-vue-devtools": "0.0.20",
+    "vite-svg-loader": "^5.1.0"
   },
   "browserslist": [
     "> 1%",

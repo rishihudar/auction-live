@@ -9,10 +9,30 @@
     @tailwind utilities;
 }
 
-@import '../../node_modules/primevue/resources/themes/lara-light-blue/theme';
+// @import '../../node_modules/primevue/resources/themes/lara-light-blue/theme';
 
 
-// Variables
+// --------------------------------------------------------
+// IMPORTS
+// --------------------------------------------------------
+@import "variables";
+
+@import "common/header";
+@import "common/menu";
+@import "common/sidebar";
+@import "common/footer";
+
+@import "components/breadcrumbs";
+@import "components/buttons";
+@import "components/cards";
+@import "components/dropdowns";
+@import "components/forms";
+@import "components/tables";
+// @import "components/wizards";
+
+@import "pages/login";
+@import "pages/registration";
+
 $gray-lightest          : #85858d;
 $blue                   : #B7CADB;
 $yellow                 : #FAF4B7;
@@ -23,10 +43,6 @@ $orange                 : #F6D7A7;
 $red                    : #FFB3B3;
 $gray-lighter           : #5e5a49;
 
-:root {
-    --font-family           : 'DM Sans', sans-serif;
-}
-
 
 // Reset
 // *, *::after, *::before {
@@ -36,32 +52,54 @@ $gray-lighter           : #5e5a49;
 // }
 
 
-// Body
-body {
-    font-family: var(--font-family);
+body {font-size: 16px; line-height: 24px; font-family: var(--font-family); color: var(--neutral-400); background-color: var(--bg-body);}
+
+h1 {@apply text-4xl font-bold text-[var(--neutral-600)];}
+
+a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {background: linear-gradient(rgb(var(--primary-600)), rgb(var(--primary-600))) no-repeat left bottom / 0px 1px; transition: background 0.2s ease;
+    &:hover {background-size: 100% 1px;}
 }
 
-.wrapper {
-    height: calc(100vh - 72px);
+.content-wrapper {@apply pt-[var(--header-height)]; transition: margin 0.2s ease;
+    .sidebar-open & {@apply ml-[var(--sidebar-width)];}
+}
+.content-holder {@apply p-12;}
+
+.main-wrapper-full {
+    .content-wrapper {@apply ml-0 pt-0;}
+    .content-holder {@apply p-4;}
 }
 
-.subtext {
-    @apply mt-0.5 ml-6 mb-6 text-slate-600;
+.page-header {@apply mb-6;
+    // &:has(h2.title) {@apply mb-6;}
+
+    .ph-media {@apply mb-5 h-20 flex gap-3 items-center justify-center;
+        img {@apply max-h-full;}
+    }
+
+    .title {@apply font-bold text-[var(--neutral-600)];}
+    h1.title {@apply text-4xl;}
+    h2.title {@apply text-3xl;}
+    .subtitle {@apply mt-1;}
 }
+
+// .subtext {
+//     @apply mt-0.5 ml-6 mb-6 text-slate-600;
+// }
 
 // Buttons
-.btn {
-    @apply px-4 inline-flex gap-2 items-center border-none rounded-lg outline-none text-base font-semibold text-[#212121] cursor-pointer;
-    .isax {
-        @apply text-xl;
-    }
-    &.btn-submit {
-        background-color: $green;
-    }
-    &.btn-show {
-        background-color: $orange;
-    }
-}
+// .btn {
+//     @apply px-4 inline-flex gap-2 items-center border-none rounded-lg outline-none text-base font-semibold text-[#212121] cursor-pointer;
+//     .isax {
+//         @apply text-xl;
+//     }
+//     &.btn-submit {
+//         background-color: $green;
+//     }
+//     &.btn-show {
+//         background-color: $orange;
+//     }
+// }
 
 
 // Home
@@ -98,20 +136,17 @@ body {
 
 
 // Login
-.box-login {
-    --fk-max-width-input: 100%;
-    @apply mt-4;
-
-    .json-wrapper {
-        .jv-container.jv-light {
-            font-family: var(--font-family);
-        }
-        .jv-container:hover {
-            box-shadow: none;
-            border-color: #eee;
-        }
-    }
-}
+// .box-login {
+//     .json-wrapper {
+//         .jv-container.jv-light {
+//             font-family: var(--font-family);
+//         }
+//         .jv-container:hover {
+//             box-shadow: none;
+//             border-color: #eee;
+//         }
+//     }
+// }
 
 
 // form controls
@@ -133,7 +168,19 @@ select.formkit-input {
 }
 
 
-// Footer
-.box-footer {
-    box-shadow: 0 -8px 16px rgba(#212121, 0.04);
+// UI Loader
+.spinner {@apply mx-auto my-10 w-12 h-12; background-color: var(--bg-spinner, #0e1726); animation: sk-rotateplane 1.2s infinite ease-in-out;}
+
+@keyframes sk-rotateplane {
+    0% { 
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    } 50% { 
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    } 100% { 
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
 }
+
+
+.card-login {position: relative;}
+.btn-float {position: absolute; top: 15px; left: 20px;}

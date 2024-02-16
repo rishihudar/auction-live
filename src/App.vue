@@ -6,33 +6,41 @@
 		<div id="app-loader" v-if="mainStore.isPageBlocked">
 			<div class="fixed z-50 bg-gray-200 bg-opacity-70 w-full min-h-screen flex justify-center items-center">
 				<div class="flex min-h-screen w-full items-center justify-center">
-					<div
-						class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 animate-spin"
-					>
-						<div class="h-9 w-9 rounded-full bg-gray-200"></div>
-					</div>
+                    <div class="spinner"></div>
 				</div>
 			</div>
 		</div>
-		<div class="wrapper p-10 flex flex-col overflow-y-auto">
-			<router-view :key="$route.fullPath" />
-		</div>
-		<Footer></Footer>
+        <div class="main-wrapper" :class="[ (mainStore.sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-open'), ({'main-wrapper-full': routes.includes($route.fullPath)}) ]">
+            <Header v-if="!routes.includes($route.fullPath)"></Header>
+            <main class="main-content">
+                <Sidebar v-if="!routes.includes($route.fullPath)"></Sidebar>
+                <div class="content-wrapper">
+                    <router-view class="content-holder" :key="$route.fullPath" />
+                    <Footer v-if="!routes.includes($route.fullPath)"></Footer>
+                </div>
+            </main>
+        </div>
 	</div>
 </template>
 
 <script>
 	import { useMeta } from "vue-meta"
+	import Header from "./components/common/Header.vue"
+    import Sidebar from "./components/common/Sidebar.vue"
 	import Footer from "./components/common/Footer.vue"
 	import { main } from "./store/index"
 
 	export default {
 		name: "App",
 		components: {
-			Footer,
+			Header,
+            Sidebar,
+			Footer
 		},
 		data() {
-			return {}
+			return {
+                routes: ['/', '/registration', '/forgot-password','/payment']
+            }
 		},
 		setup() {
 			useMeta({
