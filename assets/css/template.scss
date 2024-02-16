@@ -184,3 +184,34 @@ select.formkit-input {
 
 .card-login {position: relative;}
 .btn-float {position: absolute; top: 15px; left: 20px;}
+
+//File Upload
+[data-pc-name="fileupload"] {border: 1px solid var(--neutral-200); border-radius: var(--fm-border-radius);
+    input {display: none;}
+    [data-pc-section="buttonbar"] {padding: 15px 15px; display: flex; gap: 8px; align-items: center;}
+    [data-pc-section="empty"] {color: var(--neutral-200);}
+    [data-pc-section="choosebutton"] {padding: 0 20px; height: var(--fm-height); display: flex; gap: 5px; align-items: center; border-radius: var(--fm-border-radius); color: #fff; background: rgb(var(--primary-400)); cursor: pointer;}
+
+    [data-pc-section="content"] {padding: 0 15px 15px;}
+    [data-pc-name="progressbar"] {position: relative; margin-inline: -15px; height: 3px;}
+    [data-pc-section="file"] {margin-top: -1px; margin-bottom: 8px; padding: 14px; display: flex; gap: 8px; align-items: center; border: 1px solid #e0e0e0; border-radius: var(--fm-border-radius);
+        &:last-child {margin-bottom: 0;}
+
+        img {width: 50px; height: 50px; object-fit: contain; display: none;}
+    }
+    [data-pc-section="filesize"] {font-size: 14px; color: var(--neutral-200);}
+    [data-pc-name="badge"] {margin-left: 8px; padding: 0px 14px;}
+    [data-pc-section="actions"] {margin-left: auto;
+        button span {display: none;}
+    }
+}
+[data-pc-section="file"] {
+    position: relative;
+    &::before {
+        content: '';
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        background: url('../images/excel-icon.webp') no-repeat center/ cover;
+    }
+}
