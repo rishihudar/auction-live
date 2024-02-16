@@ -45,7 +45,7 @@
                         <label for="step1">District<span class="text-danger">*</span></label>
 
                         <Dropdown v-model="selectedDistrict" variant="filled" :options="districts"
-                            optionLabel="inventoryName" placeholder="Select Auction Type" class="w-full md:w-14rem" />
+                            optionLabel="inventoryName" placeholder="Select District" class="w-full md:w-14rem" />
 
                     </div>
                 </div>

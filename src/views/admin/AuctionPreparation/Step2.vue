@@ -32,7 +32,7 @@
 
         <div class="card flex justify-content-center">
             <label for="step2">Auction Description<span class="text-danger">*</span> </label>
-            <Textarea v-model="value" autoResize rows="5" cols="30" placeholder="Enter Description" />
+            <Textarea v-model="value2" autoResize rows="5" cols="30" placeholder="Enter Description" />
         </div>
         <div class="fm-row">
             <div class="w-1/2">
@@ -137,6 +137,7 @@ import Textarea from 'primevue/textarea';
 const incrementValue = ref();
 
 const value = ref(null);
+const value2 = ref(null);
 const selectedAuctionCategory = ref();
 const selectedAuctionProcess = ref();
 const selectedDepartment = ref();
