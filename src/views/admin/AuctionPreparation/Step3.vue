@@ -202,7 +202,7 @@ const confirm1 = () => {
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {
-            toast.add({ severity: 'error', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
+            toast.add({ severity: 'info', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
         }
     });
 };

@@ -20,13 +20,12 @@ import Alive from '../assets/presets/alive'
 import Breadcrumb from 'primevue/breadcrumb'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
-import Button from 'primevue/button'
+
 import Menu from 'primevue/menu'
 import Steps from 'primevue/steps';
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
@@ -61,8 +60,6 @@ vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue, { unstyled: true, pt: Alive })
 vm.use(Breadcrumb)
 vm.component('Breadcrumb', Breadcrumb)
-vm.component('ConfirmDialog', ConfirmDialog);
-vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('ConfirmDialog', ConfirmDialog);
 vm.component('ConfirmPopup', ConfirmPopup);
@@ -71,7 +68,6 @@ vm.component('InputText', InputText)
 vm.use(Password)
 vm.component('Password', Password)
 vm.use(Button)
-vm.component('Button', Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
 vm.use(Accordion)
@@ -82,7 +78,6 @@ vm.component('AccordionTab', AccordionTab)
 vm.use(DataTable)
 vm.component('DataTable', DataTable)
 vm.use(Column)
-vm.component('Column', Column)
 vm.use(Paginator)
 vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
