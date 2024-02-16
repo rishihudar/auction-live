@@ -62,7 +62,7 @@
                     <div class="fm-group">
                         <label for="step1">Location<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedCity" variant="filled" :options="locations" optionLabel="inventoryName"
+                        <Dropdown v-model="selectedLocation" variant="filled" :options="locations" optionLabel="inventoryName2"
                             placeholder="Select Location" class="w-full md:w-14rem" />
 
                     </div>
@@ -73,8 +73,8 @@
                     <div class="fm-group">
                         <label for="step1">Area<span class="text-danger">*</span></label>
 
-                        <Dropdown v-model="selectedCity" variant="filled" :options="areas" optionLabel="inventoryName"
-                            placeholder="Select Area" class="w-full md:w-14rem" />
+                        <Dropdown v-model="selectedArea" variant="filled" :options="areas" optionLabel="inventoryName1"
+                            placeholder="Select Area" @change="updatePrice" class="w-full md:w-14rem" />
 
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     <div class="fm-group">
                         <FloatLabel>
                             <label for="username">Reserve Price<span class="text-danger">*</span></label>
-                            <InputText id="username" v-model="value" placeholder="Enter Reserve Price" />
+                            <InputText id="username" v-model="selectedPrice" placeholder="Enter Reserve Price" readonly/>
 
                         </FloatLabel>
                     </div>
@@ -91,7 +91,7 @@
                     <div class="fm-group">
                         <FloatLabel>
                             <label for="username">Unit<span class="text-danger">*</span></label>
-                            <InputText id="username" v-model="value" placeholder="Ente Unit" />
+                            <InputText id="username" v-model="unitValue"  @input="findEmd" placeholder="Enter Unit" />
 
                         </FloatLabel>
                     </div>
@@ -102,7 +102,7 @@
                     <div class="fm-group">
                         <FloatLabel>
                             <label for="username">EMD<span class="text-danger">*</span></label>
-                            <InputText id="username" v-model="value" placeholder="Enter EMD" />
+                            <InputText id="username" v-model="emdPrice" placeholder="Enter EMD" readonly />
 
                         </FloatLabel>
                     </div>
@@ -221,15 +221,16 @@ function changeFlag(newValue) {
     console.log("getting from change function", flag)
 }
 const products = ref();
-const selectedCity = ref([]);
+const selectedLocation = ref([]);
+const selectedArea = ref([]);
 const selectedModifierValueChange = ref([]);
 const districts = ref([]);
 
-const locations = ref([{ inventoryName: "Ambala Central" }]);
+const locations = ref([{ inventoryName2: "Ambala Central" }]);
 const modifierValue1 = ref();
 const modifierValue2 = ref();
 const modifierValue3 = ref();
-const areas = ref([{ inventoryName: "1000 SQM" }]);
+const areas = ref([{ inventoryName1: "1000 SQM" }]);
 const MC = ref([]);
 const MCs = ref([{ inventoryName: " Muncipal Corporation Ambala" }]);
 const selectedEntities = ref({
@@ -238,6 +239,9 @@ const selectedEntities = ref({
     inventoryCategoryId: '',
 }
 );
+const selectedPrice=ref(null);
+const unitValue=ref(null);
+const emdPrice=ref(0);
 const modifiervaluechanges = ref([]);
 const selectedDistrict = ref([]);
 const inventoryCategoryId = 1
@@ -288,6 +292,18 @@ function FetchAllModifierValueChange() {
 //             }
 //         });
 // }
+
+
+const updatePrice = () => {
+        // Find the selected area object
+       
+            selectedPrice.value = 50000; // Assuming the price is stored in the 'price' property of the area object
+      
+    };
+
+const findEmd=()=>{
+     emdPrice.value=50000*unitValue.value*0.1; 
+};
 
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
