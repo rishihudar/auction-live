@@ -1,12 +1,13 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vitePluginCompression from "vite-plugin-compression";
+import svgLoader from 'vite-svg-loader';
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: process.env.NODE_ENV === "production" ? "/app/" : "",
-  base: process.env.NODE_ENV === "production" ? "/app/" : "",
+  publicDir: process.env.NODE_ENV =  "/auction/" ,
+  base: process.env.NODE_ENV = "/auction/",
 
   resolve: {
     alias: {
@@ -21,7 +22,7 @@ export default defineConfig({
       analyzerMode: "disabled",
     },
   },
-  plugins: [vue(), vitePluginCompression()],
+  plugins: [vue(), vitePluginCompression(), svgLoader()],
   build: {
     minify: "terser",
     terserOptions: {
@@ -55,8 +56,8 @@ export default defineConfig({
         rewrite: (p) => p.replace(/^\/server/, ""),
       },
       "/cdnserver": {
-        // target: "https://testcdncs.mkcl.org",
-        target: "http://localhost:3032",
+        target: "https://testcdncs.mkcl.org",
+        // target: "http://localhost:3032",
         ws: true,
         secure: false,
         changeOrigin: true,

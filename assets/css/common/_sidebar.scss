@@ -1,0 +1,5 @@
+#left-sidebar {@apply fixed top-[var(--header-height)] bottom-0 left-0 z-20 w-[var(--sidebar-width)] bg-[var(--sidebar-bg)]; transition: transform 0.2s ease;
+    .sidebar-holder {@apply h-full;}
+
+    .sidebar-collapsed & {transform: translate3d(calc(-100% - 5px), 0, 0);}
+}

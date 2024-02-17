@@ -13,18 +13,29 @@ import ToastService from 'primevue/toastservice';
 // import 'primevue/resources/primevue.min.css';
 // import 'primeicons/primeicons.css';
 import { plugin, defaultConfig } from '@formkit/vue'
+import Column from 'primevue/column';
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
-import InputText from 'primevue/inputtext';
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
+import Alive from '../assets/presets/alive'
+import Breadcrumb from 'primevue/breadcrumb'
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+
+import Menu from 'primevue/menu'
+import Steps from 'primevue/steps';
+import Accordion from 'primevue/accordion'
+import AccordionTab from 'primevue/accordiontab'
+import DataTable from 'primevue/datatable';
+import Paginator from 'primevue/paginator';
+import simplebar from 'simplebar-vue'
+import 'simplebar-vue/dist/simplebar.min.css'
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Dialog from 'primevue/dialog';
 import DialogService from 'primevue/dialogservice'
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
-import '../assets/fonts/iconsax/style.css'
+// import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -46,16 +57,30 @@ vm.component('Button', Button);
 vm.component('Card', Card);
 vm.component('Toast', Toast);
 vm.use(ToastService); // Add this line to enable toast service
-vm.use(primeVue)
+vm.use(primeVue, { unstyled: true, pt: Alive })
+vm.use(Breadcrumb)
+vm.component('Breadcrumb', Breadcrumb)
 vm.use(InputText)
 vm.component('ConfirmDialog', ConfirmDialog);
 vm.component('ConfirmPopup', ConfirmPopup);
 vm.component('Dialog', Dialog);
 vm.component('InputText', InputText)
+vm.use(Password)
+vm.component('Password', Password)
+vm.use(Button)
+vm.use(Menu)
+vm.component('Menu', Menu)
 vm.use(Accordion)
+vm.component('Column', Column);
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
+vm.use(DataTable)
+vm.component('DataTable', DataTable)
+vm.use(Column)
+vm.use(Paginator)
+vm.component('Paginator', Paginator)
+vm.component('simplebar', simplebar)
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())
