@@ -141,7 +141,7 @@
 </div>
 </template>
   
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
@@ -156,18 +156,18 @@ import Dropdown from 'primevue/dropdown';
 
 
 
-export default {
-    components: {
-        DataTable,
-        Column,
-        Button,
-        ScrollTop,
-        ScrollPanel,
-        InputText,
-        Dropdown,
+// export default {
+//     components: {
+//         DataTable,
+//         Column,
+//         Button,
+//         ScrollTop,
+//         ScrollPanel,
+//         InputText,
+//         Dropdown,
     
-    },
-    setup() {
+//     },
+//     setup() {
         //const selectedState = ref();
         const state = ref([]);
         const district = ref([]);
@@ -366,31 +366,31 @@ export default {
             getStateData();
         });
 
-        return {
-            district,
-            state,
-            //selectedState,
-            loading,
-            filters,
-            districtData,
-            flag,
-            toast,
-            changeFlag,
-            reloadPage,
-            handleEditClick,
-            // showToastSuccess,
-            // showToastError,
-            // showToast,
-            showSuccess,
-            showInfo,
-            showWarn,
-            showError,
-            updateData,
-            submitForm,
-            deleteData
-        };
-    },
-};
+//         return {
+//             district,
+//             state,
+//             //selectedState,
+//             loading,
+//             filters,
+//             districtData,
+//             flag,
+//             toast,
+//             changeFlag,
+//             reloadPage,
+//             handleEditClick,
+//             // showToastSuccess,
+//             // showToastError,
+//             // showToast,
+//             showSuccess,
+//             showInfo,
+//             showWarn,
+//             showError,
+//             updateData,
+//             submitForm,
+//             deleteData
+//         };
+//     },
+// };
 </script>
 
 <style scoped>

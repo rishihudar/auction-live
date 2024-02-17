@@ -214,7 +214,7 @@
 </div>
 </template>
   
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
@@ -227,17 +227,17 @@ import ScrollPanel from 'primevue/scrollpanel';
 import { useToast } from 'primevue/usetoast';
 
 
-export default {
-    components: {
-        DataTable,
-        Column,
-        Button,
-        ScrollTop,
-        ScrollPanel,
-        InputText,
+// export default {
+//     components: {
+//         DataTable,
+//         Column,
+//         Button,
+//         ScrollTop,
+//         ScrollPanel,
+//         InputText,
         
-    },
-    setup() {
+//     },
+//     setup() {
         const country = ref([]);
         const loading = ref(true);
         const toast = useToast();
@@ -417,26 +417,26 @@ export default {
             getData();
         });
 
-        return {
-            country,
-            loading,
-            filters,
-            countryData,
-            flag,
-            toast,
-            showSuccess,
-            showInfo,
-            showWarn,
-            showError,
-            changeFlag,
-            reloadPage,
-            updateData,
-            handleEditClick,
-            submitForm,
-            deleteData
-        };
-    },
-};
+        // return {
+        //     country,
+        //     loading,
+        //     filters,
+        //     countryData,
+        //     flag,
+        //     toast,
+        //     showSuccess,
+        //     showInfo,
+        //     showWarn,
+        //     showError,
+        //     changeFlag,
+        //     reloadPage,
+        //     updateData,
+        //     handleEditClick,
+        //     submitForm,
+        //     deleteData
+        // };
+//     },
+// };
 </script>
 
 <style scoped>
