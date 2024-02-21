@@ -2,7 +2,7 @@
     <div class="content-area">
       <div class="title-wrapper">
         <h3 class="page-title">
-          Auction Preparation
+          Auction Preparation {{ lastInsertedId }}
         </h3>
       </div>
       <div class="card">
@@ -25,7 +25,7 @@
               icon="mdi mdi-gavel"
               :before-change="switchTab1"
             >
-              <Step1 :ref="step1" />
+              <Step1  @submit="(i) => lastInsertedId=i" :ref="step1" />
             </tab-content>
             <tab-content
               title="Step 2"
@@ -61,6 +61,7 @@
   import Step2 from '@/views/admin/AuctionPreparation/Step2.vue';
   import Step3 from '@/views/admin/AuctionPreparation/Step3.vue';
   import Step4 from '@/views/admin/AuctionPreparation/Step4.vue';
+  
  
 //   const items = ref([
 //     {
@@ -73,6 +74,9 @@
 //         label: 'Review'
 //     }
 // ]);
+
+  const lastInsertedId = ref(0);
+
    const auctionPreparation = ref({
     auctionMethodId: 1,
     stepPosition: 0

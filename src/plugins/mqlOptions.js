@@ -2,6 +2,7 @@ export default {
   install: (Vue, options) => {
     let cdnServerList = []
     let baseURL = options.baseURL
+    let managementURL = options.managementURL
     let cdnBaseURL = options.cdnBaseURL
     let version = options.version
     let region = options.region
@@ -22,11 +23,18 @@ export default {
     Vue.getBaseURL = () => {
       return baseURL
     }
+    Vue.getManagementURL = () => {
+      return managementURL
+    }
     Vue.getCDNBaseURL = () => {
       return cdnBaseURL
     }
     Vue.setBaseURL = (str) => {
       baseURL = str
+    }
+
+    Vue.setManagementURL = (str) => {
+      managementURL = str
     }
 
     Vue.getVersion = function () {

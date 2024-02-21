@@ -3,16 +3,14 @@
         <div class="w-subtitle">
             Auction ID:
             <!-- {{ $store.state.AuctionPreparation.auctionId }} -->
+            {{ getLastInsertedAuctionId }}
         </div>
 
         <div class="fm-row">
             <div class="w-1/2">
                 <div class="fm-group">
-                    <FloatLabel>
                         <label for="username">Reference Number</label>
-                        <InputText id="username" v-model="value" placeholder="Enter Reference Number" />
-
-                    </FloatLabel>
+                        <InputText id="username" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
                 </div>
             </div>
 
@@ -20,7 +18,7 @@
                 <div class="fm-group">
                     <label for="step1">Auction Category<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedAuctionCategory" variant="filled" :options="auctionCategory"
+                    <Dropdown v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled" :options="auctionCategory"
                         optionLabel="propertyCategoryName" placeholder="Select Auction Category"
                         class="w-full md:w-14rem" />
 
@@ -32,14 +30,14 @@
 
         <div class="card flex justify-content-center">
             <label for="step2">Auction Description<span class="text-danger">*</span> </label>
-            <Textarea v-model="value2" autoResize rows="5" cols="30" placeholder="Enter Description" />
+            <Textarea v-model="auctionDetails.description" autoResize rows="5" cols="30" placeholder="Enter Description" />
         </div>
         <div class="fm-row">
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Auction Process<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedAuctionProcess" variant="filled" :options="auctionProcess"
+                    <Dropdown v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled" :options="auctionProcess"
                         optionLabel="auctionProcessName" placeholder="Select Auction Process" class="w-full md:w-14rem" />
 
 
@@ -49,8 +47,8 @@
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Department<span class="text-danger">*</span></label>
-
-                    <Dropdown v-model="selectedDepartment" variant="filled" :options="departments"
+                    
+                    <Dropdown v-model="auctionDetails.department" option-value="departmentId" variant="filled" :options="departments"
                         optionLabel="departmentName" placeholder="Select Department" class="w-full md:w-14rem" />
 
                 </div>
@@ -61,7 +59,7 @@
                 <div class="fm-group">
                     <label for="step2">Bid Submission/Placement<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedBidPlacement" variant="filled" :options="bidPlacements"
+                    <Dropdown v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled" :options="bidPlacements"
                         optionLabel="bidPlacementName" placeholder=" Select Bid Submission/Placement"
                         class="w-full md:w-14rem" />
 
@@ -75,7 +73,7 @@
                 <div class="fm-group">
                     <label for="step2">Event Processsing Fee Mode<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedPaymentMode" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
+                    <Dropdown v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
                         placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
 
                 </div>
@@ -85,7 +83,7 @@
                 <div class="fm-group">
                     <FloatLabel>
                         <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
-                        <InputNumber v-model="incrementValue" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
+                        <InputNumber v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
                             :max="100" />
 
                     </FloatLabel>
@@ -97,7 +95,7 @@
                 <div class="fm-group">
                     <label for="step2">EMD Fee Payment Mode<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedPaymentMode" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
+                    <Dropdown v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
                         placeholder=" Select EMD Fee Payment Mode" class="w-full md:w-14rem" />
 
                 </div>
@@ -106,7 +104,7 @@
                 <div class="fm-group">
                     <label for="step2">EMD Applied For<span class="text-danger">*</span></label>
 
-                    <Dropdown v-model="selectedEMDAppliedFor" variant="filled" :options="emdAppliedFor" optionLabel="emdAppliedForName"
+                    <Dropdown v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled" :options="emdAppliedFor" optionLabel="emdAppliedForName"
                         placeholder=" Select EMD Applied For" class="w-full md:w-14rem" />
 
                 </div>
@@ -119,40 +117,51 @@
         </div>
         <div class="ml-auto">
             <span class="p-buttonset">
-                <Button label="Next" @click=" $router.push({ name: 'Step3' })" icon="pi pi-trash" />
+                <Button label="Next" @click="InsertAuctionDataStep2" icon="pi pi-trash" />
             </span>
         </div>
     </div>
+    <!-- ,$router.push({ name: 'Step3' }) -->
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
 import MQL from '@/plugins/mql.js';
 import Dropdown from 'primevue/dropdown';
-
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
-
 import Textarea from 'primevue/textarea';
-const incrementValue = ref();
+import { useAuctionPreparation } from '@/store/auctionPreparation.js'
+import { storeToRefs } from 'pinia'
 
-const value = ref(null);
-const value2 = ref(null);
-const selectedAuctionCategory = ref();
-const selectedAuctionProcess = ref();
-const selectedDepartment = ref();
-const selectedBidPlacement = ref();
+const store = useAuctionPreparation()
+const { getLastInsertedAuctionId, getPropertyCategoryId  } = storeToRefs(store)
+
+const auctionDetails = ref({
+        referenceNo: '',
+        description: '',
+        // bidderCategory: '',
+        auctionCategory: '',
+        auctionProcess: '',
+        // unit: '',
+        department: '',
+        bidPlacement: '',
+        eventProcesssingFeeMode: '',
+        eventProcessingFeeAmount: 0,
+        emdFeePaymentMode: '',
+        emdAppliedFor: '',
+        // emdFeeAmount: ''
+      });
 const bidPlacements = ref([])
-const auctionCategory = ref([
-
-]);
-const selectedPaymentMode = ref();
-const selectedEMDAppliedFor = ref();
- const paymentModes = ref([]);
-const auctionMethod = ref([]);
+const auctionCategory = ref([]);
 const departments = ref([]);
 const auctionProcess = ref([]);
 const emdAppliedFor = ref([]);
+const paymentModes = ref([]);
+
+
+
+
 function FetchInventoryCategories() {
     new MQL()
         .setActivity('o.[FetchInventoryCategories]')
@@ -168,6 +177,7 @@ function FetchInventoryCategories() {
             }
         });
 }
+
 function FetchAllAuctionProcess() {
     new MQL()
         .setActivity('o.[FetchAllAuctionProcess]')
@@ -183,6 +193,7 @@ function FetchAllAuctionProcess() {
             }
         });
 }
+
 function FetchAllDepartments() {
     new MQL()
         .setActivity('o.[FetchAllDepartments]')
@@ -198,6 +209,7 @@ function FetchAllDepartments() {
             }
         });
 }
+
 function FetchAllBidPlacements() {
     new MQL()
         .setActivity('o.[FetchAllBidPlacements]')
@@ -213,6 +225,7 @@ function FetchAllBidPlacements() {
             }
         });
 }
+
 function FetchAllPaymentModes() {
     new MQL()
         .setActivity('o.[FetchAllPaymentModes]')
@@ -228,6 +241,7 @@ function FetchAllPaymentModes() {
             }
         });
 }
+
 function FetchAllEMDAppliedFor() {
     new MQL()
         .setActivity('o.[FetchAllEMDAppliedFor]')
@@ -244,7 +258,36 @@ function FetchAllEMDAppliedFor() {
         });
 }
 
+function InsertAuctionDataStep2() {
+    new MQL()
+        .setActivity('o.[InsertStep2AuctionData]')
+        .setData({
+            referenceNumber:  auctionDetails.value.referenceNo,
+            auctionDescription: auctionDetails.value.description,
+            inventoryCategoryId: auctionDetails.value.auctionCategory,
+            auctionProcessId: auctionDetails.value.auctionProcess,
+            departmentId: auctionDetails.value.department,
+            bidPlacement: auctionDetails.value.bidPlacement,
+            eventProcessingFeeMode: auctionDetails.value.eventProcesssingFeeMode,
+            eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
+            eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
+            emdAppliedFor: auctionDetails.value.emdAppliedFor,
+            auctionId: getLastInsertedAuctionId.value   
+        })
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('InsertStep2AuctionData', true);
+            if (rs.isValid('InsertStep2AuctionData')) {
+                console.log("LastUpdatedId from response",res.result);
+                store.setPropertyCategoryId(auctionDetails.value.auctionCategory); 
+                console.log("propertyCategoryId: ",getPropertyCategoryId.value);
+            } else {
+                rs.showErrorToast('InsertStep2AuctionData');
+            }
+        });
 
+    console.log(auctionDetails.value);
+}
 
 
 

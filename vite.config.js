@@ -55,6 +55,13 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/server/, ""),
       },
+      "/auctionmanagementserver": {
+        target: "https://cs.mkcl.org/2ZncVDPZRGYZwwteYYbB3aw4fr7",                                                         
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/auctionmanagementserver/, ""),
+      },
       "/cdnserver": {
         target: "https://testcdncs.mkcl.org",
         // target: "http://localhost:3032",

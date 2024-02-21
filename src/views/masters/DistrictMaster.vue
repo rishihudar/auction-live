@@ -4,7 +4,7 @@
     <div class="card">
         <DataTable 
         responsiveLayout="scroll" 
-        v-model:filters="filters" 
+        v-model:filters="filters"
         :value="district" 
         paginator 
         :rows="10" 

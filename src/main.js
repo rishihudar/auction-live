@@ -2,6 +2,7 @@ import { createApp, h } from 'vue'
 import App from './App.vue'
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+import FloatLabel from 'primevue/floatlabel';
 import router from './router'
 import mqlOptions from './plugins/mqlOptions.js'
 import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
@@ -53,6 +54,7 @@ vm.use(i18n)
 vm.use(router)
 vm.use(DialogService);
 vm.use(ConfirmationService);
+vm.component('FloatLabel', FloatLabel);
 vm.component('Button', Button);
 vm.component('Card', Card);
 vm.component('Toast', Toast);
@@ -89,10 +91,12 @@ vm.use(Toaster, {
   duration: 3000
 })
 var baseURL = '/server'
+var managementURL =   '/auctionmanagementserver'
 var cdnBaseURL = '/cdnserver'
 
 vm.use(mqlOptions, {
   baseURL: baseURL,
+  managementURL: managementURL,
   cdnBaseURL: cdnBaseURL,
   cdnConfig: [],
 })

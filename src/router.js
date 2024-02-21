@@ -4,9 +4,13 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
-function loadAdminView(view) {
+function loadAuctionView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
+}
+function loadAdminView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
 }
 function loadDashboardView(view) {
   return () =>
@@ -494,31 +498,31 @@ export default createRouter({
       meta: { title: "EntityRegistration", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
-      path: "/admin/auction-preparation",
+      path: "/auction-preparation",
       component: loadAdminView("AuctionPreparation"),
-      meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
+      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
-      path: "/admin/test",
+      path: "/test",
       component: loadAdminView("test"),
       meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step1",
       name:"ROLE_MAKER",
-      component: loadAdminView("Step1"),
+      component: loadAuctionView("Step1"),
       meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step2",
       name:"step2",
-      component: loadAdminView("Step2"),
+      component: loadAuctionView("Step2"),
       meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step3",
       name: "Step3",
-      component: loadAdminView("Step3"),
+      component: loadAuctionView("Step3"),
       meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
     },
 
