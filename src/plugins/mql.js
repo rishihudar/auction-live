@@ -46,7 +46,7 @@ class MQL {
 
     const ObjActivityData = 'Data'
     const mqlInstance = axios.create({
-      baseURL: window.app.getBaseURL()
+      // baseURL: window.app.getBaseURL()
       // baseURL: window.location.host,
       // transformRequest: axios.defaults.transformRequest.concat(
       //   function (data, headers) {
