@@ -1,39 +1,47 @@
 <template>
-    <div>
-        <div class="w-subtitle">
-            <h1>Step 1 Details</h1>
+   <div class="gap-2  mx-auto">
+        <div class="fm-row">
+            <div class="w-full">
+                <div class="fm-group">
+                    <div class="w-subtitle">
+                        <h1>Step 1 Details</h1>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <br>
+        <Divider />
 
-    <div class="fm-row">
-        <div class="w-1/2">
-            <div class="fm-group">
-                <label for="step1">Auction Type {{ auctionTypeData }} <span class="text-danger">*</span></label>
-
-                <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
+        <div class="fm-row">
+            <div class="w-1/2">
+                <div class="fm-group">
+                    <label for="step1">Auction Type<span class="text-danger">*</span></label>
+                    <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
                     placeholder="Select Auction Type" class="w-full md:w-14rem" />
-                <span v-if="!$v.aucType.required" class="text-danger">Please Select Auction Type</span>
-
+                    <span v-if="!$v.aucType.required" class="text-danger">Please Select Auction Type</span>
+                </div>
             </div>
-        </div>
-        <div class="w-1/2">
-            <div class="fm-group">
-                <label for="step2">Auction Method {{ auctionMethodData }} <span class="text-danger">*</span></label>
-
-                <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
+            <div class="w-1/2">
+                <div class="fm-group">
+                    <label for="step2">Auction Method<span class="text-danger">*</span></label>
+                    <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
                     optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
-                <span v-if="!$v.aucMethod.required" class="text-danger">Please Select Auction Method</span>
+                    <span v-if="!$v.aucMethod.required" class="text-danger">Please Select Auction Method</span>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="w-1/4">
-        <span class="p-buttonset">
-            <Button label="Next" @click="validateForm,InsertAuctionTypeAndMethod()" icon="pi pi-trash" />
-            {{ lastInsertedId }}
-        </span> 
+
+        <Divider />
+        
+        <div class="fm-row">
+            <div class="w-full">
+                <div class="fm-group">
+                    <span class="p-buttonset">
+                        <Button label="Next" @click="validateForm,InsertAuctionTypeAndMethod()" icon="pi pi-trash" />
+                    </span> 
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -42,6 +50,7 @@
 <script setup>
 import { ref, onMounted ,computed} from "vue";
 import MQL from '@/plugins/mql.js';
+import Divider from 'primevue/divider';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 import { useVuelidate } from '@vuelidate/core';
