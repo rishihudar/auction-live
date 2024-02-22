@@ -90,14 +90,19 @@ vm.use(Toaster, {
   position: "top-right",
   duration: 3000
 })
-var baseURL = '/server'
-var managementURL =   '/auctionmanagementserver'
-var cdnBaseURL = '/cdnserver'
+
+var coreURL = '/core-server'
+var loginURL = '/login-server'
+var cdnBaseURL = '/cdn-server'
+var bidderURL = '/bidder-server'
+var managementURL = '/management-server'
 
 vm.use(mqlOptions, {
-  baseURL: baseURL,
-  managementURL: managementURL,
+  coreURL: coreURL,
+  loginURL: loginURL,
   cdnBaseURL: cdnBaseURL,
+  bidderURL: bidderURL,
+  managementURL : managementURL,
   cdnConfig: [],
 })
 

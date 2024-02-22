@@ -1,7 +1,9 @@
 export default {
   install: (Vue, options) => {
     let cdnServerList = []
-    let baseURL = options.baseURL
+    let coreURL = options.coreURL
+    let loginURL = options.loginURL
+    let bidderURL = options.bidderURL
     let managementURL = options.managementURL
     let cdnBaseURL = options.cdnBaseURL
     let version = options.version
@@ -20,12 +22,22 @@ export default {
       alert(show)
       pageLoader = show
     }
-    Vue.getBaseURL = () => {
-      return baseURL
+    Vue.getCoreURL = () => {
+      return coreURL
     }
+
+    Vue.getLoginURL = () => {
+      return loginURL
+    }
+
+    Vue.getBidderURL = () => {
+      return bidderURL
+    }
+    
     Vue.getManagementURL = () => {
       return managementURL
     }
+
     Vue.getCDNBaseURL = () => {
       return cdnBaseURL
     }

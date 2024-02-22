@@ -261,6 +261,7 @@ const parentInventoryId = 0
 
 function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
         .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentInventoryId })
         .fetch()
@@ -277,6 +278,7 @@ function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventory
 }
 const fetchMCNameFromInventoryMaster = (parentId) => {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
         .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId:parentId })
         .fetch()
@@ -293,6 +295,7 @@ const fetchMCNameFromInventoryMaster = (parentId) => {
 }
 const fetchLocationFromInventoryMaster = (parentId) => {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
         .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId:parentId })
         .fetch()
@@ -309,6 +312,7 @@ const fetchLocationFromInventoryMaster = (parentId) => {
 }
 const fetchAreaFromInventoryMaster = (parentId) => {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
         .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId:parentId })
         .fetch()
@@ -326,6 +330,7 @@ const fetchAreaFromInventoryMaster = (parentId) => {
 }
 function FetchAllModifierValueChange  () {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllModifierValueChange]')
         .setData()
         .fetch()
@@ -342,6 +347,7 @@ function FetchAllModifierValueChange  () {
 
 function InsertStep3AuctionData() {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[InsertStep3AuctionData]')
         .setData(
             {
@@ -372,7 +378,6 @@ const onAdvancedUpload = async (event) => {
   try {
     let timeStamp = Date.now();
     console.log(timeStamp, "timeStamp")
-    const myFile = ref ("");
     console.log("event", event.files[0])
     myFile.value = event.files[0].name;
     console.log("myFile", myFile.value)
@@ -380,6 +385,7 @@ const onAdvancedUpload = async (event) => {
     formData.append('file', event.files[0]);
     //new mqlCDN add-------------------------------------------------------------------------------
     new MQLCdn()
+    .useManagementServer()
     .enablePageLoader(true)// FIXED: change this to directory path
     .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath("/AuctionPreparation") // (optional field) if you want to save  file to specific directory path

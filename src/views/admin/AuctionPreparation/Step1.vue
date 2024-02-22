@@ -89,6 +89,7 @@ const emit = defineEmits({
 
 function FetchAuctionTypes() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllAuctionTypes]')
         .setData()
         .fetch()
@@ -105,6 +106,7 @@ function FetchAuctionTypes() {
 
 function FetchAuctionMethods() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllAuctionMethods]')
         .setData()
         .fetch()
@@ -123,6 +125,7 @@ function FetchAuctionMethods() {
 
 function InsertAuctionTypeAndMethod() {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
         .setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId})
         .fetch()

@@ -47,29 +47,51 @@ export default defineConfig({
   server: {
     port: 8080,
     proxy: {
-      "/server": {
-        // 2ZnbxLhWpB5qU6xyCW7sZPKiEvS
+      "/core-server": {
         target: "https://cs.mkcl.org/2ZnbEg2SCTvOZwAFylfCVFdMOlz",
         ws: true,
         secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/server/, ""),
+        rewrite: (p) => p.replace(/^\/core-server/, ""),
       },
-      "/auctionmanagementserver": {
-        target: "https://cs.mkcl.org/2ZncVDPZRGYZwwteYYbB3aw4fr7",                                                         
-        ws: true,
-        secure: false,
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/auctionmanagementserver/, ""),
-      },
-      "/cdnserver": {
+      "/cdn-server": {
         target: "https://testcdncs.mkcl.org",
-        // target: "http://localhost:3032",
+        // target: "http://localhost:8082",
         ws: true,
         secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/cdnserver/, ""),
+        rewrite: (p) => p.replace(/^\/cdn-server/, ""),
       },
+
+      '/ups-server/o/': {
+        target: 'http://localhost:5000/o/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ups-server/o/': ''
+        }
+      },
+      "/login-server": {
+        target: "https://cs.mkcl.org/2ZnbxLhWpB5qU6xyCW7sZPKiEvS",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/login-server/, ""),
+      },
+      "/bidder-server": {
+        target: "https://cs.mkcl.org/2cUZevMMg8meDuqpPlC5Ua2VE8D",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/bidder-server/, ""),
+      },
+      "/management-server": {
+        target: "https://cs.mkcl.org/2ZncVDPZRGYZwwteYYbB3aw4fr7",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/management-server/, ""),
+      },
+      
     },
   },
 });
