@@ -16,7 +16,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 
 const visible = ref(false);
-new MQL()
+function fetchStep1AuctionPreview (){new MQL()
     .setActivity("o.[FetchAllStepsAuctionPreview]")
     .setData({ "auctionId": 3 })
     .fetch()
@@ -29,6 +29,6 @@ new MQL()
         }
     })
 
-
+}
 
 </script>
