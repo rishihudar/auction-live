@@ -149,8 +149,12 @@
                         <div class="fm-group">
                             <div class="card">
                                 <Toast />
-                                <FileUpload name="demo[]" url="/api/upload" @upload="onAdvancedUpload($event)" :multiple="false"
-                                    accept="image/*" :maxFileSize="2000000">
+                                <FileUpload  v-model="userDataSheet"
+                                accept=".image/*,.pdf"
+                                :multiple="false"
+                                :max-file-size="2000000" 
+                                :custom-upload="true" 
+                                @uploader="onAdvancedUpload">
                                     <template #empty>
                                         <p>Drag and drop files to here to upload, Max. file size 2 MB, Only pdf and images are allowed</p>
                                     </template>
@@ -196,6 +200,7 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
 import MQL from '@/plugins/mql.js';
+ //import​ ​MQLCdn​ ​from​ ​"@/plugins/mqlCdn.js"
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
@@ -335,6 +340,105 @@ function FetchAllModifierValueChange  () {
         });
 }
 
+function InsertStep3AuctionData() {
+    new MQL()
+        .setActivity('o.[InsertStep3AuctionData]')
+        .setData(
+            {
+                auctionId: getLastInsertedAuctionId.value,
+                inventoryId: inventoryAreaDetails.value.inventoryId,
+                modifierValue: modifierValue.value,
+                modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
+                numberOfExtension: modifierValueExtentionCount.value,
+                modifierValueAfterExtension: modifierValueAfterExtention.value,
+                documentTypeId:"" ,
+                documentFilePath:"" ,
+                pklInventoryCategoryId: getPropertyCategoryId,
+            }
+        )
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('InsertStep3AuctionData', true);
+            if (rs.isValid('InsertStep3AuctionData')) {
+                console.log("Response of Step 3 Data insert : ",res.result);
+            } else {
+                rs.showErrorToast('InsertStep3AuctionData');
+            }
+        });
+}
+
+
+const onAdvancedUpload = async (event) => {
+  try {
+    let timeStamp = Date.now();
+    console.log(timeStamp, "timeStamp")
+    const myFile = ref ("");
+    console.log("event", event.files[0])
+    myFile.value = event.files[0].name;
+    console.log("myFile", myFile.value)
+    const formData = new FormData();
+    formData.append('file', event.files[0]);
+    //new mqlCDN add-------------------------------------------------------------------------------
+    new MQLCdn()
+    .enablePageLoader(true)// FIXED: change this to directory path
+    .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    .setDirectoryPath("/AuctionPreparation") // (optional field) if you want to save  file to specific directory path
+    .setFormData(formData) // (required) sets file data
+    .setFileName(timeStamp+"_"+myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+    // FIXED: pass buckeyKey instead of name
+    .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+    .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
+    
+    .uploadFile("uploadtBtn")
+    .then((res) => {
+        // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+        if (res.isValid()) {
+        fileName.value=timeStamp+"_"+myFile.value.name;
+        filePath.value=res.uploadedFileURL().filePath; 
+        fullPath.value=res.uploadedFileURL().cdnServer;
+        // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
+        toaster.success("file uploaded.");
+        cropVisible.value=false
+        } else {
+        res.showErrorToast();
+        }
+    });
+
+    //-----------------------------------------------------------------------------------
+    userDataSheet.value.push(...event.files);
+    // Check if there are any selected files
+    if (userDataSheet.value.length === 0) {
+      console.error('No files selected', userDataSheet);
+      return;
+    }
+
+  try {
+    const files = event.files;
+
+    if (files.length === 0) {
+      console.error('No files selected');
+      return;
+    }
+
+
+    toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
+  }
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      // Handle user-aborted request
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
+    } else {
+      // Handle other types of errors
+      console.error('Error uploading files', error);
+      //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
+    }
+  }
+}
+
 
 
 const confirm1 = () => {
@@ -387,9 +491,6 @@ function deleteItem(data) {
         }
     });
 }
-const onAdvancedUpload = () => {
-    toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-};
 
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
