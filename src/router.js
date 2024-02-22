@@ -382,7 +382,11 @@ export default createRouter({
       component: loadAdminView("Step3"),
       meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
     },
-
+    {
+      path: "/AuctionPreview",
+      component: loadView("AuctionPreview"),
+      meta: { title: "AuctionPreview", lang: "en", icon: "mdi mdi-home-outline" },
+    },
     
   ],
 });
