@@ -94,6 +94,29 @@ class MQL {
     //     return Promise.reject(error)
     //   }
     // )
+
+
+    this.useCoreServer = () => {
+      mqlInstance.defaults.baseURL = window.app.getCoreURL()
+      return this
+    }
+
+    this.useLoginServer = () => {
+      mqlInstance.defaults.baseURL = window.app.getLoginURL()
+      return this
+    }
+
+    this.useBidderServer = () => {
+      mqlInstance.defaults.baseURL = window.app.getBidderURL()
+      return this
+    }
+
+    this.useManagementServer = () => {
+      mqlInstance.defaults.baseURL = window.app.getManagementURL()
+      return this
+    }
+
+
     this.formatActivity = function (activityStr) {
       let activityArray = []
       this.activityType = activityStr.split(ActivitySplitter)[0]
