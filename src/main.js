@@ -10,17 +10,27 @@ import ToastService from 'primevue/toastservice';
 import { plugin, defaultConfig } from '@formkit/vue'
 import formKitConfig from './formkit.config'
 import primeVue from 'primevue/config'
-import InputText from 'primevue/inputtext';
+import Alive from '../assets/presets/alive'
+import Breadcrumb from 'primevue/breadcrumb'
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+import Button from 'primevue/button'
+import Menu from 'primevue/menu'
 import Steps from 'primevue/steps';
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
+import Accordion from 'primevue/accordion'
+import AccordionTab from 'primevue/accordiontab'
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Paginator from 'primevue/paginator';
+import simplebar from 'simplebar-vue'
+import 'simplebar-vue/dist/simplebar.min.css'
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Column from 'primevue/column';
 
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
-import '../assets/fonts/iconsax/style.css'
+// import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -38,16 +48,31 @@ vm.use(i18n)
 vm.use(router)
 vm.use(ConfirmationService);
 vm.use(ToastService);
-vm.use(primeVue)
+vm.use(primeVue, { unstyled: true, pt: Alive })
+vm.use(Breadcrumb)
+vm.component('Breadcrumb', Breadcrumb)
 vm.component('ConfirmDialog', ConfirmDialog);
 vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('InputText', InputText)
+vm.use(Password)
+vm.component('Password', Password)
+vm.use(Button)
+vm.component('Button', Button)
+vm.use(Menu)
+vm.component('Menu', Menu)
 vm.use(Accordion)
 vm.component('Column', Column);
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
+vm.use(DataTable)
+vm.component('DataTable', DataTable)
+vm.use(Column)
+vm.component('Column', Column)
+vm.use(Paginator)
+vm.component('Paginator', Paginator)
+vm.component('simplebar', simplebar)
 vm.use(Toast)
 vm.component('Toast', Toast);
 vm.component('Steps', Steps);
@@ -58,12 +83,19 @@ vm.use(Toaster, {
   position: "top-right",
   duration: 3000
 })
-var baseURL = '/server'
-var cdnBaseURL = '/cdnserver'
+
+var coreURL = '/core-server'
+var loginURL = '/login-server'
+var cdnBaseURL = '/cdn-server'
+var bidderURL = '/bidder-server'
+var managementURL = '/management-server'
 
 vm.use(mqlOptions, {
-  baseURL: baseURL,
+  coreURL: coreURL,
+  loginURL: loginURL,
   cdnBaseURL: cdnBaseURL,
+  bidderURL: bidderURL,
+  managementURL : managementURL,
   cdnConfig: [],
 })
 

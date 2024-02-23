@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vitePluginCompression from "vite-plugin-compression";
+import svgLoader from 'vite-svg-loader';
 import path from "path";
 
 // https://vitejs.dev/config/
@@ -21,7 +22,7 @@ export default defineConfig({
       analyzerMode: "disabled",
     },
   },
-  plugins: [vue(), vitePluginCompression()],
+  plugins: [vue(), vitePluginCompression(), svgLoader()],
   build: {
     minify: "terser",
     terserOptions: {
@@ -46,21 +47,51 @@ export default defineConfig({
   server: {
     port: 8080,
     proxy: {
-      "/server": {
+      "/core-server": {
         target: "https://cs.mkcl.org/2ZnbEg2SCTvOZwAFylfCVFdMOlz",
         ws: true,
         secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/server/, ""),
+        rewrite: (p) => p.replace(/^\/core-server/, ""),
       },
-      "/cdnserver": {
-        // target: "https://testcdncs.mkcl.org",
-        target: "http://localhost:3032",
+      "/cdn-server": {
+        target: "https://testcdncs.mkcl.org",
+        // target: "http://localhost:8082",
         ws: true,
         secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/cdnserver/, ""),
+        rewrite: (p) => p.replace(/^\/cdn-server/, ""),
       },
+
+      '/ups-server/o/': {
+        target: 'http://localhost:5000/o/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ups-server/o/': ''
+        }
+      },
+      "/login-server": {
+        target: "https://cs.mkcl.org/2ZnbxLhWpB5qU6xyCW7sZPKiEvS",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/login-server/, ""),
+      },
+      "/bidder-server": {
+        target: "https://cs.mkcl.org/2cUZevMMg8meDuqpPlC5Ua2VE8D",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/bidder-server/, ""),
+      },
+      "/management-server": {
+        target: "https://cs.mkcl.org/2ZncVDPZRGYZwwteYYbB3aw4fr7",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/management-server/, ""),
+      },
+      
     },
   },
 });
