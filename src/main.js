@@ -20,7 +20,6 @@ import Steps from 'primevue/steps';
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
@@ -62,7 +61,7 @@ vm.component('Button', Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
 vm.use(Accordion)
-vm.component('Column', Column);
+
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)

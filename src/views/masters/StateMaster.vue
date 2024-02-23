@@ -218,6 +218,7 @@ function changeFlag(newValue) {
 
 function FetchStateName() {
     new MQL()
+    .useCoreServer()
         .setActivity('o.[FetchAllState]')
         .setData()
         .fetch()
@@ -238,6 +239,7 @@ function FetchStateName() {
 }
 function FetchCountryName() {
     new MQL()
+    .useCoreServer()
         .setActivity('o.[FetchAllCountries]')
         .setData()
         .fetch()

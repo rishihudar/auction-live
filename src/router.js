@@ -351,7 +351,7 @@ export default createRouter({
         name: "Datatable",
         component: loadUI("datatable"),
         meta: { title: "Datatable", lang: "mr", icon: "mdi mdi-account-edit" },
-    }
+    },
     {
       path: "/StateMaster",
       component: loadMastersView("StateMaster"),
@@ -394,6 +394,7 @@ export default createRouter({
     },
     {
       path: "/AuctionPreview",
+      name: "AuctionPreview",
       component: loadView("AuctionPreview"),
       meta: { title: "AuctionPreview", lang: "en", icon: "mdi mdi-home-outline" },
     },
