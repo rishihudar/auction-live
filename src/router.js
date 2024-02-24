@@ -115,6 +115,12 @@ export default createRouter({
       meta: { title: "LandingPage", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
+      path: "/test",
+      name: "test",
+      component: loadMastersView("test"),
+      meta: { title: "test", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
       path: "/master",
       name: "master",
       component: loadMastersView("master"),

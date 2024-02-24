@@ -34,7 +34,7 @@
 
         <div class="fm-row">
             <div class="w-full">
-                <Button label="ADD Items" @click="visible = true" icon="pi pi-trash" />
+                <Button label="ADD Items" @click="visible = true"  :disabled="getIsClicked" icon="pi pi-trash" />
             </div>
         </div>
 
@@ -50,7 +50,7 @@
             <ConfirmDialog></ConfirmDialog>
             <div class="w-1/2">
                 <div class="fm-group">
-                    <Button @click="confirm1()" label="Next" outlined></Button>
+                    <Button @click="confirm1(),handleClick(false)" label="Next" outlined></Button>
                 </div>
             </div>
         </div>
@@ -150,13 +150,13 @@
                             <div class="card">
                                 <Toast />
                                 <FileUpload  v-model="userDataSheet"
-                                accept=".image/*,.pdf"
+                                :accept="docType"
                                 :multiple="false"
-                                :max-file-size="2000000" 
+                                :max-file-size="docSize*1000" 
                                 :custom-upload="true" 
                                 @uploader="onAdvancedUpload">
                                     <template #empty>
-                                        <p>Drag and drop files to here to upload, Max. file size 2 MB, Only pdf and images are allowed</p>
+                                        <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf and images are allowed</p>
                                     </template>
                                     <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                                 </FileUpload>
@@ -178,7 +178,8 @@
                             <!-- <button class="btn btn-primary-light pri-color" @click="addItem()" v-if="itemAreaCount != 0">
                                 ADD
                             </button> -->
-                            <Button @click="addItem()" icon="pi pi-check" label="Add" v-if="itemAreaCount != 0"></Button>
+                            <!-- q. if below button click once it should be disable -->
+                            <Button @click="AddStep3AuctionData" icon="pi pi-check" label="Add"  v-if="itemAreaCount != 0"></Button>
                         </div>
                     </div>
                 </div>
@@ -200,12 +201,13 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
 import MQL from '@/plugins/mql.js';
- //import​ ​MQLCdn​ ​from​ ​"@/plugins/mqlCdn.js"
+// import​ ​MQLCdn​ ​from​ ​"@/plugins/mqlCdn.js";
+import MQLCdn from '@/plugins/mqlCdn.js';
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId  } = storeToRefs(store)
+const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked  } = storeToRefs(store)
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -215,6 +217,21 @@ const mcDetail = ref([]);
 const locationDetail = ref([]);
 const areaDetail = ref([]);
 const itemAreaCount = ref(0);
+
+
+const myFile = ref("");
+const fileName = ref("");
+const fullPath = ref("");
+const filePath = ref("");
+const docTypeId = ref(0);
+const docSize = ref();
+const docName = ref();
+const docType = ref();
+const userDataSheet = ref([]);
+const docValidation=ref([]);
+const statusData = ref([]);
+const displayName = ref();
+const statusId = ref();
 
 const modifierValue = ref("");
 const modifierValueExtentionCount = ref(0);
@@ -257,6 +274,15 @@ const inventoryAreaDetails = ref([{
 
 const inventoryCategoryId = getPropertyCategoryId.value;
 const parentInventoryId = 0
+
+
+
+    const handleClick = (input) => {
+      // Your button click logic here
+      
+      console.log("is clicked: ", getIsClicked.value)
+      store.setIsClicked(input);
+    };
 
 
 function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
@@ -345,28 +371,48 @@ function FetchAllModifierValueChange  () {
         });
 }
 
-function InsertStep3AuctionData() {
+function AddStep3AuctionData() {
+    console.log("auctionId", getLastInsertedAuctionId.value); 
+    console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
+    console.log("modifierValue", modifierValue.value);
+    console.log("modifierValueChangeId", selectedModifierValueChange.value.modifierValueChangeId);
+    console.log("numberOfExtension", modifierValueExtentionCount.value);
+    console.log("modifierValueAfterExtension", modifierValueAfterExtention.value);
+    console.log("documentTypeId", docTypeId.value);
+    console.log("documentFilePath",filePath.value);
+    console.log("documentPath", fullPath.value + "/" + fileName.value);
+    console.log("documentFileName",fileName.value);
+    console.log("inventoryCategoryId", getPropertyCategoryId.value);
+    console.log("statusId", statusId.value);
+
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertStep3AuctionData]')
         .setData(
             {
-                auctionId: getLastInsertedAuctionId.value,
+                auctionId: getLastInsertedAuctionId,
                 inventoryId: inventoryAreaDetails.value.inventoryId,
                 modifierValue: modifierValue.value,
                 modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
                 numberOfExtension: modifierValueExtentionCount.value,
                 modifierValueAfterExtension: modifierValueAfterExtention.value,
-                documentTypeId:"" ,
-                documentFilePath:"" ,
-                pklInventoryCategoryId: getPropertyCategoryId,
+                documentTypeId: docTypeId.value,
+                documentFilePath:filePath.value ,
+                documentPath: fullPath.value + "/" + fileName.value,
+                documentFileName:fileName.value,
+                inventoryCategoryId: getPropertyCategoryId,
+                statusId: statusId.value,
             }
         )
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertStep3AuctionData', true);
+            console.log("Response of Step 3 Data insert : ",res);
             if (rs.isValid('InsertStep3AuctionData')) {
                 console.log("Response of Step 3 Data insert : ",res.result);
+                addItem();
+                handleClick(true);
+                 visible.value = false
             } else {
                 rs.showErrorToast('InsertStep3AuctionData');
             }
@@ -375,7 +421,7 @@ function InsertStep3AuctionData() {
 
 
 const onAdvancedUpload = async (event) => {
-  try {
+ // try {
     let timeStamp = Date.now();
     console.log(timeStamp, "timeStamp")
     console.log("event", event.files[0])
@@ -385,10 +431,10 @@ const onAdvancedUpload = async (event) => {
     formData.append('file', event.files[0]);
     //new mqlCDN add-------------------------------------------------------------------------------
     new MQLCdn()
-    .useManagementServer()
+    // .useManagementServer()
     .enablePageLoader(true)// FIXED: change this to directory path
-    .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
-    .setDirectoryPath("/AuctionPreparation") // (optional field) if you want to save  file to specific directory path
+    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    .setDirectoryPath("/AuctionPreparation/"+getLastInsertedAuctionId+"/ItemDocument") // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
     .setFileName(timeStamp+"_"+myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
     // FIXED: pass buckeyKey instead of name
@@ -403,49 +449,99 @@ const onAdvancedUpload = async (event) => {
         fileName.value=timeStamp+"_"+myFile.value.name;
         filePath.value=res.uploadedFileURL().filePath; 
         fullPath.value=res.uploadedFileURL().cdnServer;
+        console.log("fileName", fileName.value);
+        console.log("filePath", filePath.value);
+        console.log("fullPath", fullPath.value);
         // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
-        toaster.success("file uploaded.");
-        cropVisible.value=false
+        //toaster.success("file uploaded.");
+        toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+       // cropVisible.value=false
         } else {
         res.showErrorToast();
         }
     });
 
     //-----------------------------------------------------------------------------------
-    userDataSheet.value.push(...event.files);
-    // Check if there are any selected files
-    if (userDataSheet.value.length === 0) {
-      console.error('No files selected', userDataSheet);
-      return;
-    }
+    // userDataSheet.value.push(...event.files);
+    // // Check if there are any selected files
+    // if (userDataSheet.value.length === 0) {
 
-  try {
-    const files = event.files;
+    // console.log('No files selected', userDataSheet);
+    //   console.error('No files selected', userDataSheet);
+    //   return;
+    // }
 
-    if (files.length === 0) {
-      console.error('No files selected');
-      return;
-    }
+  //try {
+    // const files = event.files;
+
+    // if (files.length === 0) {
+    //   console.error('No files selected');
+    //   return;
+    // }
 
 
-    toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+   
 
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
-  }
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      // Handle user-aborted request
-      toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
-    } else {
-      // Handle other types of errors
-      console.error('Error uploading files', error);
-      //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
-    }
-  }
+//   } catch (error) {
+//     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
+//   }
+//   } catch (error) {
+//     if (error.name === 'AbortError') {
+//       // Handle user-aborted request
+//       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
+//     } else {
+//       // Handle other types of errors
+//       console.error('Error uploading files', error);
+//       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
+//     }
+//   }
+}
+
+function fetchDocumentsValidationDetails(){
+          // Automatically generated
+          new MQL()
+          .useCoreServer()
+      .setActivity("o.[fetchDocumentsValidationDetails]")
+  
+      .fetch()
+       .then(rs => {
+      let res = rs.getActivity("fetchDocumentsValidationDetails",true)
+      docValidation.value=res.result.validation
+      docValidation.value.forEach(item => {
+        if(item.typeName=="AUCTION_ITEM_DOCUMENT"){
+          docName.value=item.typeName;
+          docSize.value=item.fileSize;
+          docType.value=item.fileType;
+          docTypeId.value = item.typeId;
+          console.log("docName.value",docName.value);
+        }
+    });
+})
 }
 
 
+function FetchAuctionStatus(){
+          // Automatically generated
+          new MQL()
+        .useCoreServer()
+        .setActivity('o.[fetchStatusFromStatusMaster]')
+        .setData({statusCode: 'AUCTION_ITEM_PENDING'})
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+            if (rs.isValid('fetchStatusFromStatusMaster')) {
+                console.log("Auction Status Data",res.result);
+                statusData.value = res.result;
+                statusData.value.forEach(item => {
+                    statusId.value = item.statusId;
+                    displayName.value = item.displayName;
+                });
+                console.log("Auction Status Data",statusData.value);
+            } else {
+                rs.showErrorToast('fetchStatusFromStatusMaster');
+            }
+        });
+}
 
 const confirm1 = () => {
     confirm.require({
@@ -491,6 +587,7 @@ function deleteItem(data) {
         accept: () => {
             toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Inventory Item Removed', life: 3000 });
             addedItem.value = addedItem.value.filter((item) => item !== data);
+            handleClick(false);
         },
         reject: () => {
             toast.add({ severity: 'warn', summary: 'Drafted', detail: 'Inventory Item Not Removed', life: 3000 });
@@ -501,6 +598,8 @@ function deleteItem(data) {
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
     FetchAllModifierValueChange();
+    fetchDocumentsValidationDetails();
     //FetchInventoryMCNamefromInventoryMaster();
+    FetchAuctionStatus();
 })
 </script>

@@ -66,6 +66,9 @@ const auctionMethodData = ref({
     auctionMethodName: ''
 });
 const aucMethod = ref([]);
+const statusData = ref([]);
+const displayName = ref();
+const statusId = ref();
 const aucType = ref([]);
 const auctionTypeData = ref({ auctionType: '',
     auctionTypeId: 0
@@ -123,11 +126,36 @@ function FetchAuctionMethods() {
 
 
 
+function FetchAuctionStatus() {
+    new MQL()
+        .useCoreServer()
+        .setActivity('o.[fetchStatusFromStatusMaster]')
+        .setData({statusCode: 'AUCTION_DRAFTED'})
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+            if (rs.isValid('fetchStatusFromStatusMaster')) {
+                console.log("Auction Status Data",res.result);
+                statusData.value = res.result;
+                statusData.value.forEach(item => {
+                    statusId.value = item.statusId;
+                    displayName.value = item.displayName;
+                });
+                console.log("Auction Status Data",statusData.value);
+            } else {
+                rs.showErrorToast('fetchStatusFromStatusMaster');
+            }
+        });
+}
+
+
 function InsertAuctionTypeAndMethod() {
+
+    if (getLastInsertedAuctionId.value == null){
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-        .setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId})
+        .setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value})
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
@@ -142,7 +170,10 @@ function InsertAuctionTypeAndMethod() {
             } else {
                 rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
             }
-        });
+        });}
+        else{
+            console.log("LastInsertedId is not null: ",getLastInsertedAuctionId.value);
+        }
 }
 
 
@@ -160,6 +191,7 @@ const $v=useVuelidate(rules,{aucType,aucMethod})
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
+    FetchAuctionStatus();
 });
 
 </script>
