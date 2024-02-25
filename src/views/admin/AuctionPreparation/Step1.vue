@@ -18,7 +18,10 @@
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
                     <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
                     placeholder="Select Auction Type" class="w-full md:w-14rem" />
-                    <span v-if="!$v.aucType.required" class="text-danger">Please Select Auction Type</span>
+                    <span v-if="$v.aucType.$error" class="text-danger">Please Select Auction Type</span>
+                    <!-- <div v-if="$v.auctionTypeData.$error" class="p-error">
+                        {{ $v.auctionTypeData.$errors[0].$message }}
+                        </div> -->
                 </div>
             </div>
             <div class="w-1/2">
@@ -26,7 +29,7 @@
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
                     <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
                     optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
-                    <span v-if="!$v.aucMethod.required" class="text-danger">Please Select Auction Method</span>
+                    <span v-if="!$v.aucMethod.$error" class="text-danger">Please Select Auction Method</span>
                 </div>
             </div>
         </div>
@@ -37,7 +40,7 @@
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button label="Next" @click="validateForm,InsertAuctionTypeAndMethod()" icon="pi pi-trash" />
+                        <Button label="Next" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
                     </span> 
                 </div>
             </div>
@@ -149,9 +152,9 @@ function FetchAuctionStatus() {
 }
 
 
-function InsertAuctionTypeAndMethod() {
-
-    if (getLastInsertedAuctionId.value == null){
+const InsertAuctionTypeAndMethod = async() => {
+    const result = await $v.value.$validate();
+    if (getLastInsertedAuctionId.value == null && result ){
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
@@ -179,15 +182,16 @@ function InsertAuctionTypeAndMethod() {
 
 const rules = computed(() => (
     {
-        aucType: {
+        aucMethod: {
             required
         },
-        aucMethod: {
+        aucType: {
             required
         },
     }
 ));
-const $v=useVuelidate(rules,{aucType,aucMethod})
+const $v=useVuelidate(rules,{aucMethod,aucType});
+
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();

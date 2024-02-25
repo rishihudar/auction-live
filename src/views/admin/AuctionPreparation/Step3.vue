@@ -385,11 +385,45 @@ function AddStep3AuctionData() {
     console.log("inventoryCategoryId", getPropertyCategoryId.value);
     console.log("statusId", statusId.value);
 
-    new MQL()
-        .useManagementServer()
-        .setActivity('o.[InsertStep3AuctionData]')
-        .setData(
-            {
+    // new MQL()
+    // .useCoreServer()
+    //     .setActivity('o.[InsertStep3AuctionData]')
+    //     .setData(
+    //         {
+    //             auctionId: getLastInsertedAuctionId,
+    //             inventoryId: inventoryAreaDetails.value.inventoryId,
+    //             modifierValue: modifierValue.value,
+    //             modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
+    //             numberOfExtension: modifierValueExtentionCount.value,
+    //             modifierValueAfterExtension: modifierValueAfterExtention.value,
+    //             documentTypeId: docTypeId.value,
+    //             documentFilePath:filePath.value ,
+    //             documentPath: fullPath.value + "/" + fileName.value,
+    //             documentFileName:fileName.value,
+    //             inventoryCategoryId: getPropertyCategoryId,
+    //             statusId: statusId.value,
+    //         }
+    //     )
+    //     .fetch()
+    //     .then((rs) => {
+    //         let res = rs.getActivity('InsertStep3AuctionData', true);
+    //         console.log("Response of Step 3 Data insert : ",rs);
+    //         if (rs.isValid('InsertStep3AuctionData')) {
+    //             console.log("Response of Step 3 Data insert : ",res.result);
+    //             addItem();
+    //             handleClick(true);
+    //              visible.value = false
+    //         } else {
+    //             rs.showErrorToast('InsertStep3AuctionData');
+    //         }
+    //     });
+
+    
+					// Automatically generated
+			new MQL()
+            .useCoreServer() 
+			.setActivity("o.[InsertStep3AuctionData]")
+			.setData({
                 auctionId: getLastInsertedAuctionId,
                 inventoryId: inventoryAreaDetails.value.inventoryId,
                 modifierValue: modifierValue.value,
@@ -402,21 +436,17 @@ function AddStep3AuctionData() {
                 documentFileName:fileName.value,
                 inventoryCategoryId: getPropertyCategoryId,
                 statusId: statusId.value,
-            }
-        )
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('InsertStep3AuctionData', true);
-            console.log("Response of Step 3 Data insert : ",res);
-            if (rs.isValid('InsertStep3AuctionData')) {
-                console.log("Response of Step 3 Data insert : ",res.result);
-                addItem();
-                handleClick(true);
-                 visible.value = false
-            } else {
-                rs.showErrorToast('InsertStep3AuctionData');
-            }
-        });
+            })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertStep3AuctionData",true)
+			if (rs.isValid("InsertStep3AuctionData")) {
+            console.log("Response of Step 3 Data insert : ",res.result)
+			} else{ 
+			rs.showErrorToast("InsertStep3AuctionData")
+			}
+			})
+			
 }
 
 

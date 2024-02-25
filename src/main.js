@@ -40,6 +40,7 @@ import DialogService from 'primevue/dialogservice'
 import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import Vuelidate from 'vuelidate';
 
 const piniaStore = createPinia()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -83,6 +84,7 @@ vm.use(Column)
 vm.use(Paginator)
 vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
+vm.use(Vuelidate);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())
