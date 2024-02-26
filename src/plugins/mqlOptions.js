@@ -45,6 +45,10 @@ export default {
       baseURL = str
     }
 
+    Vue.setManagementURL = (str) => {
+      managementURL = str
+    }
+
     Vue.getVersion = function () {
       return version
     }

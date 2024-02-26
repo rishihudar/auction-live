@@ -4,6 +4,26 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadAuctionView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
+}
+function loadAdminView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
+}
+function loadDashboardView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/Dashboard/${view}.vue`);
+}
+function loadMastersView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
+}
+function loadManagementView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/management/${view}.vue`);
+}
 function loadUI(view) {
     return () => import(/* webpackChunkName: "view-[request]" */ `@/views/ui/${view}.vue`)
 }
@@ -11,10 +31,142 @@ export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: "/home",
+      path: "/inventoryMaster",
+      name: "inventoryMaster",
+      component: loadView("InventoryMaster"),
+      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/",
       name: "home",
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    // {
+    //   path: "/admin/auction-preparation",
+    //   name: "ROLE_MAKER",
+    //   component: loadAdminView("AuctionPreparation"),
+    //   meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
+    // },
+    {
+      path: "/AuctionCheckerDashboard",
+      name: "ROLE_CHECKER",
+      component: loadDashboardView("AuctionCheckerComponent"),
+      meta: { title: "AuctionCheckerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/AdminDashboard",
+      name: "ROLE_ADMIN",
+      component: loadDashboardView("AdminComponent"),
+      meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    // {
+    //   path: "/AuctionMakerDashboard",
+    //   name: "ROLE_MAKER",
+    //   component: loadDashboardView("AuctionMakerComponent"),
+    //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    // },
+    {
+      path: "/BidderDashboard",
+      name: "ROLE_BIDDER",
+      component: loadDashboardView("BidderComponent"),
+      meta: { title: "BidderComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/SuperAdminDashboard",
+      name: "ROLE_SUPERADMIN",
+      component: loadDashboardView("SuperAdminComponent"),
+      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/OrganizationAdminDashboard",
+      name: "ROLE_ORGANIZATION_ADMIN",
+      component: loadDashboardView("OrganizationAdminComponent"),
+      meta: { title: "OrganizationAdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/ApproverDashboard",
+      name: "ROLE_APPROVER",
+      component: loadDashboardView("ApproverComponent"),
+      meta: { title: "ApproverComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/PublisherDashboard",
+      name: "ROLE_PUBLISHER",
+      component: loadDashboardView("PublisherComponent"),
+      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/SchedulerDashboard",
+      name: "ROLE_SCHEDULER",
+      component: loadDashboardView("SchedulerComponent"),
+      meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/WatcherDashboard",
+      name: "ROLE_WATCHER",
+      component: loadDashboardView("WatcherComponent"),
+      meta: { title: "WatcherComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/LandingPage",
+      name: "LandingPage",
+      component: loadView("LandingPage"),
+      meta: { title: "LandingPage", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/TestVue",
+      name: "TestVue",
+      component: loadMastersView("TestVue"),
+      meta: { title: "TestVue", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/master",
+      name: "master",
+      component: loadMastersView("master"),
+      meta: { title: "master", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/CountryMaster",
+      name: "CountryMaster",
+      component: loadMastersView("CountryMaster"),
+      meta: { title: "CountryMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/StateMaster",
+      name: "StateMaster",
+      component: loadMastersView("StateMaster"),
+      meta: { title: "StateMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/DistrictMaster",
+      name: "DistrictMaster",
+      component: loadMastersView("DistrictMaster"),
+      meta: { title: "DistrictMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/TalukaMaster",
+      name: "TalukaMaster",
+      component: loadMastersView("TalukaMaster"),
+      meta: { title: "TalukaMaster", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/ExcelViewer",
+      name: "ExcelViewer",
+      component: loadMastersView("ExcelViewer"),
+      meta: { title: "ExcelViewer", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/UserManagement",
+      name: "UserManagement",
+      component: loadManagementView("UserManagement"),
+      meta: { title: "UserManagement", lang: "en", icon: "mdi mdi-information-variant" },
+    },
+    {
+      path: "/RoleManagement",
+      name: "RoleManagement",
+      component: loadManagementView("RoleManagement"),
+      meta: { title: "RoleManagement", lang: "en", icon: "mdi mdi-information-variant" },
     },
     {
       path: "/about",
@@ -343,6 +495,57 @@ export default createRouter({
       component: loadView("validateOTP"),
       meta: { title: "validateOTP", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    {
+      path: "/StateMaster",
+      component: loadMastersView("StateMaster"),
+      meta: { title: "stateMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/TalukaMaster",
+      component: loadMastersView("TalukaMaster"),
+      meta: { title: "talukaMaster", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/EntityRegistration",
+      component: loadView("EntityRegistration"),
+      meta: { title: "EntityRegistration", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/auction-preparation",
+      component: loadAdminView("AuctionPreparation"),
+      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/test",
+      component: loadAdminView("test"),
+      meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step1",
+      name:"ROLE_MAKER",
+      component: loadAuctionView("Step1"),
+      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step2",
+      name:"step2",
+      component: loadAuctionView("Step2"),
+      meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step3",
+      name: "Step3",
+      component: loadAuctionView("Step3"),
+      meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+    {
+      path: "/Step4",
+      name: "Step4",
+      component: loadAuctionView("Step4"),
+      meta: { title: "Step4",lang: "en", icon: "mdi mdi-home-outline"},
+    },
+
+    
     // UI
     {
         path: "/ui/datatable",
