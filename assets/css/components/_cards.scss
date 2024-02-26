@@ -1,6 +1,22 @@
+.card {@apply p-8 rounded-[var(--border-radius)] bg-white shadow;
+    &-header {@apply mb-5 flex gap-2 items-center;
+        .ch-title {@apply text-xl font-bold text-[var(--neutral-600)];}
+    }
+
+    .fm-action {
+        .btn {@apply px-8;}
+    }
+}
+
 .card-login {@apply mx-auto p-10 pb-0 w-[500px] max-w-full rounded-xl bg-white shadow;
     .page-header {@apply mb-2 text-center;}
     .fm-action {@apply justify-center;
         .btn {@apply px-16;}
     }
+
+    #registration & {@apply w-[1080px];
+        .page-header {@apply mb-6;}
+    }
 }
+
+.card-add-entry {@apply mb-10;}

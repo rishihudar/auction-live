@@ -1,5 +1,5 @@
 .box-breadcrumb {@apply mt-1;}
-.breadcrumb {@apply flex items-center;
+.breadcrumb {@apply flex items-center text-sm;
     &-separator {@apply px-2;
         svg {@apply mt-[1px] *:fill-[var(--neutral-200)];}
     }

@@ -18,6 +18,7 @@ export default {
     },
     input: ({ props, context }) => ({
         class: [
+            'fm-box',
             // Alignment
             'flex',
             'items-center',
@@ -28,14 +29,15 @@ export default {
             'h-6',
 
             // Shape
-            'rounded-lg',
-            'border-2',
+            // 'rounded-lg',
+            // 'border-2',
 
             // Colors
             'text-surface-600',
             {
                 'border-surface-200 bg-surface-0 dark:border-surface-700 dark:bg-surface-900': !context.checked,
-                'border-primary-500 bg-primary-500 dark:border-primary-400 dark:bg-primary-400': context.checked
+                // 'border-primary-500 bg-primary-500 dark:border-primary-400 dark:bg-primary-400': context.checked
+                'fm-box-checked': context.checked
             },
 
             // States
