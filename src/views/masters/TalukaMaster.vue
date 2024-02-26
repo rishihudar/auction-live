@@ -163,7 +163,7 @@ function FetchDistrictName() {
                 districts.value = res.result;
 
             } else {
-                rs.showErrorToast('ErrorFetchAllDistrict');
+                rs.showErrorToast('FetchAllDistrict');
             }
             loading.value = false; // Move loading to here
         });
@@ -180,7 +180,7 @@ function FetchTalukaName() {
                 taluka.value = res.result;
 
             } else {
-                rs.showErrorToast('ErrorFetchAllTaluka');
+                rs.showErrorToast('FetchAllTaluka');
             }
             loading.value = false; // Move loading to here
         });
@@ -202,7 +202,7 @@ function insertTaluka(talukaData) {
                     // Optionally, you can reload the page or update the state list after insertion
                     // FetchTalukaName()
                 } else {
-                    rs.showErrorToast('ErrorInsertState');
+                    rs.showErrorToast('InsertTaluka');
                 }
                 loading.value = false;
             });
@@ -220,7 +220,7 @@ function updateTaluka(talukaData) {
                 console.log("stateData update", talukaData);
 
             } else {
-                rs.showErrorToast('ErrorUpdateState');
+                rs.showErrorToast('UpdateTalukaById');
             }
             loading.value = false;
         });
@@ -246,7 +246,7 @@ function deleteTaluka(data) {
             if (rs.isValid('DeleteTalukaById')) {
                 console.log(res.result);
             } else {
-                rs.showErrorToast('ErrorUpdateState');
+                rs.showErrorToast('DeleteTalukaById');
             }
             loading.value = false;
         });

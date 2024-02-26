@@ -379,16 +379,19 @@ export default createRouter({
     },
     {
       path: "/Step1",
+      name: "Step1",
       component: loadAdminView("Step1"),
       meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step2",
+      name: "Step2",
       component: loadAdminView("Step2"),
       meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
       path: "/Step3",
+      name: "Step3",
       component: loadAdminView("Step3"),
       meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
     },
@@ -397,6 +400,12 @@ export default createRouter({
       name: "AuctionPreview",
       component: loadView("AuctionPreview"),
       meta: { title: "AuctionPreview", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/History",
+      name: "History",
+      component: loadView("History"),
+      meta: { title: "History", lang: "en", icon: "mdi mdi-home-outline" },
     },
     
   ],
