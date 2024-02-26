@@ -12,20 +12,32 @@
         <div class="fm-row">
             <div class="w-full">
                 <div class="card">
-                    <DataTable :value="addedItem" resizableColumns columnResizeMode="fit" showGridlines
+                    <!-- <DataTable :value="addedItem" resizableColumns columnResizeMode="fit" showGridlines
                         tableStyle="min-width: 50rem">
-                        <!-- <Column field="srNumber" header="Sr. No."></Column> -->
                         <Column field="inventoryId" header="Inventory Id"></Column>
-                        <Column field="inventoryAreaName" header="Inventory Name"></Column>
-                        <Column field="itemReservePrice" header="Reserved Price"></Column>
-                        <Column field="modifierVal" header="Modifier Value"></Column>
-                        <Column field="modifierValAfter" header="Modifier Value Change After"></Column>
+                        <Column field="inventoryHierarchy" header="Inventory Name"></Column>
+                        <Column field="reservePrice" header="Reserved Price"></Column>
+                        <Column field="modifierValue" header="Modifier Value"></Column>
+                        <Column field="modifierValue" header="Modifier Value Change After"></Column>
+                        <Column field="action" header="Action">
+                            <template #body="slotProps">
+                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove" @click="deleteItem(slotProps.data)" />
+                            </template>
+                        </Column>
+                    </DataTable> -->
+                    <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
+                        <Column field="inventoryId" header="Inventory Id"></Column>
+                        <Column field="inventoryHierarchy" header="Inventory Name"></Column>
+                        <Column field="reservePrice" header="Reserved Price"></Column>
+                        <Column field="modifierValue" header="Modifier Value"></Column>
+                        <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
                         <Column field="action" header="Action">
                             <template #body="slotProps">
                                 <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove" @click="deleteItem(slotProps.data)" />
                             </template>
                         </Column>
                     </DataTable>
+                    <div v-else>No inventory Item added</div>
                 </div>
             </div>
         </div>
@@ -41,16 +53,17 @@
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/2">
+            <!-- <div class="w-1/2">
                 <div class="fm-group">
                     <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" />
                 </div>
-            </div>
+            </div> -->
             <Toast />
             <ConfirmDialog></ConfirmDialog>
-            <div class="w-1/2">
+            <div class="w-full">
                 <div class="fm-group">
-                    <Button @click="confirm1(),handleClick(false)" label="Next" outlined></Button>
+                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
+                    <Button label="Save" @click="confirm1(),handleClick(false)" icon="pi pi-trash" />
                 </div>
             </div>
         </div>
@@ -236,7 +249,11 @@ const statusId = ref();
 const modifierValue = ref("");
 const modifierValueExtentionCount = ref(0);
 const modifierValueAfterExtention = ref(0);
-const selectedModifierValueChange = ref([]);
+const selectedModifierValueChange = ref({
+    modifierValueChangeId: 0,
+    modifierValueChangeName: ''
+
+});
 const addedItem = ref([]);
 
 const modifiervaluechanges = ref([]);
@@ -372,18 +389,18 @@ function FetchAllModifierValueChange  () {
 }
 
 function AddStep3AuctionData() {
-    console.log("auctionId", getLastInsertedAuctionId.value); 
-    console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
-    console.log("modifierValue", modifierValue.value);
-    console.log("modifierValueChangeId", selectedModifierValueChange.value.modifierValueChangeId);
-    console.log("numberOfExtension", modifierValueExtentionCount.value);
-    console.log("modifierValueAfterExtension", modifierValueAfterExtention.value);
-    console.log("documentTypeId", docTypeId.value);
-    console.log("documentFilePath",filePath.value);
-    console.log("documentPath", fullPath.value + "/" + fileName.value);
-    console.log("documentFileName",fileName.value);
-    console.log("inventoryCategoryId", getPropertyCategoryId.value);
-    console.log("statusId", statusId.value);
+    // console.log("auctionId", getLastInsertedAuctionId.value); 
+    // console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
+    // console.log("modifierValue", modifierValue.value);
+    // console.log("modifierValueChangeId", selectedModifierValueChange.value.modifierValueChangeId);
+    // console.log("numberOfExtension", modifierValueExtentionCount.value);
+    // console.log("modifierValueAfterExtension", modifierValueAfterExtention.value);
+    // console.log("documentTypeId", docTypeId.value);
+    // console.log("documentFilePath",filePath.value);
+    // console.log("documentPath", fullPath.value + "/" + fileName.value);
+    // console.log("documentFileName",fileName.value);
+    // console.log("inventoryCategoryId", getPropertyCategoryId.value);
+    // console.log("statusId", statusId.value);
 
     // new MQL()
     // .useCoreServer()
@@ -421,10 +438,10 @@ function AddStep3AuctionData() {
     
 					// Automatically generated
 			new MQL()
-            .useCoreServer() 
+            .useManagementServer() 
 			.setActivity("o.[InsertStep3AuctionData]")
 			.setData({
-                auctionId: getLastInsertedAuctionId,
+                auctionId: getLastInsertedAuctionId.value,
                 inventoryId: inventoryAreaDetails.value.inventoryId,
                 modifierValue: modifierValue.value,
                 modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
@@ -434,13 +451,18 @@ function AddStep3AuctionData() {
                 documentFilePath:filePath.value ,
                 documentPath: fullPath.value + "/" + fileName.value,
                 documentFileName:fileName.value,
-                inventoryCategoryId: getPropertyCategoryId,
+                inventoryCategoryId: getPropertyCategoryId.value,
                 statusId: statusId.value,
             })
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("InsertStep3AuctionData",true)
+                console.log(rs)
+                let res = rs.getActivity("InsertStep3AuctionData",true)
+                console.log(res)
 			if (rs.isValid("InsertStep3AuctionData")) {
+                addItem();
+                handleClick(true);
+                visible.value = false
             console.log("Response of Step 3 Data insert : ",res.result)
 			} else{ 
 			rs.showErrorToast("InsertStep3AuctionData")
@@ -591,13 +613,35 @@ const confirm1 = () => {
 };
 
 function addItem() {
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[FetchAllStepsAuctionPreview]")
+			.setData({"auctionId":getLastInsertedAuctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
+			if (rs.isValid("FetchAllStepsAuctionPreview")) {
+                //if(!res.result.fetchStep3AuctionPreview == null){
+                addedItem.value = res.result.fetchStep3AuctionPreview;
+                // Ensure your data is correctly populated
+                console.log("***************",addedItem.value);
+
+               // }
+                console.log("Response of Step 3 Data insert : ",res.result);
+                console.log("addedItem",addedItem.value);
+			} else
+			 { 
+			rs.showErrorToast("FetchAllStepsAuctionPreview")
+			}
+			})
+			
     // let srNumber = addedItem.value.length + 1;
-    let inventoryId = inventoryAreaDetails.value.inventoryId;
-    let inventoryAreaName = inventoryAreaDetails.value.inventoryHierarchy;
-    let itemReservePrice = inventoryAreaDetails.value.inventoryReservePrice;
-    let modifierVal = modifierValue.value;
-    let modifierValAfter = selectedModifierValueChange.value.modifierValueChangeName;
-    addedItem.value.push({ inventoryId, inventoryAreaName, itemReservePrice, modifierVal, modifierValAfter });
+    // let inventoryId = inventoryAreaDetails.value.inventoryId;
+    // let inventoryAreaName = inventoryAreaDetails.value.inventoryHierarchy;
+    // let itemReservePrice = inventoryAreaDetails.value.inventoryReservePrice;
+    // let modifierVal = modifierValue.value;
+    // let modifierValAfter = selectedModifierValueChange.value.modifierValueChangeName;
+    // addedItem.value.push({ inventoryId, inventoryAreaName, itemReservePrice, modifierVal, modifierValAfter });
     // reset();
 }
 // function reset(){
@@ -631,5 +675,6 @@ onMounted(() => {
     fetchDocumentsValidationDetails();
     //FetchInventoryMCNamefromInventoryMaster();
     FetchAuctionStatus();
+    addItem();
 })
 </script>

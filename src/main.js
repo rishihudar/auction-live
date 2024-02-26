@@ -31,6 +31,8 @@ import Paginator from 'primevue/paginator';
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import ConfirmDialog from 'primevue/confirmdialog';
+import Stepper from 'primevue/stepper';
+import StepperPanel from 'primevue/stepperpanel';
 import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Dialog from 'primevue/dialog';
@@ -84,6 +86,8 @@ vm.use(Column)
 vm.use(Paginator)
 vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
+vm.component('Stepper', Stepper);
+vm.component('StepperPanel', StepperPanel);
 vm.use(Vuelidate);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)

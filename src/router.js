@@ -531,6 +531,12 @@ export default createRouter({
       component: loadAuctionView("Step3"),
       meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline"},
     },
+    {
+      path: "/Step4",
+      name: "Step4",
+      component: loadAuctionView("Step4"),
+      meta: { title: "Step4",lang: "en", icon: "mdi mdi-home-outline"},
+    },
 
     
     // UI

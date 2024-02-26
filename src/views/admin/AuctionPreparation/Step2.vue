@@ -106,17 +106,17 @@
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/2">
+            <!-- <div class="w-1/2">
                 <div class="fm-group">
                     <span class="p-buttonset">
                         <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button>
                     </span>
                 </div>
-            </div>
-            <div class="w-1/2">
+            </div> -->
+            <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button @click="InsertAuctionDataStep2" icon="pi pi-check" label="Next"></Button>
+                        <Button @click="InsertAuctionDataStep2" icon="pi pi-check" label="Save"></Button>
                     </span>
                 </div>
             </div>

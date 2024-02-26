@@ -18,7 +18,8 @@
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
                     <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
                     placeholder="Select Auction Type" class="w-full md:w-14rem" />
-                    <span v-if="$v.aucType.$error" class="text-danger">Please Select Auction Type</span>
+                    {{ $v?.auctionTypeId?.$errors[0]?.$message }}
+                    <!-- <span v-if="$v.auctionTypeData.$error" class="text-danger">Please Select Auction Type</span> -->
                     <!-- <div v-if="$v.auctionTypeData.$error" class="p-error">
                         {{ $v.auctionTypeData.$errors[0].$message }}
                         </div> -->
@@ -29,7 +30,8 @@
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
                     <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
                     optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
-                    <span v-if="!$v.aucMethod.$error" class="text-danger">Please Select Auction Method</span>
+                    <!-- <span v-if="!$v.auctionMethodData.$error" class="text-danger">Please Select Auction Method</span> -->
+                    {{ $v?.auctionMethodId?.$errors[0]?.$message }}
                 </div>
             </div>
         </div>
@@ -40,7 +42,7 @@
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button label="Next" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
+                        <Button label="Save" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
                     </span> 
                 </div>
             </div>
@@ -57,7 +59,7 @@ import Divider from 'primevue/divider';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators'
+import { helpers, required } from '@vuelidate/validators'
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
@@ -73,7 +75,8 @@ const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
 const aucType = ref([]);
-const auctionTypeData = ref({ auctionType: '',
+const auctionTypeData = ref({ 
+    auctionType: '',
     auctionTypeId: 0
 });
 const lastInsertedId = ref(0);
@@ -153,8 +156,10 @@ function FetchAuctionStatus() {
 
 
 const InsertAuctionTypeAndMethod = async() => {
-    const result = await $v.value.$validate();
-    if (getLastInsertedAuctionId.value == null && result ){
+    //const result = await $v.value.$validate();
+    $v.value.$validate();
+    // getLastInsertedAuctionId.value == null && result
+    if ( $v?.value.$invalid){
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
@@ -182,15 +187,15 @@ const InsertAuctionTypeAndMethod = async() => {
 
 const rules = computed(() => (
     {
-        aucMethod: {
-            required
+        auctionTypeData: {
+           auctionTypeId: { required: helpers.withMessage('Please Select Auction Type', required) },
         },
-        aucType: {
-            required
+        auctionMethodData: {
+            auctionMethodId: { required: helpers.withMessage('Please Select Auction Method', required) },
         },
     }
 ));
-const $v=useVuelidate(rules,{aucMethod,aucType});
+const $v=useVuelidate(rules,auctionMethodData,auctionTypeData);
 
 onMounted(() => {
     FetchAuctionTypes();
