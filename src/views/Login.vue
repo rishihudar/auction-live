@@ -1,8 +1,8 @@
 <template>
     <div id="login" class="box-login-holder">
         <div class="card-login">
-            <div class="page-header">
-                <div class="ph-media">
+            <div class="cl-header">
+                <div class="cl-header-media">
                     <img src="../../assets/images/logo_dulb.webp" alt="DULB logo" width="956" height="193">
                 </div>
                 <h1 class="title">
@@ -10,21 +10,25 @@
                 </h1>
             </div>
             <form class="form-login form-grid">
-                <div class="fm-group">
-                    <label for="username">Username</label>
-                    <InputText id="username" v-model="value" aria-describedby="username-help" placeholder="Enter Your Username" />
-                    <small id="username-help">Your username will be unique across the entire application and it will be used across the entire application.</small>
+                <div class="col-span-full">
+                    <div class="fm-group">
+                        <label class="fm-label" for="username">Username</label>
+                        <div class="fm-inner">
+                            <InputText id="username" v-model="value" aria-describedby="username-help" placeholder="Enter Your Username" />
+                        </div>
+                        <div id="username-help" class="fm-info">Your username will be unique across the entire application and it will be used across the entire application.</div>
+                    </div>
                 </div>
-                <div class="fm-group">
-                    <label for="password">Password</label>
-                    <Password id="password" v-model="value" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled>
-                        <!-- <template #hideicon>
-                            test
-                        </template>
-                        <template #showicon>
-                            test
-                        </template> -->
-                    </Password>
+                <div class="col-span-full">
+                    <div class="fm-group">
+                        <div class="fm-label-holder">
+                            <label class="fm-label" for="password">Password</label>
+                            <router-link to="/forgetPassword">Forgot Password?</router-link>
+                        </div>
+                        <div class="fm-inner">
+                            <Password id="password" v-model="value" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled />
+                        </div>
+                    </div>
                 </div>
                 <div class="fm-action">
                     <Button label="Login" @click="$router.push({ name: 'home' })" />
