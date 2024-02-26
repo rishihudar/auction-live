@@ -495,6 +495,13 @@ export default createRouter({
       component: loadView("validateOTP"),
       meta: { title: "validateOTP", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    // UI
+    {
+        path: "/ui/datatable",
+        name: "Datatable",
+        component: loadUI("datatable"),
+        meta: { title: "Datatable", lang: "mr", icon: "mdi mdi-account-edit" },
+    },
     {
       path: "/StateMaster",
       component: loadMastersView("StateMaster"),
@@ -528,8 +535,8 @@ export default createRouter({
     },
     {
       path: "/Step2",
-      name:"step2",
-      component: loadAuctionView("Step2"),
+      name: "Step2",
+      component: loadAdminView("Step2"),
       meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
@@ -548,10 +555,17 @@ export default createRouter({
     
     // UI
     {
-        path: "/ui/datatable",
-        name: "Datatable",
-        component: loadUI("datatable"),
-        meta: { title: "Datatable", lang: "mr", icon: "mdi mdi-account-edit" },
-    }
+      path: "/AuctionPreview",
+      name: "AuctionPreview",
+      component: loadView("AuctionPreview"),
+      meta: { title: "AuctionPreview", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/History",
+      name: "History",
+      component: loadView("History"),
+      meta: { title: "History", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    
   ],
 });
