@@ -6,7 +6,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: process.env.NODE_ENV = "/auction/",
+  publicDir: process.env.NODE_ENV =  "/auction/" ,
   base: process.env.NODE_ENV = "/auction/",
 
   resolve: {

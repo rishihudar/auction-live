@@ -18,7 +18,7 @@
 
                         </div>
                     </template>
-                    <template #empty>No talukas found.</template>
+                    <!-- <template #empty>No talukas found.</template> -->
                     <template #loading>Loading taluka data. Please wait.</template>
                     <Column field="talukaName" header="Taluka Name" style="min-width: 12rem">
                         <template #body="{ data }">

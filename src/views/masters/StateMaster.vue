@@ -218,7 +218,7 @@ function changeFlag(newValue) {
 
 function FetchStateName() {
     new MQL()
-    .useCoreServer()
+        .useCoreServer()
         .setActivity('o.[FetchAllState]')
         .setData()
         .fetch()
@@ -239,7 +239,7 @@ function FetchStateName() {
 }
 function FetchCountryName() {
     new MQL()
-    .useCoreServer()
+        .useCoreServer()
         .setActivity('o.[FetchAllCountries]')
         .setData()
         .fetch()
@@ -263,6 +263,7 @@ function insertState(stateData) {
 
 
         new MQL()
+            .useCoreServer()
             .setActivity('o.[InsertState]')
             .setData(stateData)
             .fetch()
@@ -280,6 +281,7 @@ function insertState(stateData) {
 }
 function updateState(stateData) {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[UpdateStateById]')
         .setData(stateData)
         .fetch()
@@ -312,6 +314,7 @@ function editState(state) {
 }
 function deleteState(data) {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[DeleteStateById]')
         .setData(data)
         .fetch()
