@@ -160,6 +160,12 @@ import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
 import { useRouter } from 'vue-router';
 import History from "./History.vue";
+import { useAuctionPreparation } from '@/store/auctionPreparation.js'
+import { storeToRefs } from 'pinia'
+
+const store = useAuctionPreparation()
+const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked  } = storeToRefs(store)
+
 
 const router = useRouter();
 
@@ -176,7 +182,7 @@ function FetchAuctionSummaryByAuctionId() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionSummaryByAuctionId]")
-        .setData({ "auctionId": 3 })
+        .setData({ "auctionId": getLastInsertedAuctionId.value})
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionSummaryByAuctionId", true)
@@ -188,12 +194,13 @@ function FetchAuctionSummaryByAuctionId() {
                 let updatedAuctionSummary = auctionSummary.value[0]
                 console.log(auctionSummary.value.length, "auctionSummary.value.length")
                 for (let i = 1; i < auctionSummary.value.length; i++) {
-                    let index = (i % 3); //1,2
+                    let index = i; //1,2
                     let refKey = `ref${index}`;
                     updatedAuctionSummary[refKey] = {
                         "documentPath": auctionSummary.value[i].documentPath,
                         "documentTypeName": auctionSummary.value[i].documentTypeName
                     };
+                    
                 }
                 console.log(updatedAuctionSummary, "updatedAuctionSummary")
 
