@@ -181,6 +181,13 @@ export default createRouter({
       meta: { title: "Registration", lang: "mr", icon: "mdi mdi-account-edit" },
     },
     {
+      path: "/view-auction/:workflowStepDetailsId",
+      name: "ViewAuction",
+      component: loadView("ViewAuction"),
+      meta: { title: "ViewAuction", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+
+    {
       path: "/mqlRequestDemo",
       name: "mqlRequestDemo",
       component: loadView("MQLRequestDemo"),
