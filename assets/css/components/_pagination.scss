@@ -1,0 +1,24 @@
+.box-pagination {@apply flex items-center;
+    [data-pc-section="start"] {@apply mr-4 grow;}
+    [data-pc-section="current"] {@apply mr-auto text-sm text-[var(--neutral-300)];}
+
+    .fm-select {@apply w-auto;}
+
+    .btn-page {@apply ml-0.5 w-9 h-10 inline-flex items-center justify-center rounded; transition: colors 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        svg {@apply w-auto h-4;}
+        &:hover {@apply bg-white; box-shadow: inset 0 0 0 1px theme('colors.slate[200]');}
+        &.btn-page-active {@apply text-white bg-primary-400;
+            &:hover {@apply shadow-none;}
+        }
+        &.btn-page-disabled {@apply opacity-50 pointer-events-none;}
+    }
+}
+
+[data-pc-section="paginatorwrapper"] {@apply mt-3;
+    [data-pc-section="start"], [data-pc-name="dropdown"] {@apply hidden;}
+    &:has(+ [data-pc-section="wrapper"]) {@apply mt-0 mb-3;
+        [data-pc-section="start"] {@apply block;}
+        [data-pc-name="dropdown"] {@apply flex;}
+        [data-pc-section="current"], [data-pc-group-section="pagebutton"], [data-pc-section="pagebutton"] {@apply hidden;}
+    }
+}

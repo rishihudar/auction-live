@@ -33,8 +33,10 @@ export default {
     }),
     header: {
         class: [
+            'modal-title',
             // Flexbox and Alignment
             'flex items-center justify-between',
+            'gap-3',
             'shrink-0',
 
             // Spacing
@@ -47,11 +49,11 @@ export default {
 
             // Colors
             'bg-surface-0 dark:bg-surface-800',
-            'text-surface-700 dark:text-surface-0/80'
+            // 'text-surface-700 dark:text-surface-0/80'
         ]
     },
     title: {
-        class: ['font-bold text-lg']
+        class: ['font-bold text-2xl']
     },
     icons: {
         class: ['flex items-center']
@@ -70,7 +72,8 @@ export default {
 
             // Shape
             'border-0',
-            'rounded-full',
+            'rounded-md',
+            // 'rounded-full',
 
             // Colors
             'text-surface-500',
@@ -82,8 +85,9 @@ export default {
             // States
             'hover:text-surface-700 dark:hover:text-white/80',
             'hover:bg-surface-100 dark:hover:bg-surface-800/80',
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-inset',
-            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
+            'focus:outline-none focus:bg-slate-200',
+            // 'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-inset',
+            // 'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
 
             // Misc
             'overflow-hidden'
