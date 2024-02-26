@@ -12,12 +12,12 @@
             <form class="form-login form-grid">
                 <div class="fm-group">
                     <label for="username">Username</label>
-                    <InputText id="username" v-model="value" aria-describedby="username-help" placeholder="Enter Your Username" />
+                    <InputText id="username" v-model="user.username" aria-describedby="username-help" placeholder="Enter Your Username" />
                     <small id="username-help">Your username will be unique across the entire application and it will be used across the entire application.</small>
                 </div>
                 <div class="fm-group">
                     <label for="password">Password</label>
-                    <Password id="password" v-model="value" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled>
+                    <Password id="password" v-model="user.password" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled>
                         <!-- <template #hideicon>
                             test
                         </template>
@@ -27,7 +27,7 @@
                     </Password>
                 </div>
                 <div class="fm-action">
-                    <Button label="Login" @click="$router.push({ name: 'home' })" />
+                    <Button label="Login" @click="authenticate" />
                 </div>
                 <div class="fm-action-link">
                     <router-link to="/registration">New User? Register here</router-link>
@@ -45,8 +45,11 @@ import { createToaster } from "@meforma/vue-toaster";
 import Footer from "@/components/common/Footer.vue"
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
-let username = ref("");
-let password = ref("");
+let user = ref({
+  username: "",
+  password: "",
+  recaptchaVerified: false,
+});
 let submitted = ref(false);
 
 function authenticate() {

@@ -37,7 +37,7 @@ export default createRouter({
     {
       path: "/view-auction/:workflowStepDetailsId",
       name: "ViewAuction",
-      component: loadView("ViewAuction"),
+      component: loadView("WorkflowManagement/ViewAuction"),
       meta: { title: "ViewAuction", lang: "en", icon: "mdi mdi-home-outline" },
     },
 
