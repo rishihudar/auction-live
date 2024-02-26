@@ -1,0 +1,8 @@
+.modal {@apply max-h-[90vh];
+    &-title {@apply text-[var(--neutral-600)];}
+    &-action {@apply mt-6 flex gap-1 items-center justify-center;
+        .btn {@apply px-12;}
+    }
+}
+
+.modal-cropper {@apply w-[500px];}

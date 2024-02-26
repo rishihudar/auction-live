@@ -8,7 +8,7 @@ export default {
             'align-bottom',
 
             // Size
-            'w-[1.571rem] h-[1.571rem]',
+            'w-6 h-6',
 
             // Misc
             'cursor-pointer',
@@ -21,7 +21,7 @@ export default {
             'flex justify-center items-center',
 
             // Size
-            'w-[1.571rem] h-[1.571rem]',
+            'w-6 h-6',
 
             // Shape
             'border-2',
@@ -35,8 +35,8 @@ export default {
                 'text-surface-700 dark:text-white/80': props.value !== props.modelValue && props.value !== undefined,
                 'bg-surface-0 dark:bg-surface-900': props.value !== props.modelValue && props.value !== undefined,
                 'border-surface-300 dark:border-surface-700': props.value !== props.modelValue && props.value !== undefined,
-                'border-primary-500 dark:border-primary-400': props.value == props.modelValue && props.value !== undefined,
-                'bg-primary-500 dark:bg-primary-400': props.value == props.modelValue && props.value !== undefined
+                'border-primary-600 dark:border-primary-400': props.value == props.modelValue && props.value !== undefined,
+                'bg-primary-600 dark:bg-primary-400': props.value == props.modelValue && props.value !== undefined
             },
 
             // States
