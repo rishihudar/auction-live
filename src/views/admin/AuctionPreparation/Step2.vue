@@ -21,16 +21,17 @@
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step1">Auction Category<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled" :options="auctionCategory"
-                    optionLabel="propertyCategoryName" placeholder="Select Auction Category"
-                    class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
+                        :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Auction Process<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled" :options="auctionProcess"
-                    optionLabel="auctionProcessName" placeholder="Select Auction Process" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
+                        :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
         </div>
@@ -40,11 +41,12 @@
         <div class="fm-row">
             <!-- <div class="w-full">
                 <div class="fm-group"> -->
-                    <div class="justify-content-center">
-                        <label for="step2">Auction Description<span class="text-danger">*</span> </label>
-                        <Textarea v-model="auctionDetails.description" autoResize rows="3" cols="111" placeholder="Enter Description" />
-                    </div>
-                <!-- </div>
+            <div class="justify-content-center">
+                <label for="step2">Auction Description<span class="text-danger">*</span> </label>
+                <Textarea v-model="auctionDetails.description" autoResize rows="3" cols="111"
+                    placeholder="Enter Description" />
+            </div>
+            <!-- </div>
             </div> -->
         </div>
 
@@ -54,23 +56,25 @@
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Department<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.department" option-value="departmentId" variant="filled" :options="departments"
-                    optionLabel="departmentName" placeholder="Select Department" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.department" option-value="departmentId" variant="filled"
+                        :options="departments" optionLabel="departmentName" placeholder="Select Department"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Bid Submission/Placement<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled" :options="bidPlacements"
-                    optionLabel="bidPlacementName" placeholder=" Select Bid Submission/Placement"
-                    class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
+                        :options="bidPlacements" optionLabel="bidPlacementName"
+                        placeholder=" Select Bid Submission/Placement" class="w-full md:w-14rem" />
                 </div>
             </div>
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Event Processsing Fee Mode<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
-                    placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
+                        :options="paymentModes" optionLabel="paymentModeName"
+                        placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
                 </div>
             </div>
         </div>
@@ -82,23 +86,25 @@
                 <div class="fm-group">
                     <FloatLabel>
                         <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
-                        <InputNumber v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
-                        :max="100" />
+                        <InputNumber v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons"
+                            mode="decimal" showButtons :min="0" :max="100" />
                     </FloatLabel>
                 </div>
             </div>
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">EMD Fee Payment Mode<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
-                    placeholder=" Select EMD Fee Payment Mode" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
+                        :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
             <div class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">EMD Applied For<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled" :options="emdAppliedFor" optionLabel="emdAppliedForName"
-                    placeholder=" Select EMD Applied For" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
+                        :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
         </div>
@@ -120,7 +126,7 @@
                     </span>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
     <!-- ,$router.push({ name: 'Step3' }) -->
 </template>
@@ -137,30 +143,30 @@ import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId  } = storeToRefs(store)
+const { getLastInsertedAuctionId, getPropertyCategoryId } = storeToRefs(store)
 
 const auctionDetails = ref({
-        referenceNo: '',
-        description: '',
-        // bidderCategory: '',
-        auctionCategory: '',
-        auctionCategoryName:'',
-        auctionProcess: '',
-        auctionProcessName:'',
-        departmentName:'',
-        bidPlacementName:'',
-        // unit: '',
-        department: '',
-        bidPlacement: '',
-        eventProcesssingFeeMode: '',
-        eveventProcesssingFeeModeName:'',
-        eventProcessingFeeAmount: 0,
-        emdFeePaymentMode: '',
-        emdAppliedFor: '',
-        emdAppliedForName: '',
-        emdFeePaymentModeName: '',
-        // emdFeeAmount: ''
-      });
+    referenceNo: '',
+    description: '',
+    // bidderCategory: '',
+    auctionCategory: '',
+    auctionCategoryName: '',
+    auctionProcess: '',
+    auctionProcessName: '',
+    departmentName: '',
+    bidPlacementName: '',
+    // unit: '',
+    department: '',
+    bidPlacement: '',
+    eventProcesssingFeeMode: '',
+    eveventProcesssingFeeModeName: '',
+    eventProcessingFeeAmount: 0,
+    emdFeePaymentMode: '',
+    emdAppliedFor: '',
+    emdAppliedForName: '',
+    emdFeePaymentModeName: '',
+    // emdFeeAmount: ''
+});
 const bidPlacements = ref([])
 const auctionCategory = ref([]);
 const departments = ref([]);
@@ -278,7 +284,7 @@ function InsertAuctionDataStep2() {
         .useManagementServer()
         .setActivity('o.[InsertStep2AuctionData]')
         .setData({
-            referenceNumber:  auctionDetails.value.referenceNo,
+            referenceNumber: auctionDetails.value.referenceNo,
             auctionDescription: auctionDetails.value.description,
             inventoryCategoryId: auctionDetails.value.auctionCategory,
             auctionProcessId: auctionDetails.value.auctionProcess,
@@ -288,15 +294,15 @@ function InsertAuctionDataStep2() {
             eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
             eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
             emdAppliedFor: auctionDetails.value.emdAppliedFor,
-            auctionId: getLastInsertedAuctionId.value   
+            auctionId: getLastInsertedAuctionId.value
         })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertStep2AuctionData', true);
             if (rs.isValid('InsertStep2AuctionData')) {
-                console.log("LastUpdatedId from response",res.result);
-                store.setPropertyCategoryId(auctionDetails.value.auctionCategory); 
-                console.log("propertyCategoryId: ",getPropertyCategoryId.value);
+                console.log("LastUpdatedId from response", res.result);
+                store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
+                console.log("propertyCategoryId: ", getPropertyCategoryId.value);
             } else {
                 rs.showErrorToast('InsertStep2AuctionData');
             }
@@ -307,32 +313,31 @@ function InsertAuctionDataStep2() {
 
 function FetchAllStepsAuctionPreview() {
     new MQL()
-    .useManagementServer()
+        .useManagementServer()
         .setActivity("o.[FetchAllStepsAuctionPreview]")
-        .setData({"auctionId": getLastInsertedAuctionId.value})
+        .setData({ "auctionId": getLastInsertedAuctionId.value })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
             if (rs.isValid("FetchAllStepsAuctionPreview")) {
                 console.log("FetchAllStepsAuctionPreview", res.result);
-                auctionDetails.value.referenceNo= res.result.fetchStep2AuctionPreview.referenceNumber;
-                auctionDetails.value.auctionCategoryName= res.result.fetchStep2AuctionPreview.inventoryCategoryName;
-                auctionDetails.value.auctionCategory= `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
-                console.log(auctionDetails.value.auctionCategoryId,auctionCategory,"###############" )
-            auctionDetails.value.description=res.result.fetchStep2AuctionPreview.auctionDescription;
-            auctionDetails.value.auctionProcessName= res.result.fetchStep2AuctionPreview.auctionProcessName;
-            auctionDetails.value.auctionProcess= `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
-            auctionDetails.value.departmentName= res.result.fetchStep2AuctionPreview.departmentName;
-            auctionDetails.value.department= `${res.result.fetchStep2AuctionPreview.departmentId}`;
-            auctionDetails.value.bidPlacementName= res.result.fetchStep2AuctionPreview.bidPlacementName;
-            auctionDetails.value.bidPlacement= `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
-            auctionDetails.value.eveventProcesssingFeeModeName= res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
-            auctionDetails.value.eventProcesssingFeeMode= `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
-            auctionDetails.value.eventProcessingFeeAmount= res.result.fetchStep2AuctionPreview.eventProcessingFees;
-            auctionDetails.value.emdAppliedFor= `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
-            auctionDetails.value.emdAppliedForName= res.result.fetchStep2AuctionPreview.emdAppliedForName;
-            auctionDetails.value.emdFeePaymentMode= `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
-            auctionDetails.value.emdFeePaymentModeName= res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+                auctionDetails.value.referenceNo = res.result.fetchStep2AuctionPreview.referenceNumber;
+                auctionDetails.value.auctionCategoryName = res.result.fetchStep2AuctionPreview.inventoryCategoryName;
+                auctionDetails.value.auctionCategory = `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
+                auctionDetails.value.description = res.result.fetchStep2AuctionPreview.auctionDescription;
+                auctionDetails.value.auctionProcessName = res.result.fetchStep2AuctionPreview.auctionProcessName;
+                auctionDetails.value.auctionProcess = `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
+                auctionDetails.value.departmentName = res.result.fetchStep2AuctionPreview.departmentName;
+                auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
+                auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
+                auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
+                auctionDetails.value.eveventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+                auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
+                auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
+                auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
+                auctionDetails.value.emdFeePaymentMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
             } else {
                 rs.showErrorToast("FetchAllStepsAuctionPreview")
             }
