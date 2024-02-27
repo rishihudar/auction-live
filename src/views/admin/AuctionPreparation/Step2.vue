@@ -160,7 +160,7 @@ const auctionDetails = ref({
     bidPlacement: '',
     eventProcesssingFeeMode: '',
     eveventProcesssingFeeModeName: '',
-    eventProcessingFeeAmount: 0,
+    eventProcessingFeeAmount: '',
     emdFeePaymentMode: '',
     emdAppliedFor: '',
     emdAppliedForName: '',
