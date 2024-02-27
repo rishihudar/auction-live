@@ -8,10 +8,11 @@
                 <fa-bars></fa-bars>
             </button>
             <div class="dropdown dropdown-profile">
-                <Button type="button" severity text class="btn-profile" @click="toggle" aria-haspopup="true" aria-controls="ddmenu_profile">
+                <Button type="button" severity text class="btn-profile" @click="toggle" aria-haspopup="true"
+                    aria-controls="ddmenu_profile">
                     <span class="dp-text">
-                        <span class="dp-name">{{ fullName }}</span>
-                        <span class="dp-info">{{ userLevel }}</span>
+                        <span class="dp-name">{{ loginStore.username }}</span>
+                        <span class="dp-info">{{ loginStore.role }}</span>
                     </span>
                     <span class="dp-media">
                         <img src="../../../assets/images/user.webp" width="100" height="100" alt="{{ fullName }}">
@@ -36,55 +37,45 @@
     </header>
 </template>
 
-<script>
+<script setup>
 import { main } from "@/store/index"
-import faAddressCard from '../../../assets/icons/address-card.svg'
+import { login } from "../../store/modules/login"
+// import faAddressCard from '../../../assets/icons/address-card.svg'
 import faBars from '../../../assets/icons/bars.svg'
-import faGear from '../../../assets/icons/gear.svg'
-import faRightFromBracket from '../../../assets/icons/right-from-bracket.svg'
+import { ref } from "vue";
+// import faGear from '../../../assets/icons/gear.svg'
+// import faRightFromBracket from '../../../assets/icons/right-from-bracket.svg'
 
-export default {
-    components: {
-        faAddressCard,
-        faBars,
-        faGear,
-        faRightFromBracket
+const profilemenu = ref(null)
+
+const items = ref([
+    {
+        label: 'My Profile',
+        icon: 'fa-address-card'
     },
-    data() {
-        return {
-            fullName: 'John \'Jonathan\' Doe',
-            userLevel: 'Auction Admin',
-            items: [
-                {
-                    label: 'My Profile',
-                    icon: 'fa-address-card'
-                },
-                {
-                    label: 'Settings',
-                    icon: 'fa-gear'
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: 'Logout',
-                    icon: 'fa-right-from-bracket',
-                    route: '/'
-                }
-            ]
-        }
+    {
+        label: 'Settings',
+        icon: 'fa-gear'
     },
-    setup() {
-        const mainStore = main();
-        return { mainStore };
+    {
+        separator: true
     },
-    methods: {
-        toggle(event) {
-            this.$refs.profilemenu.toggle(event);
-        }
+    {
+        label: 'Change Role',
+        icon: 'fa-right-from-bracket',
+        route: '/role-select'
+    },
+    {
+        label: 'Logout',
+        icon: 'fa-right-from-bracket',
+        route: '/'
     }
+])
+const mainStore = main();
+const loginStore = login();
+function toggle(event) {
+    profilemenu.value.toggle(event);
 }
 </script>
 
-<style>
-</style>
+<style></style>

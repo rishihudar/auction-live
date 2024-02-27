@@ -14,15 +14,12 @@
                     <div class="fm-group">
                         <label class="fm-label" for="username">Username</label>
                         <div class="fm-inner">
-                            <InputText
-                                id="username"
-                                v-model="user.username"
-                                aria-describedby="username-help"
+                            <InputText id="username" v-model="user.username" aria-describedby="username-help"
                                 placeholder="Enter Your Username"
-                                :class="{ 'p-invalid': submitted && $v.user.username.$error }"
-                            />
+                                :class="{ 'p-invalid': submitted && $v.user.username.$error }" />
                         </div>
-                        <small id="username-help">Your username will be unique across the entire application and it will be used across the entire application.</small>
+                        <small id="username-help">Your username will be unique across the entire application and it will be
+                            used across the entire application.</small>
                         <div class="text-danger" v-if="submitted && $v.user.username.$error">
                             {{ $v.user.username.$errors[0].$message }}
                         </div>
@@ -32,14 +29,8 @@
                     <div class="fm-group">
                         <label class="fm-label" for="password">Password</label>
                         <div class="fm-inner">
-                            <Password
-                                id="password"
-                                v-model="user.password"
-                                :feedback="false"
-                                toggleMask
-                                placeholder="Enter Your Password"
-                                unstyled
-                            />
+                            <Password id="password" v-model="user.password" :feedback="false" toggleMask
+                                placeholder="Enter Your Password" unstyled />
                             <div class="text-danger" v-if="submitted && $v.user.password.$error">
                                 {{ $v.user.password.$errors[0].$message }}
                             </div>
@@ -97,79 +88,68 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-const router = useRouter();
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { login } from "../store/modules/login.js";
 import { createToaster } from "@meforma/vue-toaster";
 import Footer from "@/components/common/Footer.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
+
+
+
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
 let submitted = ref(false);
+const router = useRouter();
+
 
 // <-----Validations---->
 let user = ref({
-  username: "",
-  password: "",
-  recaptchaVerified: false,
+    username: "",
+    password: "",
+    recaptchaVerified: false,
 });
 
 let rules = computed(() => ({
-  user: {
-    username: { required, email },
-    password: { required },
-  },
+    user: {
+        username: { required, email },
+        password: { required },
+    },
 }));
 
 const $v = useVuelidate(rules, { user });
 
 // <----Functions---->
 function authenticate() {
-  submitted.value = true;
-  const result = $v.value.$validate();
-  console.log("if any error", $v.value.user.$error);
-  if (!$v.value.user.$error) {
-    console.log("Valid Details", user.value.username);
-    loginStore
-      .userLogin({
-        userName: user.value.username,
-        password: user.value.password,
-        enabled : 1
-      })
-      .then((res) => {
-        //console.log(res)
-        let roles = loginStore.roleNames;
-        console.log("Roles from store", roles);
-        // if (roles === "ROLE_BIDDER") {
-        //   console.log("push to bidder dashboard");
-        //   router.push({ path: "/bidder/bidderDashboard" });
-        //  } 
-        // //else if (roles === "ROLE_SUPERADMIN") {
-        // //   router.push({ name: "SuperAdminDashboard" });
-        // // } else if (roles === "ROLE_ORGANIZATION_ADMIN") {
-        // //   router.push({ name: "OrganizationAdminDashboard" });
-        // // }
-        // else if (roles === "ROLE_MAKER"){
-        //   router.push({ path: "/users/makerDashboard" });
-        // }
-        toaster.success("Login Successfully");
-        // console.log('Store Data',login().loginDetails)
-        //console.log('Role Data', login().roleNames)
-      })
-      .catch((err) => {
-        toaster.error;
-      });
-    // loginStore
-    // .AUTH_REQUEST({ loginId: username.value, password: password.value })
-    // .then((res) => {
-    //   toaster.success("Login Successfully");
-    // })
-    // .catch((err) => {
-    //   toaster.error(err);
-    // });
-  } else {
-    console.log("InValid Details");
-  }
+    submitted.value = true;
+    const result = $v.value.$validate();
+    if (!$v.value.user.$error) {
+        loginStore
+            .userLogin({
+                userName: user.value.username,
+                password: user.value.password,
+                enabled: 1
+            })
+            .then((res) => {
+                let roles = loginStore.roleNames;
+                toaster.success("Login Successfully");
+                router.push('/role-select')
+
+            })
+            .catch((err) => {
+                toaster.error;
+            });
+    } else {
+        console.log("InValid Details");
+        toaster.error("Invalid Details")
+    }
+
+
 }
+
+onMounted(() => {
+    sessionStorage.setItem('user-token','')
+    loginStore.$reset()
+}
+)
 </script>
