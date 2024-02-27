@@ -9,10 +9,14 @@ export const login = defineStore("login", {
   state: () => ({
     token: sessionStorage.getItem("user-token") || "",
     status: "",
+    loginDetails : {},
+    roles :[]
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
     authStatus: (state) => state.status,
+    roleNames: (state) => state.roles
+
   },
   actions: {
     MUTATE_AUTH_REQUEST() {
@@ -24,6 +28,12 @@ export const login = defineStore("login", {
     },
     MUTATE_AUTH_ERROR() {
       this.status = "error";
+    },
+    SET_LOGIN_USER_DETAILS(newData){
+      this.loginDetails = newData
+    },
+    SET_ROLE(data){
+      this.roles = data
     },
     AUTH_REQUEST(payload) {
       return new Promise((resolve) => {
@@ -50,6 +60,44 @@ export const login = defineStore("login", {
             }
           });
       });
+    },
+    userLogin (user) {
+      return new Promise((resolve, reject) => {
+        // console.log('login.js',user)
+        new MQL()
+        .useLoginServer()
+          .setActivity('o.[UserLogin]')
+          .setData(user)
+          .fetch()
+          .then((rs) => {
+            let res = rs.getActivity('UserLogin', true)
+            if (rs.isValid('UserLogin')) {
+              console.log("res.result",res.result)
+              // const bidderUserId=res.result.pklLoginId
+              // console.log("bidderUserId",bidderUserId)
+              // console.log('user', res.result.userEnable === 1)
+              // if (res.result.userEnable === 1) {
+              // console.log('Bidder approved')
+                  let token = rs.getHeaders().authorization
+              // console.log('token',token)
+                  sessionStorage.setItem('user-token', token)
+                  let role = JSON.parse(atob(token.split('.')[1])).groups[0]
+              // console.log('role',role)
+                 let loginUserDetails = JSON.parse(atob(token.split('.')[1]))
+                   .metadata
+              // console.log('metaDATA', JSON.parse(atob(token.split('.')[1]))
+              // .metadata )
+                 loginUserDetails = JSON.parse(loginUserDetails)
+                  this.SET_LOGIN_USER_DETAILS(loginUserDetails)
+                  this.SET_ROLE(role)
+             // }
+              resolve(res)
+            } else {
+               rs.showErrorToast('UserLogin')
+               reject(res)
+            }
+          })
+      })
     },
 
     AUTH_LOGOUT() {
