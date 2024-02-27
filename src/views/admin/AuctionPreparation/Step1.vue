@@ -156,7 +156,7 @@ const InsertAuctionTypeAndMethod = async() => {
     const result = await $v.value.$validate();
    // $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
-    if ( result){
+    if ( getLastInsertedAuctionId.value == null && result){
         alert("success, form submitted");
     new MQL()
         .useManagementServer()

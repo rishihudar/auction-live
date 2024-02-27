@@ -62,7 +62,7 @@
                 <template #content="{ nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content I</div> -->
-                        <Step1  @submit="(i) => lastInsertedId=i" :ref="step1" />
+                        <Step1  @submit="(i) => lastInsertedId=i" :ref="Step1" />
                     </div>
                     <div class="flex pt-4 justify-content-end">
                         <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
@@ -73,7 +73,7 @@
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div> -->
-                        <Step2 :ref="step2" />
+                        <Step2 :ref="Step2" />
                     </div>
                     <div class="flex pt-4 justify-content-between">
                         <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
@@ -85,7 +85,7 @@
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div> -->
-                        <Step3 :ref="step3" />
+                        <Step3 :ref="Step3" />
                     </div>
                     <div class="flex pt-4 justify-content-start">
                       <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
@@ -97,13 +97,13 @@
                 <template #content="{ prevCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div> -->
-                       <Step4 :ref="step4" />
+                       <Step4 :ref="Step4" />
                     </div>
                     <div class="flex pt-4 justify-content-start">
                         <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
                     </div>
                 </template>
-            </StepperPanel>
+            </StepperPanel> 
         </Stepper>
     </div>
 </template>
