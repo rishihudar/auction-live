@@ -144,14 +144,21 @@ const auctionDetails = ref({
         description: '',
         // bidderCategory: '',
         auctionCategory: '',
+        auctionCategoryName:'',
         auctionProcess: '',
+        auctionProcessName:'',
+        departmentName:'',
+        bidPlacementName:'',
         // unit: '',
         department: '',
         bidPlacement: '',
         eventProcesssingFeeMode: '',
+        eveventProcesssingFeeModeName:'',
         eventProcessingFeeAmount: 0,
         emdFeePaymentMode: '',
         emdAppliedFor: '',
+        emdAppliedForName: '',
+        emdFeePaymentModeName: '',
         // emdFeeAmount: ''
       });
 const bidPlacements = ref([])
@@ -298,7 +305,39 @@ function InsertAuctionDataStep2() {
     console.log(auctionDetails.value);
 }
 
-
+function FetchAllStepsAuctionPreview() {
+    new MQL()
+    .useManagementServer()
+        .setActivity("o.[FetchAllStepsAuctionPreview]")
+        .setData({"auctionId": getLastInsertedAuctionId.value})
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+            if (rs.isValid("FetchAllStepsAuctionPreview")) {
+                console.log("FetchAllStepsAuctionPreview", res.result);
+                auctionDetails.value.referenceNo= res.result.fetchStep2AuctionPreview.referenceNumber;
+                auctionDetails.value.auctionCategoryName= res.result.fetchStep2AuctionPreview.inventoryCategoryName;
+                auctionDetails.value.auctionCategory= `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
+                console.log(auctionDetails.value.auctionCategoryId,auctionCategory,"###############" )
+            auctionDetails.value.description=res.result.fetchStep2AuctionPreview.auctionDescription;
+            auctionDetails.value.auctionProcessName= res.result.fetchStep2AuctionPreview.auctionProcessName;
+            auctionDetails.value.auctionProcess= `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
+            auctionDetails.value.departmentName= res.result.fetchStep2AuctionPreview.departmentName;
+            auctionDetails.value.department= `${res.result.fetchStep2AuctionPreview.departmentId}`;
+            auctionDetails.value.bidPlacementName= res.result.fetchStep2AuctionPreview.bidPlacementName;
+            auctionDetails.value.bidPlacement= `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
+            auctionDetails.value.eveventProcesssingFeeModeName= res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+            auctionDetails.value.eventProcesssingFeeMode= `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+            auctionDetails.value.eventProcessingFeeAmount= res.result.fetchStep2AuctionPreview.eventProcessingFees;
+            auctionDetails.value.emdAppliedFor= `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
+            auctionDetails.value.emdAppliedForName= res.result.fetchStep2AuctionPreview.emdAppliedForName;
+            auctionDetails.value.emdFeePaymentMode= `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+            auctionDetails.value.emdFeePaymentModeName= res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+            } else {
+                rs.showErrorToast("FetchAllStepsAuctionPreview")
+            }
+        })
+}
 
 onMounted(() => {
     FetchInventoryCategories();
@@ -307,5 +346,6 @@ onMounted(() => {
     FetchAllBidPlacements();
     FetchAllPaymentModes();
     FetchAllEMDAppliedFor();
+    FetchAllStepsAuctionPreview();
 });
 </script> 
