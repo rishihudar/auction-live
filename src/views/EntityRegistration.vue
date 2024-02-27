@@ -242,7 +242,7 @@ function FetchEntities() {
                 console.log(res.result);
                 entities.value = res.result;
             } else {
-                rs.showErrorToast('ErrorFetchEntityDetails');
+                rs.showErrorToast('FetchEntityDetails');
             }
             loading.value = false; // Move loading to here
         });
@@ -260,7 +260,7 @@ function FetchEntityTypeByOrganization(organizationId) {
                 entitytype.value = res.result;
 
             } else {
-                rs.showErrorToast('ErrorFetchEntityTypeByOrganizationId');
+                rs.showErrorToast('FetchEntityTypeByOrganizationId');
             }
             loading.value = false; // Move loading to here
         });
@@ -277,7 +277,7 @@ function insertEntity(entityData) {
                 console.log("entityData from Insert", entityData);
 
             } else {
-                rs.showErrorToast('ErrorInsertState');
+                rs.showErrorToast('InsertState');
             }
             loading.value = false;
         });
@@ -295,7 +295,7 @@ function updateEntity(entityData) {
                 // Optionally, you can reload the page or update the state list after insertion
 
             } else {
-                rs.showErrorToast('ErrorUpdateEntityById');
+                rs.showErrorToast('UpdateEntityById');
             }
             loading.value = false;
         });
@@ -380,7 +380,7 @@ function deleteEntity(data) {
             if (rs.isValid('DeleteEntityById')) {
                 console.log(res.result);
             } else {
-                rs.showErrorToast('ErrorDeleteEntity');
+                rs.showErrorToast('DeleteEntity');
             }
             loading.value = false;
         });

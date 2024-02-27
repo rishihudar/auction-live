@@ -1,7 +1,7 @@
 export default {
     root: ({ props }) => ({
         class: [
-            'fm-inner',
+            'fm-inner-holder',
             {
                 'opacity-60 select-none pointer-events-none cursor-default': props.disabled
             }
@@ -55,12 +55,14 @@ export default {
             'transition-all duration-1000 ease-in-out'
         ]
     }),
-    // showicon: {
-    //     class: ['absolute top-1/2 right-3 -mt-2', 'text-surface-600 dark:text-white/70']
-    // },
-    // hideicon: {
-    //     class: ['absolute top-1/2 right-3 -mt-2', 'text-surface-600 dark:text-white/70']
-    // },
+    showicon: {
+        class: ['fm-suffix fm-icon-action']
+        // class: ['absolute top-1/2 right-3 -mt-2', 'text-surface-600 dark:text-white/70']
+    },
+    hideicon: {
+        class: ['fm-suffix fm-icon-action']
+        // class: ['absolute top-1/2 right-3 -mt-2', 'text-surface-600 dark:text-white/70']
+    },
     transition: {
         enterFromClass: 'opacity-0 scale-y-[0.8]',
         enterActiveClass: 'transition-[transform,opacity] duration-[120ms] ease-[cubic-bezier(0,0,0.2,1)]',

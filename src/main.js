@@ -65,6 +65,8 @@ vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue, { unstyled: true, pt: Alive })
 vm.use(Breadcrumb)
 vm.component('Breadcrumb', Breadcrumb)
+vm.component('ConfirmDialog', ConfirmDialog);
+vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('ConfirmDialog', ConfirmDialog);
 vm.component('ConfirmPopup', ConfirmPopup);
@@ -76,7 +78,7 @@ vm.use(Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
 vm.use(Accordion)
-vm.component('Column', Column);
+
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
