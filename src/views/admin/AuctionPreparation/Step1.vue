@@ -1,5 +1,5 @@
 <template>
-   <div class="gap-2  mx-auto">
+    <div class="gap-2  mx-auto">
         <div class="fm-row">
             <div class="w-full">
                 <div class="fm-group">
@@ -34,13 +34,13 @@
         </div>
 
         <Divider />
-        
+
         <div class="fm-row">
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
                         <Button label="Save" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
-                    </span> 
+                    </span>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
 <!-- , $router.push({ name: 'step2' }) -->
 
 <script setup>
-import { ref, onMounted ,computed} from "vue";
+import { ref, onMounted, computed } from "vue";
 import MQL from '@/plugins/mql.js';
 import Divider from 'primevue/divider';
 import Button from 'primevue/button';
@@ -62,35 +62,36 @@ import { storeToRefs } from 'pinia'
 
 // access the `store` variable anywhere in the component ✨
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId  } = storeToRefs(store)
+const { getLastInsertedAuctionId } = storeToRefs(store)
 const auctionMethodData = ref({
     auctionMethodName: '',
     auctionMethodId: 0
 });
+// const auctionM = ref([]);
+// const auctionT = ref([]);
 const aucMethod = ref([]);
 const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
 const aucType = ref([]);
-const auctionTypeData = ref({ 
+const auctionTypeData = ref({
     auctionType: '',
     auctionTypeId: 0
 });
 const lastInsertedId = ref(0);
-
 const emit = defineEmits({
-  // No validation
-  click: null,
+    // No validation
+    click: null,
 
-  // Validate submit event
-  submit: ({ lastInsertedId }) => {
-    if (lastInsertedId) {
-      return true
-    } else {
-      console.warn('Invalid submit event payload!')
-      return false
+    // Validate submit event
+    submit: ({ lastInsertedId }) => {
+        if (lastInsertedId) {
+            return true
+        } else {
+            console.warn('Invalid submit event payload!')
+            return false
+        }
     }
-  }
 })
 
 function FetchAuctionTypes() {
@@ -119,7 +120,7 @@ function FetchAuctionMethods() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllAuctionMethods', true);
             if (rs.isValid('FetchAllAuctionMethods')) {
-                console.log("Auction Method Data",res.result);
+                console.log("Auction Method Data", res.result);
                 aucMethod.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllAuctionMethods');
@@ -133,18 +134,18 @@ function FetchAuctionStatus() {
     new MQL()
         .useCoreServer()
         .setActivity('o.[fetchStatusFromStatusMaster]')
-        .setData({statusCode: 'AUCTION_DRAFTED'})
+        .setData({ statusCode: 'AUCTION_DRAFTED' })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('fetchStatusFromStatusMaster', true);
             if (rs.isValid('fetchStatusFromStatusMaster')) {
-                console.log("Auction Status Data",res.result);
+                console.log("Auction Status Data", res.result);
                 statusData.value = res.result;
                 statusData.value.forEach(item => {
                     statusId.value = item.statusId;
                     displayName.value = item.displayName;
                 });
-                console.log("Auction Status Data",statusData.value);
+                console.log("Auction Status Data", statusData.value);
             } else {
                 rs.showErrorToast('fetchStatusFromStatusMaster');
             }
@@ -183,6 +184,26 @@ const InsertAuctionTypeAndMethod = async() => {
         }
 }
 
+function FetchAllStepsAuctionPreview() {
+    new MQL()
+    .useManagementServer()
+        .setActivity("o.[FetchAllStepsAuctionPreview]")
+        .setData({"auctionId": getLastInsertedAuctionId.value})
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+            if (rs.isValid("FetchAllStepsAuctionPreview")) {
+                console.log("FetchAllStepsAuctionPreview", res.result);
+                auctionMethodData.value.auctionMethodName= res.result.fetchStep1AuctionPreview.auctionMethodName;
+                auctionMethodData.value.auctionMethodId= `${res.result.fetchStep1AuctionPreview.auctionMethodId}`;
+                auctionTypeData.value.auctionType = res.result.fetchStep1AuctionPreview.auctionType;
+                auctionTypeData.value.auctionTypeId = `${res.result.fetchStep1AuctionPreview.auctionTypeId}`;
+
+            } else {
+                rs.showErrorToast("FetchAllStepsAuctionPreview")
+            }
+        })
+}
 
 const rules = computed(() => ({
         auctionTypeData: {
@@ -203,6 +224,9 @@ onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
     FetchAuctionStatus();
+    FetchAllStepsAuctionPreview();
+
+
 });
 
 </script>

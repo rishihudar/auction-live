@@ -131,7 +131,7 @@
                     </span>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
     <!-- ,$router.push({ name: 'Step3' }) -->
 </template>
@@ -150,23 +150,30 @@ import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId  } = storeToRefs(store)
+const { getLastInsertedAuctionId, getPropertyCategoryId } = storeToRefs(store)
 
 const auctionDetails = ref({
-        referenceNo: '',
-        description: '',
-        // bidderCategory: '',
-        auctionCategory: '',
-        auctionProcess: '',
-        // unit: '',
-        department: '',
-        bidPlacement: '',
-        eventProcesssingFeeMode: '',
-        eventProcessingFeeAmount: '',
-        emdFeePaymentMode: '',
-        emdAppliedFor: '',
-        // emdFeeAmount: ''
-      });
+    referenceNo: '',
+    description: '',
+    // bidderCategory: '',
+    auctionCategory: '',
+    auctionCategoryName: '',
+    auctionProcess: '',
+    auctionProcessName: '',
+    departmentName: '',
+    bidPlacementName: '',
+    // unit: '',
+    department: '',
+    bidPlacement: '',
+    eventProcesssingFeeMode: '',
+    eveventProcesssingFeeModeName: '',
+    eventProcessingFeeAmount: '',
+    emdFeePaymentMode: '',
+    emdAppliedFor: '',
+    emdAppliedForName: '',
+    emdFeePaymentModeName: '',
+    // emdFeeAmount: ''
+});
 const bidPlacements = ref([])
 const auctionCategory = ref([]);
 const departments = ref([]);
@@ -287,7 +294,7 @@ if (result){
         .useManagementServer()
         .setActivity('o.[InsertStep2AuctionData]')
         .setData({
-            referenceNumber:  auctionDetails.value.referenceNo,
+            referenceNumber: auctionDetails.value.referenceNo,
             auctionDescription: auctionDetails.value.description,
             inventoryCategoryId: auctionDetails.value.auctionCategory,
             auctionProcessId: auctionDetails.value.auctionProcess,
@@ -297,15 +304,15 @@ if (result){
             eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
             eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
             emdAppliedFor: auctionDetails.value.emdAppliedFor,
-            auctionId: getLastInsertedAuctionId.value   
+            auctionId: getLastInsertedAuctionId.value
         })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertStep2AuctionData', true);
             if (rs.isValid('InsertStep2AuctionData')) {
-                console.log("LastUpdatedId from response",res.result);
-                store.setPropertyCategoryId(auctionDetails.value.auctionCategory); 
-                console.log("propertyCategoryId: ",getPropertyCategoryId.value);
+                console.log("LastUpdatedId from response", res.result);
+                store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
+                console.log("propertyCategoryId: ", getPropertyCategoryId.value);
             } else {
                 rs.showErrorToast('InsertStep2AuctionData');
             }
@@ -355,7 +362,38 @@ const rules = computed(() => ({
     }
     }));
 
-    const $v=useVuelidate(rules,{auctionDetails});
+    const $v=useVuelidate(rules,{auctionDetails});function FetchAllStepsAuctionPreview() {
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchAllStepsAuctionPreview]")
+        .setData({ "auctionId": getLastInsertedAuctionId.value })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+            if (rs.isValid("FetchAllStepsAuctionPreview")) {
+                console.log("FetchAllStepsAuctionPreview", res.result);
+                auctionDetails.value.referenceNo = res.result.fetchStep2AuctionPreview.referenceNumber;
+                auctionDetails.value.auctionCategoryName = res.result.fetchStep2AuctionPreview.inventoryCategoryName;
+                auctionDetails.value.auctionCategory = `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
+                auctionDetails.value.description = res.result.fetchStep2AuctionPreview.auctionDescription;
+                auctionDetails.value.auctionProcessName = res.result.fetchStep2AuctionPreview.auctionProcessName;
+                auctionDetails.value.auctionProcess = `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
+                auctionDetails.value.departmentName = res.result.fetchStep2AuctionPreview.departmentName;
+                auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
+                auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
+                auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
+                auctionDetails.value.eveventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+                auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
+                auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
+                auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
+                auctionDetails.value.emdFeePaymentMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+            } else {
+                rs.showErrorToast("FetchAllStepsAuctionPreview")
+            }
+        })
+}
 
 onMounted(() => {
     FetchInventoryCategories();
@@ -364,5 +402,6 @@ onMounted(() => {
     FetchAllBidPlacements();
     FetchAllPaymentModes();
     FetchAllEMDAppliedFor();
+    FetchAllStepsAuctionPreview();
 });
 </script> 
