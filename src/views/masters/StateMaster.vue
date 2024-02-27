@@ -218,6 +218,7 @@ function changeFlag(newValue) {
 
 function FetchStateName() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllState]')
         .setData()
         .fetch()
@@ -231,13 +232,14 @@ function FetchStateName() {
                     isUnionTerritories: state.isUnionTerritories == 1 ? 'Yes' : 'No'
                 }));
             } else {
-                rs.showErrorToast('ErrorFetchAllState');
+                rs.showErrorToast('FetchAllState');
             }
             loading.value = false; // Move loading to here
         });
 }
 function FetchCountryName() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllCountries]')
         .setData()
         .fetch()
@@ -248,7 +250,7 @@ function FetchCountryName() {
                 countries.value = res.result;
 
             } else {
-                rs.showErrorToast('ErrorFetchAllCountries');
+                rs.showErrorToast('FetchAllCountries');
             }
             loading.value = false; // Move loading to here
         });
@@ -261,6 +263,7 @@ function insertState(stateData) {
 
 
         new MQL()
+            .useCoreServer()
             .setActivity('o.[InsertState]')
             .setData(stateData)
             .fetch()
@@ -270,7 +273,7 @@ function insertState(stateData) {
                     console.log(res.result);
                     console.log("stateData from Insert", stateData);
                 } else {
-                    rs.showErrorToast('ErrorInsertState');
+                    rs.showErrorToast('InsertState');
                 }
                 loading.value = false;
             });
@@ -278,6 +281,7 @@ function insertState(stateData) {
 }
 function updateState(stateData) {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[UpdateStateById]')
         .setData(stateData)
         .fetch()
@@ -289,7 +293,7 @@ function updateState(stateData) {
                 // Optionally, you can reload the page or update the state list after insertion
 
             } else {
-                rs.showErrorToast('ErrorUpdateState');
+                rs.showErrorToast('UpdateState');
             }
             loading.value = false;
         });
@@ -310,6 +314,7 @@ function editState(state) {
 }
 function deleteState(data) {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[DeleteStateById]')
         .setData(data)
         .fetch()
@@ -318,7 +323,7 @@ function deleteState(data) {
             if (rs.isValid('DeleteStateById')) {
                 console.log(res.result);
             } else {
-                rs.showErrorToast('ErrorDeleteState');
+                rs.showErrorToast('DeleteStateById');
             }
             loading.value = false;
         });

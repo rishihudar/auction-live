@@ -31,6 +31,8 @@ import Paginator from 'primevue/paginator';
 import simplebar from 'simplebar-vue'
 import 'simplebar-vue/dist/simplebar.min.css'
 import ConfirmDialog from 'primevue/confirmdialog';
+import Stepper from 'primevue/stepper';
+import StepperPanel from 'primevue/stepperpanel';
 import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Dialog from 'primevue/dialog';
@@ -40,6 +42,7 @@ import DialogService from 'primevue/dialogservice'
 import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import Vuelidate from 'vuelidate';
 
 const piniaStore = createPinia()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -62,6 +65,8 @@ vm.use(ToastService); // Add this line to enable toast service
 vm.use(primeVue, { unstyled: true, pt: Alive })
 vm.use(Breadcrumb)
 vm.component('Breadcrumb', Breadcrumb)
+vm.component('ConfirmDialog', ConfirmDialog);
+vm.component('ConfirmPopup', ConfirmPopup);
 vm.use(InputText)
 vm.component('ConfirmDialog', ConfirmDialog);
 vm.component('ConfirmPopup', ConfirmPopup);
@@ -73,7 +78,7 @@ vm.use(Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
 vm.use(Accordion)
-vm.component('Column', Column);
+
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
@@ -83,6 +88,9 @@ vm.use(Column)
 vm.use(Paginator)
 vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
+vm.component('Stepper', Stepper);
+vm.component('StepperPanel', StepperPanel);
+vm.use(Vuelidate);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
 vm.use(createMetaManager())

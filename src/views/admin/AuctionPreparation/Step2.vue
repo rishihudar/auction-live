@@ -106,17 +106,17 @@
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/2">
+            <!-- <div class="w-1/2">
                 <div class="fm-group">
                     <span class="p-buttonset">
                         <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button>
                     </span>
                 </div>
-            </div>
-            <div class="w-1/2">
+            </div> -->
+            <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button @click="InsertAuctionDataStep2" icon="pi pi-check" label="Next"></Button>
+                        <Button @click="InsertAuctionDataStep2" icon="pi pi-check" label="Save"></Button>
                     </span>
                 </div>
             </div>
@@ -166,6 +166,7 @@ const paymentModes = ref([]);
 
 function FetchInventoryCategories() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchInventoryCategories]')
         .setData()
         .fetch()
@@ -182,6 +183,7 @@ function FetchInventoryCategories() {
 
 function FetchAllAuctionProcess() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllAuctionProcess]')
         .setData()
         .fetch()
@@ -198,6 +200,7 @@ function FetchAllAuctionProcess() {
 
 function FetchAllDepartments() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllDepartments]')
         .setData()
         .fetch()
@@ -214,6 +217,7 @@ function FetchAllDepartments() {
 
 function FetchAllBidPlacements() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllBidPlacements]')
         .setData()
         .fetch()
@@ -230,6 +234,7 @@ function FetchAllBidPlacements() {
 
 function FetchAllPaymentModes() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllPaymentModes]')
         .setData()
         .fetch()
@@ -246,6 +251,7 @@ function FetchAllPaymentModes() {
 
 function FetchAllEMDAppliedFor() {
     new MQL()
+        .useCoreServer()
         .setActivity('o.[FetchAllEMDAppliedFor]')
         .setData()
         .fetch()
@@ -262,6 +268,7 @@ function FetchAllEMDAppliedFor() {
 
 function InsertAuctionDataStep2() {
     new MQL()
+        .useManagementServer()
         .setActivity('o.[InsertStep2AuctionData]')
         .setData({
             referenceNumber:  auctionDetails.value.referenceNo,

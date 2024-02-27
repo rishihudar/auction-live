@@ -1,0 +1,37 @@
+.wizard-wrapper {--wizard-item-width: theme('width[36]'); --wizard-icon-size: theme('height[14]'); --wizard-progress-height: theme('height[1]'); --wizard-content-padding: theme('padding[8]'); @apply relative;}
+
+.wizard-progress {@apply absolute left-1/2 w-10 h-[var(--wizard-progress-height)] rounded-full bg-slate-300 overflow-hidden; top: calc(var(--wizard-icon-size) / 2 - var(--wizard-progress-height) / 2); transform: translateX(-50%);
+    .wp-value {@apply absolute left-0 w-0 h-full rounded-full bg-primary-400; transition: width 0.4s ease;}
+}
+
+.wizard-steps {@apply relative z-10 flex items-start justify-center;
+    .ws-item {@apply w-[var(--wizard-item-width)] flex gap-2 flex-col items-center;
+        &-icon {@apply w-[var(--wizard-icon-size)] h-[var(--wizard-icon-size)] flex items-center justify-center rounded-full text-xl text-[var(--neutral-200)] bg-[var(--bg-body)]; border: 2px solid theme('colors.slate[300]'); box-shadow: 0 0 0 8px var(--bg-body); transition: border-color 0.2s ease, background 0.2s ease;
+            svg {@apply h-7 fill-[var(--neutral-200)]; transition: fill 0.2s ease;}
+        }
+        &-title {@apply text-sm text-[var(--neutral-200)]; transition: color 0.2s ease;}
+
+        &.completed {
+            .ws-item-icon {@apply text-white border-primary-400 bg-primary-400;
+                svg {@apply fill-white;}
+            }
+            .ws-item-title {@apply text-primary-600 font-normal;}
+        }
+
+        &.active {
+            .ws-item-icon {@apply text-primary-400 border-primary-400;
+                svg {@apply fill-primary-400;}
+            }
+            .ws-item-title {@apply text-[var(--neutral-400)] font-semibold;}
+        }
+    }
+}
+
+.wizard-content {@apply mt-6 rounded-lg bg-white; border: 2px solid var(--separator-color);
+    .wc-item {@apply px-[var(--wizard-content-padding)] py-8;}
+
+    .wc-action {@apply px-[var(--wizard-content-padding)] py-4 flex gap-2 items-center; border-top: 1px solid var(--border-color);
+        .btn {@apply w-32;}
+        .btn-next, .btn-submit {@apply ml-auto;}
+    }
+}

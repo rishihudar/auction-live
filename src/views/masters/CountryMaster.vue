@@ -267,6 +267,7 @@ import { useToast } from 'primevue/usetoast';
         function updateData(countryData){
                 // Perform form Edit logic here
                 new MQL()
+                    .useCoreServer()
                     .setActivity('o.[UpdateCountryById]')
                     .setData(countryData)
                     .fetch()
@@ -298,6 +299,7 @@ import { useToast } from 'primevue/usetoast';
            
         // Perform form submission logic here
         new MQL()
+            .useCoreServer()
             .setActivity('o.[InsertCountry]')
             .setData(countryData)
             .fetch()
@@ -327,6 +329,7 @@ import { useToast } from 'primevue/usetoast';
 
         function getData() {
             new MQL()
+                .useCoreServer()
                 .setActivity('o.[FetchAllCountries]')
                 .setData()
                 .fetch()
@@ -346,6 +349,7 @@ import { useToast } from 'primevue/usetoast';
         function deleteData(rowData) {
            // countryData.value = {...rowData}
             new MQL()
+                .useCoreServer()
                 .setActivity('o.[DeleteCountryById]')
                 .setData(rowData)
                 .fetch()

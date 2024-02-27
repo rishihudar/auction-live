@@ -406,6 +406,7 @@ function changeFlag(newValue){
 
 function fetchAllUsers(){
   new MQL()
+    .useCoreServer()
     .setActivity('o.[FetchAllUsers]')
     .setData()
     .fetch()

@@ -197,6 +197,7 @@ import Dropdown from 'primevue/dropdown';
         function updateData(districtData){
                 // Perform form Edit logic here
                 new MQL()
+                    .useCoreServer()
                     .setActivity('o.[UpdateDistrictById]')
                     .setData({stateId: districtData.stateId, districtName: districtData.districtName, districtId: districtData.districtId})
                     .fetch()
@@ -227,6 +228,7 @@ import Dropdown from 'primevue/dropdown';
         
         // Perform form submission logic here
         new MQL()
+            .useCoreServer()
             .setActivity('o.[InsertDistrict]')
             .setData({stateId: districtData.stateId, districtName: districtData.districtName})
             .fetch()
@@ -256,6 +258,7 @@ import Dropdown from 'primevue/dropdown';
 
         function getData() {
             new MQL()
+                .useCoreServer()
                 .setActivity('o.[FetchAllDistrict]')
                 .setData()
                 .fetch()
@@ -277,6 +280,7 @@ import Dropdown from 'primevue/dropdown';
         function deleteData(rowData) {
            // countryData.value = {...rowData}
             new MQL()
+                .useCoreServer()
                 .setActivity('o.[DeleteDistrictById]')
                 .setData(rowData)
                 .fetch()
@@ -295,6 +299,7 @@ import Dropdown from 'primevue/dropdown';
 
         function getStateData() {
             new MQL()
+                .useCoreServer()
                 .setActivity('o.[FetchAllState]')
                 .setData()
                 .fetch()
