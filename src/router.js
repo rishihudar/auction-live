@@ -8,6 +8,10 @@ function loadAuctionView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
 }
+function loadAuctionPublishView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPublishing/${view}.vue`);
+}
 function loadAdminView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
@@ -551,7 +555,12 @@ export default createRouter({
       component: loadAuctionView("Step4"),
       meta: { title: "Step4",lang: "en", icon: "mdi mdi-home-outline"},
     },
-
+    {
+      path: "/auction-publishing-details",
+      name: "AuctionPublishingDetails",
+      component: loadAuctionPublishView("AuctionPublishingDetails"),
+      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline"},
+    },
     
     // UI
     {
