@@ -37,7 +37,7 @@ export default createRouter({
       meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
-      path: "/",
+      path: "/home",
       name: "home",
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },

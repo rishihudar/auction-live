@@ -139,7 +139,7 @@ function authenticate() {
       })
       .then((res) => {
         //console.log(res)
-        let roles = login().roleNames;
+        let roles = loginStore.roleNames;
         console.log("Roles from store", roles);
         // if (roles === "ROLE_BIDDER") {
         //   console.log("push to bidder dashboard");

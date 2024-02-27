@@ -10,7 +10,8 @@ export const login = defineStore("login", {
     token: sessionStorage.getItem("user-token") || "",
     status: "",
     loginDetails : {},
-    roles :[]
+    roles :[],
+    currentRole: null
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -32,8 +33,11 @@ export const login = defineStore("login", {
     SET_LOGIN_USER_DETAILS(newData){
       this.loginDetails = newData
     },
-    SET_ROLE(data){
+    SET_ROLES(data){
       this.roles = data
+    },
+    SET_ROLE(data){
+      this.currentRole = data
     },
     AUTH_REQUEST(payload) {
       return new Promise((resolve) => {
@@ -81,15 +85,15 @@ export const login = defineStore("login", {
                   let token = rs.getHeaders().authorization
               // console.log('token',token)
                   sessionStorage.setItem('user-token', token)
-                  let role = JSON.parse(atob(token.split('.')[1])).groups[0]
-              // console.log('role',role)
+                  let roles = JSON.parse(atob(token.split('.')[1])).groups
+              console.log('role',roles)
                  let loginUserDetails = JSON.parse(atob(token.split('.')[1]))
                    .metadata
               // console.log('metaDATA', JSON.parse(atob(token.split('.')[1]))
               // .metadata )
                  loginUserDetails = JSON.parse(loginUserDetails)
                   this.SET_LOGIN_USER_DETAILS(loginUserDetails)
-                  this.SET_ROLE(role)
+                  this.SET_ROLES(roles)
              // }
               resolve(res)
             } else {
