@@ -1,5 +1,24 @@
-.btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;}
+.btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;
+    svg {@apply w-auto h-4;}
+}
 
 .btn-primary {@apply text-white bg-primary-400; box-shadow: 0 10px 20px -10px rgb(var(--primary-400) / 0.6);
+    svg {@apply fill-white;}
     &:hover, &:focus {@apply bg-primary-600; box-shadow: 0 10px 20px -10px rgb(var(--primary-400) / 0);}
+}
+
+.btn-secondary {@apply text-white bg-secondary-400;
+    svg {@apply fill-white;}
+    &:hover, &:focus {@apply bg-secondary-600;}
+}
+
+.btn-danger {@apply text-white bg-rose-500;
+    svg {@apply fill-white;}
+    &:hover, &:focus {@apply bg-rose-600;}
+}
+
+.btn-outline {@apply border bg-transparent;
+    &.btn-danger {@apply border-rose-500 bg-rose-100 text-rose-600;
+        &:hover, &:focus {@apply bg-rose-200;}
+    }
 }

@@ -1,5 +1,6 @@
 export default {
     root: {
-        class: ['flex items-stretch', 'w-full']
+        class: ['fm-input-group']
+        // class: ['flex items-stretch', 'w-full']
     }
 };

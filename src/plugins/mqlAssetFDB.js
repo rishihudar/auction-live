@@ -21,6 +21,7 @@ class mqlAssetFDB {
     this.mainStore = main()
     const mqlInstance = axios.create({
       baseURL: Vue.getBaseURL(),
+      managementURL: Vue.getManagementURL()
     })
 
     mqlInstance.interceptors.request.use(

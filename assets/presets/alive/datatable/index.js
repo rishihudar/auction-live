@@ -1,7 +1,8 @@
 export default {
     root: ({ props }) => ({
         class: [
-            'relative',
+            'table-wrapper',
+            // 'relative',
 
             // Flex & Alignment
             { 'flex flex-col': props.scrollable && props.scrollHeight === 'flex' },
@@ -35,6 +36,7 @@ export default {
     },
     wrapper: ({ props }) => ({
         class: [
+            'table-reponsive',
             { relative: props.scrollable, 'flex flex-col grow': props.scrollable && props.scrollHeight === 'flex' },
 
             // Size
@@ -58,7 +60,8 @@ export default {
         ]
     }),
     table: {
-        class: 'w-full border-spacing-0 border-separate'
+        class: 'table'
+        // class: 'w-full border-spacing-0 border-separate'
     },
     thead: ({ context }) => ({
         class: [
@@ -100,7 +103,7 @@ export default {
     column: {
         headercell: ({ context, props }) => ({
             class: [
-                'font-bold',
+                // 'font-bold',
 
                 // Position
                 { 'sticky z-20 border-b': props.frozen || props.frozen === '' },
@@ -108,32 +111,33 @@ export default {
                 { relative: context.resizable },
 
                 // Alignment
-                'text-left',
+                // 'text-left',
 
                 // Shape
                 { 'first:border-l border-y border-r': context?.showGridlines },
-                'border-0 border-b border-solid',
+                // 'border-0 border-b border-solid',
 
                 // Spacing
-                context?.size === 'small' ? 'p-2' : context?.size === 'large' ? 'p-5' : 'p-4',
+                // context?.size === 'small' ? 'p-2' : context?.size === 'large' ? 'p-5' : 'p-4',
 
                 // Color
-                (props.sortable === '' || props.sortable) && context.sorted ? 'bg-primary-50 text-primary-700' : 'bg-surface-50 text-surface-700',
-                (props.sortable === '' || props.sortable) && context.sorted ? 'dark:text-white dark:bg-primary-400/30' : 'dark:text-white/80 dark:bg-surface-800',
-                'border-surface-200 dark:border-surface-700 ',
+                // (props.sortable === '' || props.sortable) && context.sorted ? 'bg-primary-50 text-primary-700' : 'bg-surface-50 text-surface-700',
+                // (props.sortable === '' || props.sortable) && context.sorted ? 'dark:text-white dark:bg-primary-400/30' : 'dark:text-white/80 dark:bg-surface-800',
+                // 'border-surface-200 dark:border-surface-700 ',
 
                 // States
-                { 'hover:bg-surface-100 dark:hover:bg-surface-400/30': (props.sortable === '' || props.sortable) && !context?.sorted },
-                'focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:ring focus-visible:ring-inset focus-visible:ring-primary-400/50 dark:focus-visible:ring-primary-300/50',
+                // { 'hover:bg-surface-100 dark:hover:bg-surface-400/30': (props.sortable === '' || props.sortable) && !context?.sorted },
+                // 'focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:ring focus-visible:ring-inset focus-visible:ring-primary-400/50 dark:focus-visible:ring-primary-300/50',
 
                 // Transition
-                { 'transition duration-200': props.sortable === '' || props.sortable },
+                // { 'transition duration-200': props.sortable === '' || props.sortable },
 
                 // Misc
-                { 'cursor-pointer': props.sortable === '' || props.sortable },
-                {
-                    'overflow-hidden space-nowrap border-y bg-clip-padding': context.resizable // Resizable
-                }
+                { 'table-column-sortable': props.sortable === '' || props.sortable },
+                // { 'cursor-pointer': props.sortable === '' || props.sortable },
+                // {
+                //     'overflow-hidden space-nowrap border-y bg-clip-padding': context.resizable // Resizable
+                // }
             ]
         }),
         headercontent: {

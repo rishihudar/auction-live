@@ -1,8 +1,8 @@
 <template>
     <div id="login" class="box-login-holder">
         <div class="card-login">
-            <div class="page-header">
-                <div class="ph-media">
+            <div class="cl-header">
+                <div class="cl-header-media">
                     <img src="../../assets/images/logo_dulb.webp" alt="DULB logo" width="956" height="193">
                 </div>
                 <h1 class="title">

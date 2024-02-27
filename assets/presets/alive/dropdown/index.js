@@ -1,87 +1,92 @@
 export default {
     root: ({ props, state }) => ({
         class: [
+            'fm-control fm-select',
             // Display and Position
-            'inline-flex',
-            'relative',
+            // 'inline-flex',
+            // 'relative',
 
             // Shape
-            'w-full md:w-56',
-            'rounded-md',
+            // 'w-full md:w-56',
+            // 'rounded-md',
 
             // Color and Background
-            'bg-surface-0 dark:bg-surface-900',
-            'border border-surface-300 dark:border-surface-700',
+            // 'bg-surface-0 dark:bg-surface-900',
+            // 'border border-surface-300 dark:border-surface-700',
 
             // Transitions
-            'transition-all',
-            'duration-200',
+            // 'transition-all',
+            // 'duration-200',
 
             // States
-            'hover:border-primary-500 dark:hover:border-primary-300',
-            { 'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50': state.focused },
+            // 'hover:border-primary-500 dark:hover:border-primary-300',
+            // { 'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50': state.focused },
 
             // Misc
-            'cursor-pointer',
-            'select-none',
-            { 'opacity-60': props.disabled, 'pointer-events-none': props.disabled, 'cursor-default': props.disabled }
+            // 'cursor-pointer',
+            // 'select-none',
+            { 'fm-select-disabled': props.disabled }
+            // { 'opacity-60': props.disabled, 'pointer-events-none': props.disabled, 'cursor-default': props.disabled }
         ]
     }),
     input: ({ props }) => ({
         class: [
+            'fm-select-label',
             //Font
-            'font-sans',
-            'leading-none',
+            // 'font-sans',
+            // 'leading-none',
 
             // Display
-            'block',
-            'flex-auto',
+            // 'block',
+            // 'flex-auto',
 
             // Color and Background
-            'bg-transparent',
-            'border-0',
-            { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-400 dark:text-surface-500': !props.modelValue },
-            'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+            // 'bg-transparent',
+            // 'border-0',
+            { 'fm-select-value': props.modelValue, 'fm-select-placeholder': !props.modelValue },
+            // { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-400 dark:text-surface-500': !props.modelValue },
+            // 'placeholder:text-surface-400 dark:placeholder:text-surface-500',
 
             // Sizing and Spacing
-            'w-[1%]',
-            'p-3',
-            { 'pr-7': props.showClear },
+            // 'w-[1%]',
+            // 'p-3',
+            // { 'pr-7': props.showClear },
 
             //Shape
-            'rounded-none',
+            // 'rounded-none',
 
             // Transitions
-            'transition',
-            'duration-200',
+            // 'transition',
+            // 'duration-200',
 
             // States
-            'focus:outline-none focus:shadow-none',
+            // 'focus:outline-none focus:shadow-none',
 
             // Misc
-            'relative',
-            'cursor-pointer',
-            'overflow-hidden overflow-ellipsis',
-            'whitespace-nowrap',
-            'appearance-none'
+            // 'relative',
+            // 'cursor-pointer',
+            // 'overflow-hidden overflow-ellipsis',
+            // 'whitespace-nowrap',
+            // 'appearance-none'
         ]
     }),
     trigger: {
         class: [
+            'fm-select-trigger'
             // Flexbox
-            'flex items-center justify-center',
-            'shrink-0',
+            // 'flex items-center justify-center',
+            // 'shrink-0',
 
             // Color and Background
-            'bg-transparent',
-            'text-surface-500',
+            // 'bg-transparent',
+            // 'text-surface-500',
 
             // Size
-            'w-12',
+            // 'w-12',
 
             // Shape
-            'rounded-tr-md',
-            'rounded-br-md'
+            // 'rounded-tr-md',
+            // 'rounded-br-md'
         ]
     },
     panel: {

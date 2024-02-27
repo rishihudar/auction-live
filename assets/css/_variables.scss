@@ -1,6 +1,13 @@
 :root {
     --primary-400               : 92 187 95;
     --primary-600               : 60 171 64;
+    --primary-800               : 60 129 63;
+
+    // --secondary-200            : #15a1ff;
+    // --secondary-300            : #0084dc;
+    --secondary-400             : 61 151 231;// 61 129 231
+    --secondary-600             : 34 132 219;// 27 102 214
+    // --secondary-800            : #{darken(#3d81e7, 20%)};
 
     --neutral-200               : theme('colors.slate[400]');
     --neutral-300               : theme('colors.slate[500]');
@@ -19,13 +26,16 @@
     --font-family               : 'DM Sans', sans-serif;
 
     --border-color              : #e0e6ed;
+    --border-radius             : theme('borderRadius[lg]');
 
     --header-height             : 90px;
 
     --sidebar-width             : 260px;
     --sidebar-bg                : #0e1726;
 
+    --fm-grid-gap               : theme('gap[5]');
     --fm-height                 : theme('height[11]');
+    --fm-border-color           : var(--neutral-200);
     --fm-border-radius          : theme('borderRadius[md]');
 
     --bg-body                   : #f6f4f7;

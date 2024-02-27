@@ -27,11 +27,16 @@
 @import "components/cards";
 @import "components/dropdowns";
 @import "components/forms";
+@import "components/forms-upload";
+@import "components/grids";
+@import "components/modals";
+@import "components/pagination";
 @import "components/tables";
-// @import "components/wizards";
+@import "components/wizards";
 
 @import "pages/login";
-@import "pages/registration";
+// @import "pages/registration";
+
 
 $gray-lightest          : #85858d;
 $blue                   : #B7CADB;
@@ -60,7 +65,7 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     &:hover {background-size: 100% 1px;}
 }
 
-.content-wrapper {@apply pt-[var(--header-height)]; transition: margin 0.2s ease;
+.content-wrapper {@apply pt-[var(--header-height)] min-h-screen flex flex-col; transition: margin 0.2s ease;
     .sidebar-open & {@apply ml-[var(--sidebar-width)];}
 }
 .content-holder {@apply p-12;}
@@ -70,17 +75,21 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     .content-holder {@apply p-4;}
 }
 
-.page-header {@apply mb-6;
+.page-header {@apply mb-6 flex items-center;
+    .card-login & {@apply flex-col;}
     // &:has(h2.title) {@apply mb-6;}
-
-    .ph-media {@apply mb-5 h-20 flex gap-3 items-center justify-center;
-        img {@apply max-h-full;}
-    }
 
     .title {@apply font-bold text-[var(--neutral-600)];}
     h1.title {@apply text-4xl;}
     h2.title {@apply text-3xl;}
     .subtitle {@apply mt-1;}
+    
+    .ph-action {@apply ml-auto flex flex-wrap gap-4;
+        .fm-control {@apply border-none;}
+        .btn {@apply px-5;
+            svg {@apply h-5;}
+        }
+    }
 }
 
 // .subtext {
@@ -184,3 +193,195 @@ select.formkit-input {
 
 .card-login {position: relative;}
 .btn-float {position: absolute; top: 15px; left: 20px;}
+
+
+.box-cropper {}
+.box-cropper-image {
+    img {margin: 0 auto;}
+}
+
+
+// slide-fade for cropper
+.slide-fade-enter-active {
+    transition: all 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
+}
+
+// fade-up for card-datatables (masters)
+.fade-up-enter-active {
+    transition: all 0.2s ease-out;
+}
+
+.fade-up-leave-active {
+    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.fade-up-enter-from,
+.fade-up-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.fade-left-enter-active {
+    transition: all 0.2s ease-out;
+}
+
+.fade-left-leave-active {
+    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.fade-left-enter-from,
+.fade-left-leave-to {
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+// Stats cards
+.card-stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    .card-wrapper {
+      width: 25%;
+      padding: 15px;
+    }
+  }
+  .card-stat {
+    width: 100%;
+    height: 150px;
+    border-radius: 6px;
+    background-color: #ef4770;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 15px;
+    transition: all 0.8s ease-in;
+    cursor: pointer;
+    z-index: 1;
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 15px;
+      height: 100%;
+    }
+    &::before {
+      position: absolute;
+      content: "";
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(#ffffff, 0.15);
+      top: 10%;
+      right: -19%;
+      z-index: 1;
+      transition: all 0.8s ease-in;
+    }
+    &::after {
+      position: absolute;
+      content: "";
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(#ffffff, 0.15);
+      bottom: -24%;
+      right: -10%;
+      z-index: 1;
+      transition: all 0.8s ease-in;
+    }
+  
+    i {
+      font-size: 22px;
+      line-height: 1;
+      background-color: rgba(#000000, 0.12);
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .card-value {
+      color: #fff;
+      font-size: 60px;
+      line-height: 56px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .card-name {
+      font-size: 14px;
+      line-height: 22px;
+      color: #e9e9e9;
+      margin-bottom: 0px;
+    }
+    &:hover {
+      // i{
+      //   transform: rotate(72deg);
+      // }
+      box-shadow: 0px 15px 20px 6px rgba(#000000, 0.12);
+      &::before {
+        top: 40%;
+        right: -10%;
+        //animation: move1 5s ease-in 1;
+      }
+      &::after {
+        bottom: 14%;
+        right: -19%;
+      }
+    }
+  }
+  
+  .stat-area {
+    .card-wrapper:nth-child(4n + 1) {
+      .card-stat {
+        background-color: #f73967;
+        &:hover {
+          background-color: darken(#f73967, 10%);
+        }
+      }
+    }
+    .card-wrapper:nth-child(4n + 2) {
+      .card-stat {
+        background-color: #8e4cff;
+        &:hover {
+          background-color: darken(#8e4cff, 10%);
+        }
+      }
+    }
+    .card-wrapper:nth-child(4n + 3) {
+      .card-stat {
+        background-color: #2cbf9a;
+        &:hover {
+          background-color: darken(#2cbf9a, 10%);
+        }
+      }
+    }
+    .card-wrapper:nth-child(4n + 4) {
+      .card-stat {
+        background-color: #ed9a27;
+        &:hover {
+          background-color: darken(#ed9a27, 10%);
+        }
+      }
+    }
+  }

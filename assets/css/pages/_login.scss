@@ -1,1 +1,16 @@
-.box-login-holder {@apply py-4 min-h-screen flex items-center; background: var(--bg-login-image) no-repeat center / cover;}
+.box-login-holder {@apply py-4 min-h-screen flex items-center; background: var(--bg-login-image) no-repeat center / cover; background-attachment: fixed;}
+
+.box-top {
+    &-holder {@apply absolute -mt-4 flex items-center justify-between;}
+    a {@apply text-sm font-medium text-primary-600;}
+}
+
+.cl-header {@apply mb-6 text-center;
+    .cl-header-media {@apply mb-5 h-20 flex gap-3 items-center justify-center;
+        img {@apply w-auto max-h-full;}
+    }
+
+    .title {@apply font-bold text-[var(--neutral-600)];}
+    h1.title {@apply text-4xl;}
+    h2.title {@apply text-3xl;}
+}
