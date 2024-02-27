@@ -111,7 +111,7 @@
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Auction Item Document:</label>
-                        <span><a href="{{ auctionSummary[0].auctionItemDocumentPath }}">Click Here</a></span>
+                        <span><a :href="auctionItemDocumentPath">Click Here</a></span>
                     </div>
                     <div class="ml-auto">
                         <span class="p-buttonset">
@@ -134,11 +134,11 @@
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Auction Document:</label>
-                        <span><a href="{{ auctionSummary[0].auctionDocumentPath }}">Click Here</a></span>
+                        <span><a :href="auctionDocumentPath">Click Here</a></span>
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Notice Document:</label>
-                        <span><a href="{{ auctionSummary[0].auctionNoticeDocumentPath}}">Click Here</a></span>
+                        <span><a :href="auctionNoticeDocumentPath">Click Here</a></span>
                     </div>
                     <div class="ml-auto">
                         <span class="p-buttonset">

@@ -1,5 +1,5 @@
 <template>
-   <div class="gap-2  mx-auto">
+    <div class="gap-2  mx-auto">
         <div class="fm-row">
             <div class="w-full">
                 <div class="fm-group">
@@ -17,7 +17,7 @@
                 <div class="fm-group">
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
                     <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
-                    placeholder="Select Auction Type" class="w-full md:w-14rem" />
+                        placeholder="Select Auction Type" class="w-full md:w-14rem" />
                     {{ $v?.auctionTypeId?.$errors[0]?.$message }}
                     <!-- <span v-if="$v.auctionTypeData.$error" class="text-danger">Please Select Auction Type</span> -->
                     <!-- <div v-if="$v.auctionTypeData.$error" class="p-error">
@@ -28,8 +28,8 @@
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
-                    optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
+                    <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod" 
+                        optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
                     <!-- <span v-if="!$v.auctionMethodData.$error" class="text-danger">Please Select Auction Method</span> -->
                     {{ $v?.auctionMethodId?.$errors[0]?.$message }}
                 </div>
@@ -37,13 +37,13 @@
         </div>
 
         <Divider />
-        
+
         <div class="fm-row">
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
                         <Button label="Save" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
-                    </span> 
+                    </span>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
 <!-- , $router.push({ name: 'step2' }) -->
 
 <script setup>
-import { ref, onMounted ,computed} from "vue";
+import { ref, onMounted, computed } from "vue";
 import MQL from '@/plugins/mql.js';
 import Divider from 'primevue/divider';
 import Button from 'primevue/button';
@@ -65,35 +65,36 @@ import { storeToRefs } from 'pinia'
 
 // access the `store` variable anywhere in the component ✨
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId  } = storeToRefs(store)
+const { getLastInsertedAuctionId } = storeToRefs(store)
 const auctionMethodData = ref({
     auctionMethodId: 0,
     auctionMethodName: ''
 });
+// const auctionM = ref([]);
+// const auctionT = ref([]);
 const aucMethod = ref([]);
 const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
 const aucType = ref([]);
-const auctionTypeData = ref({ 
+const auctionTypeData = ref({
     auctionType: '',
     auctionTypeId: 0
 });
 const lastInsertedId = ref(0);
-
 const emit = defineEmits({
-  // No validation
-  click: null,
+    // No validation
+    click: null,
 
-  // Validate submit event
-  submit: ({ lastInsertedId }) => {
-    if (lastInsertedId) {
-      return true
-    } else {
-      console.warn('Invalid submit event payload!')
-      return false
+    // Validate submit event
+    submit: ({ lastInsertedId }) => {
+        if (lastInsertedId) {
+            return true
+        } else {
+            console.warn('Invalid submit event payload!')
+            return false
+        }
     }
-  }
 })
 
 function FetchAuctionTypes() {
@@ -122,7 +123,7 @@ function FetchAuctionMethods() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllAuctionMethods', true);
             if (rs.isValid('FetchAllAuctionMethods')) {
-                console.log("Auction Method Data",res.result);
+                console.log("Auction Method Data", res.result);
                 aucMethod.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllAuctionMethods');
@@ -136,18 +137,18 @@ function FetchAuctionStatus() {
     new MQL()
         .useCoreServer()
         .setActivity('o.[fetchStatusFromStatusMaster]')
-        .setData({statusCode: 'AUCTION_DRAFTED'})
+        .setData({ statusCode: 'AUCTION_DRAFTED' })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('fetchStatusFromStatusMaster', true);
             if (rs.isValid('fetchStatusFromStatusMaster')) {
-                console.log("Auction Status Data",res.result);
+                console.log("Auction Status Data", res.result);
                 statusData.value = res.result;
                 statusData.value.forEach(item => {
                     statusId.value = item.statusId;
                     displayName.value = item.displayName;
                 });
-                console.log("Auction Status Data",statusData.value);
+                console.log("Auction Status Data", statusData.value);
             } else {
                 rs.showErrorToast('fetchStatusFromStatusMaster');
             }
@@ -155,52 +156,83 @@ function FetchAuctionStatus() {
 }
 
 
-const InsertAuctionTypeAndMethod = async() => {
+const InsertAuctionTypeAndMethod = async () => {
     //const result = await $v.value.$validate();
     $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
-    if ( $v?.value.$invalid){
-    new MQL()
-        .useManagementServer()
-        .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-        .setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value})
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
-            if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
-                console.log("LastInsertedId from response",res.result);
-                lastInsertedId.value = res.result.objectId;
-                console.log("LastInsertedId from lastInsertedId variable",lastInsertedId.value);
-                store.setLastInsertedAuctionId(lastInsertedId.value);
-                console.log("LastInsertedId FROM GETTERS",getLastInsertedAuctionId.value);
-                // how to emit the last inserted id to the parent component to be used in the next step
-                emit('submit', lastInsertedId.value); 
-            } else {
-                rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
-            }
-        });}
-        else{
-            console.log("LastInsertedId is not null: ",getLastInsertedAuctionId.value);
-        }
+    if ($v?.value.$invalid) {
+        new MQL()
+            .useManagementServer()
+            .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
+            .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value })
+            .fetch()
+            .then((rs) => {
+                let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
+                if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
+                    console.log("LastInsertedId from response", res.result);
+                    lastInsertedId.value = res.result.objectId;
+                    console.log("LastInsertedId from lastInsertedId variable", lastInsertedId.value);
+                    store.setLastInsertedAuctionId(lastInsertedId.value);
+                    console.log("LastInsertedId FROM GETTERS", getLastInsertedAuctionId.value);
+                    // how to emit the last inserted id to the parent component to be used in the next step
+                    emit('submit', lastInsertedId.value);
+                } else {
+                    rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
+                }
+            });
+    }
+    else {
+        console.log("LastInsertedId is not null: ", getLastInsertedAuctionId.value);
+    }
 }
 
 
 const rules = computed(() => (
     {
         auctionTypeData: {
-           auctionTypeId: { required: helpers.withMessage('Please Select Auction Type', required) },
+            auctionTypeId: { required: helpers.withMessage('Please Select Auction Type', required) },
         },
         auctionMethodData: {
             auctionMethodId: { required: helpers.withMessage('Please Select Auction Method', required) },
         },
     }
 ));
-const $v=useVuelidate(rules,auctionMethodData,auctionTypeData);
+const $v = useVuelidate(rules, auctionMethodData, auctionTypeData);
+
+
+function FetchAllStepsAuctionPreview() {
+    new MQL()
+    .useManagementServer()
+        .setActivity("o.[FetchAllStepsAuctionPreview]")
+        .setData({"auctionId": getLastInsertedAuctionId.value})
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+            if (rs.isValid("FetchAllStepsAuctionPreview")) {
+                console.log("FetchAllStepsAuctionPreview", res.result);
+                auctionMethodData.value.auctionMethodName= res.result.fetchStep1AuctionPreview.auctionMethodName;
+                auctionMethodData.value.auctionMethodId= `${res.result.fetchStep1AuctionPreview.auctionMethodId}`;
+                auctionTypeData.value.auctionType = res.result.fetchStep1AuctionPreview.auctionType;
+                auctionTypeData.value.auctionTypeId = `${res.result.fetchStep1AuctionPreview.auctionTypeId}`;
+
+            } else {
+                rs.showErrorToast("FetchAllStepsAuctionPreview")
+            }
+        })
+}
+
+
+
+
+
 
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
     FetchAuctionStatus();
+    FetchAllStepsAuctionPreview();
+
+
 });
 
 </script>

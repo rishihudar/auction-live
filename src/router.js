@@ -540,7 +540,7 @@ export default createRouter({
     {
       path: "/Step2",
       name: "Step2",
-      component: loadAdminView("Step2"),
+      component: loadAuctionView("Step2"),
       meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
