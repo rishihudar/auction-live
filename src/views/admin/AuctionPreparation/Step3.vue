@@ -37,7 +37,7 @@
                             </template>
                         </Column>
                     </DataTable>
-                    <div v-else>No inventory Item added</div>
+                    <div v-else><h4>INVENTORY ITEM NOT AVAILABLE</h4></div>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
 
         <div class="fm-row">
             <div class="w-full">
-                <Button label="ADD Items" @click="visible = true"  :disabled="getIsClicked" icon="pi pi-trash" />
+                <Button label="Add Items" @click="visible = true"  :disabled="getIsClicked" icon="pi pi-trash" />
             </div>
         </div>
 
@@ -60,12 +60,12 @@
             </div> -->
             <Toast />
             <ConfirmDialog></ConfirmDialog>
-            <div class="w-full">
+            <!-- <div class="w-full">
                 <div class="fm-group">
-                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
-                    <Button label="Save" @click="confirm1(),handleClick(false)" icon="pi pi-trash" />
+                    <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button>
+                    <Button label="Save" @click="confirm1()" icon="pi pi-trash" />
                 </div>
-            </div>
+            </div> -->
         </div>
         
 
@@ -78,8 +78,11 @@
                     <div class="w-1/3">
                         <div class="fm-group">
                             <label for="step1">District<span class="text-danger">*</span></label>
+                            <!-- {{ $v.inventoryDistrictDetails.inventoryId }}
+                            {{ inventoryDistrictDetails }} -->
                             <Dropdown v-model="inventoryDistrictDetails.inventoryId" option-value="inventoryId" variant="filled" :options="districtDetail"
                             optionLabel="inventoryName" placeholder="Select District" @change="fetchMCNameFromInventoryMaster(inventoryDistrictDetails.inventoryId)" class="w-full md:w-14rem" />
+                            <span v-if="$v.inventoryDistrictDetails.inventoryId.$error" class="text-red-500">{{ $v.inventoryDistrictDetails.inventoryId.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
@@ -87,6 +90,7 @@
                             <label for="step1">MC Name<span class="text-danger">*</span></label>
                             <Dropdown v-model="inventoryMcDetails.inventoryId" option-value="inventoryId" variant="filled" :options="mcDetail"
                             optionLabel="inventoryName" placeholder="Select MC Type" @change="fetchLocationFromInventoryMaster(inventoryMcDetails.inventoryId)"  class="w-full md:w-14rem" />
+                            <span v-if="$v.inventoryMcDetails.inventoryId.$error" class="text-red-500">{{ $v.inventoryMcDetails.inventoryId.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
@@ -94,6 +98,7 @@
                             <label for="step1">Location<span class="text-danger">*</span></label>
                             <Dropdown v-model="inventoryLocationDetails.inventoryId" option-value="inventoryId" variant="filled" :options="locationDetail" optionLabel="inventoryName"
                             placeholder="Select Location" @change="fetchAreaFromInventoryMaster(inventoryLocationDetails.inventoryId)" class="w-full md:w-14rem" />
+                            <span v-if="$v.inventoryLocationDetails.inventoryId.$error" class="text-red-500">{{ $v.inventoryLocationDetails.inventoryId.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -103,18 +108,21 @@
                             <label for="step1">Area <span class="text-danger">*</span></label>
                             <Dropdown v-model="inventoryAreaDetails"  variant="filled" :options="areaDetail" optionLabel="inventoryName"
                             placeholder="Select Area" class="w-full md:w-14rem" />
+                            <span v-if="$v.inventoryAreaDetails.inventoryId.$error" class="text-red-500">{{ $v.inventoryAreaDetails.inventoryId.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
                         <div class="fm-group">
                                 <label for="username">Reserve Price<span class="text-danger">*</span></label>
                                 <InputText id="username" v-model="inventoryAreaDetails.inventoryReservePrice" placeholder="Enter Reserve Price" readonly/>
+                                <span v-if="$v.inventoryAreaDetails.inventoryReservePrice.$error" class="text-red-500">{{ $v.inventoryAreaDetails.inventoryReservePrice.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
                         <div class="fm-group">
                                 <label for="username">Unit<span class="text-danger">*</span></label>
                                 <InputText id="username" v-model="inventoryAreaDetails.inventoryUnit"  placeholder="Enter Unit" />
+                                <span v-if="$v.inventoryAreaDetails.inventoryUnit.$error" class="text-red-500">{{ $v.inventoryAreaDetails.inventoryUnit.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -123,12 +131,14 @@
                         <div class="fm-group">
                                 <label for="username">EMD<span class="text-danger">*</span></label>
                                 <InputText id="username" v-model="inventoryAreaDetails.inventoryEMDAmount" placeholder="Enter EMD" readonly />
+                                <span v-if="$v.inventoryAreaDetails.inventoryEMDAmount.$error" class="text-red-500">{{ $v.inventoryAreaDetails.inventoryEMDAmount.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
                         <div class="fm-group">
                             <label for="step2">Modifier Value <span class="text-danger">*</span></label>
                             <InputNumber v-model="modifierValue" inputId="minmax-buttons" mode="decimal" showButtons :min="0"/>
+                            <span v-if="$v.modifierValue.$error" class="text-red-500">{{ $v.modifierValue.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/3">
@@ -137,6 +147,7 @@
                             <Dropdown v-model="selectedModifierValueChange" variant="filled" :options="modifiervaluechanges"
                                 optionLabel="modifierValueChangeName" placeholder="Enter Modifier Value"
                                 class="w-full md:w-14rem" />
+                            <span v-if="$v.selectedModifierValueChange.modifierValueChangeId.$error" class="text-red-500">{{ $v.selectedModifierValueChange.modifierValueChangeId.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -147,13 +158,14 @@
 
                             <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
                                 :max="100" />
-
+                            <span v-if="$v.modifierValueExtentionCount.$error" class="text-red-500">{{ $v.modifierValueExtentionCount.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
                             <label for="step1">Modifier Value After Extension<span class="text-danger">*</span></label>
                             <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons" mode="decimal" showButtons :min="0"/>
+                            <span v-if="$v.modifierValueAfterExtention.$error" class="text-red-500">{{ $v.modifierValueAfterExtention.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -202,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Divider from 'primevue/divider';
 import Dropdown from 'primevue/dropdown';
 import DataTable from 'primevue/datatable';
@@ -218,6 +230,9 @@ import MQL from '@/plugins/mql.js';
 import MQLCdn from '@/plugins/mqlCdn.js';
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
+//import { helpers } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
+import { helpers, required } from '@vuelidate/validators'
 
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked  } = storeToRefs(store)
@@ -247,47 +262,47 @@ const displayName = ref();
 const statusId = ref();
 
 const modifierValue = ref("");
-const modifierValueExtentionCount = ref(0);
-const modifierValueAfterExtention = ref(0);
+const modifierValueExtentionCount = ref('');
+const modifierValueAfterExtention = ref('');
 const selectedModifierValueChange = ref({
-    modifierValueChangeId: 0,
+    modifierValueChangeId: '',
     modifierValueChangeName: ''
 
 });
 const addedItem = ref([]);
 
 const modifiervaluechanges = ref([]);
-const inventoryDistrictDetails = ref([{
+const inventoryDistrictDetails = ref({
         inventoryName: "",
-        inventoryId: 0,
+        inventoryId: '',
         parentInventoryId: 0,
         inventoryLevelId:0,
-}]);
+});
 
-const inventoryMcDetails = ref([{
+const inventoryMcDetails = ref({
         inventoryName: "",
-        inventoryId: 0,
+        inventoryId: '',
         parentInventoryId: 0,
         inventoryLevelId:0,
-}]);
+});
 
-const inventoryLocationDetails = ref([{
+const inventoryLocationDetails = ref({
         inventoryName: "",
         inventoryId: 0,
         parentInventoryId: 0,
         inventoryLevelId:0,
-}]);
+});
 
-const inventoryAreaDetails = ref([{
+const inventoryAreaDetails = ref({
         inventoryName: "",
-        inventoryId: 0,
+        inventoryId: '',
         parentInventoryId: 0,
         inventoryLevelId:0,
-        inventoryReservePrice:0,
-        inventoryUnit:"",
-        inventoryEMDAmount:0,
-        inventoryHierarchy:"",
-}]);
+        inventoryReservePrice:'',
+        inventoryUnit:'',
+        inventoryEMDAmount:'',
+        inventoryHierarchy:'',
+});
 
 const inventoryCategoryId = getPropertyCategoryId.value;
 const parentInventoryId = 0
@@ -388,7 +403,7 @@ function FetchAllModifierValueChange  () {
         });
 }
 
-function AddStep3AuctionData() {
+const AddStep3AuctionData = async () => {
     // console.log("auctionId", getLastInsertedAuctionId.value); 
     // console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
     // console.log("modifierValue", modifierValue.value);
@@ -434,9 +449,10 @@ function AddStep3AuctionData() {
     //             rs.showErrorToast('InsertStep3AuctionData');
     //         }
     //     });
-
-    
-					// Automatically generated
+    const result = await $v.value.$validate();
+            if(result){
+                alert("Form data is valid, form submitted");
+                					// Automatically generated
 			new MQL()
             .useManagementServer() 
 			.setActivity("o.[InsertStep3AuctionData]")
@@ -449,7 +465,7 @@ function AddStep3AuctionData() {
                 modifierValueAfterExtension: modifierValueAfterExtention.value,
                 documentTypeId: docTypeId.value,
                 documentFilePath:filePath.value ,
-                documentPath: fullPath.value + "/" + fileName.value,
+                documentPath: fullPath.value + "/" + filePath.value,
                 documentFileName:fileName.value,
                 inventoryCategoryId: getPropertyCategoryId.value,
                 statusId: statusId.value,
@@ -468,6 +484,12 @@ function AddStep3AuctionData() {
 			rs.showErrorToast("InsertStep3AuctionData")
 			}
 			})
+
+            } else {
+                alert("Form data is invalid, please check the form");
+            }
+    
+
 			
 }
 
@@ -572,45 +594,68 @@ function fetchDocumentsValidationDetails(){
 }
 
 
-function FetchAuctionStatus(){
+function FetchAuctionStatus(code){
           // Automatically generated
-          new MQL()
-        .useCoreServer()
-        .setActivity('o.[fetchStatusFromStatusMaster]')
-        .setData({statusCode: 'AUCTION_ITEM_PENDING'})
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('fetchStatusFromStatusMaster', true);
-            if (rs.isValid('fetchStatusFromStatusMaster')) {
-                console.log("Auction Status Data",res.result);
-                statusData.value = res.result;
-                statusData.value.forEach(item => {
-                    statusId.value = item.statusId;
-                    displayName.value = item.displayName;
-                });
-                console.log("Auction Status Data",statusData.value);
-            } else {
-                rs.showErrorToast('fetchStatusFromStatusMaster');
-            }
-        });
+          return new Promise((resolve, reject) => {
+            new MQL()
+            .useCoreServer()
+            .setActivity('o.[fetchStatusFromStatusMaster]')
+            .setData({statusCode: code })
+            .fetch()
+            .then((rs) => {
+                let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+                if (rs.isValid('fetchStatusFromStatusMaster')) {
+                    console.log("Auction Status Data",res.result);
+                    statusData.value = res.result;
+                    statusData.value.forEach(item => {
+                        statusId.value = item.statusId;
+                        displayName.value = item.displayName;
+                    });
+                    console.log("Auction Status Data",statusData.value);
+                    resolve(true)
+                } else {
+                    rs.showErrorToast('fetchStatusFromStatusMaster');
+                    reject(false)
+                }
+            });
+          })
+        //   new MQL()
+        // .useCoreServer()
+        // .setActivity('o.[fetchStatusFromStatusMaster]')
+        // .setData({statusCode: code })
+        // .fetch()
+        // .then((rs) => {
+        //     let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+        //     if (rs.isValid('fetchStatusFromStatusMaster')) {
+        //         console.log("Auction Status Data",res.result);
+        //         statusData.value = res.result;
+        //         statusData.value.forEach(item => {
+        //             statusId.value = item.statusId;
+        //             displayName.value = item.displayName;
+        //         });
+        //         console.log("Auction Status Data",statusData.value);
+        //     } else {
+        //         rs.showErrorToast('fetchStatusFromStatusMaster');
+        //     }
+        // });
 }
 
-const confirm1 = () => {
-    confirm.require({
-        message: 'Are you sure you want to proceed?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        rejectClass: 'p-button-secondary p-button-outlined',
-        rejectLabel: 'Save',
-        acceptLabel: 'Send For Checking',
-        accept: () => {
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-        },
-        reject: () => {
-            toast.add({ severity: 'info', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
-        }
-    });
-};
+// const confirm1 = () => {
+//     confirm.require({
+//         message: 'Are you sure you want to proceed?',
+//         header: 'Confirmation',
+//         icon: 'pi pi-exclamation-triangle',
+//         rejectClass: 'p-button-secondary p-button-outlined',
+//         rejectLabel: 'Save',
+//         acceptLabel: 'Send For Checking',
+//         accept: () => {
+//             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+//         },
+//         reject: () => {
+//             toast.add({ severity: 'info', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
+//         }
+//     });
+// };
 
 function addItem() {
 			new MQL()
@@ -650,6 +695,67 @@ function addItem() {
 //     inventoryLocationDetails.value.inventoryId = null;
 //     inventoryAreaDetails.value.inventoryId = null;
 // };
+const documentDetails = ref([])
+
+     const   docFileName = ref("")
+     const   docFilePath = ref("")
+     const   docPath     = ref("")
+     const   docFileTypeId = ref(0)
+    
+
+  function RemoveItemFromDB () {
+					// Automatically generated
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[FetchDocumentDetails]")
+			.setData({"auctionId":getLastInsertedAuctionId.value})
+			.fetch()
+			 .then(async rs => {
+			let res = rs.getActivity("FetchDocumentDetails",true)
+			if (rs.isValid("FetchDocumentDetails")) {
+                    documentDetails.value = res.result;
+                    documentDetails.value.forEach(item => {
+                        docFileName.value = item.documentFileName;
+                        docFilePath.value = item.documentFilePath;
+                        docPath.value = item.documentPath;
+                        docFileTypeId.value = item.documentTypeId;
+                });
+                    console.log("documentDetails",documentDetails.value);
+                    console.log("docFileName",docFileName.value);
+                    console.log("docFilePath",docFilePath.value);
+                    console.log("docPath",docPath.value);
+                    console.log("docFileTypeId",docFileTypeId.value);
+
+                    await FetchAuctionStatus('AUCTION_ITEM_DELETED');
+                    console.log("statusId",statusId.value);
+                    // Automatically generated
+                    new MQL()
+                    .useManagementServer()
+                    .setActivity("o.[DeleteStep3Data]")
+                    .setData({
+                        "auctionId":getLastInsertedAuctionId.value,
+                        "documentFileName": docFileName.value ,
+                        "documentFilePath": docFilePath.value,
+                        "documentPath": docPath.value, 
+                        "documentTypeId": docFileTypeId.value,
+                        "statusId":statusId.value})         
+                    .fetch()
+                    .then(rs => {
+                    let res = rs.getActivity("DeleteStep3Data",true)
+                    if (rs.isValid("DeleteStep3Data")) {            
+                    } else
+                    { 
+                    rs.showErrorToast("DeleteStep3Data")
+                    }
+                    })
+
+			} else
+			 { 
+			rs.showErrorToast("FetchDocumentDetails")
+			}
+			})
+    }
+
 function deleteItem(data) {
     confirm.require({
         message: 'Are you sure you want to Remove Inventory?',
@@ -659,9 +765,10 @@ function deleteItem(data) {
         rejectLabel: 'No',
         acceptLabel: 'Yes',
         accept: () => {
-            toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Inventory Item Removed', life: 3000 });
-            addedItem.value = addedItem.value.filter((item) => item !== data);
-            handleClick(false);
+            RemoveItemFromDB();
+			toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Inventory Item Removed', life: 3000 });
+                        addedItem.value = addedItem.value.filter((item) => item !== data);
+                        handleClick(false);
         },
         reject: () => {
             toast.add({ severity: 'warn', summary: 'Drafted', detail: 'Inventory Item Not Removed', life: 3000 });
@@ -669,12 +776,54 @@ function deleteItem(data) {
     });
 }
 
+const rules = computed(() => ({
+    inventoryDistrictDetails:{
+        inventoryId: { required: helpers.withMessage('District is required', required) },
+    },
+
+    inventoryMcDetails:{
+        inventoryId: { required: helpers.withMessage('MC Name is required', required) },
+    },
+
+    inventoryLocationDetails:{
+        inventoryId: { required: helpers.withMessage('Location is required', required) },
+    },
+
+    inventoryAreaDetails:{
+        inventoryId: { required: helpers.withMessage('Area is required', required) },
+        inventoryReservePrice: { required: helpers.withMessage('Reserve Price is required', required) },
+        inventoryUnit: { required: helpers.withMessage('Unit is required', required) },
+        inventoryEMDAmount: { required: helpers.withMessage('EMD is required', required) },
+    },
+
+    modifierValue: { required: helpers.withMessage('Modifier Value is required', required) },
+
+    selectedModifierValueChange: {
+        modifierValueChangeId: { required: helpers.withMessage('Modifier Value Change is required', required) },
+    },
+    modifierValueExtentionCount: { required: helpers.withMessage('Modifier Value After No. Of Extensions is required', required) },
+
+    modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
+
+    }));
+
+    const $v = useVuelidate(rules,{
+        inventoryDistrictDetails,
+        inventoryMcDetails,
+        inventoryLocationDetails,
+        inventoryAreaDetails,
+        modifierValue,
+        selectedModifierValueChange,
+        modifierValueExtentionCount,
+        modifierValueAfterExtention,
+    });
+
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
     FetchAllModifierValueChange();
     fetchDocumentsValidationDetails();
     //FetchInventoryMCNamefromInventoryMaster();
-    FetchAuctionStatus();
+    FetchAuctionStatus('AUCTION_ITEM_PENDING');
     addItem();
 })
 </script>

@@ -106,22 +106,6 @@ const rules = computed(() => {
     password: { required, minLength: minLength(6) },
     confirmPassword: { required, sameAs: sameAs(forData.password) }
   } 
-  // username: {
-  //   required,
-  //   minLength: minLength(3)
-  // },
-  // email: {
-  //   required,
-  //   email: true
-  // },
-  // password: {
-  //   required,
-  //   minLength: minLength(6)
-  // },
-  // confirmPassword: {
-  //   required,
-  //   sameAs : sameAs(forData.password)
-  // }
 });
 
 const $v = useVuelidate(rules, forData);
