@@ -1,4 +1,7 @@
+import { createToaster  } from "@meforma/vue-toaster";
 import { createRouter, createWebHashHistory } from "vue-router";
+import { login } from "./store/modules/login";
+const toaster = createToaster({ position: "top-right", duration: 3000 });
 
 function loadView(view) {
   return () =>
@@ -27,7 +30,7 @@ function loadManagementView(view) {
 function loadUI(view) {
     return () => import(/* webpackChunkName: "view-[request]" */ `@/views/ui/${view}.vue`)
 }
-export default createRouter({
+const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
@@ -49,13 +52,19 @@ export default createRouter({
     //   meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
     // },
     {
-      path: "/AuctionCheckerDashboard",
+      path: "/auction-checking",
       name: "ROLE_CHECKER",
       component: loadDashboardView("AuctionCheckerComponent"),
       meta: { title: "AuctionCheckerComponent", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
-      path: "/AdminDashboard",
+      path: "/auction-publishing",
+      name: "ROLE_ADMIN",
+      component: loadDashboardView("AdminComponent"),
+      meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
+    {
+      path: "/auction-approval",
       name: "ROLE_ADMIN",
       component: loadDashboardView("AdminComponent"),
       meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
@@ -88,13 +97,13 @@ export default createRouter({
       path: "/ApproverDashboard",
       name: "ROLE_APPROVER",
       component: loadDashboardView("ApproverComponent"),
-      meta: { title: "ApproverComponent", lang: "en", icon: "mdi mdi-home-outline" },
+      meta: { title: "ApproverComponent", lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true },
     },
     {
       path: "/PublisherDashboard",
       name: "ROLE_PUBLISHER",
       component: loadDashboardView("PublisherComponent"),
-      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline" },
+      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true  },
     },
     {
       path: "/SchedulerDashboard",
@@ -109,10 +118,10 @@ export default createRouter({
       meta: { title: "WatcherComponent", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
-      path: "/LandingPage",
-      name: "LandingPage",
+      path: "/role-select",
+      name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "LandingPage", lang: "en", icon: "mdi mdi-home-outline" },
+      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false, requiresAuth: true },
     },
     {
       path: "/TestVue",
@@ -178,7 +187,7 @@ export default createRouter({
       path: "/",
       name: "login",
       component: loadView("Login"),
-      meta: { title: "Login", lang: "mr", icon: "mdi mdi-account" },
+      meta: { title: "Login", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false },
     },
     {
       path: "/registration",
@@ -528,10 +537,16 @@ export default createRouter({
       meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline"},
     },
     {
+      path: "/auction-preparation",
+      name:"ROLE_MAKER",
+      component: loadAuctionView("Step1"),
+      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true},
+    },
+    {
       path: "/Step1",
       name:"ROLE_MAKER",
       component: loadAuctionView("Step1"),
-      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline"},
+      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true},
     },
     {
       path: "/Step2",
@@ -569,3 +584,29 @@ export default createRouter({
     
   ],
 });
+
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    if (!(!!sessionStorage.getItem('user-token'))) {
+      toaster.error('Please Login')
+        next({ path: '/' })
+    } else {
+      // const loginStore = login()
+      // let pathinMenu = loginStore.menu.find((r) => r.menuRoute == to.path)
+      // var allowed = pathinMenu?.roleName == loginStore.role
+      // console.log(to.path,pathinMenu,allowed);
+      let allowed = true
+      if (!allowed) {
+        toaster.error('Access Denied')
+        return false
+      } else {
+        next()
+      }
+    }
+  } else {
+    next()
+  }
+})
+
+export default router
