@@ -10,19 +10,20 @@
       hourFormat="24"
       :minDate="minDate"
       :showIcon="true"
+      @click="checkDates"
     />
-    <!-- @change="formattedStartDateCalc" -->
     <p>Start date: {{ formattedStartDate }}</p>
     <label for="calendar-12h" class="font-bold block mb-2">
       Processing Fee And EMD payment End Date:</label
     >
     <Calendar
-      id="calendar-24h"
+      id="calendar"
       v-model="formattedEndDate"
       showTime
       hourFormat="24"
       :minDate="endMinDate"
       :showIcon="true"
+      @click="checkDates"
     />
     <p>End date: {{ formattedEndDate }}</p>
   </div>
@@ -63,11 +64,12 @@
     </FileUpload>
   </div>
   <Button label="Back" @click="backToStep3" />
-  <Button label="Save" @click="processingFeeEmdPaymentStartEndDate" />
+  <Button label="Save" @click="onSave" />
+  <Button label="Next" @click="auctionPreview" />
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted , watch} from "vue";
 import moment from "moment";
 import router from "../../../router";
 import Calendar from "primevue/calendar";
@@ -86,9 +88,10 @@ const endDate = ref(new Date());
 
 const minDate = ref();
 minDate.value = moment().add(1, 'minutes').toDate();
-
 const endMinDate = ref();
 endMinDate.value = moment().add(2, 'minutes').toDate();
+
+
 const myFile = ref();
 const docValidation = ref([]);
 const docName = ref();
@@ -177,6 +180,9 @@ const onAdvancedUpload = async (event) => {
 function backToStep3() {
   router.push({ path: "/Step3" });
 }
+function auctionPreview() {
+  router.push({ path: "/AuctionPreview" });
+}
 
 function fetchDocumentsValidationDetails() {
   // Automatically generated
@@ -195,14 +201,14 @@ function fetchDocumentsValidationDetails() {
           docType.value = item.fileType;
           docTypeId.value=item.typeId
           console.log("docName.value", docName.value);
-          console.log("AuctionDocTypeId.value",AuctionDocTypeId.value);
+          console.log("AuctionDocTypeId.value",docTypeId.value);
         } else if (item.typeName == "NOTICE_DOCUMENT") {
           NoticeDocName.value = item.typeName;
           NoticeDocSize.value = item.fileSize;
           NoticeDocType.value = item.fileType;
           docTypeId.value=item.typeId;
           console.log("docName.value", NoticeDocName.value);
-          console.log("NoticeDocTypeId.value",NoticeDocTypeId.value);
+          console.log("NoticeDocTypeId.value",docTypeId.value);
         }
       });
       if (rs.isValid("fetchDocumentsValidationDetails")) {
@@ -231,17 +237,29 @@ function processingFeeEmdPaymentStartEndDate() {
     .then((rs) => {
       let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
       if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
+        console.log("res.result",res.result);
       } else {
         rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
       }
     });
 }
-
+function checkDates(){
+  console.log("Inside checkDates");
+  if(formattedEndDate.value<=formattedStartDate.value){
+    alert(`Start Date Can not be after End Date`);
+  }
+  // else{
+  //   processingFeeEmdPaymentStartEndDate();
+  // }
+};
 onMounted(() => {
   fetchDocumentsValidationDetails();
   formattedEndDateCalc();
   formattedStartDateCalc();
 });
+
+
+
 </script>
 
 <style scoped>
