@@ -125,7 +125,7 @@ const router = createRouter({
       path: "/role-select",
       name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false, requiresAuth: true },
+      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false, requiresAuth: false },
     },
     {
       path: "/TestVue",
@@ -532,23 +532,24 @@ const router = createRouter({
     },
     {
       path: "/auction-preparation",
+      name:"ROLE_MAKER",
       component: loadAdminView("AuctionPreparation"),
-      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline"},
+      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER'], requiresAuth: true},
     },
     {
       path: "/test",
       component: loadAdminView("test"),
       meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline"},
     },
-    {
-      path: "/auction-preparation",
-      name:"ROLE_MAKER",
-      component: loadAuctionView("Step1"),
-      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true},
-    },
+    // {
+    //   path: "/auction-preparation",
+    //   name:"Auction Preparation",
+    //   component: loadAuctionView("Step1"),
+    //   meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true},
+    // },
     {
       path: "/Step1",
-      name:"ROLE_MAKER",
+      name:"Step",
       component: loadAuctionView("Step1"),
       meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true},
     },
@@ -601,14 +602,12 @@ router.beforeEach((to, from, next) => {
       toaster.error('Please Login')
         next({ path: '/' })
     } else {
-      // const loginStore = login()
-      // let pathinMenu = loginStore.menu.find((r) => r.menuRoute == to.path)
-      // var allowed = pathinMenu?.roleName == loginStore.role
-      // console.log(to.path,pathinMenu,allowed);
-      let allowed = true
+      const loginStore = login()
+      console.log(to.meta.roles,loginStore.currentRole);
+      let allowed = to.meta.roles?.findIndex((r) => r == loginStore.currentRole) > -1
       if (!allowed) {
         toaster.error('Access Denied')
-        return false
+       next({path: from.path})
       } else {
         next()
       }
