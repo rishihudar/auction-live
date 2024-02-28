@@ -7,6 +7,10 @@ function loadView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`);
 }
+function loadWorkflowView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/WorkflowManagement/${view}.vue`);
+}
 function loadAuctionView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
@@ -49,12 +53,6 @@ const router = createRouter({
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" },
     },
-    // {
-    //   path: "/admin/auction-preparation",
-    //   name: "ROLE_MAKER",
-    //   component: loadAdminView("AuctionPreparation"),
-    //   meta: { title: "Auction Preparation",lang: "en", icon: "mdi mdi-home-outline"},
-    // },
     {
       path: "/auction-checking",
       name: "ROLE_CHECKER",
@@ -73,12 +71,12 @@ const router = createRouter({
       component: loadDashboardView("AdminComponent"),
       meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" },
     },
-    // {
-    //   path: "/AuctionMakerDashboard",
-    //   name: "ROLE_MAKER",
-    //   component: loadDashboardView("AuctionMakerComponent"),
-    //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" },
-    // },
+    {
+      path: "/AuctionMakerDashboard",
+      name: "ROLE_MAKER",
+      component: loadDashboardView("AuctionMakerComponent"),
+      meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" },
+    },
     {
       path: "/BidderDashboard",
       name: "ROLE_BIDDER",
@@ -202,7 +200,7 @@ const router = createRouter({
     {
       path: "/view-auction/:workflowStepDetailsId",
       name: "ViewAuction",
-      component: loadView("WorkflowManagement/ViewAuction"),
+      component: loadWorkflowView("ViewAuction"),
       meta: { title: "ViewAuction", lang: "en", icon: "mdi mdi-home-outline" },
     },
 
@@ -532,7 +530,7 @@ const router = createRouter({
     },
     {
       path: "/auction-preparation",
-      name:"ROLE_MAKER",
+      name:"AuctionPreparation",
       component: loadAdminView("AuctionPreparation"),
       meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER'], requiresAuth: true},
     },

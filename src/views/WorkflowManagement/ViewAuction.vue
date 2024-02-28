@@ -167,14 +167,13 @@ function FetchAuctionDetailsForView() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsForView]")
-        .setData({ "workflowStepDetailsId": 1 })
+        .setData({ "workflowStepDetailsId": route.params.workflowStepDetailsId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionDetailsForView", true)
             console.log(res, "result")
             if (rs.isValid("FetchAuctionDetailsForView")) {
                 auctionDetailsData.value = res.result.fetchAuctionDetails
-
                 console.log(auctionDetailsData.value, " auctionDetailsData")
             } else {
                 rs.showErrorToast("FetchAuctionDetailsForView")
