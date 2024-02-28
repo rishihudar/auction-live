@@ -16,22 +16,19 @@
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType"
-                        placeholder="Select Auction Type" class="w-full md:w-14rem" />
-                    {{ $v?.auctionTypeId?.$errors[0]?.$message }}
-                    <!-- <span v-if="$v.auctionTypeData.$error" class="text-danger">Please Select Auction Type</span> -->
-                    <!-- <div v-if="$v.auctionTypeData.$error" class="p-error">
-                        {{ $v.auctionTypeData.$errors[0].$message }}
-                        </div> -->
+                    <!-- {{ $v.auctionTypeData.auctionType }}
+                    {{ auctionTypeData }} -->
+                    <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" 
+                    optionLabel="auctionType"  placeholder="Select Auction Type" class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionTypeData.auctionType.$error" class="text-red-500">{{ $v.auctionTypeData.auctionType.$errors[0].$message }}</span>
                 </div>
             </div>
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod" 
-                        optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
-                    <!-- <span v-if="!$v.auctionMethodData.$error" class="text-danger">Please Select Auction Method</span> -->
-                    {{ $v?.auctionMethodId?.$errors[0]?.$message }}
+                    <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
+                    optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
+                  <span v-if="$v.auctionMethodData.auctionMethodName.$error" class="text-red-500">{{ $v.auctionMethodData.auctionMethodName.$errors[0].$message }}</span>
                 </div>
             </div>
         </div>
@@ -67,8 +64,8 @@ import { storeToRefs } from 'pinia'
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId } = storeToRefs(store)
 const auctionMethodData = ref({
-    auctionMethodId: 0,
-    auctionMethodName: ''
+    auctionMethodName: '',
+    auctionMethodId: 0
 });
 // const auctionM = ref([]);
 // const auctionT = ref([]);
@@ -156,49 +153,36 @@ function FetchAuctionStatus() {
 }
 
 
-const InsertAuctionTypeAndMethod = async () => {
-    //const result = await $v.value.$validate();
-    $v.value.$validate();
+const InsertAuctionTypeAndMethod = async() => {
+    const result = await $v.value.$validate();
+   // $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
-    if ($v?.value.$invalid) {
-        new MQL()
-            .useManagementServer()
-            .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-            .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value })
-            .fetch()
-            .then((rs) => {
-                let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
-                if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
-                    console.log("LastInsertedId from response", res.result);
-                    lastInsertedId.value = res.result.objectId;
-                    console.log("LastInsertedId from lastInsertedId variable", lastInsertedId.value);
-                    store.setLastInsertedAuctionId(lastInsertedId.value);
-                    console.log("LastInsertedId FROM GETTERS", getLastInsertedAuctionId.value);
-                    // how to emit the last inserted id to the parent component to be used in the next step
-                    emit('submit', lastInsertedId.value);
-                } else {
-                    rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
-                }
-            });
-    }
-    else {
-        console.log("LastInsertedId is not null: ", getLastInsertedAuctionId.value);
-    }
+    if ( getLastInsertedAuctionId.value == null && result){
+        alert("success, form submitted");
+    new MQL()
+        .useManagementServer()
+        .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
+        .setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value})
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
+            if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
+                console.log("LastInsertedId from response",res.result);
+                lastInsertedId.value = res.result.objectId;
+                console.log("LastInsertedId from lastInsertedId variable",lastInsertedId.value);
+                store.setLastInsertedAuctionId(lastInsertedId.value);
+                console.log("LastInsertedId FROM GETTERS",getLastInsertedAuctionId.value);
+                // how to emit the last inserted id to the parent component to be used in the next step
+                emit('submit', lastInsertedId.value); 
+            } else {
+                rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
+            }
+        });}
+        else{
+            console.log("LastInsertedId is not null: ",getLastInsertedAuctionId.value);
+            alert("error, form not submitted");
+        }
 }
-
-
-const rules = computed(() => (
-    {
-        auctionTypeData: {
-            auctionTypeId: { required: helpers.withMessage('Please Select Auction Type', required) },
-        },
-        auctionMethodData: {
-            auctionMethodId: { required: helpers.withMessage('Please Select Auction Method', required) },
-        },
-    }
-));
-const $v = useVuelidate(rules, auctionMethodData, auctionTypeData);
-
 
 function FetchAllStepsAuctionPreview() {
     new MQL()
@@ -221,10 +205,20 @@ function FetchAllStepsAuctionPreview() {
         })
 }
 
+const rules = computed(() => ({
+        auctionTypeData: {
+        auctionTypeId: { required: helpers.withMessage('Please Select Auction Type ID', required) },
+        auctionType: { required: helpers.withMessage('Please Select Auction Type', required) }
+        },
+        auctionMethodData: {
+        auctionMethodId: { required: helpers.withMessage('Please Select Auction Method ID', required) },
+        auctionMethodName: { required: helpers.withMessage('Please Select Auction Method', required) }
+        },
+
+    }));
 
 
-
-
+const $v=useVuelidate(rules,{auctionMethodData,auctionTypeData});
 
 onMounted(() => {
     FetchAuctionTypes();

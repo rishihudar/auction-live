@@ -63,9 +63,9 @@
       </template>
     </FileUpload>
   </div>
-  <Button label="Back" @click="backToStep3" />
+  <!-- <Button label="Back" @click="backToStep3" /> -->
   <Button label="Save" @click="onSave" />
-  <Button label="Next" @click="auctionPreview" />
+  <!-- <Button label="Next" @click="auctionPreview" /> -->
 </template>
 
 <script setup>
@@ -177,12 +177,12 @@ const onAdvancedUpload = async (event) => {
 };
 
 
-function backToStep3() {
-  router.push({ path: "/Step3" });
-}
-function auctionPreview() {
-  router.push({ path: "/AuctionPreview" });
-}
+// function backToStep3() {
+//   router.push({ path: "/Step3" });
+// }
+// function auctionPreview() {
+//   router.push({ path: "/AuctionPreview" });
+// }
 
 function fetchDocumentsValidationDetails() {
   // Automatically generated
@@ -248,9 +248,9 @@ function checkDates(){
   if(formattedEndDate.value<=formattedStartDate.value){
     alert(`Start Date Can not be after End Date`);
   }
-  // else{
-  //   processingFeeEmdPaymentStartEndDate();
-  // }
+  else{
+    processingFeeEmdPaymentStartEndDate();
+  }
 };
 onMounted(() => {
   fetchDocumentsValidationDetails();

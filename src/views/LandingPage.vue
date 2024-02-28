@@ -33,6 +33,12 @@
         "menuName": "Auction Approval",
         "roleId": "6",
         "roleName": "ROLE_MAKER"
+    },
+    {
+        "menuId": 3,
+        "menuName": "Auction Approval",
+        "roleId": "6",
+        "roleName": "ROLE_MAKER"
     }
 ])
 //Automatically generated
