@@ -19,7 +19,7 @@ export const login = defineStore("login", {
     isAuthenticated: (state) => !!state.token,
     authStatus: (state) => state.status,
     roleNames: (state) => state.roles,
-    username: (state) => state.loginDetails.username,
+    username: (state) => state.loginDetails.fullName,
     role: (state) => state.currentRole,
     menu: (state) => state.menus,
   },
