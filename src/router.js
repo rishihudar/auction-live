@@ -575,6 +575,12 @@ export default createRouter({
       component: loadView("History"),
       meta: { title: "History", lang: "en", icon: "mdi mdi-home-outline" },
     },
+    {
+      path: "/UpcomingAuction",
+      name: "UpcomingAuction",
+      component: loadAdminView("UpcomingAuction"),
+      meta: { title: "UpcomingAuction", lang: "en", icon: "mdi mdi-home-outline" },
+    },
     
   ],
 });

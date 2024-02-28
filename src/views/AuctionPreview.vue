@@ -116,8 +116,7 @@
                         <span>{{ auctionSummary[0].modifierValueChangeName }}</span>
                     </div>
                     <div class="profile-field">
-                        <label class="bold-label" for="address">Auction Item Document:</label>
-                        <span><a :href="auctionItemDocumentPath">Click Here</a></span>
+                        <span><a :href="auctionItemDocumentPath" class="document-link">Auction Item Document</a></span>
                     </div>
                     <div class="ml-auto">
                        
@@ -143,12 +142,10 @@
                         <span>{{ auctionSummary[0].endDate }}</span>
                     </div>
                     <div class="profile-field">
-                        <label class="bold-label" for="address">Auction Document:</label>
-                        <span><a :href="auctionDocumentPath">Click Here</a></span>
+                        <span><a :href="auctionDocumentPath" class="document-link">Auction Document</a></span>
                     </div>
                     <div class="profile-field">
-                        <label class="bold-label" for="address">Notice Document:</label>
-                        <span><a :href="auctionNoticeDocumentPath">Click Here</a></span>
+                        <span><a :href="auctionNoticeDocumentPath" class="document-link">Notice Document</a></span>
                     </div>
                     <div class="ml-auto">
                        
@@ -174,7 +171,6 @@ import { ref, onMounted } from "vue";
 import Card from "primevue/card";
 import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
-import { useRouter } from 'vue-router';
 import History from "./History.vue";
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
@@ -194,7 +190,7 @@ const store = useAuctionPreparation()
 const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
 
 
-const router = useRouter();
+
 
 const auctionNoticeDocumentPath = ref("");
 const auctionItemDocumentPath = ref("");
@@ -257,3 +253,9 @@ onMounted(() => {
 
 </script>
   
+<style scoped>
+.document-link {
+    color: blue;
+    text-decoration: underline;
+}
+</style>
