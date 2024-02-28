@@ -64,8 +64,10 @@
     </FileUpload>
   </div>
   <!-- <Button label="Back" @click="backToStep3" /> -->
-  <Button label="Save" @click="onSave" />
+  <Button label="Back" @click="prevCallback()" />
+  <!-- <Button label="Save" @click="onSave" /> -->
   <!-- <Button label="Next" @click="auctionPreview" /> -->
+  <Button label="Next" @click="nextCallback()" />
 </template>
 
 <script setup>
@@ -106,6 +108,18 @@ const docTypeId = ref();
 const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
+
+const emit = defineEmits({
+    nextTab3: null,
+    previousTab3: null
+});
+function prevCallback() {
+    emit('previousTab3')
+}
+
+function nextCallback() {
+    emit('nextTab3')
+}
 
 function formattedStartDateCalc() {
   formattedStartDate.value = moment(startDate.value)

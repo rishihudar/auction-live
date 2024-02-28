@@ -117,13 +117,14 @@
         <Divider />
 
         <div class="fm-row">
-            <!-- <div class="w-1/2">
+            <div class="w-1/2">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button>
+                        <!-- <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button> -->
+                        <Button @click="prevCallback()" icon="pi pi-check" label="Back"></Button>
                     </span>
                 </div>
-            </div> -->
+            </div>
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
@@ -181,8 +182,14 @@ const auctionProcess = ref([]);
 const emdAppliedFor = ref([]);
 const paymentModes = ref([]);
 
+const emit = defineEmits({
+    nextTab1: null,
+    previousTab1: null
+});
 
-
+function prevCallback() {
+    emit('previousTab1')
+}
 
 function FetchInventoryCategories() {
     new MQL()
@@ -313,6 +320,7 @@ if (result){
                 console.log("LastUpdatedId from response", res.result);
                 store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
                 console.log("propertyCategoryId: ", getPropertyCategoryId.value);
+                emit('nextTab1')
             } else {
                 rs.showErrorToast('InsertStep2AuctionData');
             }
@@ -362,7 +370,8 @@ const rules = computed(() => ({
     }
     }));
 
-    const $v=useVuelidate(rules,{auctionDetails});function FetchAllStepsAuctionPreview() {
+    const $v=useVuelidate(rules,{auctionDetails});
+    function FetchAllStepsAuctionPreview() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAllStepsAuctionPreview]")

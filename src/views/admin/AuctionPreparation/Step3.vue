@@ -53,19 +53,21 @@
         <Divider />
 
         <div class="fm-row">
-            <!-- <div class="w-1/2">
+            <div class="w-1/2">
                 <div class="fm-group">
-                    <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" />
+                    <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
+                    <Button label="Back" @click="prevCallback()" icon="pi pi-trash" />
                 </div>
-            </div> -->
+            </div>
             <Toast />
             <ConfirmDialog></ConfirmDialog>
-            <!-- <div class="w-full">
+            <div class="w-full">
                 <div class="fm-group">
-                    <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button>
-                    <Button label="Save" @click="confirm1()" icon="pi pi-trash" />
+                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
+                    <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
+                    <Button label="Next" @click="nextCallback()" icon="pi pi-trash" />
                 </div>
-            </div> -->
+            </div>
         </div>
         
 
@@ -309,8 +311,16 @@ const inventoryAreaDetails = ref({
 const inventoryCategoryId = getPropertyCategoryId.value;
 const parentInventoryId = 0
 
-
-
+const emit = defineEmits({
+    nextTab2: null,
+    previousTab2: null
+});
+function prevCallback() {
+    emit('previousTab2')
+}
+function nextCallback() {
+    emit('nextTab2')
+}
     const handleClick = (input) => {
       // Your button click logic here
       
@@ -526,8 +536,8 @@ const onAdvancedUpload = async (event) => {
     // FIXED: pass buckeyKey instead of name
     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
-    
+    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    //clientID:2ZncVDPZRGYZwwteYYbB3aw4fr7
     .uploadFile("uploadtBtn")
     .then((res) => {
         // (required) this will upload file takes element id (optional param) which will be blocked while file upload..

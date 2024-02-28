@@ -11,13 +11,11 @@
         </div>
 
         <Divider />
-
         <div class="fm-row">
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
-                    <!-- {{ $v.auctionTypeData.auctionType }}
-                    {{ auctionTypeData }} -->
+                    <!-- {{ $v.auctionTypeData.auctionType }} -->
                     <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" 
                     optionLabel="auctionType"  placeholder="Select Auction Type" class="w-full md:w-14rem" />
                     <span v-if="$v.auctionTypeData.auctionType.$error" class="text-red-500">{{ $v.auctionTypeData.auctionType.$errors[0].$message }}</span>
@@ -26,6 +24,7 @@
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
+                    <!-- {{ $v.auctionMethodData.auctionMethodName }} -->
                     <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
                     optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
                   <span v-if="$v.auctionMethodData.auctionMethodName.$error" class="text-red-500">{{ $v.auctionMethodData.auctionMethodName.$errors[0].$message }}</span>
@@ -78,7 +77,7 @@ const auctionTypeData = ref({
     auctionType: '',
     auctionTypeId: 0
 });
-const lastInsertedId = ref(0);
+const lastInsertedId = ref('');
 const emit = defineEmits({
     // No validation
     click: null,
@@ -91,7 +90,8 @@ const emit = defineEmits({
             console.warn('Invalid submit event payload!')
             return false
         }
-    }
+    },
+    nextTab: null
 })
 
 function FetchAuctionTypes() {
@@ -154,10 +154,14 @@ function FetchAuctionStatus() {
 
 
 const InsertAuctionTypeAndMethod = async() => {
+    //console.log('HEre');
     const result = await $v.value.$validate();
    // $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
-    if ( getLastInsertedAuctionId.value == null && result){
+    if(false){
+
+    }else{
+        if ( getLastInsertedAuctionId.value == "" && result){
         alert("success, form submitted");
     new MQL()
         .useManagementServer()
@@ -174,14 +178,35 @@ const InsertAuctionTypeAndMethod = async() => {
                 console.log("LastInsertedId FROM GETTERS",getLastInsertedAuctionId.value);
                 // how to emit the last inserted id to the parent component to be used in the next step
                 emit('submit', lastInsertedId.value); 
+                emit('nextTab')
             } else {
                 rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
             }
         });}
         else{
             console.log("LastInsertedId is not null: ",getLastInsertedAuctionId.value);
-            alert("error, form not submitted");
+            //alert("error, form not submitted");
+			// Automatically generated
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[UpdateStep1Details]")
+			.setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: getLastInsertedAuctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateStep1Details",true)
+			if (rs.isValid("UpdateStep1Details")) {  
+                // lastInsertedId.value = res.result.objectId; 
+                // emit('submit');
+                emit('nextTab')
+            console.log("UpdateStep1Details",res.result);
+			} else
+			 { 
+			rs.showErrorToast("UpdateStep1Details")
+			}
+			})
+			
         }
+    }
 }
 
 function FetchAllStepsAuctionPreview() {
@@ -219,6 +244,26 @@ const rules = computed(() => ({
 
 
 const $v=useVuelidate(rules,{auctionMethodData,auctionTypeData});
+
+
+
+//rest of the properties & methods are public
+defineExpose({
+    InsertAuctionTypeAndMethod,
+    FetchAuctionTypes,
+    FetchAuctionMethods,
+    FetchAuctionStatus,
+    FetchAllStepsAuctionPreview,
+    lastInsertedId,
+    auctionMethodData,
+    aucMethod,
+    statusData,
+    displayName,
+    statusId,
+    aucType,
+    auctionTypeData,
+});
+
 
 onMounted(() => {
     FetchAuctionTypes();
