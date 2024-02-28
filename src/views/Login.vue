@@ -147,9 +147,9 @@ function authenticate() {
 
 }
 
-onMounted(() => {
-    sessionStorage.setItem('user-token','')
-    loginStore.$reset()
-}
-)
+// onMounted(() => {
+//     sessionStorage.setItem('user-token','')
+//     loginStore.$reset()
+// }
+// )
 </script>

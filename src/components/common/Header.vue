@@ -20,7 +20,7 @@
                 </Button>
                 <Menu ref="profilemenu" id="ddmenu_profile" class="w-full md:w-15rem" :model="items" :popup="true">
                     <template #item="{ item, props }">
-                        <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+                        <!-- <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" @click="navigate">
                                 <component :is="item.icon" />
                                 <span class="di-text">{{ item.label }}</span>
@@ -29,7 +29,8 @@
                         <a v-else :href="item.url" v-bind="props.action">
                             <component :is="item.icon" />
                             <span class="di-text">{{ item.label }}</span>
-                        </a>
+                        </a> -->
+                        <li @click="item.action">{{ item.label }}</li>
                     </template>
                 </Menu>
             </div>
@@ -40,6 +41,7 @@
 <script setup>
 import { main } from "@/store/index"
 import { login } from "../../store/modules/login"
+import { useRouter } from "vue-router";
 // import faAddressCard from '../../../assets/icons/address-card.svg'
 import faBars from '../../../assets/icons/bars.svg'
 import { ref } from "vue";
@@ -48,14 +50,28 @@ import { ref } from "vue";
 
 const profilemenu = ref(null)
 
+const router = useRouter()
+
+
+const logout = () => {
+    loginStore.AUTH_LOGOUT()
+}
+
+const navigateToRoleSelect = () => {
+    loginStore.SET_ROLE(null)
+    router.push('/role-select')
+}
+
 const items = ref([
     {
         label: 'My Profile',
-        icon: 'fa-address-card'
+        icon: 'fa-address-card',
+        action: () => {}
     },
     {
         label: 'Settings',
-        icon: 'fa-gear'
+        icon: 'fa-gear',
+        action: () => {}
     },
     {
         separator: true
@@ -63,12 +79,15 @@ const items = ref([
     {
         label: 'Change Role',
         icon: 'fa-right-from-bracket',
-        route: '/role-select'
+        route: '/role-select',
+        action: navigateToRoleSelect
+
     },
     {
         label: 'Logout',
         icon: 'fa-right-from-bracket',
-        route: '/'
+        route: '/',
+        action: logout
     }
 ])
 const mainStore = main();

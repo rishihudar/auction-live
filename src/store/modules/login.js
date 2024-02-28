@@ -1,6 +1,7 @@
 import router from "../../router";
 import { defineStore } from "pinia";
 import MQL from "@/plugins/mql.js";
+import axios from "axios";
 export const login = defineStore("login", {
   persist: {
     storage: sessionStorage,
@@ -83,11 +84,10 @@ export const login = defineStore("login", {
               let token = rs.getHeaders().authorization;
               console.log('token',token)
               sessionStorage.setItem("user-token", token);
+              this.token = token
               let roles = JSON.parse(atob(token.split(".")[1])).groups;
               console.log("role", roles);
-              let loginUserDetails = JSON.parse(JSON.parse(
-                atob(token.split(".")[1])
-              ).metadata);
+              let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
               console.log('metaDATA', JSON.parse(JSON.parse(atob(token.split('.')[1])).metadata) )
               console.log(loginUserDetails);
               this.menus = res.result.rolesMenuData;
@@ -106,10 +106,9 @@ export const login = defineStore("login", {
       return new Promise((resolve) => {
         sessionStorage.removeItem("user-token");
         // remove the axios default header
-        // delete axios.defaults.headers.common['Authorization']
-        router.push({
-          name: "login",
-        });
+        delete axios.defaults.headers.common['Authorization']
+        router.push({name: "login"});
+        this.$reset()
         resolve();
       });
     },
