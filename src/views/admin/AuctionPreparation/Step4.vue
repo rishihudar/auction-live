@@ -5,27 +5,25 @@
     >
     <Calendar
       id="calendar-24h"
-      v-model="formattedStartDate"
+      v-model="selectedStartDate"
       showTime
       hourFormat="24"
       :minDate="minDate"
       :showIcon="true"
-      @click="checkDates"
     />
-    <p>Start date: {{ formattedStartDate }}</p>
+    <p>Start date: {{ selectedStartDate }}</p>
     <label for="calendar-12h" class="font-bold block mb-2">
       Processing Fee And EMD payment End Date:</label
     >
     <Calendar
       id="calendar"
-      v-model="formattedEndDate"
+      v-model="selectedEndDate"
       showTime
       hourFormat="24"
       :minDate="endMinDate"
       :showIcon="true"
-      @click="checkDates"
     />
-    <p>End date: {{ formattedEndDate }}</p>
+    <p>End date: {{ selectedEndDate }}</p>
   </div>
   <div class="card">
     <p>Auction Document:</p>
@@ -63,13 +61,13 @@
       </template>
     </FileUpload>
   </div>
-  <Button label="Back" @click="backToStep3" />
   <Button label="Save" @click="onSave" />
-  <Button label="Next" @click="auctionPreview" />
+  <!-- <Button label="Back" @click="backToStep3" />
+  <Button label="Next" @click="auctionPreview" /> -->
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import moment from "moment";
 import router from "../../../router";
 import Calendar from "primevue/calendar";
@@ -85,6 +83,8 @@ const { getLastInsertedAuctionId } = storeToRefs(store);
 
 const startDate = ref(new Date());
 const endDate = ref(new Date());
+const selectedStartDate =ref();
+const selectedEndDate =ref();
 
 const minDate = ref();
 minDate.value = moment().add(1, 'minutes').toDate();
@@ -100,7 +100,8 @@ const docSize = ref();
 const NoticeDocName = ref();
 const NoticeDocType = ref();
 const NoticeDocSize = ref();
-
+const dbEndDate=ref();
+const dbStartDate=ref();
 const docTypeId = ref();
 //const NoticeDocTypeId = ref();
 const documentsArray = ref([]);
@@ -131,7 +132,7 @@ const onAdvancedUpload = async (event) => {
   new MQLCdn()
     // .useManagementServer()
     .enablePageLoader(true) // FIXED: change this to directory path
-    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    // .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath(
       getLastInsertedAuctionId + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
@@ -177,12 +178,12 @@ const onAdvancedUpload = async (event) => {
 };
 
 
-function backToStep3() {
-  router.push({ path: "/Step3" });
-}
-function auctionPreview() {
-  router.push({ path: "/AuctionPreview" });
-}
+// function backToStep3() {
+//   router.push({ path: "/Step3" });
+// }
+// function auctionPreview() {
+//   router.push({ path: "/AuctionPreview" });
+// }
 
 function fetchDocumentsValidationDetails() {
   // Automatically generated
@@ -218,17 +219,50 @@ function fetchDocumentsValidationDetails() {
       }
     });
 }
+
+function fetchAllStepsAuctionPreview(){
+  
+					// Automatically generated
+          new MQL()
+          .useManagementServer()
+			.setActivity("o.[FetchAllStepsAuctionPreview]")
+			.setData({auctionId:3})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
+      dbStartDate.value=res.result.fetchStep4AuctionPreview[0].startDate;
+      dbEndDate.value=res.result.fetchStep4AuctionPreview[0].endDate;
+      console.log("dbStartDate.value",dbStartDate.value,"dbEndDate.value",dbEndDate.value);
+      if (dbStartDate.value === null && dbEndDate.value=== null) {
+      selectedStartDate.value = formattedStartDate.value;
+      selectedEndDate.value = formattedEndDate.value;
+      console.log(" formattedStartDate.value", formattedStartDate.value);
+      
+    } else {
+      selectedStartDate.value = dbStartDate.value;
+      selectedEndDate.value = dbEndDate.value;
+      
+    }
+			if (rs.isValid("FetchAllStepsAuctionPreview")) {
+			} else
+			 { 
+			rs.showErrorToast("FetchAllStepsAuctionPreview")
+			}
+			})
+			
+};
+
 function processingFeeEmdPaymentStartEndDate() {
-  store.setLastInsertedAuctionId(31);
+ // store.setLastInsertedAuctionId(31);
   // Automatically generated
   new MQL()
     .useManagementServer()
     .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
     .setData({
-      registrationStartDate: moment(formattedStartDate.value).format(
+      registrationStartDate: moment(selectedStartDate.value).format(
         "YYYY/MM/DD HH:mm:ss"
       ),
-      registrationEndDate: moment(formattedEndDate.value).format(
+      registrationEndDate: moment(selectedEndDate.value).format(
         "YYYY/MM/DD HH:mm:ss"
       ),
       auctionId: getLastInsertedAuctionId.value,
@@ -243,19 +277,26 @@ function processingFeeEmdPaymentStartEndDate() {
       }
     });
 }
-function checkDates(){
+
+function onSave(){
   console.log("Inside checkDates");
-  if(formattedEndDate.value<=formattedStartDate.value){
+  if(selectedEndDate.value<=selectedStartDate.value){
     alert(`Start Date Can not be after End Date`);
+  }else{  
+  processingFeeEmdPaymentStartEndDate();
   }
-  // else{
-  //   processingFeeEmdPaymentStartEndDate();
-  // }
+
 };
+
 onMounted(() => {
   fetchDocumentsValidationDetails();
   formattedEndDateCalc();
   formattedStartDateCalc();
+
+
+});
+onBeforeMount(()=>{
+  fetchAllStepsAuctionPreview();
 });
 
 
