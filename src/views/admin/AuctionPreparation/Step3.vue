@@ -158,14 +158,14 @@
 
                             <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
                                 :max="100" />
-                            <span v-if="$v.modifierValueExtentionCount.$error" class="text-red-500">{{ $v.modifierValueExtentionCount.$errors[0].$message }}</span>
+                            <span v-if=" $v.modifierValueExtentionCount.$error" class="text-red-500">{{ $v.modifierValueExtentionCount.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
                             <label for="step1">Modifier Value After Extension<span class="text-danger">*</span></label>
                             <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons" mode="decimal" showButtons :min="0"/>
-                            <span v-if="$v.modifierValueAfterExtention.$error" class="text-red-500">{{ $v.modifierValueAfterExtention.$errors[0].$message }}</span>
+                            <span v-if=" $v.modifierValueAfterExtention.$error" class="text-red-500">{{ $v.modifierValueAfterExtention.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,8 @@
                         <div class="fm-group">
                             <div class="card">
                                 <Toast />
-                                <FileUpload  v-model="userDataSheet"
+                                <!-- {{ $v.$errors.length }} -->
+                                <FileUpload  v-model="uploadedFile"
                                 :accept="docType"
                                 :multiple="false"
                                 :max-file-size="docSize*1000" 
@@ -185,6 +186,7 @@
                                     </template>
                                     <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                                 </FileUpload>
+                                <span v-if="$v.uploadedFile.$error" class="text-red-500">{{ $v.uploadedFile.$errors[0].$message }}</span>
                             </div>
                         </div>
                     </div>
@@ -255,7 +257,7 @@ const docTypeId = ref(0);
 const docSize = ref();
 const docName = ref();
 const docType = ref();
-const userDataSheet = ref([]);
+const uploadedFile = ref('');
 const docValidation=ref([]);
 const statusData = ref([]);
 const displayName = ref();
@@ -449,8 +451,17 @@ const AddStep3AuctionData = async () => {
     //             rs.showErrorToast('InsertStep3AuctionData');
     //         }
     //     });
-    const result = await $v.value.$validate();
-            if(result){
+        let result = ref(false);
+        await $v.value.$validate()
+        let errorCount =  $v.value.$errors.length;
+        console.log("errorCount",errorCount);
+
+        if (selectedModifierValueChange.value.modifierValueChangeId === '1'){
+            errorCount=errorCount-2    
+        }
+
+                  
+            if(errorCount==0){
                 alert("Form data is valid, form submitted");
                 					// Automatically generated
 			new MQL()
@@ -503,6 +514,7 @@ const onAdvancedUpload = async (event) => {
     console.log("myFile", myFile.value)
     const formData = new FormData();
     formData.append('file', event.files[0]);
+    uploadedFile.value = true;
     //new mqlCDN add-------------------------------------------------------------------------------
     new MQLCdn()
     // .useManagementServer()
@@ -526,6 +538,7 @@ const onAdvancedUpload = async (event) => {
         console.log("fileName", fileName.value);
         console.log("filePath", filePath.value);
         console.log("fullPath", fullPath.value);
+       // uploadedFile.value = true;
         // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
         //toaster.success("file uploaded.");
         toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
@@ -805,6 +818,7 @@ const rules = computed(() => ({
 
     modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
 
+    uploadedFile: { required: helpers.withMessage('Document is required', required) },
     }));
 
     const $v = useVuelidate(rules,{
@@ -816,6 +830,7 @@ const rules = computed(() => ({
         selectedModifierValueChange,
         modifierValueExtentionCount,
         modifierValueAfterExtention,
+        uploadedFile
     });
 
 onMounted(() => {

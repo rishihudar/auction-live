@@ -219,7 +219,7 @@ function fetchDocumentsValidationDetails() {
     });
 }
 function processingFeeEmdPaymentStartEndDate() {
-  store.setLastInsertedAuctionId(31);
+  store.setLastInsertedAuctionId(getLastInsertedAuctionId.value);
   // Automatically generated
   new MQL()
     .useManagementServer()
