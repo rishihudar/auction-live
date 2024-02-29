@@ -82,12 +82,12 @@
                         <span>{{ auctionSummary[0].emdAppliedFor }}</span>
                     </div>
                     <div class="ml-auto">
-                       
-                    <Button label="Edit" @click="visible2 = true" />
-                    <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
-                        <Step2 :ref="Step2" />
 
-                    </Dialog>
+                        <Button label="Edit" @click="visible2 = true" />
+                        <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
+                            <Step2 :ref="Step2" />
+
+                        </Dialog>
                     </div>
                 </div>
                 <Divider />
@@ -120,14 +120,14 @@
                         <span><a :href="auctionItemDocumentPath">Click Here</a></span>
                     </div>
                     <div class="ml-auto">
-                       
-                       <Button label="Edit" @click="visible3 = true" />
-                       <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
-                        <Step3 :ref="Step3" />
 
-                       </Dialog>
-                       </div>
-                   
+                        <Button label="Edit" @click="visible3 = true" />
+                        <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
+                            <Step3 :ref="Step3" />
+
+                        </Dialog>
+                    </div>
+
                 </div>
                 <Divider />
 
@@ -151,19 +151,19 @@
                         <span><a :href="auctionNoticeDocumentPath">Click Here</a></span>
                     </div>
                     <div class="ml-auto">
-                       
-                       <Button label="Edit" @click="visible4 = true" />
-                       <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
-                        <Step4 :ref="Step4" />
 
-                       </Dialog>
-                       </div>
+                        <Button label="Edit" @click="visible4 = true" />
+                        <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
+                            <Step4 :ref="Step4" />
+
+                        </Dialog>
+                    </div>
                 </div>
                 <Divider />
-                <History v-if="true" />
+                <History v-if="false" />
 
 
-            
+
             </template>
         </Card>
     </div>
@@ -209,7 +209,7 @@ function FetchAuctionSummaryByAuctionId() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionSummaryByAuctionId]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value })
+        .setData({ "auctionId":  })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionSummaryByAuctionId", true)
