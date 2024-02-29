@@ -106,17 +106,17 @@
                     </div> -->
                 </template>
             </StepperPanel> 
-            <StepperPanel header="Header IV">
+            <!-- <StepperPanel header="Header IV">
                 <template #content="{ prevCallback }">
                     <div class="flex flex-column h-12rem">
-                        <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div> -->
+                        <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div>
                        <Step1 @previousTab4="prevCallback()"  ref="StepRef" />
                     </div>
-                    <!-- <div class="flex pt-4 justify-content-start">
+                    <div class="flex pt-4 justify-content-start">
                         <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                    </div> -->
+                    </div>
                 </template>
-            </StepperPanel>
+            </StepperPanel> -->
         </Stepper>
     </div>
 </template>

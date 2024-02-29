@@ -59,7 +59,7 @@ import { helpers, required } from '@vuelidate/validators'
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
-// access the `store` variable anywhere in the component ✨
+// access the `store` variable anywhere in the component 
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId } = storeToRefs(store)
 const auctionMethodData = ref({
@@ -94,6 +94,8 @@ const emit = defineEmits({
     nextTab: null
 })
 
+
+// Fetch Auction Types from Auction Master
 function FetchAuctionTypes() {
     new MQL()
         .useCoreServer()
@@ -111,6 +113,7 @@ function FetchAuctionTypes() {
         });
 }
 
+// Fetch Auction Methods from Method Master
 function FetchAuctionMethods() {
     new MQL()
         .useCoreServer()
@@ -129,7 +132,7 @@ function FetchAuctionMethods() {
 }
 
 
-
+// Fetch Auction Status from Status Master
 function FetchAuctionStatus() {
     new MQL()
         .useCoreServer()
@@ -152,9 +155,8 @@ function FetchAuctionStatus() {
         });
 }
 
-
+// Insert Auction Type and Method step 1 details 
 const InsertAuctionTypeAndMethod = async() => {
-    //console.log('HEre');
     const result = await $v.value.$validate();
    // $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
@@ -176,7 +178,7 @@ const InsertAuctionTypeAndMethod = async() => {
                 console.log("LastInsertedId from lastInsertedId variable",lastInsertedId.value);
                 store.setLastInsertedAuctionId(lastInsertedId.value);
                 console.log("LastInsertedId FROM GETTERS",getLastInsertedAuctionId.value);
-                // how to emit the last inserted id to the parent component to be used in the next step
+                //  to emit the last inserted id to the parent component to be used in the next step
                 emit('submit', lastInsertedId.value); 
                 emit('nextTab')
             } else {
@@ -209,6 +211,7 @@ const InsertAuctionTypeAndMethod = async() => {
     }
 }
 
+// Fetch All Steps 1 Auction Preview
 function FetchAllStepsAuctionPreview() {
     new MQL()
     .useManagementServer()
@@ -230,6 +233,8 @@ function FetchAllStepsAuctionPreview() {
         })
 }
 
+
+// Vuelidate Rules  
 const rules = computed(() => ({
         auctionTypeData: {
         auctionTypeId: { required: helpers.withMessage('Please Select Auction Type ID', required) },
@@ -242,29 +247,29 @@ const rules = computed(() => ({
 
     }));
 
-
+// Vuelidate 
 const $v=useVuelidate(rules,{auctionMethodData,auctionTypeData});
 
 
 
 //rest of the properties & methods are public
-defineExpose({
-    InsertAuctionTypeAndMethod,
-    FetchAuctionTypes,
-    FetchAuctionMethods,
-    FetchAuctionStatus,
-    FetchAllStepsAuctionPreview,
-    lastInsertedId,
-    auctionMethodData,
-    aucMethod,
-    statusData,
-    displayName,
-    statusId,
-    aucType,
-    auctionTypeData,
-});
+// defineExpose({
+//     InsertAuctionTypeAndMethod,
+//     FetchAuctionTypes,
+//     FetchAuctionMethods,
+//     FetchAuctionStatus,
+//     FetchAllStepsAuctionPreview,
+//     lastInsertedId,
+//     auctionMethodData,
+//     aucMethod,
+//     statusData,
+//     displayName,
+//     statusId,
+//     aucType,
+//     auctionTypeData,
+// });
 
-
+// Fetch Auction Types, Methods, Status and All Steps 1 Auction Preview on Mounted
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();

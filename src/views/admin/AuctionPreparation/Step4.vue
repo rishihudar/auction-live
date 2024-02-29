@@ -67,7 +67,7 @@
   <Button label="Back" @click="prevCallback()" />
   <!-- <Button label="Save" @click="onSave" /> -->
   <!-- <Button label="Next" @click="auctionPreview" /> -->
-  <Button label="Next" @click="nextCallback()" />
+  <!-- <Button label="Next" @click="nextCallback()" /> -->
 </template>
 
 <script setup>
@@ -147,7 +147,7 @@ const onAdvancedUpload = async (event) => {
     .enablePageLoader(true) // FIXED: change this to directory path
     //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath(
-      getLastInsertedAuctionId + "/AuctionPreparation/Publishing"
+      getLastInsertedAuctionId.value + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
     .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
