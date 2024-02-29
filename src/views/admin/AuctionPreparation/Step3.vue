@@ -246,10 +246,12 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import MQL from '@/plugins/mql.js';
 import MQLCdn from '@/plugins/mqlCdn.js';
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
-import { ifBool } from "../../../plugins/helpers";
+import { fetchAuctionStatus, ifBool } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const store = useAuctionPreparation()
 const { getPropertyCategoryId, getIsClicked } = storeToRefs(store)
@@ -637,50 +639,38 @@ function fetchDocumentsValidationDetails() {
 }
 
 
-function FetchAuctionStatus(code) {
+async function FetchAuctionStatus(code) {
     // Automatically generated
-    return new Promise((resolve, reject) => {
-        new MQL()
-            .useCoreServer()
-            .setActivity('o.[fetchStatusFromStatusMaster]')
-            .setData({ statusCode: code })
-            .fetch()
-            .then((rs) => {
-                let res = rs.getActivity('fetchStatusFromStatusMaster', true);
-                if (rs.isValid('fetchStatusFromStatusMaster')) {
-                    console.log("Auction Status Data", res.result);
-                    statusData.value = res.result;
-                    statusData.value.forEach(item => {
-                        statusId.value = item.statusId;
-                        displayName.value = item.displayName;
-                    });
-                    console.log("Auction Status Data", statusData.value);
-                    resolve(true)
-                } else {
-                    rs.showErrorToast('fetchStatusFromStatusMaster');
-                    reject(false)
-                }
-            });
-    })
-    //   new MQL()
-    // .useCoreServer()
-    // .setActivity('o.[fetchStatusFromStatusMaster]')
-    // .setData({statusCode: code })
-    // .fetch()
-    // .then((rs) => {
-    //     let res = rs.getActivity('fetchStatusFromStatusMaster', true);
-    //     if (rs.isValid('fetchStatusFromStatusMaster')) {
-    //         console.log("Auction Status Data",res.result);
-    //         statusData.value = res.result;
-    //         statusData.value.forEach(item => {
-    //             statusId.value = item.statusId;
-    //             displayName.value = item.displayName;
+    // return new Promise((resolve, reject) => {
+    //     new MQL()
+    //         .useCoreServer()
+    //         .setActivity('o.[fetchStatusFromStatusMaster]')
+    //         .setData({ statusCode: code })
+    //         .fetch()
+    //         .then((rs) => {
+    //             let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+    //             if (rs.isValid('fetchStatusFromStatusMaster')) {
+    //                 console.log("Auction Status Data", res.result);
+    //                 statusData.value = res.result;
+    //                 statusData.value.forEach(item => {
+    //                     statusId.value = item.statusId;
+    //                     displayName.value = item.displayName;
+    //                 });
+    //                 console.log("Auction Status Data", statusData.value);
+    //                 resolve(true)
+    //             } else {
+    //                 rs.showErrorToast('fetchStatusFromStatusMaster');
+    //                 reject(false)
+    //             }
     //         });
-    //         console.log("Auction Status Data",statusData.value);
-    //     } else {
-    //         rs.showErrorToast('fetchStatusFromStatusMaster');
-    //     }
-    // });
+    // })
+    const statusResult = await fetchAuctionStatus(code)
+            if (statusResult.error == null) {
+                statusId.value = statusResult.result.statusId
+                displayName.value = statusResult.result.displayName
+            } else {
+                toaster.error("Oops! Please Contact")
+            }
 }
 
 // const confirm1 = () => {

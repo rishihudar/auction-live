@@ -2,27 +2,19 @@
   <div class="main-date">
     <label for="calendar-12h" class="font-bold block mb-2">
       Processing Fee And EMD payment Start Date:</label>
-    <Calendar id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
+    <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
       :showIcon="true" />
-    <p>Start date: {{ selectedStartDate }}</p>
     <label for="calendar-12h" class="font-bold block mb-2">
       Processing Fee And EMD payment End Date:</label>
-    <Calendar id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
-    <p>End date: {{ selectedEndDate }}</p>
+    <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
   </div>
-  <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')" style="color: red;">
-             Start Date should not be equal or after End Date !
-            </div>
+  <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')" style="color: red;">
+    Start Date should not be equal or after End Date !
+  </div>
   <div class="card">
     <p>Auction Document:</p>
-    <FileUpload
-      v-model="docName"
-      :accept="docType"
-      :multiple="false"
-      :max-file-size="docSize * 1000"
-      :custom-upload="true"
-      @uploader="onAdvancedUpload($event,NoticeDocTypeId)"
-    >
+    <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000"
+      :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
       <template #empty>
         <p>
           Drag and drop files here to upload, Max. file size is 500 KB, Only
@@ -32,19 +24,11 @@
       </template>
     </FileUpload>
     <p>Notice Document:</p>
-    <FileUpload
-      v-model="NoticeDocName"
-      :accept="NoticeDocType"
-      :multiple="false"
-      :max-file-size="NoticeDocSize * 1000"
-      :custom-upload="true"
-      @uploader="onAdvancedUpload($event,AuctionDocTypeId)"
-    >
+    <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType" :multiple="false" :max-file-size="NoticeDocSize * 1000"
+      :custom-upload="true" @uploader="onAdvancedUpload($event, AuctionDocTypeId)">
       <template #empty>
         <p>
-          Drag and drop files here to upload, Max. file size is 500 KB, Only
-          {{ docType }}
-          are allowed !
+          Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }}  are allowed !
         </p>
       </template>
     </FileUpload>
@@ -52,19 +36,19 @@
   <!-- <Button label="Back" @click="backToStep3" /> -->
   <Button label="Save" @click="onSave" />
   <Button label="Back" @click="prevCallback()" />
-  <!-- <Button label="Save" @click="onSave" /> -->
   <!-- <Button label="Next" @click="auctionPreview" /> -->
   <!-- <Button label="Next" @click="nextCallback()" /> -->
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted, onBeforeMount, defineProps } from "vue";
 import moment from "moment";
 import Calendar from "primevue/calendar";
 import FileUpload from "primevue/fileupload";
 import Button from "primevue/button";
 import MQLCdn from "@/plugins/MQLCdn.js";
 import MQL from "@/plugins/mql.js";
+import { fetchAuctionStatus } from "../../../plugins/helpers";
 import { useRouter } from "vue-router";
 import { useAuctionPreparation } from "../../../store/auctionPreparation";
 import { login } from "../../../store/modules/login";
@@ -74,6 +58,17 @@ const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const store = useAuctionPreparation();
 const { getLastInsertedAuctionId } = storeToRefs(store);
+
+const { auctionId, config } = defineProps({
+  auctionId: {
+    type: Number,
+    default: null
+  },
+  config: {
+    type: Object,
+    default: null
+  }
+})
 
 const startDate = ref(new Date());
 const endDate = ref(new Date());
@@ -104,20 +99,20 @@ const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
 
-const fileName=ref();
-const filePath=ref();
-const fullPath=ref();
+const fileName = ref();
+const filePath = ref();
+const fullPath = ref();
 
 const emit = defineEmits({
-    nextTab3: null,
-    previousTab3: null
+  nextTab: null,
+  previousTab: null
 });
 function prevCallback() {
-    emit('previousTab3')
+  emit('previousTab')
 }
 
 function nextCallback() {
-    emit('nextTab3')
+  emit('nextTab')
 }
 
 function formattedStartDateCalc() {
@@ -133,7 +128,7 @@ function formattedEndDateCalc() {
 
 const onAdvancedUpload = async (event, id) => {
   // try {
-    console.log(event, "event")
+  console.log(event, "event")
   let timeStamp = Date.now();
   console.log(timeStamp, "timeStamp");
   console.log("event", event.files[0]);
@@ -147,7 +142,7 @@ const onAdvancedUpload = async (event, id) => {
     .enablePageLoader(true) // FIXED: change this to directory path
     // .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath(
-      getLastInsertedAuctionId.value + "/AuctionPreparation/Publishing"
+      auctionId + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
     .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
@@ -202,16 +197,16 @@ function fetchDocumentsValidationDetails() {
           docName.value = item.typeName;
           docSize.value = item.fileSize;
           docType.value = item.fileType;
-          AuctionDocTypeId.value=item.typeId
+          AuctionDocTypeId.value = item.typeId
           console.log("docName.value", docName.value);
-          console.log("AuctionDocTypeId.value",AuctionDocTypeId.value);
+          console.log("AuctionDocTypeId.value", AuctionDocTypeId.value);
         } else if (item.typeName == "NOTICE_DOCUMENT") {
           NoticeDocName.value = item.typeName;
           NoticeDocSize.value = item.fileSize;
           NoticeDocType.value = item.fileType;
-          NoticeDocTypeId.value=item.typeId;
+          NoticeDocTypeId.value = item.typeId;
           console.log("docName.value", NoticeDocName.value);
-          console.log("NoticeDocTypeId.value",NoticeDocTypeId.value);
+          console.log("NoticeDocTypeId.value", NoticeDocTypeId.value);
         }
       });
       if (rs.isValid("fetchDocumentsValidationDetails")) {
@@ -221,100 +216,120 @@ function fetchDocumentsValidationDetails() {
     });
 }
 
-function fetchAllStepsAuctionPreview(){
-  
-					// Automatically generated
-          new MQL()
-          .useManagementServer()
-			.setActivity("o.[FetchAllStepsAuctionPreview]")
-			.setData({auctionId:getLastInsertedAuctionId.value})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
-      dbStartDate.value=res.result.fetchStep4AuctionPreview[0].startDate;
-      dbEndDate.value=res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log("dbStartDate.value",dbStartDate.value,"dbEndDate.value",dbEndDate.value);
-      if (dbStartDate.value === null && dbEndDate.value=== null) {
-      selectedStartDate.value = formattedStartDate.value;
-      selectedEndDate.value = formattedEndDate.value;
-      console.log(" formattedStartDate.value", formattedStartDate.value);
-      
-    } else {
-      selectedStartDate.value = dbStartDate.value;
-      selectedEndDate.value = dbEndDate.value;
-      
-    }
-			if (rs.isValid("FetchAllStepsAuctionPreview")) {
-			} else
-			 { 
-			rs.showErrorToast("FetchAllStepsAuctionPreview")
-			}
-			})
-			
-};
+function fetchAllStepsAuctionPreview() {
 
-function processingFeeEmdPaymentStartEndDate() {
-  store.setLastInsertedAuctionId(getLastInsertedAuctionId.value);
   // Automatically generated
   new MQL()
     .useManagementServer()
+    .setActivity("o.[FetchAllStepsAuctionPreview]")
+    .setData({ "auctionId": auctionId })
+    .fetch()
+    .then(rs => {
+      let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+      dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
+      dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
+      console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+      if (dbStartDate.value === null && dbEndDate.value === null) {
+        selectedStartDate.value = formattedStartDate.value;
+        selectedEndDate.value = formattedEndDate.value;
+        console.log(" formattedStartDate.value", formattedStartDate.value);
+
+      } else {
+        selectedStartDate.value = dbStartDate.value;
+        selectedEndDate.value = dbEndDate.value;
+
+      }
+      if (rs.isValid("FetchAllStepsAuctionPreview")) {
+      } else {
+        rs.showErrorToast("FetchAllStepsAuctionPreview")
+      }
+    })
+
+};
+
+async function processingFeeEmdPaymentStartEndDate() {
+  let statusId
+  const resultStatus = await fetchAuctionStatus('AUCTION_COMPLETED')
+  if (resultStatus.error == null) {
+    statusId = resultStatus.result.statusId
+  } else {
+    toaster.error('Oops! Please Contact Support')
+  }
+
+  return new Promise((resolve) => {
+    new MQL()
+    .useManagementServer()
     .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
     .setData({
-      registrationStartDate: moment(selectedStartDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      registrationEndDate: moment(selectedEndDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      auctionId: getLastInsertedAuctionId.value,
-      statusId:23
+      registrationStartDate: moment(selectedStartDate.value).format("YYYY/MM/DD HH:mm:ss"),
+      registrationEndDate: moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
+      auctionId: auctionId,
+      statusId: statusId
     })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
       if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
-        console.log("res.result",res.result);
+        console.log("res.result", res.result);
+        resolve()
       } else {
         rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
       }
     });
+  })
+  // Automatically generated
+  
 }
 
-function insertDocumentPathToDb(){
-  
-					// Automatically generated
-          new MQL()
-      .useManagementServer()
-			.setActivity("o.[InsertDocumentPathStep4]")
-			.setData({auctionId:getLastInsertedAuctionId.value,
-              documentsArray:documentsArray.value
-      })
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("InsertDocumentPathStep4",true)
-			if (rs.isValid("InsertDocumentPathStep4")) {
-			} else
-			 { 
-			rs.showErrorToast("InsertDocumentPathStep4")
-			}
-			})
-			
-};
-
-function insertInWorkflow() {
+function insertDocumentPathToDb() {
 
   return new Promise((resolve, reject) => {
+    new MQL()
+    .useManagementServer()
+    .setActivity("o.[InsertDocumentPathStep4]")
+    .setData({
+      auctionId: auctionId,
+      documentsArray: documentsArray.value
+    })
+    .fetch()
+    .then(rs => {
+      let res = rs.getActivity("InsertDocumentPathStep4", true)
+      if (rs.isValid("InsertDocumentPathStep4")) {
+        resolve()
+      } else {
+        rs.showErrorToast("InsertDocumentPathStep4")
+      }
+    })
+  })
+
+  // Automatically generated
+  
+
+};
+
+async function insertInWorkflow() {
+
+  var AUCTION_COMPLETED_ID
+
+  const resultStatus = await fetchAuctionStatus('AUCTION_COMPLETED')
+    if (resultStatus.error == null) {
+      AUCTION_COMPLETED_ID = resultStatus.result.statusId
+    } else {
+      toaster.error("Oops! Please contact Support")
+    }
+  return new Promise((resolve, reject) => {
+    console.log(AUCTION_COMPLETED_ID);
 
     var data = {
       "assignedLoginId": null,
       "assignedRoleId": loginStore.roleId,
-      "auctionId": AuctionStore.getLastInsertedAuctionId,
+      "auctionId": auctionId,
       "comment": "Auction Completed",
       "entityId": loginStore.entityId,
       "loginId": loginStore.loginId,
       "organisationId": loginStore.organizationId,
       "roleId": loginStore.roleId,
-      "statusId": 15
+      "statusId": AUCTION_COMPLETED_ID
     }
     // Automatically generated
     new MQL()
@@ -339,14 +354,17 @@ function insertInWorkflow() {
 
 async function onSave() {
   console.log("Inside checkDates");
-  if(moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute')){
-    console.log("log-",moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute'));
+  if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, 'minute')) {
     alert(`Start Date should not be equal or after End Date !`);
-  }else{  
-  processingFeeEmdPaymentStartEndDate();
-  insertDocumentPathToDb();
-  toaster.success(" Data Saved !!!");
+  } else {
+    await processingFeeEmdPaymentStartEndDate();
+    await insertDocumentPathToDb();
+    toaster.success(" Data Saved !!!");
+    if (config == null) {
+      await insertInWorkflow()
+    }
   }
+  nextCallback()
 
 };
 

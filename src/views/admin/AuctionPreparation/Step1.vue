@@ -60,7 +60,7 @@ import Dropdown from 'primevue/dropdown';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
-import { ifBool } from "../../../plugins/helpers";
+import { fetchAuctionStatus, ifBool } from "../../../plugins/helpers";
 const toaster = createToaster({ position: "top-right", duration: 3000 })
 
 // access the `store` variable anywhere in the component 
@@ -147,26 +147,33 @@ function FetchAuctionMethods() {
 
 
 // Fetch Auction Status from Status Master
-function FetchAuctionStatus() {
-    new MQL()
-        .useCoreServer()
-        .setActivity('o.[fetchStatusFromStatusMaster]')
-        .setData({ statusCode: 'AUCTION_DRAFTED' })
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('fetchStatusFromStatusMaster', true);
-            if (rs.isValid('fetchStatusFromStatusMaster')) {
-                console.log("Auction Status Data", res.result);
-                statusData.value = res.result;
-                statusData.value.forEach(item => {
-                    statusId.value = item.statusId;
-                    displayName.value = item.displayName;
-                });
-                console.log("Auction Status Data", statusData.value);
+async function FetchAuctionStatus() {
+    // new MQL()
+    //     .useCoreServer()
+    //     .setActivity('o.[fetchStatusFromStatusMaster]')
+    //     .setData({ statusCode: 'AUCTION_DRAFTED' })
+    //     .fetch()
+    //     .then((rs) => {
+    //         let res = rs.getActivity('fetchStatusFromStatusMaster', true);
+    //         if (rs.isValid('fetchStatusFromStatusMaster')) {
+    //             console.log("Auction Status Data", res.result);
+    //             statusData.value = res.result;
+    //             statusData.value.forEach(item => {
+    //                 statusId.value = item.statusId;
+    //                 displayName.value = item.displayName;
+    //             });
+    //             console.log("Auction Status Data", statusData.value);
+    //         } else {
+    //             rs.showErrorToast('fetchStatusFromStatusMaster');
+    //         }
+    //     });
+        const statusResult = await fetchAuctionStatus('AUCTION_DRAFTED')
+            if (statusResult.error == null) {
+                statusId.value = statusResult.result.statusId
+                displayName.value = statusResult.result.displayName
             } else {
-                rs.showErrorToast('fetchStatusFromStatusMaster');
+                toaster.error("Oops! Please Contact")
             }
-        });
 }
 
 // Insert Auction Type and Method step 1 details 
