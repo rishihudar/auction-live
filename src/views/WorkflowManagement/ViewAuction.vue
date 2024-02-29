@@ -69,13 +69,12 @@
 
         </div>
         <div>
-            <div class="ml-auto">
+            <div v-if="showAction" class="ml-auto">
                 <span class="p-buttonset">
                     <Button v-for="item in label" @click="modalVisible(item)" :label="item.statusDisplayName"
                         :key="item.statusId"></Button>
                 </span>
             </div>
-            <div class="card flex justify-content-center">
                 <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
                     <span class="p-text-secondary block mb-5">Assign to <strong>{{ role.roleName }}</strong></span>
                     <label for="comment" class="font-semibold w-6rem">Comment</label>
@@ -89,10 +88,7 @@
                         <Button type="button" :label=modalItem.statusDisplayName @click="submitWorkflow"></Button>
                     </div>
                 </Dialog>
-            </div>
         </div>
-
-
     </div>
 </template>
 
@@ -131,6 +127,11 @@ let rules = computed(() => ({
     comment: { required }
 }));
 
+const showAction = computed(() => (
+    workflowStepData.value.assignedRoleId == loginStore.roleId &&
+    (!workflowStepData.value.assignedLoginId || workflowStepData.value.assignedLoginId == loginStore.loginId)
+))
+
 const $v = useVuelidate(rules, { comment });
 
 async function submitWorkflow() {
@@ -160,6 +161,7 @@ async function submitWorkflow() {
         .then(rs => {
             let res = rs.getActivity("UpdateWorkflowStepDetails", true)
             if (rs.isValid("UpdateWorkflowStepDetails")) {
+                
             } else {
                 rs.showErrorToast("UpdateWorkflowStepDetails")
             }
