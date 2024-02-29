@@ -11,13 +11,11 @@
         </div>
 
         <Divider />
-
         <div class="fm-row">
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step1">Auction Type<span class="text-danger">*</span></label>
-                    <!-- {{ $v.auctionTypeData.auctionType }}
-                    {{ auctionTypeData }} -->
+                    <!-- {{ $v.auctionTypeData.auctionType }} -->
                     <Dropdown v-model="auctionTypeData" variant="filled" :options="aucType" 
                     optionLabel="auctionType"  placeholder="Select Auction Type" class="w-full md:w-14rem" />
                     <span v-if="$v.auctionTypeData.auctionType.$error" class="text-red-500">{{ $v.auctionTypeData.auctionType.$errors[0].$message }}</span>
@@ -26,6 +24,7 @@
             <div class="w-1/2">
                 <div class="fm-group">
                     <label for="step2">Auction Method<span class="text-danger">*</span></label>
+                    <!-- {{ $v.auctionMethodData.auctionMethodName }} -->
                     <Dropdown v-model="auctionMethodData" variant="filled" :options="aucMethod"
                     optionLabel="auctionMethodName" placeholder="Select Auction Method" class="w-full md:w-14rem" />
                   <span v-if="$v.auctionMethodData.auctionMethodName.$error" class="text-red-500">{{ $v.auctionMethodData.auctionMethodName.$errors[0].$message }}</span>
@@ -60,7 +59,7 @@ import { helpers, required } from '@vuelidate/validators'
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
 
-// access the `store` variable anywhere in the component ✨
+// access the `store` variable anywhere in the component 
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId } = storeToRefs(store)
 const auctionMethodData = ref({
@@ -78,7 +77,7 @@ const auctionTypeData = ref({
     auctionType: '',
     auctionTypeId: 0
 });
-const lastInsertedId = ref(0);
+const lastInsertedId = ref('');
 const emit = defineEmits({
     // No validation
     click: null,
@@ -91,9 +90,12 @@ const emit = defineEmits({
             console.warn('Invalid submit event payload!')
             return false
         }
-    }
+    },
+    nextTab: null
 })
 
+
+// Fetch Auction Types from Auction Master
 function FetchAuctionTypes() {
     new MQL()
         .useCoreServer()
@@ -111,6 +113,7 @@ function FetchAuctionTypes() {
         });
 }
 
+// Fetch Auction Methods from Method Master
 function FetchAuctionMethods() {
     new MQL()
         .useCoreServer()
@@ -129,7 +132,7 @@ function FetchAuctionMethods() {
 }
 
 
-
+// Fetch Auction Status from Status Master
 function FetchAuctionStatus() {
     new MQL()
         .useCoreServer()
@@ -152,12 +155,15 @@ function FetchAuctionStatus() {
         });
 }
 
-
+// Insert Auction Type and Method step 1 details 
 const InsertAuctionTypeAndMethod = async() => {
     const result = await $v.value.$validate();
    // $v.value.$validate();
     // getLastInsertedAuctionId.value == null && result
-    if ( getLastInsertedAuctionId.value == null && result){
+    if(false){
+
+    }else{
+        if ( getLastInsertedAuctionId.value == "" && result){
         alert("success, form submitted");
     new MQL()
         .useManagementServer()
@@ -172,18 +178,40 @@ const InsertAuctionTypeAndMethod = async() => {
                 console.log("LastInsertedId from lastInsertedId variable",lastInsertedId.value);
                 store.setLastInsertedAuctionId(lastInsertedId.value);
                 console.log("LastInsertedId FROM GETTERS",getLastInsertedAuctionId.value);
-                // how to emit the last inserted id to the parent component to be used in the next step
+                //  to emit the last inserted id to the parent component to be used in the next step
                 emit('submit', lastInsertedId.value); 
+                emit('nextTab')
             } else {
                 rs.showErrorToast('InsertAuctionTypeAndAuctionMethod');
             }
         });}
         else{
             console.log("LastInsertedId is not null: ",getLastInsertedAuctionId.value);
-            alert("error, form not submitted");
+            //alert("error, form not submitted");
+			// Automatically generated
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[UpdateStep1Details]")
+			.setData({auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: getLastInsertedAuctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateStep1Details",true)
+			if (rs.isValid("UpdateStep1Details")) {  
+                // lastInsertedId.value = res.result.objectId; 
+                // emit('submit');
+                emit('nextTab')
+            console.log("UpdateStep1Details",res.result);
+			} else
+			 { 
+			rs.showErrorToast("UpdateStep1Details")
+			}
+			})
+			
         }
+    }
 }
 
+// Fetch All Steps 1 Auction Preview
 function FetchAllStepsAuctionPreview() {
     new MQL()
     .useManagementServer()
@@ -205,6 +233,8 @@ function FetchAllStepsAuctionPreview() {
         })
 }
 
+
+// Vuelidate Rules  
 const rules = computed(() => ({
         auctionTypeData: {
         auctionTypeId: { required: helpers.withMessage('Please Select Auction Type ID', required) },
@@ -217,9 +247,29 @@ const rules = computed(() => ({
 
     }));
 
-
+// Vuelidate 
 const $v=useVuelidate(rules,{auctionMethodData,auctionTypeData});
 
+
+
+//rest of the properties & methods are public
+// defineExpose({
+//     InsertAuctionTypeAndMethod,
+//     FetchAuctionTypes,
+//     FetchAuctionMethods,
+//     FetchAuctionStatus,
+//     FetchAllStepsAuctionPreview,
+//     lastInsertedId,
+//     auctionMethodData,
+//     aucMethod,
+//     statusData,
+//     displayName,
+//     statusId,
+//     aucType,
+//     auctionTypeData,
+// });
+
+// Fetch Auction Types, Methods, Status and All Steps 1 Auction Preview on Mounted
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();

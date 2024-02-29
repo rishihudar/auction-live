@@ -130,13 +130,14 @@
         <Divider />
 
         <div class="fm-row">
-            <!-- <div class="w-1/2">
+            <div class="w-1/2">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button>
+                        <!-- <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button> -->
+                        <Button @click="prevCallback()" icon="pi pi-check" label="Back"></Button>
                     </span>
                 </div>
-            </div> -->
+            </div>
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
@@ -194,8 +195,14 @@ const auctionProcess = ref([]);
 const emdAppliedFor = ref([]);
 const paymentModes = ref([]);
 
+const emit = defineEmits({
+    nextTab1: null,
+    previousTab1: null
+});
 
-
+function prevCallback() {
+    emit('previousTab1')
+}
 
 function FetchInventoryCategories() {
     new MQL()
@@ -299,37 +306,38 @@ function FetchAllEMDAppliedFor() {
         });
 }
 
-const InsertAuctionDataStep2 = async () => {
-    const result = await $v.value.$validate();
-    if (result) {
-        alert("success, form submitted")
-        new MQL()
-            .useManagementServer()
-            .setActivity('o.[InsertStep2AuctionData]')
-            .setData({
-                referenceNumber: auctionDetails.value.referenceNo,
-                auctionDescription: auctionDetails.value.description,
-                inventoryCategoryId: auctionDetails.value.auctionCategory,
-                auctionProcessId: auctionDetails.value.auctionProcess,
-                departmentId: auctionDetails.value.department,
-                bidPlacement: auctionDetails.value.bidPlacement,
-                eventProcessingFeeMode: auctionDetails.value.eventProcesssingFeeMode,
-                eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
-                eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
-                emdAppliedFor: auctionDetails.value.emdAppliedFor,
-                auctionId: getLastInsertedAuctionId.value
-            })
-            .fetch()
-            .then((rs) => {
-                let res = rs.getActivity('InsertStep2AuctionData', true);
-                if (rs.isValid('InsertStep2AuctionData')) {
-                    console.log("LastUpdatedId from response", res.result);
-                    store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
-                    console.log("propertyCategoryId: ", getPropertyCategoryId.value);
-                } else {
-                    rs.showErrorToast('InsertStep2AuctionData');
-                }
-            });
+const InsertAuctionDataStep2 = async () =>{
+  const result = await $v.value.$validate();
+if (result){
+    alert("success, form submitted")
+    new MQL()
+        .useManagementServer()
+        .setActivity('o.[InsertStep2AuctionData]')
+        .setData({
+            referenceNumber: auctionDetails.value.referenceNo,
+            auctionDescription: auctionDetails.value.description,
+            inventoryCategoryId: auctionDetails.value.auctionCategory,
+            auctionProcessId: auctionDetails.value.auctionProcess,
+            departmentId: auctionDetails.value.department,
+            bidPlacement: auctionDetails.value.bidPlacement,
+            eventProcessingFeeMode: auctionDetails.value.eventProcesssingFeeMode,
+            eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
+            eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
+            emdAppliedFor: auctionDetails.value.emdAppliedFor,
+            auctionId: getLastInsertedAuctionId.value
+        })
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('InsertStep2AuctionData', true);
+            if (rs.isValid('InsertStep2AuctionData')) {
+                console.log("LastUpdatedId from response", res.result);
+                store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
+                console.log("propertyCategoryId: ", getPropertyCategoryId.value);
+                emit('nextTab1')
+            } else {
+                rs.showErrorToast('InsertStep2AuctionData');
+            }
+        });
 
         console.log(auctionDetails.value);
     } else {

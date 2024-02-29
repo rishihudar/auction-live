@@ -57,53 +57,66 @@
 
   <template>
     <div class="card flex justify-content-center">
+      <!-- <h1>Auction Preparation ID: {{ lastInsertedId }}</h1> -->
         <Stepper linear>
-            <StepperPanel header="Header I">
+            <StepperPanel header="Header I" >
                 <template #content="{ nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content I</div> -->
-                        <Step1  @submit="(i) => lastInsertedId=i" :ref="Step1" />
+                        <Step1  @submit="(i) => lastInsertedId=i" @nextTab="nextCallback()" ref="Step1Ref" />
                     </div>
-                    <div class="flex pt-4 justify-content-end">
-                        <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
-                    </div>
+                    <!-- <div class="flex pt-4 justify-content-end">
+                        <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="saveAndNext(), nextCallback()" ></Button>
+                        v-if="lastInsertedId !=''" 
+                    </div> -->
                 </template>
             </StepperPanel>
             <StepperPanel header="Header II">
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content II</div> -->
-                        <Step2 :ref="Step2" />
+                        <Step2 @previousTab1="prevCallback()" @nextTab1="nextCallback()" ref="Step2Ref" />
                     </div>
-                    <div class="flex pt-4 justify-content-between">
+                    <!-- <div class="flex pt-4 justify-content-between">
                         <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
                         <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
-                    </div>
+                    </div> -->
                 </template>
             </StepperPanel>
             <StepperPanel header="Header III">
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div> -->
-                        <Step3 :ref="Step3" />
+                        <Step3 @previousTab2="prevCallback()" @nextTab2="nextCallback()"  ref="Step3Ref" />
                     </div>
-                    <div class="flex pt-4 justify-content-start">
+                    <!-- <div class="flex pt-4 justify-content-start">
                       <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
                         <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
-                    </div>
+                    </div> -->
                 </template>
             </StepperPanel>
             <StepperPanel header="Header IV">
-                <template #content="{ prevCallback }">
+                <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
                         <!-- <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div> -->
-                       <Step4 :ref="Step4" />
+                       <Step4 @previousTab3="prevCallback()" @nextTab3="nextCallback()" ref="Step4Ref" />
+                    </div>
+                    <!-- <div class="flex pt-4 justify-content-start">
+                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
+                    </div> -->
+                </template>
+            </StepperPanel> 
+            <!-- <StepperPanel header="Header IV">
+                <template #content="{ prevCallback }">
+                    <div class="flex flex-column h-12rem">
+                        <div class="border-2 border-dashed surface-border border-round surface-ground flex-auto flex justify-content-center align-items-center font-medium">Content III</div>
+                       <Step1 @previousTab4="prevCallback()"  ref="StepRef" />
                     </div>
                     <div class="flex pt-4 justify-content-start">
                         <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
                     </div>
                 </template>
-            </StepperPanel> 
+            </StepperPanel> -->
         </Stepper>
     </div>
 </template>
@@ -123,11 +136,38 @@ import StepperPanel from 'primevue/stepperpanel';
 import Button from 'primevue/button';
 
 
-  import Step1 from '@/views/admin/AuctionPreparation/Step1.vue';
-  import Step2 from '@/views/admin/AuctionPreparation/Step2.vue';
-  import Step3 from '@/views/admin/AuctionPreparation/Step3.vue';
-  import Step4 from '@/views/admin/AuctionPreparation/Step4.vue';
+import Step1 from '@/views/admin/AuctionPreparation/Step1.vue';
+import Step2 from '@/views/admin/AuctionPreparation/Step2.vue';
+import Step3 from '@/views/admin/AuctionPreparation/Step3.vue';
+import Step4 from '@/views/admin/AuctionPreparation/Step4.vue';
   
+
+const Step1Ref = ref(null);
+const Step2Ref = ref(null);
+const Step3Ref = ref(null);
+const Step4Ref = ref(null);
+//const child = ref(null);
+//const Step1 = ref("");
+
+//  function switchTab1 () {
+//       return new Promise(async (resolve) => {
+//         resolve(await this.$refs.step1.InsertAuctionTypeAndMethod)
+//       })
+//     }
+// function saveAndNext() {
+//   Step1Ref.value.InsertAuctionTypeAndMethod;
+
+// }
+
+
+
+// async function switchTab1() {
+//       // if (step1.value && typeof step1.value.InsertAuctionTypeAndMethod === 'function') {
+//         await Step1.value.InsertAuctionTypeAndMethod;
+//       // }
+//     }
+
+
 //   const active = ref(0);
 // const completed = ref(false);
 // const products = ref();
@@ -156,7 +196,7 @@ import Button from 'primevue/button';
 //     }
 // ]);
 
-  const lastInsertedId = ref(0);
+  const lastInsertedId = ref('');
 
   //  const auctionPreparation = ref({
   //   auctionMethodId: 1,

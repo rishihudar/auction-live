@@ -34,9 +34,11 @@
       </template>
     </FileUpload>
   </div>
-  <Button label="Save" @click="onSave" />
-  <!-- <Button label="Back" @click="backToStep3" />
-  <Button label="Next" @click="auctionPreview" /> -->
+  <!-- <Button label="Back" @click="backToStep3" /> -->
+  <Button label="Back" @click="prevCallback()" />
+  <!-- <Button label="Save" @click="onSave" /> -->
+  <!-- <Button label="Next" @click="auctionPreview" /> -->
+  <!-- <Button label="Next" @click="nextCallback()" /> -->
 </template>
 
 <script setup>
@@ -86,6 +88,18 @@ const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
 
+const emit = defineEmits({
+    nextTab3: null,
+    previousTab3: null
+});
+function prevCallback() {
+    emit('previousTab3')
+}
+
+function nextCallback() {
+    emit('nextTab3')
+}
+
 function formattedStartDateCalc() {
   formattedStartDate.value = moment(startDate.value)
     .add(60, "seconds")
@@ -112,7 +126,7 @@ const onAdvancedUpload = async (event) => {
     .enablePageLoader(true) // FIXED: change this to directory path
     // .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath(
-      getLastInsertedAuctionId + "/AuctionPreparation/Publishing"
+      getLastInsertedAuctionId.value + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
     .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
