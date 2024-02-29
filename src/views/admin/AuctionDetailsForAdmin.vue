@@ -8,7 +8,7 @@
 
             <Column expander style="width: 50rem">
                 <template #rowtogglericon="">
-                    <Button label="Action" />
+                    <Button label="Details" />
                 </template>
             </Column>
             <template #expansion="slot">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="area">Area:</label>
-                        <span>{{ slot.data.AREA }}</span>
+                        <span>{{ slot.data.area }}</span>
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="itemCount">Properties Available:</label>
@@ -84,28 +84,19 @@
 import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import { useAuctionPreparation } from '@/store/auctionPreparation.js'
-import { storeToRefs } from 'pinia'
-
 import Listbox from 'primevue/listbox';
-
 import MQL from "@/plugins/mql.js";
-
 import Dialog from 'primevue/dialog';
-
-const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
-
 const visible6 = ref(false);
 const expandedRows = ref([]);
 const auctionDetails = ref([]);
 
 function FetchAuctionDetailsByAuctionId() {
-    console.log(getLastInsertedAuctionId.value,"******")
+   
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsByAuctionId]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value})
+        .setData()
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionDetailsByAuctionId", true)
@@ -144,5 +135,14 @@ onMounted(() => {
 .document-link {
     color: blue;
     text-decoration: underline;
+}
+.profile-field label {
+    display: inline-block;
+    width: 120px; /* Adjust width as needed */
+    margin-right: 10px; /* Example margin between label and span */
+}
+.profile-field {
+    margin-bottom: 10px; /* Example margin */
+    border-bottom: 1px solid #ccc; /* Add border to separate fields */
 }
 </style>

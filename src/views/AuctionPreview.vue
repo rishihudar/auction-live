@@ -15,11 +15,11 @@
                 <div class="profile-section">
                     <h2>Step1 Details</h2>
                     <div class="profile-field">
-                        <label class="bold-label" for="address">Auction Type:</label>
+                        <label class="bold-label" for="auctionType">Auction Type:</label>
                         <span>{{ auctionSummary[0].auctionType }}</span>
                     </div>
                     <div class="profile-field">
-                        <label class="bold-label" for="address">Auction Method:</label>
+                        <label class="bold-label" for="auctionMethodName">Auction Method:</label>
                         <span>{{ auctionSummary[0].auctionMethodName }}</span>
                     </div>
                     <div class="ml-auto">
