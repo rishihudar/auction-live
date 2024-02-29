@@ -14,53 +14,142 @@
                     <div class="fm-group">
                         <label class="fm-label" for="username">Username</label>
                         <div class="fm-inner">
-                            <InputText id="username" v-model="value" aria-describedby="username-help" placeholder="Enter Your Username" />
+                            <InputText id="username" v-model="user.username" aria-describedby="username-help"
+                                placeholder="Enter Your Username"
+                                :class="{ 'p-invalid': submitted && $v.user.username.$error }" />
                         </div>
-                        <div id="username-help" class="fm-info">Your username will be unique across the entire application and it will be used across the entire application.</div>
+                        <small id="username-help">Your username will be unique across the entire application and it will be
+                            used across the entire application.</small>
+                        <div class="text-danger" v-if="submitted && $v.user.username.$error">
+                            {{ $v.user.username.$errors[0].$message }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-span-full">
                     <div class="fm-group">
-                        <div class="fm-label-holder">
-                            <label class="fm-label" for="password">Password</label>
-                            <router-link to="/forgetPassword">Forgot Password?</router-link>
-                        </div>
+                        <label class="fm-label" for="password">Password</label>
                         <div class="fm-inner">
-                            <Password id="password" v-model="value" :feedback="false" toggleMask placeholder="Enter Your Password" unstyled />
+                            <Password id="password" v-model="user.password" :feedback="false" toggleMask
+                                placeholder="Enter Your Password" unstyled />
+                            <div class="text-danger" v-if="submitted && $v.user.password.$error">
+                                {{ $v.user.password.$errors[0].$message }}
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="fm-action">
-                    <Button label="Login" @click="$router.push({ name: 'home' })" />
+                    <Button label="Login" @click="authenticate" />
                 </div>
                 <div class="fm-action-link">
                     <router-link to="/registration">New User? Register here</router-link>
                 </div>
+                <div class="fm-action-link">
+                    <router-link to="/forgetPassword">Forget Password? Click here</router-link>
+                </div>
             </form>
             <Footer name="box"></Footer>
+            <!-- <FormKit
+                type="form"
+                id="login-example"
+                :form-class="submitted ? 'hide' : 'show'"
+                submit-label="Register"
+                @submit="authenticate"
+                :actions="false"
+                #default="{ value }"
+            >
+                <FormKit
+                    type="text"
+                    name="username"
+                    label="User Name"
+                    v-model="username"
+                    placeholder="User Name"
+                    help="Enter User Name"
+                    validation="required"
+                />
+                <div class="double">
+                    <FormKit
+                        type="password"
+                        name="password"
+                        label="Password"
+                        validation="required|length:6|matches:/[^a-zA-Z]/"
+                        :validation-messages="{
+                        matches: 'Please include at least one symbol',
+                        }"
+                        v-model="password"
+                        placeholder="Your password"
+                        help="Choose a password"
+                    />
+                </div>
+                <FormKit type="submit" label="Login" />
+            </FormKit>-->
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
 import { login } from "../store/modules/login.js";
 import { createToaster } from "@meforma/vue-toaster";
-import Footer from "@/components/common/Footer.vue"
+import Footer from "@/components/common/Footer.vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+
+
+
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
-let username = ref("");
-let password = ref("");
 let submitted = ref(false);
+const router = useRouter();
 
+
+// <-----Validations---->
+let user = ref({
+    username: "",
+    password: "",
+    recaptchaVerified: false,
+});
+
+let rules = computed(() => ({
+    user: {
+        username: { required, email },
+        password: { required },
+    },
+}));
+
+const $v = useVuelidate(rules, { user });
+
+// <----Functions---->
 function authenticate() {
-  loginStore
-    .AUTH_REQUEST({ loginId: username.value, password: password.value })
-    .then((res) => {
-      toaster.success("Login Successfully");
-    })
-    .catch((err) => {
-      toaster.error(err);
-    });
+    submitted.value = true;
+    const result = $v.value.$validate();
+    if (!$v.value.user.$error) {
+        loginStore
+            .userLogin({
+                userName: user.value.username,
+                password: user.value.password,
+                enabled: 1
+            })
+            .then((res) => {
+                let roles = loginStore.roleNames;
+                toaster.success("Login Successfully");
+                router.push('/role-select')
+
+            })
+            .catch((err) => {
+                toaster.error;
+            });
+    } else {
+        console.log("InValid Details");
+        toaster.error("Invalid Details")
+    }
+
+
 }
+
+// onMounted(() => {
+//     sessionStorage.setItem('user-token','')
+//     loginStore.$reset()
+// }
+// )
 </script>
