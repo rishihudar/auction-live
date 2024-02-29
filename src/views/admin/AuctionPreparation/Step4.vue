@@ -117,7 +117,7 @@ const AuctionDocTypeId = ref();
 const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
-
+const uploadedFiles=ref([]);
 const fileName=ref();
 const filePath=ref();
 const fullPath=ref();
@@ -187,9 +187,11 @@ const onAdvancedUpload = async (event, id) => {
           fullPath: res.uploadedFileURL().cdnServer,
           documentTypeId: id
         });
+        docTypeId.value=id
+        console.log("id-",docTypeId.value);
         // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
-        //toaster.success("file uploaded.");
-        uploadedFiles.value.push(uploadedFile);
+        toaster.success("file uploaded.");
+       uploadedFiles.value.push(uploadedFile);
 
         console.log("uploadedFiles", uploadedFiles.value);
         toaster.success("File Uploaded !!!");
@@ -252,15 +254,18 @@ function fetchAllStepsAuctionPreview(){
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
-      dbStartDate.value=res.result.fetchStep4AuctionPreview[0].startDate;
-      dbEndDate.value=res.result.fetchStep4AuctionPreview[0].endDate;
+      console.log("inside fetchAllStepsAuctionPreview");
+      console.log("result",res.result.fetchStep4AuctionPreview);
+      
       console.log("dbStartDate.value",dbStartDate.value,"dbEndDate.value",dbEndDate.value);
-      if (dbStartDate.value === null && dbEndDate.value=== null) {
+      if (res.result.fetchStep4AuctionPreview.length==0) {
       selectedStartDate.value = formattedStartDate.value;
       selectedEndDate.value = formattedEndDate.value;
       console.log(" formattedStartDate.value", formattedStartDate.value);
       
     } else {
+    dbStartDate.value=res.result.fetchStep4AuctionPreview[0].startDate;
+      dbEndDate.value=res.result.fetchStep4AuctionPreview[0].endDate;
       selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       
@@ -308,7 +313,8 @@ function insertDocumentPathToDb(){
       .useManagementServer()
 			.setActivity("o.[InsertDocumentPathStep4]")
 			.setData({auctionId:getLastInsertedAuctionId.value,
-              documentsArray:documentsArray.value
+              documentsArray:documentsArray.value,
+              documentTypeId:docTypeId.value
       })
 			.fetch()
 			 .then(rs => {
