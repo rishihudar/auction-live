@@ -53,19 +53,21 @@
         <Divider />
 
         <div class="fm-row">
-            <!-- <div class="w-1/2">
+            <div class="w-1/2">
                 <div class="fm-group">
-                    <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" />
+                    <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
+                    <Button label="Back" @click="prevCallback()" icon="pi pi-trash" />
                 </div>
-            </div> -->
+            </div>
             <Toast />
             <ConfirmDialog></ConfirmDialog>
-            <!-- <div class="w-full">
+            <div class="w-full">
                 <div class="fm-group">
-                    <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button>
-                    <Button label="Save" @click="confirm1()" icon="pi pi-trash" />
+                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
+                    <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
+                    <Button label="Next" @click="nextCallback()" icon="pi pi-trash" />
                 </div>
-            </div> -->
+            </div>
         </div>
         
 
@@ -158,14 +160,14 @@
 
                             <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons" mode="decimal" showButtons :min="0"
                                 :max="100" />
-                            <span v-if="$v.modifierValueExtentionCount.$error" class="text-red-500">{{ $v.modifierValueExtentionCount.$errors[0].$message }}</span>
+                            <span v-if=" $v.modifierValueExtentionCount.$error" class="text-red-500">{{ $v.modifierValueExtentionCount.$errors[0].$message }}</span>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
                             <label for="step1">Modifier Value After Extension<span class="text-danger">*</span></label>
                             <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons" mode="decimal" showButtons :min="0"/>
-                            <span v-if="$v.modifierValueAfterExtention.$error" class="text-red-500">{{ $v.modifierValueAfterExtention.$errors[0].$message }}</span>
+                            <span v-if=" $v.modifierValueAfterExtention.$error" class="text-red-500">{{ $v.modifierValueAfterExtention.$errors[0].$message }}</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +176,8 @@
                         <div class="fm-group">
                             <div class="card">
                                 <Toast />
-                                <FileUpload  v-model="userDataSheet"
+                                <!-- {{ $v.$errors.length }} -->
+                                <FileUpload  v-model="uploadedFile"
                                 :accept="docType"
                                 :multiple="false"
                                 :max-file-size="docSize*1000" 
@@ -185,6 +188,7 @@
                                     </template>
                                     <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                                 </FileUpload>
+                                <span v-if="$v.uploadedFile.$error" class="text-red-500">{{ $v.uploadedFile.$errors[0].$message }}</span>
                             </div>
                         </div>
                     </div>
@@ -255,7 +259,7 @@ const docTypeId = ref(0);
 const docSize = ref();
 const docName = ref();
 const docType = ref();
-const userDataSheet = ref([]);
+const uploadedFile = ref('');
 const docValidation=ref([]);
 const statusData = ref([]);
 const displayName = ref();
@@ -307,8 +311,16 @@ const inventoryAreaDetails = ref({
 const inventoryCategoryId = getPropertyCategoryId.value;
 const parentInventoryId = 0
 
-
-
+const emit = defineEmits({
+    nextTab2: null,
+    previousTab2: null
+});
+function prevCallback() {
+    emit('previousTab2')
+}
+function nextCallback() {
+    emit('nextTab2')
+}
     const handleClick = (input) => {
       // Your button click logic here
       
@@ -403,6 +415,89 @@ function FetchAllModifierValueChange  () {
         });
 }
 
+
+
+
+const onAdvancedUpload = async (event) => {
+ // try {
+    let timeStamp = Date.now();
+    console.log(timeStamp, "timeStamp")
+    console.log("event", event.files[0])
+    myFile.value = event.files[0].name;
+    console.log("myFile", myFile.value)
+    const formData = new FormData();
+    formData.append('file', event.files[0]);
+    uploadedFile.value = true;
+    //new mqlCDN add-------------------------------------------------------------------------------
+    new MQLCdn()
+    // .useManagementServer()
+    .enablePageLoader(true)// FIXED: change this to directory path
+    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    .setDirectoryPath(getLastInsertedAuctionId.value+"/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
+    .setFormData(formData) // (required) sets file data
+    .setFileName(timeStamp+"_"+myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+    // FIXED: pass buckeyKey instead of name
+    .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+    .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    //clientID:2ZncVDPZRGYZwwteYYbB3aw4fr7
+    .uploadFile("uploadtBtn")
+    .then((res) => {
+        // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+        if (res.isValid()) {
+        fileName.value=timeStamp+"_"+myFile.value.name;
+        filePath.value=res.uploadedFileURL().filePath; 
+        fullPath.value=res.uploadedFileURL().cdnServer;
+        console.log("fileName", fileName.value);
+        console.log("filePath", filePath.value);
+        console.log("fullPath", fullPath.value);
+       // uploadedFile.value = true;
+        // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
+        //toaster.success("file uploaded.");
+        toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+       // cropVisible.value=false
+        } else {
+        res.showErrorToast();
+        }
+    });
+
+    //-----------------------------------------------------------------------------------
+    // userDataSheet.value.push(...event.files);
+    // // Check if there are any selected files
+    // if (userDataSheet.value.length === 0) {
+
+    // console.log('No files selected', userDataSheet);
+    //   console.error('No files selected', userDataSheet);
+    //   return;
+    // }
+
+  //try {
+    // const files = event.files;
+
+    // if (files.length === 0) {
+    //   console.error('No files selected');
+    //   return;
+    // }
+
+
+   
+
+//   } catch (error) {
+//     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
+//   }
+//   } catch (error) {
+//     if (error.name === 'AbortError') {
+//       // Handle user-aborted request
+//       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
+//     } else {
+//       // Handle other types of errors
+//       console.error('Error uploading files', error);
+//       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
+//     }
+//   }
+}
+
+
 const AddStep3AuctionData = async () => {
     // console.log("auctionId", getLastInsertedAuctionId.value); 
     // console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
@@ -449,8 +544,17 @@ const AddStep3AuctionData = async () => {
     //             rs.showErrorToast('InsertStep3AuctionData');
     //         }
     //     });
-    const result = await $v.value.$validate();
-            if(result){
+        let result = ref(false);
+        await $v.value.$validate()
+        let errorCount =  $v.value.$errors.length;
+        console.log("errorCount",errorCount);
+
+        if (selectedModifierValueChange.value.modifierValueChangeId === '1'){
+            errorCount=errorCount-2    
+        }
+
+                  
+            if(errorCount==0){
                 alert("Form data is valid, form submitted");
                 					// Automatically generated
 			new MQL()
@@ -491,84 +595,6 @@ const AddStep3AuctionData = async () => {
     
 
 			
-}
-
-
-const onAdvancedUpload = async (event) => {
- // try {
-    let timeStamp = Date.now();
-    console.log(timeStamp, "timeStamp")
-    console.log("event", event.files[0])
-    myFile.value = event.files[0].name;
-    console.log("myFile", myFile.value)
-    const formData = new FormData();
-    formData.append('file', event.files[0]);
-    //new mqlCDN add-------------------------------------------------------------------------------
-    new MQLCdn()
-    // .useManagementServer()
-    .enablePageLoader(true)// FIXED: change this to directory path
-    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
-    .setDirectoryPath("/AuctionPreparation/"+getLastInsertedAuctionId+"/ItemDocument") // (optional field) if you want to save  file to specific directory path
-    .setFormData(formData) // (required) sets file data
-    .setFileName(timeStamp+"_"+myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
-    // FIXED: pass buckeyKey instead of name
-    .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
-    .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
-    
-    .uploadFile("uploadtBtn")
-    .then((res) => {
-        // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
-        if (res.isValid()) {
-        fileName.value=timeStamp+"_"+myFile.value.name;
-        filePath.value=res.uploadedFileURL().filePath; 
-        fullPath.value=res.uploadedFileURL().cdnServer;
-        console.log("fileName", fileName.value);
-        console.log("filePath", filePath.value);
-        console.log("fullPath", fullPath.value);
-        // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
-        //toaster.success("file uploaded.");
-        toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-       // cropVisible.value=false
-        } else {
-        res.showErrorToast();
-        }
-    });
-
-    //-----------------------------------------------------------------------------------
-    // userDataSheet.value.push(...event.files);
-    // // Check if there are any selected files
-    // if (userDataSheet.value.length === 0) {
-
-    // console.log('No files selected', userDataSheet);
-    //   console.error('No files selected', userDataSheet);
-    //   return;
-    // }
-
-  //try {
-    // const files = event.files;
-
-    // if (files.length === 0) {
-    //   console.error('No files selected');
-    //   return;
-    // }
-
-
-   
-
-//   } catch (error) {
-//     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
-//   }
-//   } catch (error) {
-//     if (error.name === 'AbortError') {
-//       // Handle user-aborted request
-//       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
-//     } else {
-//       // Handle other types of errors
-//       console.error('Error uploading files', error);
-//       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
-//     }
-//   }
 }
 
 function fetchDocumentsValidationDetails(){
@@ -805,6 +831,7 @@ const rules = computed(() => ({
 
     modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
 
+    uploadedFile: { required: helpers.withMessage('Document is required', required) },
     }));
 
     const $v = useVuelidate(rules,{
@@ -816,6 +843,7 @@ const rules = computed(() => ({
         selectedModifierValueChange,
         modifierValueExtentionCount,
         modifierValueAfterExtention,
+        uploadedFile
     });
 
 onMounted(() => {
