@@ -48,13 +48,13 @@ import Button from "primevue/button";
 import MQLCdn from "@/plugins/MQLCdn.js";
 import MQL from "@/plugins/mql.js";
 import { useRouter } from "vue-router";
-import { useAuctionPreparation } from "@/store/auctionPreparation.js";
+import { useAuctionPreparation } from "../../../store/auctionPreparation";
 import { login } from "../../../store/modules/login";
 import { storeToRefs } from "pinia";
 
-const store = useAuctionPreparation();
+const AuctionStore = useAuctionPreparation();
 const loginStore = login()
-const { getLastInsertedAuctionId } = storeToRefs(store);
+const { getLastInsertedAuctionId } = storeToRefs(AuctionStore);
 
 const router = useRouter()
 
@@ -197,7 +197,7 @@ function fetchAllStepsAuctionPreview() {
   new MQL()
     .useManagementServer()
     .setActivity("o.[FetchAllStepsAuctionPreview]")
-    .setData({ auctionId: store.getLastInsertedAuctionId })
+    .setData({ auctionId: AuctionStore.getLastInsertedAuctionId })
     .fetch()
     .then(rs => {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
@@ -256,7 +256,7 @@ function insertInWorkflow() {
     var data = {
       "assignedLoginId": null,
       "assignedRoleId": loginStore.roleId,
-      "auctionId": store.getLastInsertedAuctionId,
+      "auctionId": AuctionStore.getLastInsertedAuctionId,
       "comment": "Auction Completed",
       "entityId": loginStore.entityId,
       "loginId": loginStore.loginId,
@@ -292,6 +292,7 @@ async function onSave() {
   } else {
     await processingFeeEmdPaymentStartEndDate()
     await insertInWorkflow()
+    AuctionStore.$reset()
     router.push({name: 'ViewAuction', params: {workflowStepDetailsId: workflowStepDetailsId.value}})
 
   }
