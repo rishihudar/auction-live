@@ -13,6 +13,7 @@
                 <!-- Step1 Details -->
                 <div class="profile-section">
                     <h2>Step1 Details</h2>
+                    <pre>{{ config }}</pre>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Auction Type:</label>
                         <span>{{ auctionSummary[0].auctionType }}</span>
@@ -23,7 +24,7 @@
                     </div>
                     <div class="ml-auto">
 
-                        <Button label="Edit" @click="visible1 = true" />
+                        <Button v-if="config?.step1.editable" label="Edit" @click="visible1 = true" />
                         <Dialog v-model:visible="visible1" modal :style="{ width: '50rem' }">
                             <Step1 :ref="Step1" />
                         </Dialog>
@@ -81,7 +82,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <Button label="Edit" @click="visible2 = true" />
+                        <Button v-if="config?.step2.editable" label="Edit" @click="visible2 = true" />
                         <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
                             <Step2 :ref="Step2" />
                         </Dialog>
@@ -119,7 +120,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <Button label="Edit" @click="visible3 = true" />
+                        <Button v-if="config?.step3.editable" label="Edit" @click="visible3 = true" />
                         <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
                             <Step3 :ref="Step3" />
                         </Dialog>
@@ -149,7 +150,7 @@
                     </div>
 
                     <div class="ml-auto">
-                        <Button label="Edit" @click="visible4 = true" />
+                        <Button v-if="config?.step4.editable" label="Edit" @click="visible4 = true" />
                         <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
                             <Step4 :ref="Step4" />
                         </Dialog>
@@ -189,7 +190,7 @@ const visible4 = ref(false);
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
 
-const { auctionId, workflowStepDetailsId } = defineProps({
+const { auctionId, workflowStepDetailsId, config } = defineProps({
     auctionId: {
         type: [Number, String],
         default: null,
@@ -198,6 +199,10 @@ const { auctionId, workflowStepDetailsId } = defineProps({
     workflowStepDetailsId: {
         type: [Number, String],
         default: null,
+    },
+    config: {
+        type: Object,
+        default: null
     }
 })
 

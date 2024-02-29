@@ -8,7 +8,8 @@
             v-if="workflowStepDetailsId && auctionId"
             :workflowStepDetailsId="workflowStepDetailsId" 
             :auctionId="auctionId" 
-        />
+            :config="workflowStepData.data1"
+            />
 
     </div>
     <div>
