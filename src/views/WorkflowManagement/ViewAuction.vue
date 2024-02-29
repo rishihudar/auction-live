@@ -3,13 +3,9 @@
         <div>
             <h1> {{ workflowStepData.displayName }}</h1>
         </div>
-        
-        <AuctionPreview 
-            v-if="workflowStepDetailsId && auctionId"
-            :workflowStepDetailsId="workflowStepDetailsId" 
-            :auctionId="auctionId" 
-            :config="workflowStepData.data1"
-            />
+
+        <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
+            :auctionId="auctionId" :config="workflowStepData.data1" />
 
     </div>
     <div>
@@ -23,7 +19,7 @@
             <span class="p-text-secondary block mb-5">Assign to <strong>{{ role.roleName }}</strong></span>
             <label for="comment" class="font-semibold w-6rem">Comment</label>
             <InputText id="comment" v-model="comment" class="flex-auto" autocomplete="off" />
-            <small class="fm-error">{{ $v.comment.$errors[0]?.$message }}</small><br />
+            <small class="fm-error" v-if="$v.$comment.$error">{{ $v.comment.$errors[0].$message }}</small><br />
             <label for="login" class="font-semibold w-6rem">Login</label>
             <Dropdown v-model="selectedLoginId" :options="logins" optionLabel="fullName" optionValue="userId"
                 placeholder="Select a Login" class="w-full md:w-14rem mb-3" />

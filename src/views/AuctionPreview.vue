@@ -13,7 +13,6 @@
                 <!-- Step1 Details -->
                 <div class="profile-section">
                     <h2>Step1 Details</h2>
-                    <pre>{{ config }}</pre>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Auction Type:</label>
                         <span>{{ auctionSummary[0].auctionType }}</span>
@@ -25,8 +24,8 @@
                     <div class="ml-auto">
 
                         <Button v-if="config?.step1.editable" label="Edit" @click="visible1 = true" />
-                        <Dialog v-model:visible="visible1" modal :style="{ width: '50rem' }">
-                            <Step1 :ref="Step1" />
+                        <Dialog v-model:visible="visible1" :draggable="false" modal :style="{ width: '50rem' }">
+                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save"  />
                         </Dialog>
                     </div>
                 </div>
@@ -84,7 +83,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step2.editable" label="Edit" @click="visible2 = true" />
                         <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
-                            <Step2 :ref="Step2" />
+                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save"  />
                         </Dialog>
                     </div>
                 </div>
@@ -122,7 +121,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step3.editable" label="Edit" @click="visible3 = true" />
                         <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
-                            <Step3 :ref="Step3" />
+                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save"  />
                         </Dialog>
                     </div>
                 </div>
@@ -152,7 +151,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step4.editable" label="Edit" @click="visible4 = true" />
                         <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
-                            <Step4 :ref="Step4" />
+                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save"  />
                         </Dialog>
                     </div>
 
@@ -173,22 +172,19 @@ import Card from "primevue/card";
 import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
 import History from "./History.vue";
-import { useAuctionPreparation } from '@/store/auctionPreparation.js'
-import { storeToRefs } from 'pinia'
 import Step1 from "./admin/AuctionPreparation/Step1.vue";
 import Step2 from "./admin/AuctionPreparation/Step2.vue";
 import Step3 from "./admin/AuctionPreparation/Step3.vue";
 import Step4 from "./admin/AuctionPreparation/Step4.vue";
+import { createToaster } from "@meforma/vue-toaster";
 import Dialog from 'primevue/dialog';
-
+const toaster = createToaster({ position: "top-right", duration: 3000 })
 
 const visible1 = ref(false);
 const visible2 = ref(false);
 const visible3 = ref(false);
 const visible4 = ref(false);
 
-const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
 
 const { auctionId, workflowStepDetailsId, config } = defineProps({
     auctionId: {
@@ -211,6 +207,24 @@ const { auctionId, workflowStepDetailsId, config } = defineProps({
 const auctionNoticeDocumentPath = ref("");
 const auctionItemDocumentPath = ref("");
 const auctionDocumentPath = ref("");
+
+function step1Save() {
+    visible1.value = false
+    toaster.success('Update Successfully')
+    FetchAuctionSummaryByAuctionId()
+}
+function step2Save() {
+    visible2.value = false
+    FetchAuctionSummaryByAuctionId()
+}
+function step3Save() {
+    visible3.value = false
+    FetchAuctionSummaryByAuctionId()
+}
+function step4Save() {
+    visible4.value = false
+    FetchAuctionSummaryByAuctionId()
+}
 
 
 const auctionSummary = ref([{}]);
