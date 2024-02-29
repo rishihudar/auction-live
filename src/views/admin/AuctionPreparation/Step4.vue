@@ -25,6 +25,9 @@
     />
     <p>End date: {{ selectedEndDate }}</p>
   </div>
+  <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')" style="color: red;">
+             Start Date should not be equal or after End Date !
+            </div>
   <div class="card">
     <p>Auction Document:</p>
     <FileUpload
@@ -141,7 +144,7 @@ const onAdvancedUpload = async (event) => {
     // FIXED: pass buckeyKey instead of name
     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
+    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
 
     .uploadFile("uploadtBtn")
     .then((res) => {
@@ -226,7 +229,7 @@ function fetchAllStepsAuctionPreview(){
           new MQL()
           .useManagementServer()
 			.setActivity("o.[FetchAllStepsAuctionPreview]")
-			.setData({auctionId:3})
+			.setData({auctionId:getLastInsertedAuctionId.value})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
@@ -266,6 +269,7 @@ function processingFeeEmdPaymentStartEndDate() {
         "YYYY/MM/DD HH:mm:ss"
       ),
       auctionId: getLastInsertedAuctionId.value,
+      statusId:23
     })
     .fetch()
     .then((rs) => {
@@ -278,12 +282,35 @@ function processingFeeEmdPaymentStartEndDate() {
     });
 }
 
+function insertDocumentPathToDb(){
+  
+					// Automatically generated
+          new MQL()
+      .useManagementServer()
+			.setActivity("o.[InsertDocumentPathStep4]")
+			.setData({auctionId:getLastInsertedAuctionId.value,
+              documentsArray:documentsArray.value
+      })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertDocumentPathStep4",true)
+			if (rs.isValid("InsertDocumentPathStep4")) {
+			} else
+			 { 
+			rs.showErrorToast("InsertDocumentPathStep4")
+			}
+			})
+			
+};
+
 function onSave(){
   console.log("Inside checkDates");
-  if(selectedEndDate.value<=selectedStartDate.value){
-    alert(`Start Date Can not be after End Date`);
+  if(moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute')){
+    console.log("log-",moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute'));
+    alert(`Start Date should not be equal or after End Date !`);
   }else{  
   processingFeeEmdPaymentStartEndDate();
+  insertDocumentPathToDb();
   }
 
 };
