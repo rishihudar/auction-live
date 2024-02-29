@@ -3,7 +3,7 @@
     <div class="gap-2  mx-auto">
         <div class="fm-row">
             <div class="w-full">
-                <h1>Auction ID: {{ getLastInsertedAuctionId }}</h1>
+                <h1>Auction ID: {{ auctionId }}</h1>
             </div>
         </div>
 
@@ -12,19 +12,6 @@
         <div class="fm-row">
             <div class="w-full">
                 <div class="card">
-                    <!-- <DataTable :value="addedItem" resizableColumns columnResizeMode="fit" showGridlines
-                        tableStyle="min-width: 50rem">
-                        <Column field="inventoryId" header="Inventory Id"></Column>
-                        <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                        <Column field="reservePrice" header="Reserved Price"></Column>
-                        <Column field="modifierValue" header="Modifier Value"></Column>
-                        <Column field="modifierValue" header="Modifier Value Change After"></Column>
-                        <Column field="action" header="Action">
-                            <template #body="slotProps">
-                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove" @click="deleteItem(slotProps.data)" />
-                            </template>
-                        </Column>
-                    </DataTable> -->
                     <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
                         columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
                         <Column field="inventoryId" header="Inventory Id"></Column>
@@ -213,7 +200,8 @@
                                     </template>
                                     <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                                 </FileUpload>
-                                <span v-if="$v.uploadedFile.$error" class="text-red-500">{{ $v.uploadedFile.$errors[0].$message }}</span>
+                                <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
+                                    $v.uploadedFile.$errors[0].$message }}</span>
                             </div>
                         </div>
                     </div>
@@ -244,7 +232,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, defineProps } from 'vue';
 import Divider from 'primevue/divider';
 import Dropdown from 'primevue/dropdown';
 import DataTable from 'primevue/datatable';
@@ -256,16 +244,27 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
 import MQL from '@/plugins/mql.js';
-// import​ ​MQLCdn​ ​from​ ​"@/plugins/mqlCdn.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
+import { ifBool } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
-//import { helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
+const { getPropertyCategoryId, getIsClicked } = storeToRefs(store)
+
+const { auctionId, config } = defineProps({
+    auctionId: {
+        type: Number,
+        default: null,
+        required: true
+    },
+    config: {
+        type: Object,
+        default: null
+    }
+})
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -339,25 +338,25 @@ const inventoryCategoryId = getPropertyCategoryId.value;
 const parentInventoryId = 0
 
 const emit = defineEmits({
-    nextTab2: null,
-    previousTab2: null
+    nextTab: null,
+    previousTab: null
 });
 function prevCallback() {
-    emit('previousTab2')
+    emit('previousTab')
 }
 function nextCallback() {
-    emit('nextTab2')
+    emit('nextTab')
 }
-    const handleClick = (input) => {
-      // Your button click logic here
-      
-      console.log("is clicked: ", getIsClicked.value)
-      store.setIsClicked(input);
-    };
+const handleClick = (input) => {
+    // Your button click logic here
+
+    console.log("is clicked: ", getIsClicked.value)
+    store.setIsClicked(input);
+};
 
 
 function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
-        new MQL()
+    new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
         .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentInventoryId })
@@ -446,7 +445,7 @@ function FetchAllModifierValueChange() {
 
 
 const onAdvancedUpload = async (event) => {
- // try {
+    // try {
     let timeStamp = Date.now();
     console.log(timeStamp, "timeStamp")
     console.log("event", event.files[0])
@@ -457,36 +456,36 @@ const onAdvancedUpload = async (event) => {
     uploadedFile.value = true;
     //new mqlCDN add-------------------------------------------------------------------------------
     new MQLCdn()
-    // .useManagementServer()
-    .enablePageLoader(true)// FIXED: change this to directory path
-    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
-    .setDirectoryPath(getLastInsertedAuctionId.value+"/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
-    .setFormData(formData) // (required) sets file data
-    .setFileName(timeStamp+"_"+myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
-    // FIXED: pass buckeyKey instead of name
-    .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
-    .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    //clientID:2ZncVDPZRGYZwwteYYbB3aw4fr7
-    .uploadFile("uploadtBtn")
-    .then((res) => {
-        // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
-        if (res.isValid()) {
-        fileName.value=timeStamp+"_"+myFile.value.name;
-        filePath.value=res.uploadedFileURL().filePath; 
-        fullPath.value=res.uploadedFileURL().cdnServer;
-        console.log("fileName", fileName.value);
-        console.log("filePath", filePath.value);
-        console.log("fullPath", fullPath.value);
-       // uploadedFile.value = true;
-        // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
-        //toaster.success("file uploaded.");
-        toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-       // cropVisible.value=false
-        } else {
-        res.showErrorToast();
-        }
-    });
+        // .useManagementServer()
+        .enablePageLoader(true)// FIXED: change this to directory path
+        //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+        .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
+        .setFormData(formData) // (required) sets file data
+        .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+        // FIXED: pass buckeyKey instead of name
+        .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        //clientID:2ZncVDPZRGYZwwteYYbB3aw4fr7
+        .uploadFile("uploadtBtn")
+        .then((res) => {
+            // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+            if (res.isValid()) {
+                fileName.value = timeStamp + "_" + myFile.value.name;
+                filePath.value = res.uploadedFileURL().filePath;
+                fullPath.value = res.uploadedFileURL().cdnServer;
+                console.log("fileName", fileName.value);
+                console.log("filePath", filePath.value);
+                console.log("fullPath", fullPath.value);
+                // uploadedFile.value = true;
+                // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
+                //toaster.success("file uploaded.");
+                toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+                // cropVisible.value=false
+            } else {
+                res.showErrorToast();
+            }
+        });
 
     //-----------------------------------------------------------------------------------
     // userDataSheet.value.push(...event.files);
@@ -498,7 +497,7 @@ const onAdvancedUpload = async (event) => {
     //   return;
     // }
 
-  //try {
+    //try {
     // const files = event.files;
 
     // if (files.length === 0) {
@@ -507,21 +506,21 @@ const onAdvancedUpload = async (event) => {
     // }
 
 
-   
 
-//   } catch (error) {
-//     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
-//   }
-//   } catch (error) {
-//     if (error.name === 'AbortError') {
-//       // Handle user-aborted request
-//       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
-//     } else {
-//       // Handle other types of errors
-//       console.error('Error uploading files', error);
-//       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
-//     }
-//   }
+
+    //   } catch (error) {
+    //     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
+    //   }
+    //   } catch (error) {
+    //     if (error.name === 'AbortError') {
+    //       // Handle user-aborted request
+    //       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
+    //     } else {
+    //       // Handle other types of errors
+    //       console.error('Error uploading files', error);
+    //       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
+    //     }
+    //   }
 }
 
 
@@ -579,7 +578,7 @@ const AddStep3AuctionData = async () => {
             .useManagementServer()
             .setActivity("o.[InsertStep3AuctionData]")
             .setData({
-                auctionId: getLastInsertedAuctionId.value,
+                auctionId: auctionId,
                 inventoryId: inventoryAreaDetails.value.inventoryId,
                 modifierValue: modifierValue.value,
                 modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
@@ -705,7 +704,7 @@ function addItem() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAllStepsAuctionPreview]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value })
+        .setData({ "auctionId": auctionId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
@@ -751,7 +750,7 @@ function RemoveItemFromDB() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchDocumentDetails]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value })
+        .setData({ "auctionId": auctionId })
         .fetch()
         .then(async rs => {
             let res = rs.getActivity("FetchDocumentDetails", true)
@@ -776,7 +775,7 @@ function RemoveItemFromDB() {
                     .useManagementServer()
                     .setActivity("o.[DeleteStep3Data]")
                     .setData({
-                        "auctionId": getLastInsertedAuctionId.value,
+                        "auctionId": auctionId,
                         "documentFileName": docFileName.value,
                         "documentFilePath": docFilePath.value,
                         "documentPath": docPath.value,
