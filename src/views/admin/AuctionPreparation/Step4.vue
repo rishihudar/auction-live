@@ -279,32 +279,36 @@ function fetchAllStepsAuctionPreview(){
 			
 };
 
-function processingFeeEmdPaymentStartEndDate() {
-  store.setLastInsertedAuctionId(getLastInsertedAuctionId.value);
-  // Automatically generated
-  new MQL()
-    .useManagementServer()
-    .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
-    .setData({
-      registrationStartDate: moment(selectedStartDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      registrationEndDate: moment(selectedEndDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      auctionId: getLastInsertedAuctionId.value,
-      statusId:23
-    })
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
-      if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
-        console.log("res.result",res.result);
-      } else {
-        rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
-      }
-    });
-}
+function fetchAllStepsAuctionPreview() {
+
+// Automatically generated
+new MQL()
+  .useManagementServer()
+  .setActivity("o.[FetchAllStepsAuctionPreview]")
+  .setData({ "auctionId": auctionId })
+  .fetch()
+  .then(rs => {
+    let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
+    dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
+    dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
+    console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+    if (dbStartDate.value === null && dbEndDate.value === null) {
+      selectedStartDate.value = formattedStartDate.value;
+      selectedEndDate.value = formattedEndDate.value;
+      console.log(" formattedStartDate.value", formattedStartDate.value);
+
+    } else {
+      selectedStartDate.value = dbStartDate.value;
+      selectedEndDate.value = dbEndDate.value;
+
+    }
+    if (rs.isValid("FetchAllStepsAuctionPreview")) {
+    } else {
+      rs.showErrorToast("FetchAllStepsAuctionPreview")
+    }
+  })
+
+};
 
 function insertDocumentPathToDb(){
   
