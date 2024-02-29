@@ -5,28 +5,29 @@
     >
     <Calendar
       id="calendar-24h"
-      v-model="formattedStartDate"
+      v-model="selectedStartDate"
       showTime
       hourFormat="24"
       :minDate="minDate"
       :showIcon="true"
-      @click="checkDates"
     />
-    <p>Start date: {{ formattedStartDate }}</p>
+    <p>Start date: {{ selectedStartDate }}</p>
     <label for="calendar-12h" class="font-bold block mb-2">
       Processing Fee And EMD payment End Date:</label
     >
     <Calendar
       id="calendar"
-      v-model="formattedEndDate"
+      v-model="selectedEndDate"
       showTime
       hourFormat="24"
       :minDate="endMinDate"
       :showIcon="true"
-      @click="checkDates"
     />
-    <p>End date: {{ formattedEndDate }}</p>
+    <p>End date: {{ selectedEndDate }}</p>
   </div>
+  <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')" style="color: red;">
+             Start Date should not be equal or after End Date !
+            </div>
   <div class="card">
     <p>Auction Document:</p>
     <FileUpload
@@ -35,7 +36,7 @@
       :multiple="false"
       :max-file-size="docSize * 1000"
       :custom-upload="true"
-      @uploader="onAdvancedUpload"
+      @uploader="onAdvancedUpload($event,NoticeDocTypeId)"
     >
       <template #empty>
         <p>
@@ -52,7 +53,7 @@
       :multiple="false"
       :max-file-size="NoticeDocSize * 1000"
       :custom-upload="true"
-      @uploader="onAdvancedUpload"
+      @uploader="onAdvancedUpload($event,AuctionDocTypeId)"
     >
       <template #empty>
         <p>
@@ -64,6 +65,7 @@
     </FileUpload>
   </div>
   <!-- <Button label="Back" @click="backToStep3" /> -->
+  <Button label="Save" @click="onSave" />
   <Button label="Back" @click="prevCallback()" />
   <!-- <Button label="Save" @click="onSave" /> -->
   <!-- <Button label="Next" @click="auctionPreview" /> -->
@@ -71,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import moment from "moment";
 import router from "../../../router";
 import Calendar from "primevue/calendar";
@@ -81,12 +83,16 @@ import MQLCdn from "@/plugins/MQLCdn.js";
 import MQL from "@/plugins/mql.js";
 import { useAuctionPreparation } from "@/store/auctionPreparation.js";
 import { storeToRefs } from "pinia";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const store = useAuctionPreparation();
 const { getLastInsertedAuctionId } = storeToRefs(store);
 
 const startDate = ref(new Date());
 const endDate = ref(new Date());
+const selectedStartDate =ref();
+const selectedEndDate =ref();
 
 const minDate = ref();
 minDate.value = moment().add(1, 'minutes').toDate();
@@ -102,12 +108,19 @@ const docSize = ref();
 const NoticeDocName = ref();
 const NoticeDocType = ref();
 const NoticeDocSize = ref();
-
+const dbEndDate=ref();
+const dbStartDate=ref();
 const docTypeId = ref();
-//const NoticeDocTypeId = ref();
+const NoticeDocTypeId = ref();
+const AuctionDocTypeId = ref();
+
 const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
+
+const fileName=ref();
+const filePath=ref();
+const fullPath=ref();
 
 const emit = defineEmits({
     nextTab3: null,
@@ -132,8 +145,9 @@ function formattedEndDateCalc() {
     .format("YYYY/MM/DD HH:mm:ss");
 }
 
-const onAdvancedUpload = async (event) => {
+const onAdvancedUpload = async (event, id) => {
   // try {
+    console.log(event, "event")
   let timeStamp = Date.now();
   console.log(timeStamp, "timeStamp");
   console.log("event", event.files[0]);
@@ -145,44 +159,40 @@ const onAdvancedUpload = async (event) => {
   new MQLCdn()
     // .useManagementServer()
     .enablePageLoader(true) // FIXED: change this to directory path
-    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    // .isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
     .setDirectoryPath(
       getLastInsertedAuctionId.value + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
-    .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+    .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
     // FIXED: pass buckeyKey instead of name
     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
+    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
 
     .uploadFile("uploadtBtn")
     .then((res) => {
       // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
       if (res.isValid()) {
-        fileName.value = timeStamp + "_" + myFile.value.name;
+        fileName.value = timeStamp + "_" + myFile.value;
         filePath.value = res.uploadedFileURL().filePath;
         fullPath.value = res.uploadedFileURL().cdnServer;
         console.log("fileName", fileName.value);
         console.log("filePath", filePath.value);
         console.log("fullPath", fullPath.value);
+
         documentsArray.value.push({
-          fileName: timeStamp + "_" + myFile.value.name,
+          fileName: timeStamp + "_" + myFile.value,
           filePath: res.uploadedFileURL().filePath,
           fullPath: res.uploadedFileURL().cdnServer,
-          documentTypeId:docTypeId.value
+          documentTypeId: id
         });
         // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
         //toaster.success("file uploaded.");
         uploadedFiles.value.push(uploadedFile);
 
         console.log("uploadedFiles", uploadedFiles.value);
-        toast.add({
-          severity: "success",
-          summary: "Success",
-          detail: "File Uploaded",
-          life: 3000,
-        });
+        toaster.success("File Uploaded !!!");
         // cropVisible.value=false
       } else {
         res.showErrorToast();
@@ -213,25 +223,57 @@ function fetchDocumentsValidationDetails() {
           docName.value = item.typeName;
           docSize.value = item.fileSize;
           docType.value = item.fileType;
-          docTypeId.value=item.typeId
+          AuctionDocTypeId.value=item.typeId
           console.log("docName.value", docName.value);
-          console.log("AuctionDocTypeId.value",docTypeId.value);
+          console.log("AuctionDocTypeId.value",AuctionDocTypeId.value);
         } else if (item.typeName == "NOTICE_DOCUMENT") {
           NoticeDocName.value = item.typeName;
           NoticeDocSize.value = item.fileSize;
           NoticeDocType.value = item.fileType;
-          docTypeId.value=item.typeId;
+          NoticeDocTypeId.value=item.typeId;
           console.log("docName.value", NoticeDocName.value);
-          console.log("NoticeDocTypeId.value",docTypeId.value);
+          console.log("NoticeDocTypeId.value",NoticeDocTypeId.value);
         }
       });
       if (rs.isValid("fetchDocumentsValidationDetails")) {
-        console.log("myFile", myFile.values);
       } else {
         rs.showErrorToast("fetchDocumentsValidationDetails");
       }
     });
 }
+
+function fetchAllStepsAuctionPreview(){
+  
+					// Automatically generated
+          new MQL()
+          .useManagementServer()
+			.setActivity("o.[FetchAllStepsAuctionPreview]")
+			.setData({auctionId:getLastInsertedAuctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchAllStepsAuctionPreview",true)
+      dbStartDate.value=res.result.fetchStep4AuctionPreview[0].startDate;
+      dbEndDate.value=res.result.fetchStep4AuctionPreview[0].endDate;
+      console.log("dbStartDate.value",dbStartDate.value,"dbEndDate.value",dbEndDate.value);
+      if (dbStartDate.value === null && dbEndDate.value=== null) {
+      selectedStartDate.value = formattedStartDate.value;
+      selectedEndDate.value = formattedEndDate.value;
+      console.log(" formattedStartDate.value", formattedStartDate.value);
+      
+    } else {
+      selectedStartDate.value = dbStartDate.value;
+      selectedEndDate.value = dbEndDate.value;
+      
+    }
+			if (rs.isValid("FetchAllStepsAuctionPreview")) {
+			} else
+			 { 
+			rs.showErrorToast("FetchAllStepsAuctionPreview")
+			}
+			})
+			
+};
+
 function processingFeeEmdPaymentStartEndDate() {
   store.setLastInsertedAuctionId(getLastInsertedAuctionId.value);
   // Automatically generated
@@ -239,13 +281,14 @@ function processingFeeEmdPaymentStartEndDate() {
     .useManagementServer()
     .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
     .setData({
-      registrationStartDate: moment(formattedStartDate.value).format(
+      registrationStartDate: moment(selectedStartDate.value).format(
         "YYYY/MM/DD HH:mm:ss"
       ),
-      registrationEndDate: moment(formattedEndDate.value).format(
+      registrationEndDate: moment(selectedEndDate.value).format(
         "YYYY/MM/DD HH:mm:ss"
       ),
       auctionId: getLastInsertedAuctionId.value,
+      statusId:23
     })
     .fetch()
     .then((rs) => {
@@ -257,19 +300,50 @@ function processingFeeEmdPaymentStartEndDate() {
       }
     });
 }
-function checkDates(){
-  console.log("Inside checkDates");
-  if(formattedEndDate.value<=formattedStartDate.value){
-    alert(`Start Date Can not be after End Date`);
-  }
-  else{
-    processingFeeEmdPaymentStartEndDate();
-  }
+
+function insertDocumentPathToDb(){
+  
+					// Automatically generated
+          new MQL()
+      .useManagementServer()
+			.setActivity("o.[InsertDocumentPathStep4]")
+			.setData({auctionId:getLastInsertedAuctionId.value,
+              documentsArray:documentsArray.value
+      })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertDocumentPathStep4",true)
+			if (rs.isValid("InsertDocumentPathStep4")) {
+			} else
+			 { 
+			rs.showErrorToast("InsertDocumentPathStep4")
+			}
+			})
+			
 };
+
+function onSave(){
+  console.log("Inside checkDates");
+  if(moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute')){
+    console.log("log-",moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) || moment(selectedEndDate.value).isSame(moment(selectedStartDate.value),'minute'));
+    alert(`Start Date should not be equal or after End Date !`);
+  }else{  
+  processingFeeEmdPaymentStartEndDate();
+  insertDocumentPathToDb();
+  toaster.success(" Data Saved !!!");
+  }
+
+};
+
 onMounted(() => {
   fetchDocumentsValidationDetails();
   formattedEndDateCalc();
   formattedStartDateCalc();
+
+
+});
+onBeforeMount(()=>{
+  fetchAllStepsAuctionPreview();
 });
 
 
