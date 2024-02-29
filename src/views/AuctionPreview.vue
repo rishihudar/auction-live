@@ -3,15 +3,14 @@
 <template>
     <div class="profile-preview">
         <Card class="profile-card">
-            <template #header>
+            <!-- <template #header>
                 <div class="profile-header">
                     <h1>Auction Summary Page</h1>
                 </div>
-            </template>
+            </template> -->
 
             <template #content>
                 <!-- Step1 Details -->
-
                 <div class="profile-section">
                     <h2>Step1 Details</h2>
                     <div class="profile-field">
@@ -23,13 +22,12 @@
                         <span>{{ auctionSummary[0].auctionMethodName }}</span>
                     </div>
                     <div class="ml-auto">
+
                         <Button label="Edit" @click="visible1 = true" />
                         <Dialog v-model:visible="visible1" modal :style="{ width: '50rem' }">
                             <Step1 :ref="Step1" />
-
                         </Dialog>
                     </div>
-
                 </div>
 
                 <!-- Divider -->
@@ -81,15 +79,15 @@
                         <label class="bold-label" for="address">EMD Applied For:</label>
                         <span>{{ auctionSummary[0].emdAppliedFor }}</span>
                     </div>
-                    <div class="ml-auto">
 
+                    <div class="ml-auto">
                         <Button label="Edit" @click="visible2 = true" />
                         <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
                             <Step2 :ref="Step2" />
-
                         </Dialog>
                     </div>
                 </div>
+
                 <Divider />
 
                 <!-- Step3 Details -->
@@ -119,16 +117,15 @@
                         <label class="bold-label" for="address">Auction Item Document:</label>
                         <span><a :href="auctionItemDocumentPath">Click Here</a></span>
                     </div>
-                    <div class="ml-auto">
 
+                    <div class="ml-auto">
                         <Button label="Edit" @click="visible3 = true" />
                         <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
                             <Step3 :ref="Step3" />
-
                         </Dialog>
                     </div>
-
                 </div>
+
                 <Divider />
 
                 <!-- Step4 Details -->
@@ -150,31 +147,30 @@
                         <label class="bold-label" for="address">Notice Document:</label>
                         <span><a :href="auctionNoticeDocumentPath">Click Here</a></span>
                     </div>
-                    <div class="ml-auto">
 
+                    <div class="ml-auto">
                         <Button label="Edit" @click="visible4 = true" />
                         <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
                             <Step4 :ref="Step4" />
-
                         </Dialog>
                     </div>
+
                 </div>
+
                 <Divider />
-                <History v-if="false" />
 
-
+                <History v-if="workflowStepDetailsId" :workflow-step-details-id="workflowStepDetailsId" />
 
             </template>
         </Card>
     </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from "vue";
 import Card from "primevue/card";
 import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
-import { useRouter } from 'vue-router';
 import History from "./History.vue";
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { storeToRefs } from 'pinia'
@@ -193,23 +189,32 @@ const visible4 = ref(false);
 const store = useAuctionPreparation()
 const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked } = storeToRefs(store)
 
+const { auctionId, workflowStepDetailsId } = defineProps({
+    auctionId: {
+        type: [Number, String],
+        default: null,
+        required: true
+    },
+    workflowStepDetailsId: {
+        type: [Number, String],
+        default: null,
+    }
+})
 
-const router = useRouter();
+
 
 const auctionNoticeDocumentPath = ref("");
 const auctionItemDocumentPath = ref("");
 const auctionDocumentPath = ref("");
 
 
-const auctionSummary = ref([
-    {}
-]);
+const auctionSummary = ref([{}]);
 
 function FetchAuctionSummaryByAuctionId() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionSummaryByAuctionId]")
-        .setData({ "auctionId":  })
+        .setData({ "auctionId": auctionId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionSummaryByAuctionId", true)
@@ -221,7 +226,7 @@ function FetchAuctionSummaryByAuctionId() {
                 let updatedAuctionSummary = auctionSummary.value[0]
                 console.log(auctionSummary.value.length, "auctionSummary.value.length")
                 for (let i = 1; i < auctionSummary.value.length; i++) {
-                    let index = i; //1,2
+                    let index = i; 
                     let refKey = `ref${index}`;
                     updatedAuctionSummary[refKey] = {
                         "documentPath": auctionSummary.value[i].documentPath,
