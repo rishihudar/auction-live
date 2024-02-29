@@ -36,7 +36,7 @@
       :multiple="false"
       :max-file-size="docSize * 1000"
       :custom-upload="true"
-      @uploader="onAdvancedUpload"
+      @uploader="onAdvancedUpload($event,NoticeDocTypeId)"
     >
       <template #empty>
         <p>
@@ -53,7 +53,7 @@
       :multiple="false"
       :max-file-size="NoticeDocSize * 1000"
       :custom-upload="true"
-      @uploader="onAdvancedUpload"
+      @uploader="onAdvancedUpload($event,AuctionDocTypeId)"
     >
       <template #empty>
         <p>
@@ -65,6 +65,7 @@
     </FileUpload>
   </div>
   <!-- <Button label="Back" @click="backToStep3" /> -->
+  <Button label="Save" @click="onSave" />
   <Button label="Back" @click="prevCallback()" />
   <!-- <Button label="Save" @click="onSave" /> -->
   <!-- <Button label="Next" @click="auctionPreview" /> -->
@@ -82,6 +83,8 @@ import MQLCdn from "@/plugins/MQLCdn.js";
 import MQL from "@/plugins/mql.js";
 import { useAuctionPreparation } from "@/store/auctionPreparation.js";
 import { storeToRefs } from "pinia";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const store = useAuctionPreparation();
 const { getLastInsertedAuctionId } = storeToRefs(store);
@@ -108,10 +111,16 @@ const NoticeDocSize = ref();
 const dbEndDate=ref();
 const dbStartDate=ref();
 const docTypeId = ref();
-//const NoticeDocTypeId = ref();
+const NoticeDocTypeId = ref();
+const AuctionDocTypeId = ref();
+
 const documentsArray = ref([]);
 const formattedStartDate = ref();
 const formattedEndDate = ref();
+
+const fileName=ref();
+const filePath=ref();
+const fullPath=ref();
 
 const emit = defineEmits({
     nextTab3: null,
@@ -136,8 +145,9 @@ function formattedEndDateCalc() {
     .format("YYYY/MM/DD HH:mm:ss");
 }
 
-const onAdvancedUpload = async (event) => {
+const onAdvancedUpload = async (event, id) => {
   // try {
+    console.log(event, "event")
   let timeStamp = Date.now();
   console.log(timeStamp, "timeStamp");
   console.log("event", event.files[0]);
@@ -154,7 +164,7 @@ const onAdvancedUpload = async (event) => {
       getLastInsertedAuctionId.value + "/AuctionPreparation/Publishing"
     ) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
-    .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+    .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
     // FIXED: pass buckeyKey instead of name
     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
@@ -164,29 +174,25 @@ const onAdvancedUpload = async (event) => {
     .then((res) => {
       // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
       if (res.isValid()) {
-        fileName.value = timeStamp + "_" + myFile.value.name;
+        fileName.value = timeStamp + "_" + myFile.value;
         filePath.value = res.uploadedFileURL().filePath;
         fullPath.value = res.uploadedFileURL().cdnServer;
         console.log("fileName", fileName.value);
         console.log("filePath", filePath.value);
         console.log("fullPath", fullPath.value);
+
         documentsArray.value.push({
-          fileName: timeStamp + "_" + myFile.value.name,
+          fileName: timeStamp + "_" + myFile.value,
           filePath: res.uploadedFileURL().filePath,
           fullPath: res.uploadedFileURL().cdnServer,
-          documentTypeId:docTypeId.value
+          documentTypeId: id
         });
         // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
         //toaster.success("file uploaded.");
         uploadedFiles.value.push(uploadedFile);
 
         console.log("uploadedFiles", uploadedFiles.value);
-        toast.add({
-          severity: "success",
-          summary: "Success",
-          detail: "File Uploaded",
-          life: 3000,
-        });
+        toaster.success("File Uploaded !!!");
         // cropVisible.value=false
       } else {
         res.showErrorToast();
@@ -217,20 +223,19 @@ function fetchDocumentsValidationDetails() {
           docName.value = item.typeName;
           docSize.value = item.fileSize;
           docType.value = item.fileType;
-          docTypeId.value=item.typeId
+          AuctionDocTypeId.value=item.typeId
           console.log("docName.value", docName.value);
-          console.log("AuctionDocTypeId.value",docTypeId.value);
+          console.log("AuctionDocTypeId.value",AuctionDocTypeId.value);
         } else if (item.typeName == "NOTICE_DOCUMENT") {
           NoticeDocName.value = item.typeName;
           NoticeDocSize.value = item.fileSize;
           NoticeDocType.value = item.fileType;
-          docTypeId.value=item.typeId;
+          NoticeDocTypeId.value=item.typeId;
           console.log("docName.value", NoticeDocName.value);
-          console.log("NoticeDocTypeId.value",docTypeId.value);
+          console.log("NoticeDocTypeId.value",NoticeDocTypeId.value);
         }
       });
       if (rs.isValid("fetchDocumentsValidationDetails")) {
-        console.log("myFile", myFile.values);
       } else {
         rs.showErrorToast("fetchDocumentsValidationDetails");
       }
@@ -325,6 +330,7 @@ function onSave(){
   }else{  
   processingFeeEmdPaymentStartEndDate();
   insertDocumentPathToDb();
+  toaster.success(" Data Saved !!!");
   }
 
 };
