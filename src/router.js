@@ -576,10 +576,10 @@ export default createRouter({
       meta: { title: "History", lang: "en", icon: "mdi mdi-home-outline" },
     },
     {
-      path: "/UpcomingAuction",
-      name: "UpcomingAuction",
-      component: loadAdminView("UpcomingAuction"),
-      meta: { title: "UpcomingAuction", lang: "en", icon: "mdi mdi-home-outline" },
+      path: "/AuctionDetails",
+      name: "AuctionDetails",
+      component: loadAdminView("AuctionDetails"),
+      meta: { title: "AuctionDetails", lang: "en", icon: "mdi mdi-home-outline" },
     },
     
   ],
