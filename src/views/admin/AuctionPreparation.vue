@@ -11,21 +11,21 @@
             <StepperPanel header="Header II">
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
-                        <Step2 :auctionId="auctionId" @previousTab1="prevCallback()" @nextTab1="nextCallback()" />
+                        <Step2 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
                     </div>
                 </template>
             </StepperPanel>
             <StepperPanel header="Header III">
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
-                        <Step3 :auctionId="auctionId" @previousTab2="prevCallback()" @nextTab2="nextCallback()"  />
+                        <Step3 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()"  />
                     </div>
                 </template>
             </StepperPanel>
             <StepperPanel header="Header IV">
                 <template #content="{ prevCallback, nextCallback }">
                     <div class="flex flex-column h-12rem">
-                        <Step4 :auctionId="auctionId" @previousTab3="prevCallback()" @nextTab3="nextCallback()" />
+                        <Step4 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
                     </div>
                 </template>
             </StepperPanel> 

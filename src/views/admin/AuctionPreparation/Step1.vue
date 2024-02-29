@@ -60,6 +60,7 @@ import Dropdown from 'primevue/dropdown';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
+import { ifBool } from "../../../plugins/helpers";
 const toaster = createToaster({ position: "top-right", duration: 3000 })
 
 // access the `store` variable anywhere in the component 
@@ -106,13 +107,6 @@ const emit = defineEmits({
     nextTab: null
 })
 
-function ifBool(params, dummy) {
-    if (typeof params == 'boolean') {
-        return params
-    } else {
-        return dummy
-    }
-}
 
 
 // Fetch Auction Types from Auction Master

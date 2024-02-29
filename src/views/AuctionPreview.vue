@@ -3,11 +3,11 @@
 <template>
     <div class="profile-preview">
         <Card class="profile-card">
-            <!-- <template #header>
+            <template #header>
                 <div class="profile-header">
-                    <h1>Auction Summary Page</h1>
+                    <h1>Auction {{ auctionId }} Summary Page</h1>
                 </div>
-            </template> -->
+            </template>
 
             <template #content>
                 <!-- Step1 Details -->
@@ -25,7 +25,7 @@
 
                         <Button v-if="config?.step1.editable" label="Edit" @click="visible1 = true" />
                         <Dialog v-model:visible="visible1" :draggable="false" modal :style="{ width: '50rem' }">
-                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save"  />
+                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save()" @previous-tab="step1Save()" />
                         </Dialog>
                     </div>
                 </div>
@@ -36,6 +36,7 @@
                 <!-- Step2 Details -->
                 <div class="profile-section">
                     <h2>Step2 Details</h2>
+                    <pre> {{  config.step2  }}</pre>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Reference Number:</label>
                         <span>{{ auctionSummary[0].referenceNumber }}</span>
@@ -83,7 +84,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step2.editable" label="Edit" @click="visible2 = true" />
                         <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
-                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save"  />
+                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save" @previous-tab="step2Save" />
                         </Dialog>
                     </div>
                 </div>
@@ -121,7 +122,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step3.editable" label="Edit" @click="visible3 = true" />
                         <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
-                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save"  />
+                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save" @previous-tab="step3Save" />
                         </Dialog>
                     </div>
                 </div>
@@ -151,7 +152,7 @@
                     <div class="ml-auto">
                         <Button v-if="config?.step4.editable" label="Edit" @click="visible4 = true" />
                         <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
-                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save"  />
+                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save" @previous-tab="step4Save" />
                         </Dialog>
                     </div>
 
@@ -176,9 +177,7 @@ import Step1 from "./admin/AuctionPreparation/Step1.vue";
 import Step2 from "./admin/AuctionPreparation/Step2.vue";
 import Step3 from "./admin/AuctionPreparation/Step3.vue";
 import Step4 from "./admin/AuctionPreparation/Step4.vue";
-import { createToaster } from "@meforma/vue-toaster";
 import Dialog from 'primevue/dialog';
-const toaster = createToaster({ position: "top-right", duration: 3000 })
 
 const visible1 = ref(false);
 const visible2 = ref(false);
@@ -210,7 +209,6 @@ const auctionDocumentPath = ref("");
 
 function step1Save() {
     visible1.value = false
-    toaster.success('Update Successfully')
     FetchAuctionSummaryByAuctionId()
 }
 function step2Save() {
