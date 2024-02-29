@@ -846,6 +846,7 @@ const rules = computed(() => ({
 
     modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
 
+    uploadedFile: { required: helpers.withMessage('Document is required', required) },
 }));
 
 const $v = useVuelidate(rules, {

@@ -36,7 +36,6 @@
                 <!-- Step2 Details -->
                 <div class="profile-section">
                     <h2>Step2 Details</h2>
-                    <pre> {{  config.step2  }}</pre>
                     <div class="profile-field">
                         <label class="bold-label" for="address">Reference Number:</label>
                         <span>{{ auctionSummary[0].referenceNumber }}</span>
