@@ -20,8 +20,8 @@
             <label for="comment" class="font-semibold w-6rem">Comment</label>
             <InputText id="comment" v-model="comment" class="flex-auto" autocomplete="off" />
             <small class="fm-error" v-if="$v.comment.$error">{{ $v.comment.$errors[0].$message }}</small><br />
-            <label v-if="workflowStepData.endStep" for="login" class="font-semibold w-6rem">Login</label>
-            <Dropdown v-if="workflowStepData.endStep" v-model="selectedLoginId" :options="logins" optionLabel="fullName" optionValue="userId"
+            <label v-if="workflowStepData.endStep == 0" for="login" class="font-semibold w-6rem">Login</label>
+            <Dropdown v-if="workflowStepData.endStep == 0" v-model="selectedLoginId" :options="logins" optionLabel="fullName" optionValue="userId"
                 placeholder="Select a Login" class="w-full md:w-14rem mb-3" />
             <div class="flex justify-content-end gap-2">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>

@@ -183,7 +183,7 @@
                 <div class="col-span-full">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload v-model="userDataSheet" :accept="docType" :multiple="false"
+                        <FileUpload  v-if="!uploadedFile" v-model="userDataSheet" :accept="docType" :multiple="false"
                             :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
@@ -193,6 +193,11 @@
                         </FileUpload>
                         <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
                             $v.uploadedFile.$errors[0].$message }}</span>
+                            <Button v-if="uploadedFile" label="View Document" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger"
+                                    @click="showDocument(fullPath + '/' + filePath)"></Button>
+                                <Button v-if="uploadedFile" label="Remove Document" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger" @click="uploadedFile = false"></Button>
                     </div>
                 </div>
                 <div class="fm-action justify-center">

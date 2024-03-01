@@ -1,65 +1,88 @@
 <template>
-    <div class="wizard-content">
-        <div class="wc-item">
-            <div class="wc-header">
-                <div class="wc-title">Auction ID: {{ auctionId }}</div>
-            </div>
+  <div class="wizard-content">
+    <div class="wc-item">
+      <div class="wc-header">
+        <div class="wc-title">Auction ID: {{ auctionId }}</div>
+      </div>
 
-            <div class="form-grid">
-                <div class="col-span-full md:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label" for="calendar-12h">
-                            Processing Fee And EMD payment Start Date
-                        </label>
-                        <div class="fm-inner">
-                            <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
-                            :showIcon="true" />
-                        </div>
-                        <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')" class="col-span-full fm-error">
-                            Start Date should not be equal or after End Date !
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full md:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label" for="calendar-12h">
-                            Processing Fee And EMD payment End Date
-                        </label>
-                        <div class="fm-inner">
-                            <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full 2xl:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label">
-                            Auction Document
-                        </label>
-                        <div class="fm-inner">
-                            <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
-                                <template #empty>
-                                    <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
-                                </template>
-                            </FileUpload>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full 2xl:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label">
-                            Notice Document
-                        </label>
-                        <div class="fm-inner">
-                            <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType" :multiple="false" :max-file-size="NoticeDocSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload($event, AuctionDocTypeId)">
-                                <template #empty>
-                                    <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
-                                </template>
-                            </FileUpload>
-                        </div>
-                    </div>
-                </div>
+      <div class="form-grid">
+        <div class="col-span-full md:col-span-6">
+          <div class="fm-group">
+            <label class="fm-label" for="calendar-12h">
+              Processing Fee And EMD payment Start Date
+            </label>
+            <div class="fm-inner">
+              <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate"
+                showTime hourFormat="24" :minDate="minDate" :showIcon="true" />
             </div>
-            <!-- <div class="main-date">
+            <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')"
+              class="col-span-full fm-error">
+              Start Date should not be equal or after End Date !
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full md:col-span-6">
+          <div class="fm-group">
+            <label class="fm-label" for="calendar-12h">
+              Processing Fee And EMD payment End Date
+            </label>
+            <div class="fm-inner">
+              <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime
+                hourFormat="24" :minDate="endMinDate" :showIcon="true" />
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full 2xl:col-span-6">
+          <div class="fm-group">
+            <label class="fm-label">
+              Auction Document
+            </label>
+            <div class="fm-inner">
+              <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false"
+                :max-file-size="docSize * 1000" :custom-upload="true"
+                @uploader="onAdvancedUpload($event,AuctionDocTypeId )">
+                <template #empty>
+                  <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
+                </template>
+              </FileUpload>
+              <span v-if="$v.AucUrl.$error" class="text-red-500">{{
+                $v.AucUrl.$errors[0].$message
+              }}</span>
+
+              <div v-if="AucUrl">
+                <a :href="AucUrl"><button>click here to view Uploaded Auction Document</button></a>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full 2xl:col-span-6">
+          <div class="fm-group">
+            <label class="fm-label">
+              Notice Document
+            </label>
+            <div class="fm-inner">
+              <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType"
+                :multiple="false" :max-file-size="NoticeDocSize * 1000" :custom-upload="true"
+                @uploader="onAdvancedUpload($event,NoticeDocTypeId )">
+                <template #empty>
+                  <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
+                </template>
+              </FileUpload>
+              <span v-if="$v.NoticeUrl.$error" class="text-red-500">{{
+                $v.NoticeUrl.$errors[0].$message
+              }}</span>
+
+              <div v-if="NoticeUrl">
+                <a :href="NoticeUrl"><button>click here to view Uploaded Notice Document</button></a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="main-date">
                 <label for="calendar-12h" class="font-bold block mb-2">
                 Processing Fee And EMD payment Start Date:</label>
                 <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
@@ -72,8 +95,8 @@
                 Start Date should not be equal or after End Date !
             </div>-->
 
-            
-                <!-- <p>Auction Document:</p>
+
+      <!-- <p>Auction Document:</p>
                 <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000"
                 :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
                 <template #empty>
@@ -93,16 +116,16 @@
                     </p>
                 </template>
                 </FileUpload> -->
-        </div>
-
-        <div class="wc-action">
-            <!-- <Button label="Back" @click="backToStep3" /> -->
-            <Button label="Back" @click="prevCallback()" severity="secondary" />
-            <Button label="Save" @click="onSave" class="btn-submit" />
-            <!-- <Button label="Next" @click="auctionPreview" /> -->
-            <!-- <Button label="Next" @click="nextCallback()" /> -->
-        </div>
     </div>
+
+    <div class="wc-action">
+      <!-- <Button label="Back" @click="backToStep3" /> -->
+      <Button label="Back" @click="prevCallback()" severity="secondary" />
+      <Button label="Save" @click="onSave" class="btn-submit" />
+      <!-- <Button label="Next" @click="auctionPreview" /> -->
+      <!-- <Button label="Next" @click="nextCallback()" /> -->
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -142,8 +165,8 @@ const { auctionId, config } = defineProps({
 const serverDate = ref();
 //const startDate = ref(new Date());
 //const endDate = ref(new Date());
-const selectedStartDate =  ref();
-const selectedEndDate =  ref();
+const selectedStartDate = ref();
+const selectedEndDate = ref();
 
 const minDate = ref();
 minDate.value = moment().add(1, "minutes").toDate();
@@ -178,7 +201,7 @@ const rules = computed(() => ({
     required: helpers.withMessage("Document is required", required),
   },
 }));
-const $v = useVuelidate(rules, {AucUrl, NoticeUrl});
+const $v = useVuelidate(rules, { AucUrl, NoticeUrl });
 const emit = defineEmits({
   nextTab: null,
   previousTab: null
@@ -319,14 +342,14 @@ function fetchAllStepsAuctionPreview() {
     .then(rs => {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
       //console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
-      if (res.result.fetchStep4AuctionPreview.length==0) {
+      if (res.result.fetchStep4AuctionPreview.length == 0 || res.result.fetchStep4AuctionPreview[0].startDate == null || res.result.fetchStep4AuctionPreview[0].endDate == null) {
         selectedStartDate.value = formattedStartDate.value;
         selectedEndDate.value = formattedEndDate.value;
         console.log("formattedStartDate.value", formattedStartDate.value);
 
       } else {
         dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
-      dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
+        dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
         selectedStartDate.value = dbStartDate.value;
         selectedEndDate.value = dbEndDate.value;
 
@@ -350,27 +373,27 @@ async function processingFeeEmdPaymentStartEndDate() {
 
   return new Promise((resolve) => {
     new MQL()
-    .useManagementServer()
-    .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
-    .setData({
-      registrationStartDate: moment(selectedStartDate.value).format("YYYY/MM/DD HH:mm:ss"),
-      registrationEndDate: moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
-      auctionId: auctionId,
-      statusId: statusId
-    })
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
-      if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
-        console.log("res.result", res.result);
-        resolve()
-      } else {
-        rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
-      }
-    });
+      .useManagementServer()
+      .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
+      .setData({
+        registrationStartDate: moment(selectedStartDate.value).format("YYYY/MM/DD HH:mm:ss"),
+        registrationEndDate: moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
+        auctionId: auctionId,
+        statusId: statusId
+      })
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
+        if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
+          console.log("res.result", res.result);
+          resolve()
+        } else {
+          rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
+        }
+      });
   })
   // Automatically generated
-  
+
 }
 
 async function insertDocumentPathToDb() {
@@ -405,11 +428,11 @@ async function insertInWorkflow() {
   var AUCTION_COMPLETED_ID
 
   const resultStatus = await fetchAuctionStatus('AUCTION_COMPLETED')
-    if (resultStatus.error == null) {
-      AUCTION_COMPLETED_ID = resultStatus.result.statusId
-    } else {
-      toaster.error("Oops! Please contact Support")
-    }
+  if (resultStatus.error == null) {
+    AUCTION_COMPLETED_ID = resultStatus.result.statusId
+  } else {
+    toaster.error("Oops! Please contact Support")
+  }
   return new Promise((resolve, reject) => {
     console.log(AUCTION_COMPLETED_ID);
 
@@ -453,7 +476,7 @@ async function onSave() {
   console.log("Inside checkDates");
   if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, 'minute')) {
     alert(`Start Date should not be equal or after End Date !`);
-  }else{  
+  } else {
     await processingFeeEmdPaymentStartEndDate();
     await insertDocumentPathToDb();
     toaster.success(" Data Saved !!!");
@@ -465,7 +488,7 @@ async function onSave() {
   if (config != null) {
     nextCallback()
   } else {
-    router.push({name: loginStore.role.roleCode})
+    router.push({ name: loginStore.role.roleCode })
   }
 
 };
@@ -486,7 +509,7 @@ function getServerDate() {
         rs.showErrorToast("getServerDate");
       }
     });
-  }
+}
 
 
 onMounted(() => {
