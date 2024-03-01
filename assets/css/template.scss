@@ -35,7 +35,7 @@
 @import "components/wizards";
 
 @import "pages/login";
-// @import "pages/registration";
+@import "pages/payment";
 
 
 $gray-lightest          : #85858d;
@@ -92,6 +92,9 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     }
 }
 
+.section-header {@apply relative mt-6 mb-4 flex gap-2 items-center after:bg-slate-300 after:h-[1px] after:grow;
+    .sh-title {@apply text-xl font-bold text-[var(--neutral-600)];}
+}
 // .subtext {
 //     @apply mt-0.5 ml-6 mb-6 text-slate-600;
 // }

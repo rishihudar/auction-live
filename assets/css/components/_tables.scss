@@ -58,3 +58,20 @@
         }
     }
 }
+
+
+.table-simple {@apply mb-5;
+    td {@apply py-2.5 px-3;}
+}
+
+.table-bordered {
+    tr {
+        td {@apply border-r border-t;
+            &:last-child {@apply border-r-0;}
+        }
+
+        &:first-child {
+            td {@apply border-t-0;}
+        }
+    }
+}
