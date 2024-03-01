@@ -260,15 +260,15 @@ function fetchAllStepsAuctionPreview() {
     .fetch()
     .then(rs => {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
-      dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
-      dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
-      if (dbStartDate.value === null && dbEndDate.value === null) {
+      //console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+      if (res.result.fetchStep4AuctionPreview.length==0) {
         selectedStartDate.value = formattedStartDate.value;
         selectedEndDate.value = formattedEndDate.value;
         console.log(" formattedStartDate.value", formattedStartDate.value);
 
       } else {
+        dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
+      dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
         selectedStartDate.value = dbStartDate.value;
         selectedEndDate.value = dbEndDate.value;
 
@@ -400,6 +400,24 @@ async function onSave() {
   }
 
 };
+
+function getServerDate() {
+  // Automatically generated
+  new MQL()
+    .useManagementServer()
+    .setActivity("o.[getServerDate]")
+    .setData({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("getServerDate", true);
+      serverDate.value = res.result.serverDate.currentDate;
+      console.log("serverDate-", serverDate.value);
+      if (rs.isValid("getServerDate")) {
+      } else {
+        rs.showErrorToast("getServerDate");
+      }
+    });
+  }
 
 
 
