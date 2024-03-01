@@ -7,26 +7,29 @@ export default {
             // 'relative',
 
             // Shape
-            // 'w-full md:w-56',
             // 'rounded-md',
 
             // Color and Background
             // 'bg-surface-0 dark:bg-surface-900',
-            // 'border border-surface-300 dark:border-surface-700',
+            // 'border',
+            // { 'border-surface-300 dark:border-surface-600': !props.invalid },
+
+            // Invalid State
+            // { 'border-red-500 dark:border-red-400': props.invalid },
 
             // Transitions
             // 'transition-all',
             // 'duration-200',
 
             // States
-            // 'hover:border-primary-500 dark:hover:border-primary-300',
+            // { 'hover:border-primary-500 dark:hover:border-primary-300': !props.invalid },
             // { 'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50': state.focused },
 
             // Misc
             // 'cursor-pointer',
             // 'select-none',
-            { 'fm-select-disabled': props.disabled }
             // { 'opacity-60': props.disabled, 'pointer-events-none': props.disabled, 'cursor-default': props.disabled }
+            { 'fm-select-disabled': props.disabled }
         ]
     }),
     input: ({ props }) => ({
@@ -43,9 +46,9 @@ export default {
             // Color and Background
             // 'bg-transparent',
             // 'border-0',
-            { 'fm-select-value': props.modelValue, 'fm-select-placeholder': !props.modelValue },
-            // { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-400 dark:text-surface-500': !props.modelValue },
+            // { 'text-surface-800 dark:text-white/80': props.modelValue != undefined, 'text-surface-400 dark:text-surface-500': props.modelValue == undefined },
             // 'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+            { 'fm-select-value': props.modelValue, 'fm-select-placeholder': !props.modelValue },
 
             // Sizing and Spacing
             // 'w-[1%]',
@@ -72,7 +75,7 @@ export default {
     }),
     trigger: {
         class: [
-            'fm-select-trigger'
+            'fm-select-trigger',
             // Flexbox
             // 'flex items-center justify-center',
             // 'shrink-0',
@@ -135,7 +138,8 @@ export default {
             'py-3 px-5',
 
             // Color
-            { 'text-surface-700 dark:text-white/80': !context.focused && !context.selected },
+            { 'text-surface-700 dark:text-white/80': !context.focused && !context.selected && !context.disabled },
+            { 'text-surface-600 dark:text-white/70': !context.focused && !context.selected && context.disabled },
             { 'bg-surface-200 dark:bg-surface-600/60 text-surface-700 dark:text-white/80': context.focused && !context.selected },
             { 'bg-primary-100 dark:bg-primary-400/40 text-primary-700 dark:text-white/80': context.focused && context.selected },
             { 'bg-primary-50 dark:bg-primary-400/40 text-primary-700 dark:text-white/80': !context.focused && context.selected },
@@ -150,7 +154,8 @@ export default {
             'duration-200',
 
             // Misc
-            'cursor-pointer',
+            { 'pointer-events-none cursor-default': context.disabled },
+            { 'cursor-pointer': !context.disabled },
             'overflow-hidden',
             'whitespace-nowrap'
         ]

@@ -10,12 +10,12 @@ export default {
             // Sizes & Spacing
             // 'leading-[normal]',
             {
-                // 'px-4 py-3': props.size === null && props.label !== null,
+                // 'px-4 py-3': props.size === null,
                 'text-sm py-2 px-3': props.size === 'small',
                 'text-xl py-3 px-4': props.size === 'large'
             },
             // {
-            //     'w-12 p-0 py-3': props.label == null
+            //     'w-12 p-0 py-3': props.label == null && props.icon !== null
             // },
 
             // Shapes
@@ -25,6 +25,7 @@ export default {
             { 'fm-input-group-addon': parent.instance.$name == 'InputGroup' },
 
             // Link Button
+            // { 'text-primary-600 bg-transparent border-transparent': props.link },
             { 'btn-link': props.link },
 
             // Plain Button
@@ -38,15 +39,15 @@ export default {
             // { 'bg-transparent border-transparent': props.text && !props.plain },
 
             // Outlined Button
-            { 'btn-outline': props.outlined && !props.plain },
             // { 'bg-transparent border': props.outlined && !props.plain },
+            { 'btn-outline': props.outlined && !props.plain },
 
             // --- Severity Buttons ---
 
             // Primary Button
             {
-                'btn-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 // 'text-white dark:text-surface-900': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
+                'btn-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 // 'bg-primary-500 dark:bg-primary-400': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 // 'border border-primary-500 dark:border-primary-400': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
             },
@@ -57,8 +58,8 @@ export default {
 
             // Secondary Button
             {
-                'btn-secondary': props.severity === 'secondary' && !props.text && !props.outlined && !props.plain,
                 // 'text-white dark:text-surface-900': props.severity === 'secondary' && !props.text && !props.outlined && !props.plain,
+                'btn-secondary': props.severity === 'secondary' && !props.text && !props.outlined && !props.plain,
                 // 'bg-surface-500 dark:bg-surface-400': props.severity === 'secondary' && !props.text && !props.outlined && !props.plain,
                 // 'border border-surface-500 dark:border-surface-400': props.severity === 'secondary' && !props.text && !props.outlined && !props.plain
             },
@@ -113,16 +114,16 @@ export default {
 
             // Danger Button
             {
-                'btn-danger': props.severity === 'danger' && !props.text && !props.outlined && !props.plain,
                 // 'text-white dark:text-surface-900': props.severity === 'danger' && !props.text && !props.outlined && !props.plain,
+                'btn-danger': props.severity === 'danger' && !props.text && !props.outlined && !props.plain,
                 // 'bg-red-500 dark:bg-red-400': props.severity === 'danger' && !props.text && !props.outlined && !props.plain,
                 // 'border border-red-500 dark:border-red-400': props.severity === 'danger' && !props.text && !props.outlined && !props.plain
             },
             // Danger Text Button
             // { 'text-red-500 dark:text-red-400': props.text && props.severity === 'danger' && !props.plain },
             // Danger Outlined Button
-            { 'btn-danger': props.outlined && props.severity === 'danger' && !props.plain },
             // { 'text-red-500 border border-red-500 hover:bg-red-300/20': props.outlined && props.severity === 'danger' && !props.plain },
+            { 'btn-danger': props.outlined && props.severity === 'danger' && !props.plain },
 
             // --- Severity Button States ---
             // 'focus:outline-none focus:outline-offset-0 focus:ring',

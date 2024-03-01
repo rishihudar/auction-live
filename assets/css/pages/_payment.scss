@@ -1,0 +1,11 @@
+.card-login {
+    .cl-data-text {@apply mb-5 text-[17px] text-center;
+        strong {@apply font-bold text-primary-600;}
+    }
+}
+
+.table-payment {@apply text-[15px];
+    strong {@apply font-semibold;}
+
+    .tp-amount {@apply text-right whitespace-nowrap;}
+}

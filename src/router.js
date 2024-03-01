@@ -559,6 +559,13 @@ const router = createRouter({
       path: "/auction-preparation",
       name:"AuctionPreparation",
       component: loadAdminView("AuctionPreparation"),
+      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
+    },
+    {
+        path: "/auction-list",
+        name:"AuctionList",
+        component: loadAdminView("AuctionList"),
+        meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
       meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'], requiresAuth: true},
     },
     {
