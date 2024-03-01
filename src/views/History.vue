@@ -11,9 +11,9 @@
                 <div class="profile-section">
                     <div class="profile-field" v-for="(item, index) in history" :key="index">
                         <span>
-                            Workflow Step: 
+                            Workflow Step:
                             <span style="font-weight: bold;">
-                                {{ item.StepDisplayName }} 
+                                {{ item.StepDisplayName }}
                             </span>,
                             last action By
                             <span style="font-weight: bold;">
@@ -26,7 +26,7 @@
                             </span>,
                             , Comment {{ item.comment }}, Decision taken {{ item.statusDisplayName }}
                         </span>
-           
+
                     </div>
                 </div>
             </template>
@@ -38,26 +38,36 @@
 import { ref, onMounted } from "vue";
 import Card from "primevue/card";
 import MQL from "@/plugins/mql.js";
+import { login } from "../store/modules/login";
+const loginStore = login()
 
-const history = ref([]); 
+const history = ref([]);
 
-function FetchWorkflowStepDetailsHistory (){
+const { workflowStepDetailsId } = defineProps({
+    workflowStepDetailsId: {
+        type: [Number, String],
+        default: null,
+        required: true
+    }
+})
+
+function FetchWorkflowStepDetailsHistory() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchWorkflowStepDetailsHistory]")
-        .setData({"organizationId":1,"workflowStepDetailsId":2})
+        .setData({ "organizationId": loginStore.organizationId, "workflowStepDetailsId": workflowStepDetailsId })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchWorkflowStepDetailsHistory",true)
+            let res = rs.getActivity("FetchWorkflowStepDetailsHistory", true)
             if (rs.isValid("FetchWorkflowStepDetailsHistory")) {
                 console.log(res)
 
                 // Remove the console.log statement
                 // console.log("res.result",res.result)
 
-                history.value = res.result; 
+                history.value = res.result;
                 console.log(history.value, "history.value")
-            } else { 
+            } else {
                 rs.showErrorToast("FetchWorkflowStepDetailsHistory")
             }
         })

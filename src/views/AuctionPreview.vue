@@ -5,13 +5,12 @@
         <Card class="profile-card">
             <template #header>
                 <div class="profile-header">
-                    <h1>Auction Summary Page</h1>
+                    <h1>Auction {{ auctionId }} Summary Page</h1>
                 </div>
             </template>
 
             <template #content>
                 <!-- Step1 Details -->
-
                 <div class="profile-section">
                     <h2>Step1 Details</h2>
                     <div class="profile-field">
@@ -23,9 +22,11 @@
                         <span>{{ auctionSummary[0].auctionMethodName }}</span>
                     </div>
                     <div class="ml-auto">
-                        <span class="p-buttonset">
-                            <Button label="Edit" @click="router.push({ path: '/Step1' })" icon="pi pi-trash" />
-                        </span>
+
+                        <Button v-if="config?.step1.editable" label="Edit" @click="visible1 = true" />
+                        <Dialog v-model:visible="visible1" :draggable="false" modal :style="{ width: '50rem' }">
+                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save()" @previous-tab="step1Save()" />
+                        </Dialog>
                     </div>
                 </div>
 
@@ -78,14 +79,17 @@
                         <label class="bold-label" for="address">EMD Applied For:</label>
                         <span>{{ auctionSummary[0].emdAppliedFor }}</span>
                     </div>
+
                     <div class="ml-auto">
-                        <span class="p-buttonset">
-                            <Button label="Edit" @click="router.push({ path: '/Step2' })" icon="pi pi-trash" />
-                        </span>
+                        <Button v-if="config?.step2.editable" label="Edit" @click="visible2 = true" />
+                        <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
+                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save" @previous-tab="step2Save" />
+                        </Dialog>
                     </div>
                 </div>
+
                 <Divider />
-                
+
                 <!-- Step3 Details -->
                 <div class="profile-section">
                     <h2>Step3 Details</h2>
@@ -113,14 +117,17 @@
                         <label class="bold-label" for="address">Auction Item Document:</label>
                         <span><a :href="auctionItemDocumentPath">Click Here</a></span>
                     </div>
+
                     <div class="ml-auto">
-                        <span class="p-buttonset">
-                            <Button label="Edit" @click="router.push({ path: '/Step3' })" icon="pi pi-trash" />
-                        </span>
+                        <Button v-if="config?.step3.editable" label="Edit" @click="visible3 = true" />
+                        <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
+                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save" @previous-tab="step3Save" />
+                        </Dialog>
                     </div>
                 </div>
+
                 <Divider />
-                
+
                 <!-- Step4 Details -->
                 <div class="profile-section">
                     <div class="profile-field">
@@ -140,49 +147,90 @@
                         <label class="bold-label" for="address">Notice Document:</label>
                         <span><a :href="auctionNoticeDocumentPath">Click Here</a></span>
                     </div>
+
                     <div class="ml-auto">
-                        <span class="p-buttonset">
-                            <Button label="Edit" @click="router.push({ path: '/Step4' })" icon="pi pi-trash" />
-                        </span>
+                        <Button v-if="config?.step4.editable" label="Edit" @click="visible4 = true" />
+                        <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
+                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save" @previous-tab="step4Save" />
+                        </Dialog>
                     </div>
+
                 </div>
+
                 <Divider />
-                <History v-if = "true"/>
+
+                <History v-if="workflowStepDetailsId" :workflow-step-details-id="workflowStepDetailsId" />
+
             </template>
         </Card>
     </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from "vue";
 import Card from "primevue/card";
 import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
-import { useRouter } from 'vue-router';
 import History from "./History.vue";
-import { useAuctionPreparation } from '@/store/auctionPreparation.js'
-import { storeToRefs } from 'pinia'
+import Step1 from "./admin/AuctionPreparation/Step1.vue";
+import Step2 from "./admin/AuctionPreparation/Step2.vue";
+import Step3 from "./admin/AuctionPreparation/Step3.vue";
+import Step4 from "./admin/AuctionPreparation/Step4.vue";
+import Dialog from 'primevue/dialog';
 
-const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId, getIsClicked  } = storeToRefs(store)
+const visible1 = ref(false);
+const visible2 = ref(false);
+const visible3 = ref(false);
+const visible4 = ref(false);
 
 
-const router = useRouter();
+const { auctionId, workflowStepDetailsId, config } = defineProps({
+    auctionId: {
+        type: [Number, String],
+        default: null,
+        required: true
+    },
+    workflowStepDetailsId: {
+        type: [Number, String],
+        default: null,
+    },
+    config: {
+        type: Object,
+        default: null
+    }
+})
+
+
 
 const auctionNoticeDocumentPath = ref("");
 const auctionItemDocumentPath = ref("");
 const auctionDocumentPath = ref("");
 
+function step1Save() {
+    visible1.value = false
+    FetchAuctionSummaryByAuctionId()
+}
+function step2Save() {
+    visible2.value = false
+    FetchAuctionSummaryByAuctionId()
+}
+function step3Save() {
+    visible3.value = false
+    FetchAuctionSummaryByAuctionId()
+}
+function step4Save() {
+    visible4.value = false
+    FetchAuctionSummaryByAuctionId()
+}
 
-const auctionSummary = ref([
-    {}
-]);
+
+const auctionSummary = ref([{}]);
 
 function FetchAuctionSummaryByAuctionId() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionSummaryByAuctionId]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value})
+        .setData({ "auctionId": auctionId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionSummaryByAuctionId", true)
@@ -194,13 +242,13 @@ function FetchAuctionSummaryByAuctionId() {
                 let updatedAuctionSummary = auctionSummary.value[0]
                 console.log(auctionSummary.value.length, "auctionSummary.value.length")
                 for (let i = 1; i < auctionSummary.value.length; i++) {
-                    let index = i; //1,2
+                    let index = i; 
                     let refKey = `ref${index}`;
                     updatedAuctionSummary[refKey] = {
                         "documentPath": auctionSummary.value[i].documentPath,
                         "documentTypeName": auctionSummary.value[i].documentTypeName
                     };
-                    
+
                 }
                 console.log(updatedAuctionSummary, "updatedAuctionSummary")
 
@@ -229,4 +277,3 @@ onMounted(() => {
 
 
 </script>
-  
