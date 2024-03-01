@@ -23,10 +23,11 @@ import { onMounted, ref } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Dialog from "primevue/dialog";
-import Calendar from "primevue/calendar";
 import MQL from "@/plugins/mql.js";
+import { login } from "../../store/modules/login";
 import ViewAuction from "../WorkflowManagement/ViewAuction.vue";
 const auctionDetails = ref([]);
+const loginStore = login()
 const visible = ref(false);
 const expandedRows = ref([]);
 
@@ -36,8 +37,8 @@ function fetchAuctionDetailsForMyTask() {
     .useManagementServer()
     .setActivity("o.[FetchAuctionDetailsForMyTask]")
     .setData({
-      assignedLoginId: 94,
-      assignedRoleId: 6,
+      assignedLoginId: loginStore.loginId,
+      assignedRoleId: loginStore.role.roleId,
     })
     .fetch()
     .then((rs) => {
