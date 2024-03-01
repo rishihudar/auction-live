@@ -4,7 +4,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h2 class="title">Auction {{ auctionId }} Summary Page</h2>
+                <h5 class="title">Auction {{ auctionId }} Summary Page</h5>
                 <Breadcrumb :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
