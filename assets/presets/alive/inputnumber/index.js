@@ -2,7 +2,7 @@ export default {
     root: ({ props, parent }) => ({
         class: [
             // Flex
-            'inline-flex',
+            'inline-flex w-full',
             { 'flex-col': props.showButtons && props.buttonLayout == 'vertical' },
             { 'flex-1 w-[1%]': parent.instance.$name == 'InputGroup' },
 
@@ -89,8 +89,8 @@ export default {
 
                 //Color
                 'text-white dark:text-surface-900',
-                'bg-primary-500 dark:bg-primary-400',
-                'border border-primary-500 dark:border-primary-400',
+                'bg-primary-400 dark:bg-primary-400',
+                'border border-primary-600 dark:border-primary-400',
 
                 // Sizing
                 'w-[3rem]',
@@ -134,8 +134,8 @@ export default {
 
                 //Color
                 'text-white dark:text-surface-900',
-                'bg-primary-500 dark:bg-primary-400',
-                'border border-primary-500 dark:border-primary-400',
+                'bg-primary-400 dark:bg-primary-400',
+                'border border-primary-600 dark:border-primary-400',
 
                 // Sizing
                 'w-[3rem]',

@@ -5,6 +5,7 @@ export default {
             'inline-flex',
             'max-w-full',
             'relative',
+            'w-full',
 
             // Misc
             { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
@@ -65,8 +66,8 @@ export default {
 
                 // Colors
                 'text-white dark:text-surface-900',
-                'bg-primary-500 dark:bg-primary-400',
-                'border border-primary-500 dark:border-primary-400',
+                'bg-primary-400 dark:bg-primary-400',
+                'border border-primary-400 dark:border-primary-400',
 
                 // States
                 'focus:outline-none focus:outline-offset-0 focus:ring',
