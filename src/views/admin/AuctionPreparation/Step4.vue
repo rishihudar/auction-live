@@ -36,7 +36,7 @@
   </div>
   <div class="card">
     <p>Auction Document:</p>
-    {{$v.docName}}
+    {{$v.AucUrl}}
     <FileUpload
       v-model="docName"
       :accept="docType"
@@ -53,8 +53,8 @@
         </p>
       </template>
     </FileUpload>
-    <span v-if="$v.docName.$error" class="text-red-500">{{
-      $v.docName.$errors[0].$message
+    <span v-if="$v.AucUrl.$error" class="text-red-500">{{
+      $v.AucUrl.$errors[0].$message
     }}</span>
 
     <div v-if="AucUrl">
@@ -63,7 +63,7 @@
       >
     </div>
     <p>Notice Document:</p>
-    {{$v.NoticeDocName}}
+    {{$v.NoticeUrl}}
     <FileUpload
       v-model="NoticeDocName"
       :accept="NoticeDocType"
@@ -80,8 +80,8 @@
         </p>
       </template>
     </FileUpload>
-    <span v-if="$v.NoticeDocName.$error" class="text-red-500">{{
-      $v.NoticeDocName.$errors[0].$message
+    <span v-if="$v.NoticeUrl.$error" class="text-red-500">{{
+      $v.NoticeUrl.$errors[0].$message
     }}</span>
 
     <div v-if="NoticeUrl">
@@ -156,13 +156,13 @@ function prevCallback() {
 }
 
 const rules = computed(() => ({
-  docName: { required: helpers.withMessage("Document is required", required) },
-  NoticeDocName: {
+  AucUrl: { required: helpers.withMessage("Document is required", required) },
+  NoticeUrl: {
     required: helpers.withMessage("Document is required", required),
   },
 }));
 
-const $v = useVuelidate(rules, {docName, NoticeDocName});
+const $v = useVuelidate(rules, {AucUrl, NoticeUrl});
 
 function formattedStartDateCalc() {
   formattedStartDate.value = moment(serverDate.value)
@@ -376,23 +376,10 @@ async function insertDocumentPathToDb() {
   }
 }
 
-function onSave() {
+async function onSave() {
+  const result = await $v.value.$validate()
   console.log("Inside checkDates");
-  if (
-    moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) ||
-    moment(selectedEndDate.value).isSame(
-      moment(selectedStartDate.value),
-      "minute"
-    )
-  ) {
-    console.log(
-      "log-",
-      moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) ||
-        moment(selectedEndDate.value).isSame(
-          moment(selectedStartDate.value),
-          "minute"
-        )
-    );
+  if ( moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, "minute") ) {
     alert(`Start Date should not be equal or after End Date !`);
   } else {
     processingFeeEmdPaymentStartEndDate();
