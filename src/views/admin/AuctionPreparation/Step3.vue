@@ -20,10 +20,12 @@
                 </Column>
             </DataTable>
             <div v-else>
-                <h4>INVENTORY ITEM NOT AVAILABLE</h4>
+                <!-- <h4>INVENTORY ITEM NOT AVAILABLE</h4> -->
+                <div class="box-watermark">Inventory Items Not Available</div>
             </div>
-
-            <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" />
+            <div class="box-table-action">
+                <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" />
+            </div>
         </div>
 
         <Toast />

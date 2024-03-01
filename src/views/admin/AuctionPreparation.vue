@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Stepper linear class="wizard-wrapper">
+        <Stepper linear class="wizard-wrapper wizard-wrapper-prime">
             <StepperPanel header="Header I">
                 <template #content="{ nextCallback }">
                     <Step1 :auctionId="auctionId"  @submit="setAuctionId" @nextTab="nextCallback()" />

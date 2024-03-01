@@ -388,3 +388,10 @@ select.formkit-input {
       }
     }
   }
+
+
+
+.box-watermark {@apply text-lg font-semibold text-center text-[var(--neutral-200)];}
+.box-table-action {@apply mt-4 flex gap-1 items-center justify-center;
+    .btn {@apply px-10;}
+}
