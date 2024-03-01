@@ -296,7 +296,6 @@ const $v = useVuelidate(rules, { auctionMethodData, auctionTypeData });
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
-    FetchAuctionStatus();
     FetchAllStepsAuctionPreview();
 
 

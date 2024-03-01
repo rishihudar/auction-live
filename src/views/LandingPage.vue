@@ -2,7 +2,7 @@
     <div class="p-grid">
         <div class="p-col-4">
             <Card class="p-card p-mb-3 mb-3" v-for="(role, index) in loginStore.roles" :key="index">
-                <template #title>{{ role.displayName }}</template>
+                <template #title>{{ role.roleName }}</template>
                 <template #content>
                     <p class="m-0">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -35,17 +35,5 @@ function navigateToDashboard(role) {
     router.push({ name: role.roleCode })
 }
 
-function formatRoleString(inputString) {
-    // Split the input string by underscore
-    let words = inputString.split('_');
-
-    // Capitalize the first letter of each word
-    let capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
-
-    // Join the words with a space
-    let formattedString = capitalizedWords.join(' ');
-
-    return formattedString;
-}
 </script>
   

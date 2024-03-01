@@ -24,7 +24,6 @@ export const login = defineStore("login", {
     menu: (state) => state.menus,
     loginId: (state) => state.loginDetails.loginId,
     entityId: (state) => state.loginDetails.entityId,
-    roleId: (state) => state.loginDetails.roleId[state.loginDetails.roleName.findIndex((r) => r == state.currentRole)],
     organizationId: (state) => state.loginDetails.organizationId
   },
   actions: {

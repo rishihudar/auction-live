@@ -70,14 +70,13 @@ import { fetchAuctionStatus } from "../../../plugins/helpers";
 import { useRouter } from "vue-router";
 import { useAuctionPreparation } from "../../../store/auctionPreparation";
 import { login } from "../../../store/modules/login";
-import { storeToRefs } from "pinia";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 
-const store = useAuctionPreparation();
-const { getLastInsertedAuctionId } = storeToRefs(store);
+const router = useRouter()
+const loginStore = login()
 
 const { auctionId, config } = defineProps({
   auctionId: {
@@ -328,11 +327,6 @@ async function processingFeeEmdPaymentStartEndDate() {
 
 async function insertDocumentPathToDb() {
   // Validate the form
-  let result = await $v.value.$validate();
-  console.log('here', result);
-  if (!result) {
-    return;
-  }
   return new Promise((resolve, reject) => {
     new MQL()
       .useManagementServer()
@@ -373,13 +367,13 @@ async function insertInWorkflow() {
 
     var data = {
       "assignedLoginId": null,
-      "assignedRoleId": loginStore.roleId,
+      "assignedRoleId": loginStore.role.roleId,
       "auctionId": auctionId,
       "comment": "Auction Completed",
       "entityId": loginStore.entityId,
       "loginId": loginStore.loginId,
       "organisationId": loginStore.organizationId,
-      "roleId": loginStore.roleId,
+      "roleId": loginStore.role.roleId,
       "statusId": AUCTION_COMPLETED_ID
     }
     // Automatically generated
@@ -404,6 +398,11 @@ async function insertInWorkflow() {
 }
 
 async function onSave() {
+  let result = await $v.value.$validate();
+  console.log('here', result);
+  if (!result) {
+    return;
+  }
   console.log("Inside checkDates");
   if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, 'minute')) {
     alert(`Start Date should not be equal or after End Date !`);
@@ -414,6 +413,12 @@ async function onSave() {
     if (config == null) {
       await insertInWorkflow()
     }
+  }
+  AuctionStore.$reset()
+  if (config == null) {
+    nextCallback()
+  } else {
+    router.push({name: loginStore.role.roleCode})
   }
 
 };
@@ -435,7 +440,6 @@ function getServerDate() {
       }
     });
   }
-
 
 
 onMounted(() => {

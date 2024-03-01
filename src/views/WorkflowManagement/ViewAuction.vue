@@ -41,9 +41,11 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createToaster } from "@meforma/vue-toaster";
 import AuctionPreview from "../AuctionPreview.vue";
+import { useAuctionPreparation } from "../../store/auctionPreparation";
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login()
+const AuctionStore = useAuctionPreparation()
 const route = useRoute()
 
 const visible = ref(false);
@@ -51,7 +53,6 @@ const comment = ref(null)
 const role = ref({})
 const logins = ref([])
 const modalItem = ref({})
-const auctionId = ref(null)
 
 
 const modalVisible = async (item) => {
@@ -76,7 +77,7 @@ const $v = useVuelidate(rules, { comment });
 
 
 const showAction = computed(() => (
-    workflowStepData.value.assignedRoleId == loginStore.roleId &&
+    workflowStepData.value.assignedRoleId == loginStore.currentRole.roleId &&
     (!workflowStepData.value.assignedLoginId || workflowStepData.value.assignedLoginId == loginStore.loginId)
 ))
 
@@ -93,7 +94,7 @@ async function submitWorkflow() {
         "assignedRoleId": role.value.roleId,
         "comment": comment.value,
         "loginId": loginStore.loginId,
-        "roleId": loginStore.roleId,
+        "roleId": loginStore.currentRole.roleId,
         "workflowStatusId": modalItem.value.statusId,
         "workflowStepDetailsId": workflowStepDetailsId,
         "workflowStepId": workflowStepData.value.workflowStepId
@@ -152,6 +153,7 @@ function fetchWorkflowStepData() {
                     workflowStepData.value = res[0]
                     workflowStepData.value.data1 = JSON.parse(workflowStepData.value.data1)
                     auctionId.value = workflowStepData.value.auctionId
+                    // AuctionStore.setLastInsertedAuctionId( workflowStepData.value.auctionId)
                     resolve()
                 } else {
                     rs.showErrorToast("query_2cg9Wj6KVFlFt8DMt6va6a4tjqm")

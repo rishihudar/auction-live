@@ -192,8 +192,15 @@
                         <div class="fm-group">
                             <div class="card">
                                 <Toast />
-                                <FileUpload v-model="userDataSheet" :accept="docType" :multiple="false"
-                                    :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
+                                <FileUpload 
+                                v-model="uploadedFile"
+                                v-if="!uploadedFile"
+                                :accept="docType"
+                                :multiple="false"
+                                :max-file-size="docSize*1000" 
+                                :custom-upload="true" 
+                                @uploader="onAdvancedUpload"
+                                >
                                     <template #empty>
                                         <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
                                             and images are allowed</p>
@@ -202,6 +209,13 @@
                                 </FileUpload>
                                 <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
                                     $v.uploadedFile.$errors[0].$message }}</span>
+                                <Button v-if="uploadedFile" label="View Document" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger"
+                                    @click="showDocument(fullPath + '/' + filePath)"></Button>
+                                <Button v-if="uploadedFile" label="Remove Document" icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger" @click="uploadedFile = false"></Button>
+
+
                             </div>
                         </div>
                     </div>
@@ -276,6 +290,11 @@ const mcDetail = ref([]);
 const locationDetail = ref([]);
 const areaDetail = ref([]);
 const itemAreaCount = ref(0);
+
+const  showDocument = (url) => {
+        window.open(url, '_blank'); 
+    }
+
 
 
 const myFile = ref("");
@@ -665,12 +684,12 @@ async function FetchAuctionStatus(code) {
     //         });
     // })
     const statusResult = await fetchAuctionStatus(code)
-            if (statusResult.error == null) {
-                statusId.value = statusResult.result.statusId
-                displayName.value = statusResult.result.displayName
-            } else {
-                toaster.error("Oops! Please Contact")
-            }
+    if (statusResult.error == null) {
+        statusId.value = statusResult.result.statusId
+        displayName.value = statusResult.result.displayName
+    } else {
+        toaster.error("Oops! Please Contact")
+    }
 }
 
 // const confirm1 = () => {
