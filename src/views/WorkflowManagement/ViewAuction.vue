@@ -41,11 +41,9 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createToaster } from "@meforma/vue-toaster";
 import AuctionPreview from "../AuctionPreview.vue";
-import { useAuctionPreparation } from "../../store/auctionPreparation";
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login()
-const AuctionStore = useAuctionPreparation()
 const route = useRoute()
 
 const visible = ref(false);
@@ -53,6 +51,7 @@ const comment = ref(null)
 const role = ref({})
 const logins = ref([])
 const modalItem = ref({})
+const auctionId = ref()
 
 
 const modalVisible = async (item) => {
