@@ -1,78 +1,211 @@
-
 <template>
-    <div class="gap-2  mx-auto">
-        <div class="fm-row">
-            <div class="w-full">
-                <h1>Auction ID: {{ auctionId }}</h1>
+    <div class="wizard-content">
+        <div class="wc-item">
+            <div class="wc-header">
+                <div class="wc-title">Auction ID: {{ auctionId }}</div>
+            </div>
+
+            <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
+                columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
+                <Column field="inventoryId" header="Inventory Id"></Column>
+                <Column field="inventoryHierarchy" header="Inventory Name"></Column>
+                <Column field="reservePrice" header="Reserved Price"></Column>
+                <Column field="modifierValue" header="Modifier Value"></Column>
+                <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
+                <Column field="action" header="Action">
+                    <template #body="slotProps">
+                        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove"
+                            @click="deleteItem(slotProps.data)" />
+                    </template>
+                </Column>
+            </DataTable>
+            <div v-else>
+                <!-- <h4>INVENTORY ITEM NOT AVAILABLE</h4> -->
+                <div class="box-watermark">Inventory Items Not Available</div>
+            </div>
+            <div class="box-table-action">
+                <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" />
             </div>
         </div>
 
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-full">
-                <div class="card">
-                    <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
-                        columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
-                        <Column field="inventoryId" header="Inventory Id"></Column>
-                        <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                        <Column field="reservePrice" header="Reserved Price"></Column>
-                        <Column field="modifierValue" header="Modifier Value"></Column>
-                        <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
-                        <Column field="action" header="Action">
-                            <template #body="slotProps">
-                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove"
-                                    @click="deleteItem(slotProps.data)" />
-                            </template>
-                        </Column>
-                    </DataTable>
-                    <div v-else>
-                        <h4>INVENTORY ITEM NOT AVAILABLE</h4>
-                    </div>
-                </div>
-            </div>
+        <Toast />
+        <ConfirmDialog></ConfirmDialog>
+        
+        <div class="wc-action">
+            <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
+            <Button label="Back" @click="prevCallback()" severity="secondary" />
+            <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
+            <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
+            <Button label="Next" @click="nextCallback()" class="btn-submit" />
         </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-full">
-                <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" icon="pi pi-trash" />
-            </div>
-        </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-1/2">
-                <div class="fm-group">
-                    <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
-                    <Button label="Back" @click="prevCallback()" icon="pi pi-trash" />
-                </div>
-            </div>
-            <Toast />
-            <ConfirmDialog></ConfirmDialog>
-            <div class="w-full">
-                <div class="fm-group">
-                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
-                    <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
-                    <Button label="Next" @click="nextCallback()" icon="pi pi-trash" />
-                </div>
-            </div>
-        </div>
-
 
         <!-- --------------------------------------------------------------------------------------- -->
-
-
         <Dialog v-model:visible="visible" modal header="Add Item" :style="{ width: '75rem' }">
-            <div class="gap-2  mx-auto">
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">District</label>
+                        <div class="fm-inner">
+                            <Dropdown v-model="inventoryDistrictDetails.inventoryId" option-value="inventoryId"
+                                variant="filled" :options="districtDetail" optionLabel="inventoryName"
+                                placeholder="Select District"
+                                @change="fetchMCNameFromInventoryMaster(inventoryDistrictDetails.inventoryId)" />                  
+                        </div>
+                        <div v-if="$v.inventoryDistrictDetails.inventoryId.$error"  class="fm-error">
+                            {{ $v.inventoryDistrictDetails.inventoryId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">MC Name</label>
+                        <div class="fm-inner">
+                            <Dropdown v-model="inventoryMcDetails.inventoryId" option-value="inventoryId" variant="filled"
+                                :options="mcDetail" optionLabel="inventoryName" placeholder="Select MC Type"
+                                @change="fetchLocationFromInventoryMaster(inventoryMcDetails.inventoryId)"/>            
+                        </div>
+                        <div v-if="$v.inventoryMcDetails.inventoryId.$error" class="fm-error">
+                            {{ $v.inventoryMcDetails.inventoryId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">Location</label>
+                        <div class="fm-inner">
+                            <Dropdown v-model="inventoryLocationDetails.inventoryId" option-value="inventoryId"
+                                variant="filled" :options="locationDetail" optionLabel="inventoryName"
+                                placeholder="Select Location"
+                                @change="fetchAreaFromInventoryMaster(inventoryLocationDetails.inventoryId)" />                  
+                        </div>
+                        <div v-if="$v.inventoryLocationDetails.inventoryId.$error" class="fm-error">
+                            {{ $v.inventoryLocationDetails.inventoryId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">Area</label>
+                        <div class="fm-inner">
+                            <Dropdown v-model="inventoryAreaDetails" variant="filled" :options="areaDetail"
+                                optionLabel="inventoryName" placeholder="Select Area"/>
+                        </div>
+                        <div v-if="$v.inventoryAreaDetails.inventoryId.$error" class="fm-error">
+                            {{ $v.inventoryAreaDetails.inventoryId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Reserve Price">Reserve Price</label>
+                        <div class="fm-inner">
+                            <InputText id="username" v-model="inventoryAreaDetails.inventoryReservePrice"
+                                placeholder="Enter Reserve Price" readonly /> 
+                        </div>
+                        <div v-if="$v.inventoryAreaDetails.inventoryReservePrice.$error" class="fm-error">
+                            {{ $v.inventoryAreaDetails.inventoryReservePrice.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Unit">Unit</label>
+                        <div class="fm-inner">
+                            <InputText id="username" v-model="inventoryAreaDetails.inventoryUnit"
+                                placeholder="Enter Unit" />
+                        </div>
+                        <div v-if="$v.inventoryAreaDetails.inventoryUnit.$error" class="fm-error">
+                            {{ $v.inventoryAreaDetails.inventoryUnit.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="EMD">EMD</label>
+                        <div class="fm-inner">
+                            <InputText id="username" v-model="inventoryAreaDetails.inventoryEMDAmount"
+                                placeholder="Enter EMD" readonly />
+                        </div>
+                        <div v-if="$v.inventoryAreaDetails.inventoryEMDAmount.$error" class="fm-error">
+                            {{ $v.inventoryAreaDetails.inventoryEMDAmount.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Modifier Value">Modifier Value</label>
+                        <div class="fm-inner">
+                            <InputNumber v-model="modifierValue" inputId="minmax-buttons" mode="decimal" showButtons :min="0" />
+                        </div>
+                        <div v-if="$v.selectedModifierValueChange.modifierValueChangeId.$error" class="fm-error">
+                            {{ $v.selectedModifierValueChange.modifierValueChangeId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Modifier Value Change">Modifier Value Change</label>
+                        <div class="fm-inner">
+                            <Dropdown v-model="selectedModifierValueChange" variant="filled" :options="modifiervaluechanges"
+                                optionLabel="modifierValueChangeName" placeholder="Enter Modifier Value"/>
+                        </div>
+                        <div v-if="$v.selectedModifierValueChange.modifierValueChangeId.$error" class="fm-error">
+                            {{ $v.selectedModifierValueChange.modifierValueChangeId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="fm-row col-span-full" v-if="selectedModifierValueChange.modifierValueChangeId === '2'">
+                    <div class="col-span-full md:col-span-6">
+                        <div class="fm-group">
+                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After No. Of Extensions</label>
+                            <div class="fm-inner">
+                                <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons" mode="decimal"
+                                showButtons :min="0" :max="100" />
+                            </div>
+                            <div v-if="$v.modifierValueExtentionCount.$error" class="fm-error">
+                                {{ $v.modifierValueExtentionCount.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-full md:col-span-6">
+                        <div class="fm-group">
+                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After Extension</label>
+                            <div class="fm-inner">
+                                <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons" mode="decimal"
+                                showButtons :min="0" />
+                            </div>
+                            <div v-if="$v.modifierValueAfterExtention.$error" class="fm-error">
+                                {{ $v.modifierValueAfterExtention.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full">
+                    <div class="fm-group">
+                        <Toast />
+                        <FileUpload v-model="userDataSheet" :accept="docType" :multiple="false"
+                            :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
+                            <template #empty>
+                                <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
+                                    and images are allowed</p>
+                            </template>
+                            <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
+                        </FileUpload>
+                        <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
+                            $v.uploadedFile.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div class="fm-action justify-center">
+                    <Button @click="visible = false" label="Close"></Button>
+                    <Button @click="AddStep3AuctionData" label="Add" v-if="itemAreaCount != 0"></Button>
+                </div>
+            </div>
+            
+            <!-- <div class="gap-2  mx-auto">
                 <div class="fm-row">
                     <div class="w-1/3">
                         <div class="fm-group">
                             <label for="step1">District<span class="text-danger">*</span></label>
-                            <!-- {{ $v.inventoryDistrictDetails.inventoryId }}
-                            {{ inventoryDistrictDetails }} -->
                             <Dropdown v-model="inventoryDistrictDetails.inventoryId" option-value="inventoryId"
                                 variant="filled" :options="districtDetail" optionLabel="inventoryName"
                                 placeholder="Select District"
@@ -205,7 +338,7 @@
                                         <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
                                             and images are allowed</p>
                                     </template>
-                                    <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
+                                    
                                 </FileUpload>
                                 <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
                                     $v.uploadedFile.$errors[0].$message }}</span>
@@ -223,24 +356,17 @@
                 <div class="fm-row">
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <!-- <button class="btn btn-danger-light danger-color" @click="visible = false">
-                                Close
-                            </button> -->
                             <Button @click="visible = false" icon="pi pi-check" label="Close"></Button>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <!-- <button class="btn btn-primary-light pri-color" @click="addItem()" v-if="itemAreaCount != 0">
-                                ADD
-                            </button> -->
-                            <!-- q. if below button click once it should be disable -->
                             <Button @click="AddStep3AuctionData" icon="pi pi-check" label="Add"
                                 v-if="itemAreaCount != 0"></Button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </Dialog>
     </div>
 </template>

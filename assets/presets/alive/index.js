@@ -6,6 +6,8 @@ import checkbox from './checkbox';
 import chips from './chips';
 import colorpicker from './colorpicker';
 import dropdown from './dropdown';
+import floatlabel from './floatlabel';
+import iconfield from './iconfield';
 import inputgroup from './inputgroup';
 import inputgroupaddon from './inputgroupaddon';
 import inputmask from './inputmask';
@@ -25,6 +27,7 @@ import togglebutton from './togglebutton';
 import treeselect from './treeselect';
 import tristatecheckbox from './tristatecheckbox';
 import button from './button';
+import speeddial from './speeddial';
 import splitbutton from './splitbutton';
 import datatable from './datatable';
 import dataview from './dataview';
@@ -34,12 +37,14 @@ import paginator from './paginator';
 import picklist from './picklist';
 import tree from './tree';
 import treetable from './treetable';
+import timeline from './timeline';
 import accordion from './accordion';
 import card from './card';
 import divider from './divider';
 import fieldset from './fieldset';
 import panel from './panel';
 import scrollpanel from './scrollpanel';
+import splitter from './splitter';
 import tabview from './tabview';
 import toolbar from './toolbar';
 import confirmpopup from './confirmpopup';
@@ -47,6 +52,7 @@ import dialog from './dialog';
 import overlaypanel from './overlaypanel';
 import sidebar from './sidebar';
 import tooltip from './tooltip';
+import fileupload from './fileupload';
 import breadcrumb from './breadcrumb';
 import contextmenu from './contextmenu';
 import dock from './dock';
@@ -60,13 +66,20 @@ import tieredmenu from './tieredmenu';
 import message from './message';
 import inlinemessage from './inlinemessage';
 import toast from './toast';
+import carousel from './carousel';
+import galleria from './galleria';
+import image from './image';
 import avatar from './avatar';
 import badge from './badge';
 import badgedirective from './badgedirective';
+import blockui from './blockui';
 import chip from './chip';
+import inplace from './inplace';
+import metergroup from './metergroup';
 import scrolltop from './scrolltop';
 import skeleton from './skeleton';
 import progressbar from './progressbar';
+import progressspinner from './progressspinner';
 import ripple from './ripple';
 import tag from './tag';
 import terminal from './terminal';
@@ -85,6 +98,8 @@ export default {
     chips,
     colorpicker,
     dropdown,
+    floatlabel,
+    iconfield,
     inputgroup,
     inputgroupaddon,
     inputmask,
@@ -104,6 +119,7 @@ export default {
     treeselect,
     tristatecheckbox,
     button,
+    speeddial,
     splitbutton,
     datatable,
     dataview,
@@ -113,18 +129,21 @@ export default {
     picklist,
     tree,
     treetable,
+    timeline,
     accordion,
     card,
     divider,
     fieldset,
     panel,
     scrollpanel,
+    splitter,
     tabview,
     toolbar,
     confirmpopup,
     dialog,
     overlaypanel,
     sidebar,
+    fileupload,
     breadcrumb,
     contextmenu,
     dock,
@@ -138,12 +157,19 @@ export default {
     message,
     inlinemessage,
     toast,
+    carousel,
+    galleria,
+    image,
     avatar,
     badge,
+    blockui,
     chip,
+    inplace,
+    metergroup,
     scrolltop,
     skeleton,
     progressbar,
+    progressspinner,
     tag,
     terminal
 }

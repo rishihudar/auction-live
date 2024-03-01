@@ -27,11 +27,36 @@
     }
 }
 
-.wizard-content {@apply mt-6 rounded-lg bg-white; border: 2px solid var(--separator-color);
+.wizard-content {@apply mt-6 rounded-lg bg-white shadow;
     .wc-item {@apply px-[var(--wizard-content-padding)] py-8;}
+
+    .wc-header {@apply mb-5;}
+    .wc-title {@apply text-2xl font-bold text-[var(--neutral-600)];}
 
     .wc-action {@apply px-[var(--wizard-content-padding)] py-4 flex gap-2 items-center; border-top: 1px solid var(--border-color);
         .btn {@apply w-32;}
         .btn-next, .btn-submit {@apply ml-auto;}
+    }
+}
+
+
+.wizard-wrapper-prime {--wizard-sep-spacing: 4px;
+    [data-pc-section="nav"] {@apply px-4 flex items-start justify-center;
+        > li {@apply relative flex items-center;
+            > button {@apply relative w-[var(--wizard-item-width)] shrink-0 text-center;
+                [data-pc-section="number"] {@apply mx-auto w-[var(--wizard-icon-size)] h-[var(--wizard-icon-size)] flex items-center justify-center rounded-full text-xl text-[var(--neutral-200)]; border: 2px solid theme('colors.slate[300]'); transition: color 0.2s ease;}
+                [data-pc-section="title"] {@apply mt-2 block text-[15px] leading-5 text-[var(--neutral-200)]; transition: color 0.2s ease;}
+            }
+            [data-pc-section="separator"] {@apply absolute mb-6 h-0.5 bg-slate-300; top: calc(var(--wizard-icon-size) / 2 - 1px); left: calc(50% + var(--wizard-icon-size) / 2 + var(--wizard-sep-spacing)); width: calc(var(--wizard-item-width) - var(--wizard-icon-size) - var(--wizard-sep-spacing) - var(--wizard-sep-spacing)); transition: all 0.2s ease;}
+        }
+        [data-pc-section="header"]:has(~ [data-p-active="true"]) {
+            [data-pc-section="number"] {@apply border-primary-600 text-white bg-primary-600;}
+            [data-pc-section="title"] {@apply text-primary-600;}
+            [data-pc-section="separator"] {@apply bg-primary-600;}
+        }
+        [data-p-active="true"] {
+            [data-pc-section="number"] {@apply border-primary-600 text-primary-600;}
+            [data-pc-section="title"] {@apply font-medium text-[var(--neutral-400)];}
+        }
     }
 }

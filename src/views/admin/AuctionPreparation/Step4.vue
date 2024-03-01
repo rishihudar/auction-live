@@ -1,61 +1,108 @@
 <template>
-  <div class="main-date">
-    <label for="calendar-12h" class="font-bold block mb-2">
-      Processing Fee And EMD payment Start Date:</label>
-    <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
-      :showIcon="true" />
-    <label for="calendar-12h" class="font-bold block mb-2">
-      Processing Fee And EMD payment End Date:</label>
-    <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
-  </div>
-  <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')" style="color: red;">
-    Start Date should not be equal or after End Date !
-  </div>
-  <div class="card">
-    <p>Auction Document:</p>
-    <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000"
-      :custom-upload="true" @uploader="onAdvancedUpload($event,  AuctionDocTypeId)">
-      <template #empty>
-        <p>
-          Drag and drop files here to upload, Max. file size is 500 KB, Only
-          {{ docType }}
-          are allowed !
-        </p>
-      </template>
-    </FileUpload>
-    <span v-if="$v.AucUrl.$error" class="text-red-500">{{
-      $v.AucUrl.$errors[0].$message
-    }}</span>
+    <div class="wizard-content">
+        <div class="wc-item">
+            <div class="wc-header">
+                <div class="wc-title">Auction ID: {{ auctionId }}</div>
+            </div>
 
-    <div v-if="AucUrl">
-      <a :href="AucUrl"
-        ><button>click here to view Uploaded Auction Document</button></a
-      >
-    </div>
-    <p>Notice Document:</p>
-    <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType" :multiple="false" :max-file-size="NoticeDocSize * 1000"
-      :custom-upload="true" @uploader="onAdvancedUpload($event,  NoticeDocTypeId)">
-      <template #empty>
-        <p>
-          Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }}  are allowed !
-        </p>
-      </template>
-    </FileUpload>
-    <span v-if="$v.NoticeUrl.$error" class="text-red-500">{{
-      $v.NoticeUrl.$errors[0].$message
-    }}</span>
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label" for="calendar-12h">
+                            Processing Fee And EMD payment Start Date
+                        </label>
+                        <div class="fm-inner">
+                            <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
+                            :showIcon="true" />
+                        </div>
+                        <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')" class="col-span-full fm-error">
+                            Start Date should not be equal or after End Date !
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label" for="calendar-12h">
+                            Processing Fee And EMD payment End Date
+                        </label>
+                        <div class="fm-inner">
+                            <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full 2xl:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label">
+                            Auction Document
+                        </label>
+                        <div class="fm-inner">
+                            <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
+                                <template #empty>
+                                    <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
+                                </template>
+                            </FileUpload>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full 2xl:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label">
+                            Notice Document
+                        </label>
+                        <div class="fm-inner">
+                            <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType" :multiple="false" :max-file-size="NoticeDocSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload($event, AuctionDocTypeId)">
+                                <template #empty>
+                                    <p>Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }} are allowed !</p>
+                                </template>
+                            </FileUpload>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="main-date">
+                <label for="calendar-12h" class="font-bold block mb-2">
+                Processing Fee And EMD payment Start Date:</label>
+                <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24" :minDate="minDate"
+                :showIcon="true" />
+                <label for="calendar-12h" class="font-bold block mb-2">
+                Processing Fee And EMD payment End Date:</label>
+                <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime hourFormat="24" :minDate="endMinDate" :showIcon="true" />
+            </div>
+            <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate, 'minute')" style="color: red;">
+                Start Date should not be equal or after End Date !
+            </div>-->
 
-    <div v-if="NoticeUrl">
-      <a :href="NoticeUrl"
-        ><button>click here to view Uploaded Notice Document</button></a
-      >
+            
+                <!-- <p>Auction Document:</p>
+                <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false" :max-file-size="docSize * 1000"
+                :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
+                <template #empty>
+                    <p>
+                    Drag and drop files here to upload, Max. file size is 500 KB, Only
+                    {{ docType }}
+                    are allowed !
+                    </p>
+                </template>
+                </FileUpload>
+                <p>Notice Document:</p>
+                <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="NoticeDocName" :accept="NoticeDocType" :multiple="false" :max-file-size="NoticeDocSize * 1000"
+                :custom-upload="true" @uploader="onAdvancedUpload($event, AuctionDocTypeId)">
+                <template #empty>
+                    <p>
+                    Drag and drop files here to upload, Max. file size is 500 KB, Only {{ docType }}  are allowed !
+                    </p>
+                </template>
+                </FileUpload> -->
+        </div>
+
+        <div class="wc-action">
+            <!-- <Button label="Back" @click="backToStep3" /> -->
+            <Button label="Back" @click="prevCallback()" severity="secondary" />
+            <Button label="Save" @click="onSave" class="btn-submit" />
+            <!-- <Button label="Next" @click="auctionPreview" /> -->
+            <!-- <Button label="Next" @click="nextCallback()" /> -->
+        </div>
     </div>
-  </div>
-  <!-- <Button label="Back" @click="backToStep3" /> -->
-  <Button label="Save" @click="onSave" />
-  <Button label="Back" @click="prevCallback()" />
-  <!-- <Button label="Next" @click="auctionPreview" /> -->
-  <!-- <Button label="Next" @click="nextCallback()" /> -->
 </template>
 
 <script setup>

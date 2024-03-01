@@ -1,6 +1,6 @@
 <template>
-    <div class="card flex justify-content-center">
-        <Stepper linear>
+    <div>
+        <Stepper linear class="wizard-wrapper wizard-wrapper-prime">
             <StepperPanel header="Header I">
                 <template #content="{ nextCallback }">
                     <div class="flex flex-column h-12rem">
@@ -39,13 +39,6 @@
         </Stepper>
     </div>
 </template>
-
-<style scoped>
-.p-stepper {
-    flex-basis: 50rem;
-}
-</style>
-
 
 <script setup>
 

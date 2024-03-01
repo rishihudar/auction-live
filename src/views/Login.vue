@@ -18,22 +18,24 @@
                                 placeholder="Enter Your Username"
                                 :class="{ 'p-invalid': submitted && $v.user.username.$error }" />
                         </div>
-                        <small id="username-help">Your username will be unique across the entire application and it will be
-                            used across the entire application.</small>
-                        <div class="text-danger" v-if="submitted && $v.user.username.$error">
+                        <div id="username-help" class="fm-info">Your username will be unique across the entire application and it will be used across the entire application.</div>
+                        <div class="fm-error" v-if="submitted && $v.user.username.$error">
                             {{ $v.user.username.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
                 <div class="col-span-full">
                     <div class="fm-group">
-                        <label class="fm-label" for="password">Password</label>
+                        <div class="fm-label-holder">
+                            <label class="fm-label" for="password">Password</label>
+                            <router-link to="/forgetPassword">Forget Password?</router-link>
+                        </div>
                         <div class="fm-inner">
                             <Password id="password" v-model="user.password" :feedback="false" toggleMask
                                 placeholder="Enter Your Password" unstyled />
-                            <div class="text-danger" v-if="submitted && $v.user.password.$error">
-                                {{ $v.user.password.$errors[0].$message }}
-                            </div>
+                        </div>
+                        <div class="fm-error" v-if="submitted && $v.user.password.$error">
+                            {{ $v.user.password.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
@@ -42,9 +44,6 @@
                 </div>
                 <div class="fm-action-link">
                     <router-link to="/registration">New User? Register here</router-link>
-                </div>
-                <div class="fm-action-link">
-                    <router-link to="/forgetPassword">Forget Password? Click here</router-link>
                 </div>
             </form>
             <Footer name="box"></Footer>

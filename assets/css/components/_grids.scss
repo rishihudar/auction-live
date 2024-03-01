@@ -1,3 +1,5 @@
 .form-grid {@apply grid gap-x-[var(--fm-grid-gap)] grid-cols-12;
     .fm-row {@apply grid gap-x-[var(--fm-grid-gap)] grid-cols-12;}
+
+    .section-header:first-child {@apply mt-0;}
 }
