@@ -41,7 +41,7 @@
       v-for="(item, index) in props.itemList"
       :key="index"
     >
-      <div class="font-bold">{{ item }}</div>
+      <div class="font-bold">{{ item.item }}</div>
       <div class="">Selected</div>
     </div>
 

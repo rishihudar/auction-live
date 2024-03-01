@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        
+
         <div class="profile-header">
             <h2>Upcoming Auctions</h2>
         </div>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="area">Total EMD Paid For:</label>
-                        <span>{{ slot.data.emdPaid}}</span>
+                        <span>{{ slot.data.emdPaid }}</span>
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="itemCount">Properties Available:</label>
@@ -82,7 +82,8 @@
                             <Listbox :options="slot.data.item" optionLabel="item" class="w-full md:w-14rem" />
                         </div>
                     </Dialog>
-
+                    <schedule-button :entity-id="loginStore.loginDetails.entityId" :auction-id="slot.data.auctionCode" :item-list="slot.data.item"
+                        v-model:startDate="slot.data.auctionStartDate" v-model:endDate="slot.data.auctionEndDate" v-model:users="slot.data.users"></schedule-button>
                 </div>
             </template>
         </DataTable>
@@ -97,26 +98,29 @@ import Listbox from 'primevue/listbox';
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
+import ScheduleButton from '@/components/SchedulerButton.vue'
+import { login } from "../../store/modules/login.js";
+
 const visible6 = ref(false);
 const expandedRows = ref([]);
 const auctionDetails = ref([]);
 import { defineProps } from 'vue';
-
-const  {auctionId}  = defineProps({
+const loginStore = login();
+const { auctionId } = defineProps({
     auctionId: Number
 })
 
 async function FetchAuctionDetailsByAuctionIdAdmin() {
-  var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
-  var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
-  console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
+    var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
+    var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
+    console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
-        .setData( {
-            auctionId:auctionId,
-           participantStatusId: participantsStatusId.result.statusId,
-           emdPaidStatusId: emdStatusId.result.statusId
+        .setData({
+            auctionId: auctionId,
+            participantStatusId: participantsStatusId.result.statusId,
+            emdPaidStatusId: emdStatusId.result.statusId
         })
         .fetch()
         .then(rs => {
@@ -127,8 +131,9 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
                 res.result.fetchAuctionDetails.participants = res.result.participationNEMD.participants;
                 res.result.fetchAuctionDetails.emdPaid = res.result.participationNEMD.emdPaid;
+                res.result.fetchAuctionDetails.users = res.result.users.map(el=>el.userId);
                 const auctionDetail = res.result.fetchAuctionDetails;
-                console.log(auctionDetail,"auctionDetails")
+                console.log(auctionDetail, "auctionDetails")
 
                 // Map documents to an object with documentTypeName as key and documentPath as value
                 const documentsMap = {};
@@ -159,13 +164,18 @@ onMounted(() => {
     color: blue;
     text-decoration: underline;
 }
+
 .profile-field label {
     display: inline-block;
-    width: 120px; /* Adjust width as needed */
-    margin-right: 10px; /* Example margin between label and span */
+    width: 120px;
+    /* Adjust width as needed */
+    margin-right: 10px;
+    /* Example margin between label and span */
 }
+
 .profile-field {
-    margin-bottom: 10px; /* Example margin */
-    border-bottom: 1px solid #ccc; /* Add border to separate fields */
-}
-</style>
+    margin-bottom: 10px;
+    /* Example margin */
+    border-bottom: 1px solid #ccc;
+    /* Add border to separate fields */
+}</style>
