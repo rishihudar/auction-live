@@ -89,6 +89,9 @@ const { auctionId, config } = defineProps({
     default: null
   }
 })
+
+
+
 const serverDate = ref();
 //const startDate = ref(new Date());
 //const endDate = ref(new Date());
@@ -121,6 +124,14 @@ const fileName = ref();
 const filePath = ref();
 const fullPath = ref();
 
+
+const rules = computed(() => ({
+  AucUrl: { required: helpers.withMessage("Document is required", required) },
+  NoticeUrl: {
+    required: helpers.withMessage("Document is required", required),
+  },
+}));
+const $v = useVuelidate(rules, {AucUrl, NoticeUrl});
 const emit = defineEmits({
   nextTab: null,
   previousTab: null
@@ -264,7 +275,7 @@ function fetchAllStepsAuctionPreview() {
       if (res.result.fetchStep4AuctionPreview.length==0) {
         selectedStartDate.value = formattedStartDate.value;
         selectedEndDate.value = formattedEndDate.value;
-        console.log(" formattedStartDate.value", formattedStartDate.value);
+        console.log("formattedStartDate.value", formattedStartDate.value);
 
       } else {
         dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
@@ -315,31 +326,37 @@ async function processingFeeEmdPaymentStartEndDate() {
   
 }
 
-function insertDocumentPathToDb() {
-
+async function insertDocumentPathToDb() {
+  // Validate the form
+  let result = await $v.value.$validate();
+  console.log('here', result);
+  if (!result) {
+    return;
+  }
   return new Promise((resolve, reject) => {
     new MQL()
-    .useManagementServer()
-    .setActivity("o.[InsertDocumentPathStep4]")
-    .setData({
-      auctionId: auctionId,
-      documentsArray: documentsArray.value
-    })
-    .fetch()
-    .then(rs => {
-      let res = rs.getActivity("InsertDocumentPathStep4", true)
-      if (rs.isValid("InsertDocumentPathStep4")) {
-        resolve()
-      } else {
-        rs.showErrorToast("InsertDocumentPathStep4")
-      }
-    })
-  })
-
-  // Automatically generated
-  
-
+      .useManagementServer()
+      .setActivity("o.[InsertDocumentPathStep4]")
+      .setData({
+        auctionId: auctionId,
+        documentsArray: documentsArray.value
+      })
+      .fetch()
+      .then(rs => {
+        let res = rs.getActivity("InsertDocumentPathStep4", true)
+        if (rs.isValid("InsertDocumentPathStep4")) {
+          resolve()
+        } else {
+          rs.showErrorToast("InsertDocumentPathStep4")
+        }
+      })
+      .catch(error => {
+        // Handle API call errors
+        reject(error);
+      });
+  });
 };
+
 
 async function insertInWorkflow() {
 
