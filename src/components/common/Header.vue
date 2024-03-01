@@ -30,7 +30,7 @@
                             <component :is="item.icon" />
                             <span class="di-text">{{ item.label }}</span>
                         </a> -->
-                        <li @click="item.action">{{ item.label }}</li>
+                        <div class="dropdown-item" @click="item.action">{{ item.label }}</div>
                     </template>
                 </Menu>
             </div>

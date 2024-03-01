@@ -38,9 +38,11 @@
                 <Column field="auctionProcessName" header="Auction Process" sortable></Column>
                 <Column field="action" header="Action">
                     <template #body="slotProps">
-                        {{ slotProps.data.auctionCode }}
-                        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Details"
-                            @click="" />
+                        <!-- {{ slotProps.data.auctionCode }} -->
+                        <Button severity="secondary" class="btn-sm"
+                            @click="">
+                            <fa-eye></fa-eye> Details
+                        </Button>
                     </template>
                 </Column>
             </DataTable>
@@ -54,6 +56,8 @@ import Button from 'primevue/button';
 import { ref, onMounted } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
 import {useRouter} from 'vue-router'
+
+import faEye from '../../../assets/icons/eye.svg'
 import faPlus from '../../../assets/icons/plus.svg'
 import faMagnifyingGlass from '../../../assets/icons/magnifying-glass.svg'
 const router = useRouter()

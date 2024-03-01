@@ -665,10 +665,10 @@ export default {
                 'text-left',
 
                 // Spacing
-                'm-0 p-4',
+                'm-0 px-4 py-2',
 
                 // Size
-                'w-auto h-8',
+                'w-auto h-10',
 
                 // Shape
                 'border-0 rounded',
