@@ -22,6 +22,10 @@ export const login = defineStore("login", {
     username: (state) => state.loginDetails.fullName,
     role: (state) => state.currentRole,
     menu: (state) => state.menus,
+    loginId: (state) => state.loginDetails.loginId,
+    entityId: (state) => state.loginDetails.entityId,
+    roleId: (state) => state.loginDetails.roleId[state.loginDetails.roleName.findIndex((r) => r == state.currentRole)],
+    organizationId: (state) => state.loginDetails.organizationId
   },
   actions: {
     MUTATE_AUTH_REQUEST() {
