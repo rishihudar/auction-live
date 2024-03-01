@@ -665,17 +665,17 @@ export default {
                 'text-left',
 
                 // Spacing
-                'm-0 p-0',
+                'm-0 p-4',
 
                 // Size
-                'w-8 h-8',
+                'w-auto h-8',
 
                 // Shape
-                'border-0 rounded-full',
+                'border-0 rounded',
 
                 // Color
-                'text-surface-500 dark:text-white/70',
-                'bg-transparent',
+                'text-white dark:text-white/70',
+                'bg-primary-400',
                 'focus-visible:outline-none focus-visible:outline-offset-0',
                 'focus-visible:ring focus-visible:ring-primary-400/50 dark:focus-visible:ring-primary-300/50',
 
