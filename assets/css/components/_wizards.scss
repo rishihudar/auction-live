@@ -27,8 +27,8 @@
     }
 }
 
-.wizard-content {@apply mt-6 rounded-lg bg-white shadow;
-    .wc-item {@apply px-[var(--wizard-content-padding)] py-8;}
+.wizard-content {@apply mt-6 rounded-lg bg-white shadow w-full;
+    .wc-item {@apply px-[var(--wizard-content-padding)] py-8;} 
 
     .wc-header {@apply mb-5;}
     .wc-title {@apply text-2xl font-bold text-[var(--neutral-600)];}

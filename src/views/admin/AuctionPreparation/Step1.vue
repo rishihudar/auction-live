@@ -247,9 +247,6 @@ function insertAuction() {
 
 // Fetch All Steps 1 Auction Preview
 function FetchAllStepsAuctionPreview() {
-    if (auctionId == null) {
-        return
-    }
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAllStepsAuctionPreview]")
@@ -310,9 +307,8 @@ const $v = useVuelidate(rules, { auctionMethodData, auctionTypeData });
 onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
-    FetchAuctionStatus();
     FetchAllStepsAuctionPreview();
-
+    FetchAuctionStatus()
 
 });
 

@@ -6,6 +6,7 @@
       showGridlines
       tableStyle="min-width: 50rem"
     >
+    <template #empty>No Auctions Found</template>
       <Column field="auctionCode" header="Auction Code"> </Column>
       <Column field="auctionDescription" header="Auction Description"> </Column>
       <Column field="inventoryCategoryName" header="Auction Category"> </Column>
