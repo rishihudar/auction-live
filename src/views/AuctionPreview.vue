@@ -25,7 +25,7 @@
                 <div class="bs-header">
                     Step1 Details
                     <div class="bs-action">
-                        <Button severity="secondary" class="btn-sm" @click="visible1 = true" >
+                        <Button  v-if="config?.step1.editable" severity="secondary" class="btn-sm" @click="visible1 = true" >
                             <fa-pen-to-square></fa-pen-to-square>  Edit
                             
                         </Button>
