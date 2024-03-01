@@ -77,6 +77,7 @@ import { helpers, required } from "@vuelidate/validators";
 
 const router = useRouter()
 const loginStore = login()
+const AuctionStore = useAuctionPreparation()
 
 const { auctionId, config } = defineProps({
   auctionId: {
@@ -385,7 +386,6 @@ async function insertInWorkflow() {
       .then(rs => {
         let res = rs.getActivity("InsertWorkflowStepDetails", true)
         if (rs.isValid("InsertWorkflowStepDetails")) {
-          workflowStepDetailsId.value = res.result.objectId
           resolve()
         } else {
           rs.showErrorToast("InsertWorkflowStepDetails")
@@ -415,7 +415,7 @@ async function onSave() {
     }
   }
   AuctionStore.$reset()
-  if (config == null) {
+  if (config != null) {
     nextCallback()
   } else {
     router.push({name: loginStore.role.roleCode})

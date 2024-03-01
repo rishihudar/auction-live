@@ -592,7 +592,12 @@ const AddStep3AuctionData = async () => {
     //         }
     //     });
     const result = await $v.value.$validate();
-    if (result) {
+    let errorCount =  $v.value.$errors.length;
+    if (selectedModifierValueChange.value.modifierValueChangeId === '1'){
+            errorCount=errorCount-2    
+        }
+
+    if (errorCount == 0) {
         alert("Form data is valid, form submitted");
         // Automatically generated
         new MQL()
@@ -600,6 +605,7 @@ const AddStep3AuctionData = async () => {
             .setActivity("o.[InsertStep3AuctionData]")
             .setData({
                 auctionId: auctionId,
+                eventEmdProcessingFees: inventoryAreaDetails.value.inventoryEMDAmount,
                 inventoryId: inventoryAreaDetails.value.inventoryId,
                 modifierValue: modifierValue.value,
                 modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
@@ -867,6 +873,7 @@ const $v = useVuelidate(rules, {
     selectedModifierValueChange,
     modifierValueExtentionCount,
     modifierValueAfterExtention,
+    uploadedFile
 });
 
 onMounted(() => {
