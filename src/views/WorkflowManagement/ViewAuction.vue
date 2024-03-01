@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <div>
-            <h1> {{ workflowStepData.displayName }}</h1>
+            <h6> {{ workflowStepData.displayName }}</h6>
         </div>
 
         <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
@@ -16,7 +16,7 @@
             </span>
         </div>
         <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
-            <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep">Assign to <strong>{{ role.roleName }}</strong></span>
+            <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{ role.roleName }}</strong></span>
             <label for="comment" class="font-semibold w-6rem">Comment</label>
             <InputText id="comment" v-model="comment" class="flex-auto" autocomplete="off" />
             <small class="fm-error" v-if="$v.comment.$error">{{ $v.comment.$errors[0].$message }}</small><br />
@@ -54,6 +54,14 @@ const logins = ref([])
 const modalItem = ref({})
 const auctionId = ref()
 
+const {workflowStepDetailsId} = defineProps({
+  // Basic prop definition
+  workflowStepDetailsId: {
+    type: Number, 
+    required: true, 
+    default: null}
+})
+
 
 const modalVisible = async (item) => {
     modalItem.value = item
@@ -67,7 +75,7 @@ const label = ref();
 const workflowStepData = ref({})
 
 const selectedLoginId = ref(null);
-const { workflowStepDetailsId } = route.params
+// const { workflowStepDetailsId } = route.params
 
 
 let rules = computed(() => ({
