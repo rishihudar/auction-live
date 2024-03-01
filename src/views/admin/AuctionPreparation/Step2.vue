@@ -15,10 +15,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionCategoryVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step1">
                             Auction Category
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
@@ -30,10 +29,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionProcessVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Auction Process
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
@@ -45,10 +43,9 @@
                     </div>
                 </div>
                 <div class="col-span-full" v-if="ifBool(config?.descriptionVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Auction Description
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111" placeholder="Enter Description" />
@@ -59,10 +56,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Department
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
@@ -74,10 +70,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Bid Submission/Placement
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
@@ -90,10 +85,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Event Processsing Fee Mode
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
@@ -106,9 +100,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="username">
-                            Event Processing Fee Amount<span class="text-danger">*</span>
+                            Event Processing Fee Amount
                         </label>
                         <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
                         <div class="fm-inner">
@@ -120,10 +114,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             EMD Fee Payment Mode
-                            <span class="text-danger">*</span>
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
@@ -135,9 +128,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible,true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
-                            EMD Applied For<span class="text-danger">*</span>
+                            EMD Applied For
                         </label>
                         <div class="fm-inner">
                             <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"

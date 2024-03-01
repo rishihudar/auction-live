@@ -11,9 +11,9 @@
     a {@apply text-sm font-medium text-primary-600;}
 }
 .fm-label {@apply mb-1 text-sm font-semibold;
-    // .required & {
-    //     &:after {@apply text-red-600; content: '*';}
-    // }
+    .required & {
+        &:after {@apply text-red-600; content: '*';}
+    }
 }
 
 

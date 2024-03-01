@@ -7,10 +7,9 @@
 
             <div class="form-grid">
                 <div class="col-span-full md:col-span-6" v-if="ifBool(config?.auctionTypeDataVisible, true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step1">
                             Auction Type
-                            <span class="text-danger">*</span>
                         </label>
                         <!-- {{ $v.auctionTypeData.auctionType }} -->
                         <div class="fm-inner">
@@ -22,10 +21,9 @@
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-6" v-if="ifBool(config?.auctionMethodDataVisible, true)">
-                    <div class="fm-group">
+                    <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Auction Method
-                            <span class="text-danger">*</span>
                         </label>
                         <!-- {{ $v.auctionMethodData.auctionMethodName }} -->
                         <div class="fm-inner">
