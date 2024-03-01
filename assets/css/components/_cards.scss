@@ -24,7 +24,7 @@
 .box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)];
     .bs-header {@apply flex items-center rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
         .bs-action {@apply ml-auto flex flex-wrap gap-4;
-            .btn {@apply text-lg px-5;
+            .btn {@apply text-base px-5;
                 svg {@apply h-5;}
             }
         }
