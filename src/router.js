@@ -110,8 +110,8 @@ const router = createRouter({
     {
       path: "/SchedulerDashboard",
       name: "ROLE_SCHEDULER",
-      component: loadDashboardView("SchedulerComponent"),
-      meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      component:loadDashboardView("SchedulerComponent"),
+      meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     },
     {
       path: "/WatcherDashboard",
@@ -624,6 +624,14 @@ const router = createRouter({
       meta: { title: "AuctionDetailsForAdmin", lang: "en", icon: "mdi mdi-home-outline" },
     },
     
+
+    {
+      path: "/auction-list",
+      name:"AuctionList",
+      component: loadAdminView("AuctionList"),
+      meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SCHEDULER']},
+    },
+
   ],
 });
 

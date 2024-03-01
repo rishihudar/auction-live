@@ -1,5 +1,6 @@
 <template>
     <div class="card">
+        
         <div class="profile-header">
             <h2>Upcoming Auctions</h2>
         </div>
@@ -8,7 +9,7 @@
 
             <Column expander style="width: 50rem">
                 <template #rowtogglericon="">
-                    <Button label="Details" />
+                    Details
                 </template>
             </Column>
             <template #expansion="slot">
@@ -44,6 +45,14 @@
                     <div class="profile-field">
                         <label class="bold-label" for="area">Area:</label>
                         <span>{{ slot.data.area }}</span>
+                    </div>
+                    <div class="profile-field">
+                        <label class="bold-label" for="area">Participants:</label>
+                        <span>{{ slot.data.participants }}</span>
+                    </div>
+                    <div class="profile-field">
+                        <label class="bold-label" for="area">Total EMD Paid For:</label>
+                        <span>{{ slot.data.emdPaid}}</span>
                     </div>
                     <div class="profile-field">
                         <label class="bold-label" for="itemCount">Properties Available:</label>
@@ -87,23 +96,37 @@ import Column from "primevue/column";
 import Listbox from 'primevue/listbox';
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
+import { fetchAuctionStatus } from "../../plugins/helpers";
 const visible6 = ref(false);
 const expandedRows = ref([]);
 const auctionDetails = ref([]);
+import { defineProps } from 'vue';
 
-function FetchAuctionDetailsByAuctionId() {
-   
+const  {auctionId}  = defineProps({
+    auctionId: Number
+})
+
+async function FetchAuctionDetailsByAuctionIdAdmin() {
+  var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
+  var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
+  console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
     new MQL()
         .useManagementServer()
-        .setActivity("o.[FetchAuctionDetailsByAuctionId]")
-        .setData()
+        .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
+        .setData( {
+            auctionId:auctionId,
+           participantStatusId: participantsStatusId.result.statusId,
+           emdPaidStatusId: emdStatusId.result.statusId
+        })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchAuctionDetailsByAuctionId", true)
-            if (rs.isValid("FetchAuctionDetailsByAuctionId")) {
+            let res = rs.getActivity("FetchAuctionDetailsByAuctionIdAdmin", true)
+            if (rs.isValid("FetchAuctionDetailsByAuctionIdAdmin")) {
                 console.log(res)
                 res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
+                res.result.fetchAuctionDetails.participants = res.result.participationNEMD.participants;
+                res.result.fetchAuctionDetails.emdPaid = res.result.participationNEMD.emdPaid;
                 const auctionDetail = res.result.fetchAuctionDetails;
                 console.log(auctionDetail,"auctionDetails")
 
@@ -121,13 +144,13 @@ function FetchAuctionDetailsByAuctionId() {
 
                 // You can access document paths using auctionDetail.documentsMap in the template
             } else {
-                rs.showErrorToast("FetchAuctionDetailsByAuctionId")
+                rs.showErrorToast("FetchAuctionDetailsByAuctionIdAdmin")
             }
         })
 }
 
 onMounted(() => {
-    FetchAuctionDetailsByAuctionId()
+    FetchAuctionDetailsByAuctionIdAdmin()
 });
 </script>
 
