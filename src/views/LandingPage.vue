@@ -1,8 +1,8 @@
 <template>
     <div class="p-grid">
         <div class="p-col-4">
-            <Card class="p-card p-mb-3 mb-3" v-for="(name, index) in loginStore.roles" :key="index">
-                <template #title>{{ formatRoleString(name) }}</template>
+            <Card class="p-card p-mb-3 mb-3" v-for="(role, index) in loginStore.roles" :key="index">
+                <template #title>{{ role.displayName }}</template>
                 <template #content>
                     <p class="m-0">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -12,8 +12,8 @@
                     </p>
                 </template>
                 <template #footer>
-                    <Button class="p-button" raised @click="navigateToDashboard(name)">
-                        {{ formatRoleString(name) }} Dashboard
+                    <Button class="p-button" raised @click="navigateToDashboard(role)">
+                        {{ role.roleName }} Dashboard
                     </Button>
                 </template>
             </Card>
@@ -30,22 +30,22 @@ import { login } from "../store/modules/login";
 const loginStore = login()
 const router = useRouter()
 
-function navigateToDashboard(name) {
-    loginStore.SET_ROLE(name)
-    router.push({name})
+function navigateToDashboard(role) {
+    loginStore.SET_ROLE(role)
+    router.push({ name: role.roleCode })
 }
 
 function formatRoleString(inputString) {
-  // Split the input string by underscore
-  let words = inputString.split('_');
+    // Split the input string by underscore
+    let words = inputString.split('_');
 
-  // Capitalize the first letter of each word
-  let capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+    // Capitalize the first letter of each word
+    let capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
 
-  // Join the words with a space
-  let formattedString = capitalizedWords.join(' ');
+    // Join the words with a space
+    let formattedString = capitalizedWords.join(' ');
 
-  return formattedString;
+    return formattedString;
 }
 </script>
   
