@@ -47,7 +47,6 @@
 
     <div class="flex justify-center items-center p-2">
       <Button class="px-2" label="Schedule" @click="schedule"></Button>
-      <Button class="px-2" label="Re-Schedule" @click="reSchedule"></Button>
     </div>
   </Dialog>
 </template>
@@ -60,6 +59,7 @@ import MQL from "@/plugins/mql_management.js";
 import { defineProps } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers, minLength, minValue } from "@vuelidate/validators";
+import { fetchAuctionStatus } from "@/plugins/helpers.js";
 
 const props = defineProps({
   itemList: Array,
@@ -119,7 +119,7 @@ const v$ = useVuelidate(rules, { startDate, endDate, users });
 
 
 
-function schedule() {
+async function schedule() {
   // Schedule the auction
   // Automatically generated }
   v$.value.$touch();
@@ -129,6 +129,7 @@ function schedule() {
     alert("Please fill all the fields");
     return;
   }
+  var statusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
   // Automatically generated
   new MQL()
     .setActivity("o.[ScheduleAuction]")
@@ -137,7 +138,7 @@ function schedule() {
       endDate: formatDate(endDate.value),
       startDate: formatDate(startDate.value),
       users: users.value,
-      statusId: 55
+      statusId: statusId.result.statusId,
     })
     .fetch()
     .then((rs) => {
