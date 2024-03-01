@@ -3,7 +3,7 @@
         <div class="fm-row">
             <div class="w-full">
                 <div class="fm-group">
-                    <h1> Auction ID:{{ getLastInsertedAuctionId }} </h1>
+                    <h1> Auction ID:{{ auctionId }} </h1>
                 </div>
             </div>
         </div>
@@ -11,73 +11,82 @@
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.referenceNoVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="username">Reference Number</label>
-                    <InputText id="username" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
-                    <!-- <span v-if="$v.auctionDetails.referenceNo.$error" class="text-red-500">{{ $v.auctionDetails.referenceNo.$errors[0].$message }}</span> -->
+                    <InputText id="username" :disabled="config?.referenceNoReadonly" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
                 </div>
             </div>
 
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.auctionCategoryVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step1">Auction Category<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled" :options="auctionCategory"
-                    optionLabel="propertyCategoryName" placeholder="Select Auction Category"
-                    class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.auctionCategory.$error" class="text-red-500">{{ $v.auctionDetails.auctionCategory.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
+                        :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category"
+                        class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.auctionCategory.$error" class="text-red-500">{{
+                        $v.auctionDetails.auctionCategory.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.auctionProcessVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Auction Process<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled" :options="auctionProcess"
-                    optionLabel="auctionProcessName" placeholder="Select Auction Process" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.auctionProcess.$error" class="text-red-500">{{ $v.auctionDetails.auctionProcess.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
+                        :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process"
+                        class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.auctionProcess.$error" class="text-red-500">{{
+                        $v.auctionDetails.auctionProcess.$errors[0].$message }}</span>
                 </div>
             </div>
         </div>
 
         <Divider />
 
-        <div class="fm-row">
+        <div v-if="ifBool(config?.descriptionVisible,true)" class="fm-row">
             <!-- <div class="w-full">
                 <div class="fm-group"> -->
-                    <div class="justify-content-center">
-                        <label for="step2">Auction Description<span class="text-danger">*</span> </label>
-                        <Textarea v-model="auctionDetails.description" autoResize rows="3" cols="111" placeholder="Enter Description" />
-                        <span v-if="$v.auctionDetails.description.$error" class="text-red-500">{{ $v.auctionDetails.description.$errors[0].$message }}</span>
-                    </div>
-                <!-- </div>
+            <div class="justify-content-center">
+                <label for="step2">Auction Description<span class="text-danger">*</span> </label>
+                <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111"
+                    placeholder="Enter Description" />
+                <span v-if="$v.auctionDetails.description.$error" class="text-red-500">{{
+                    $v.auctionDetails.description.$errors[0].$message }}</span>
+            </div>
+            <!-- </div>
             </div> -->
         </div>
 
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.departmentVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Department<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.department" option-value="departmentId" variant="filled" :options="departments"
-                    optionLabel="departmentName" placeholder="Select Department" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.department.$error" class="text-red-500">{{ $v.auctionDetails.department.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
+                        :options="departments" optionLabel="departmentName" placeholder="Select Department"
+                        class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.department.$error" class="text-red-500">{{
+                        $v.auctionDetails.department.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.bidPlacementVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Bid Submission/Placement<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled" :options="bidPlacements"
-                    optionLabel="bidPlacementName" placeholder=" Select Bid Submission/Placement"
-                    class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.bidPlacement.$error" class="text-red-500">{{ $v.auctionDetails.bidPlacement.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
+                        :options="bidPlacements" optionLabel="bidPlacementName"
+                        placeholder=" Select Bid Submission/Placement" class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.bidPlacement.$error" class="text-red-500">{{
+                        $v.auctionDetails.bidPlacement.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.eventProcesssingFeeModeVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">Event Processsing Fee Mode<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
-                    placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="text-red-500">{{ $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
+                        :options="paymentModes" optionLabel="paymentModeName"
+                        placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="text-red-500">{{
+                        $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}</span>
                 </div>
             </div>
         </div>
@@ -85,31 +94,34 @@
         <Divider />
 
         <div class="fm-row">
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.eventProcessingFeeAmountVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
-                        <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
-                        <InputNumber v-model="auctionDetails.eventProcessingFeeAmount" 
-                         inputId="minmax-buttons" 
-                         mode="decimal" showButtons :min="0"
-                         />
-                         <span v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="text-red-500">{{ $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}</span>
+                    <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
+                    <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal"
+                        showButtons :min="0" />
+                    <span v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="text-red-500">{{
+                        $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.emdFeePaymentModeVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">EMD Fee Payment Mode<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled" :options="paymentModes" optionLabel="paymentModeName"
-                    placeholder=" Select EMD Fee Payment Mode" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="text-red-500">{{ $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
+                        :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode"
+                        class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="text-red-500">{{
+                        $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div v-if= "ifBool(config?.emdAppliedForVisible,true)" class="w-1/3">
                 <div class="fm-group">
                     <label for="step2">EMD Applied For<span class="text-danger">*</span></label>
-                    <Dropdown v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled" :options="emdAppliedFor" optionLabel="emdAppliedForName"
-                    placeholder=" Select EMD Applied For" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.emdAppliedFor.$error" class="text-red-500">{{ $v.auctionDetails.emdAppliedFor.$errors[0].$message }}</span>
+                    <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
+                        :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For"
+                        class="w-full md:w-14rem" />
+                    <span v-if="$v.auctionDetails.emdAppliedFor.$error" class="text-red-500">{{
+                        $v.auctionDetails.emdAppliedFor.$errors[0].$message }}</span>
                 </div>
             </div>
         </div>
@@ -117,13 +129,14 @@
         <Divider />
 
         <div class="fm-row">
-            <!-- <div class="w-1/2">
+            <div class="w-1/2">
                 <div class="fm-group">
                     <span class="p-buttonset">
-                        <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button>
+                        <!-- <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button> -->
+                        <Button @click="prevCallback()" icon="pi pi-check" label="Back"></Button>
                     </span>
                 </div>
-            </div> -->
+            </div>
             <div class="w-full">
                 <div class="fm-group">
                     <span class="p-buttonset">
@@ -147,10 +160,21 @@ import Textarea from 'primevue/textarea';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
+import { ifBool } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
 
 const store = useAuctionPreparation()
-const { getLastInsertedAuctionId, getPropertyCategoryId } = storeToRefs(store)
+const {  getPropertyCategoryId } = storeToRefs(store)
+const { auctionId, config } = defineProps({
+    auctionId: {
+        type: Number,
+        default: null
+    },
+    config: {
+        type: Object,
+        default: null
+    },
+})
 
 const auctionDetails = ref({
     referenceNo: '',
@@ -181,8 +205,14 @@ const auctionProcess = ref([]);
 const emdAppliedFor = ref([]);
 const paymentModes = ref([]);
 
+const emit = defineEmits({
+    nextTab: null,
+    previousTab: null
+});
 
-
+function prevCallback() {
+    emit('previousTab')
+}
 
 function FetchInventoryCategories() {
     new MQL()
@@ -286,87 +316,89 @@ function FetchAllEMDAppliedFor() {
         });
 }
 
-const InsertAuctionDataStep2 = async () =>{
-  const result = await $v.value.$validate();
-if (result){
-    alert("success, form submitted")
-    new MQL()
-        .useManagementServer()
-        .setActivity('o.[InsertStep2AuctionData]')
-        .setData({
-            referenceNumber: auctionDetails.value.referenceNo,
-            auctionDescription: auctionDetails.value.description,
-            inventoryCategoryId: auctionDetails.value.auctionCategory,
-            auctionProcessId: auctionDetails.value.auctionProcess,
-            departmentId: auctionDetails.value.department,
-            bidPlacement: auctionDetails.value.bidPlacement,
-            eventProcessingFeeMode: auctionDetails.value.eventProcesssingFeeMode,
-            eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
-            eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
-            emdAppliedFor: auctionDetails.value.emdAppliedFor,
-            auctionId: getLastInsertedAuctionId.value
-        })
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity('InsertStep2AuctionData', true);
-            if (rs.isValid('InsertStep2AuctionData')) {
-                console.log("LastUpdatedId from response", res.result);
-                store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
-                console.log("propertyCategoryId: ", getPropertyCategoryId.value);
-            } else {
-                rs.showErrorToast('InsertStep2AuctionData');
-            }
-        });
+const InsertAuctionDataStep2 = async () => {
+    const result = await $v.value.$validate();
+    if (result) {
+        new MQL()
+            .useManagementServer()
+            .setActivity('o.[InsertStep2AuctionData]')
+            .setData({
+                referenceNumber: auctionDetails.value.referenceNo,
+                auctionDescription: auctionDetails.value.description,
+                inventoryCategoryId: auctionDetails.value.auctionCategory,
+                auctionProcessId: auctionDetails.value.auctionProcess,
+                departmentId: auctionDetails.value.department,
+                bidPlacement: auctionDetails.value.bidPlacement,
+                eventProcessingFeeMode: auctionDetails.value.eventProcesssingFeeMode,
+                eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
+                eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
+                emdAppliedFor: auctionDetails.value.emdAppliedFor,
+                auctionId: auctionId
+            })
+            .fetch()
+            .then((rs) => {
+                let res = rs.getActivity('InsertStep2AuctionData', true);
+                if (rs.isValid('InsertStep2AuctionData')) {
+                    console.log("LastUpdatedId from response", res.result);
+                    store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
+                    console.log("propertyCategoryId: ", getPropertyCategoryId.value);
+                    emit('nextTab')
+                } else {
+                    rs.showErrorToast('InsertStep2AuctionData');
+                }
+            });
 
-    console.log(auctionDetails.value);
-} else {
-    alert("error, form not submitted")
-}
+        console.log(auctionDetails.value);
+    } else {
+        alert("error, form not submitted")
+    }
 }
 
 
 const rules = computed(() => ({
     auctionDetails: {
-        referenceNo: { 
-                        required:  helpers.withMessage('Reference Number is required', required)
-                     },
-        description: { 
-                        required:  helpers.withMessage('Description is required', required)
-                     },
-        auctionCategory: { 
-                            required:  helpers.withMessage('Auction Category is required', required)
-                         
-                        },
-        auctionProcess: {
-                            required:  helpers.withMessage('Auction Process is required', required) 
-                        },
-        department: { 
-                        required:  helpers.withMessage('Department is required', required)
-                     },
-        bidPlacement: {
-                            required:  helpers.withMessage('Bid Placement is required', required)
-                     },
-        eventProcesssingFeeMode: {
-                                    required:  helpers.withMessage('Event Processsing Fee Mode is required', required)
-                                 
-                                },
-        eventProcessingFeeAmount: { 
-                                    required:  helpers.withMessage('Event Processing Fee Amount is required', required)
-                                 },
-        emdFeePaymentMode: {
-                            required:  helpers.withMessage('EMD Fee Payment Mode is required', required)
-                         },
-        emdAppliedFor: { 
-                        required:  helpers.withMessage('EMD Applied For is required', required)
-                        }
-    }
-    }));
+        referenceNo: {
+            required: helpers.withMessage('Reference Number is required', required)
+        },
+        description: {
+            required: helpers.withMessage('Description is required', required)
+        },
+        auctionCategory: {
+            required: helpers.withMessage('Auction Category is required', required)
 
-    const $v=useVuelidate(rules,{auctionDetails});function FetchAllStepsAuctionPreview() {
+        },
+        auctionProcess: {
+            required: helpers.withMessage('Auction Process is required', required)
+        },
+        department: {
+            required: helpers.withMessage('Department is required', required)
+        },
+        bidPlacement: {
+            required: helpers.withMessage('Bid Placement is required', required)
+        },
+        eventProcesssingFeeMode: {
+            required: helpers.withMessage('Event Processsing Fee Mode is required', required)
+
+        },
+        eventProcessingFeeAmount: {
+            required: helpers.withMessage('Event Processing Fee Amount is required', required)
+        },
+        emdFeePaymentMode: {
+            required: helpers.withMessage('EMD Fee Payment Mode is required', required)
+        },
+        emdAppliedFor: {
+            required: helpers.withMessage('EMD Applied For is required', required)
+        }
+    }
+}));
+
+const $v = useVuelidate(rules, { auctionDetails });
+
+function FetchAllStepsAuctionPreview() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAllStepsAuctionPreview]")
-        .setData({ "auctionId": getLastInsertedAuctionId.value })
+        .setData({ "auctionId": auctionId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)

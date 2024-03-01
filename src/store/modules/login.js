@@ -22,6 +22,10 @@ export const login = defineStore("login", {
     username: (state) => state.loginDetails.fullName,
     role: (state) => state.currentRole,
     menu: (state) => state.menus,
+    loginId: (state) => state.loginDetails.loginId,
+    entityId: (state) => state.loginDetails.entityId,
+    roleId: (state) => state.loginDetails.roleId[state.loginDetails.roleName.findIndex((r) => r == state.currentRole)],
+    organizationId: (state) => state.loginDetails.organizationId
   },
   actions: {
     MUTATE_AUTH_REQUEST() {
@@ -85,14 +89,12 @@ export const login = defineStore("login", {
               console.log('token',token)
               sessionStorage.setItem("user-token", token);
               this.token = token
-              let roles = JSON.parse(atob(token.split(".")[1])).groups;
-              console.log("role", roles);
               let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
               console.log('metaDATA', JSON.parse(JSON.parse(atob(token.split('.')[1])).metadata) )
               console.log(loginUserDetails);
               this.menus = res.result.rolesMenuData;
+              this.roles = res.result.roles
               this.SET_LOGIN_USER_DETAILS(loginUserDetails);
-              this.SET_ROLES(roles);
               resolve(res);
             } else {
               rs.showErrorToast("UserLogin");
