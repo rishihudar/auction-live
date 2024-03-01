@@ -2,10 +2,9 @@ import { defineStore } from "pinia";
 
 
 export const useAuctionPreparation = defineStore("auctionPreparation", {
-    persist: true, 
-    
+    persist: true,
     state: () => ({
-        lastInsertedAuctionId: "",
+        lastInsertedAuctionId: null,
         propertyCategoryId: "",
         isClicked: false,
 
@@ -16,7 +15,6 @@ export const useAuctionPreparation = defineStore("auctionPreparation", {
         getPropertyCategoryId: (state) => state.propertyCategoryId,
         getIsClicked: (state) => state.isClicked,
       },
-    
     actions: {
         setLastInsertedAuctionId(id) {
           this.lastInsertedAuctionId = id;

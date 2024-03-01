@@ -12,7 +12,7 @@
                     aria-controls="ddmenu_profile">
                     <span class="dp-text">
                         <span class="dp-name">{{ loginStore.username }}</span>
-                        <span class="dp-info">{{ loginStore.role.displayname }}</span>
+                        <span class="dp-info">{{ loginStore.role?.roleName }}</span>
                     </span>
                     <span class="dp-media">
                         <img src="../../../assets/images/user.webp" width="100" height="100" alt="{{ fullName }}">
@@ -30,7 +30,7 @@
                             <component :is="item.icon" />
                             <span class="di-text">{{ item.label }}</span>
                         </a> -->
-                        <li @click="item.action">{{ item.label }}</li>
+                        <div class="dropdown-item" @click="item.action">{{ item.label }}</div>
                     </template>
                 </Menu>
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="profile-preview">
+    <div class="profile-preview"  v-if="history.length >0">
         <Card class="profile-card">
             <template #header>
                 <div class="profile-header">
@@ -65,7 +65,8 @@ function FetchWorkflowStepDetailsHistory() {
                 // Remove the console.log statement
                 // console.log("res.result",res.result)
 
-                history.value = res.result;
+                history.value = res.result.fetchWorkflowStepDetailsHistory;
+                history.value.push(res.result.fetchCurrent)
                 console.log(history.value, "history.value")
             } else {
                 rs.showErrorToast("FetchWorkflowStepDetailsHistory")

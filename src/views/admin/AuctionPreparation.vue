@@ -3,30 +3,44 @@
         <Stepper linear class="wizard-wrapper wizard-wrapper-prime">
             <StepperPanel header="Header I">
                 <template #content="{ nextCallback }">
-                    <Step1 :auctionId="auctionId"  @submit="setAuctionId" @nextTab="nextCallback()" />
+                    <div class="flex flex-column h-12rem">
+                        <Step1 :auctionId="AuctionStore.getLastInsertedAuctionId" @submit="setAuctionId"
+                            @nextTab="nextCallback()" />
+                    </div>
                 </template>
             </StepperPanel>
             <StepperPanel header="Header II">
                 <template #content="{ prevCallback, nextCallback }">
-                    <Step2 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
+                    <div class="flex flex-column h-12rem">
+                        <Step2 v-if="AuctionStore.getLastInsertedAuctionId"
+                            :auctionId="AuctionStore.getLastInsertedAuctionId" @previousTab="prevCallback()"
+                            @nextTab="nextCallback()" />
+                    </div>
                 </template>
             </StepperPanel>
             <StepperPanel header="Header III">
                 <template #content="{ prevCallback, nextCallback }">
-                    <Step3 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()"  />
+                    <div class="flex flex-column h-12rem">
+                        <Step3 v-if="AuctionStore.getLastInsertedAuctionId"
+                            :auctionId="AuctionStore.getLastInsertedAuctionId" @previousTab="prevCallback()"
+                            @nextTab="nextCallback()" />
+                    </div>
                 </template>
             </StepperPanel>
             <StepperPanel header="Header IV">
                 <template #content="{ prevCallback, nextCallback }">
-                    <Step4 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
+                    <div class="flex flex-column h-12rem">
+                        <Step4 v-if="AuctionStore.getLastInsertedAuctionId"
+                            :auctionId="AuctionStore.getLastInsertedAuctionId" @previousTab="prevCallback()"
+                            @nextTab="nextCallback()" />
+                    </div>
                 </template>
-            </StepperPanel> 
+            </StepperPanel>
         </Stepper>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
@@ -36,12 +50,16 @@ import Step2 from '@/views/admin/AuctionPreparation/Step2.vue';
 import Step3 from '@/views/admin/AuctionPreparation/Step3.vue';
 import Step4 from '@/views/admin/AuctionPreparation/Step4.vue';
 
+import { useAuctionPreparation } from "../../store/auctionPreparation";
+import { storeToRefs } from 'pinia';
 
-const auctionId = ref(null)
+const AuctionStore = useAuctionPreparation()
+// const {  } = storeToRefs(AuctionStore)
 
 function setAuctionId(id) {
-  console.log(id)
-  auctionId.value = id
+    console.log(id)
+    AuctionStore.setLastInsertedAuctionId(id)
 }
 
 </script>
+  

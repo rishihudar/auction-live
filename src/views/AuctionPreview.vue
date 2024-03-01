@@ -4,7 +4,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h2 class="title">Auction {{ auctionId }} Summary Page</h2>
+                <h5 class="title">Auction {{ auctionId }} Summary Page</h5>
                 <Breadcrumb :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
@@ -38,7 +38,7 @@
                     <div class="bs-item col-span-6">
                         <div class="bs-label">Auction Type:</div>
                         <div class="bs-value">
-                            {{ auctionSummary[0].auctionType }}fullname
+                            {{ auctionSummary[0].auctionType }}
                         </div>
                     </div>
                     <div class="bs-item col-span-6">
@@ -170,7 +170,7 @@
                     </div>
                     <div class="bs-item col-span-4">
                         <div class="bs-buttons bs-buttons-left">
-                            <router-link class="btn btn-sm btn-secondary" to="auctionItemDocumentPath"> Auction Item Document</router-link>
+                            <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath"> Auction Item Document</a>
                         </div>
                     </div>
                 </div>
@@ -197,13 +197,13 @@
                     <div class="bs-item col-span-6">
                         <div class="bs-label">Processing Fee and EMD Payment End date:</div>
                         <div class="bs-value">
-                            {{ auctionSummary[0].endDateDate }}
+                            {{ auctionSummary[0].endDate }}
                         </div>
                     </div>
                     <div class="bs-item col-span-full">                       
                         <div class="bs-buttons">
-                            <router-link class="btn btn-sm btn-secondary" to="auctionDocumentPath"> Auction Item</router-link>
-                            <router-link class="btn btn-sm btn-secondary" to="auctionNoticeDocumentPath"> Notice Document</router-link>
+                            <router-link class="btn btn-sm btn-secondary" :to="auctionDocumentPath"> Auction Item</router-link>
+                            <router-link class="btn btn-sm btn-secondary" :to="auctionNoticeDocumentPath"> Notice Document</router-link>
                         </div>
                     </div>
                     
@@ -378,8 +378,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Card from "primevue/card";
-import Divider from "primevue/divider";
 import MQL from "@/plugins/mql.js";
 import History from "./History.vue";
 import Step1 from "./admin/AuctionPreparation/Step1.vue";

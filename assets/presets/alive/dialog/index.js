@@ -1,6 +1,7 @@
 export default {
     root: ({ state }) => ({
         class: [
+            'modal',
             // Shape
             'rounded-lg',
             'shadow-lg',

@@ -55,6 +55,11 @@
         }
         td {padding: var(--table-td-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border-light); border-right: 1px solid var(--table-border-light); font-size: 15px; line-height: 22px;
             &:last-child {border-right: none;}
+            button {@apply flex items-center gap-2;
+                svg {
+                    @apply w-auto h-4 fill-white;
+                }
+            }
         }
     }
 }
