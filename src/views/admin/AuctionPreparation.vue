@@ -1,48 +1,33 @@
-  <template>
-    <div class="card flex justify-content-center">
-        <Stepper linear>
-            <StepperPanel header="Header I" >
+<template>
+    <div>
+        <Stepper linear class="wizard-wrapper wizard-wrapper-prime">
+            <StepperPanel header="Header I">
                 <template #content="{ nextCallback }">
-                    <div class="flex flex-column h-12rem">
-                        <Step1 :auctionId="auctionId"  @submit="setAuctionId" @nextTab="nextCallback()" />
-                    </div>
+                    <Step1 :auctionId="auctionId"  @submit="setAuctionId" @nextTab="nextCallback()" />
                 </template>
             </StepperPanel>
             <StepperPanel header="Header II">
                 <template #content="{ prevCallback, nextCallback }">
-                    <div class="flex flex-column h-12rem">
-                        <Step2 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
-                    </div>
+                    <Step2 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
                 </template>
             </StepperPanel>
             <StepperPanel header="Header III">
                 <template #content="{ prevCallback, nextCallback }">
-                    <div class="flex flex-column h-12rem">
-                        <Step3 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()"  />
-                    </div>
+                    <Step3 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()"  />
                 </template>
             </StepperPanel>
             <StepperPanel header="Header IV">
                 <template #content="{ prevCallback, nextCallback }">
-                    <div class="flex flex-column h-12rem">
-                        <Step4 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
-                    </div>
+                    <Step4 :auctionId="auctionId" @previousTab="prevCallback()" @nextTab="nextCallback()" />
                 </template>
             </StepperPanel> 
         </Stepper>
     </div>
 </template>
 
-<style scoped>
-.p-stepper {
-    flex-basis: 50rem;
-}
-</style>
+<script setup>
+import { ref } from 'vue';
 
-
-  <script setup>
-  import { ref } from 'vue';
-  
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 
@@ -59,5 +44,4 @@ function setAuctionId(id) {
   auctionId.value = id
 }
 
-  </script>
-  
+</script>
