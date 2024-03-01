@@ -1,51 +1,67 @@
 <template>
-    <div class="gap-2  mx-auto">
-        <div class="fm-row">
-            <div class="w-full">
-                <div class="fm-group">
-                    <div class="w-subtitle">
-                        <h1>Step 1 Details</h1>
+    <div class="wizard-content">
+        <div class="wc-item">
+            <div class="wc-header">
+                <div class="wc-title">Step 1 Details</div>
+            </div>
+
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-6" v-if="ifBool(config?.auctionTypeDataVisible, true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">
+                            Auction Type
+                            <span class="text-danger">*</span>
+                        </label>
+                        <!-- {{ $v.auctionTypeData.auctionType }} -->
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.auctionTypeDataReadonly" v-model="auctionTypeData" variant="filled" :options="aucType" optionLabel="auctionType" placeholder="Select Auction Type"/>
+                        </div>
+                        <div v-if="$v.auctionTypeData.auctionType.$error" class="fm-error">
+                            {{ $v.auctionTypeData.auctionType.$errors[0].$message }}
+                        </div>
                     </div>
                 </div>
+                <div class="col-span-full md:col-span-6" v-if="ifBool(config?.auctionMethodDataVisible, true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Auction Method
+                            <span class="text-danger">*</span>
+                        </label>
+                        <!-- {{ $v.auctionMethodData.auctionMethodName }} -->
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.auctionMethodDataReadonly" v-model="auctionMethodData" variant="filled" :options="aucMethod" optionLabel="auctionMethodName" placeholder="Select Auction Method" />
+                        </div>
+                        <div v-if="$v.auctionMethodData.auctionMethodName.$error" class="fm-error">
+                            {{ $v.auctionMethodData.auctionMethodName.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div v-if="ifBool(config?.auctionTypeDataVisible, true)" class="w-1/2">
+                    <div class="fm-group">
+                        <label for="step1">Auction Type<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.auctionTypeDataReadonly" v-model="auctionTypeData" variant="filled"
+                            :options="aucType" optionLabel="auctionType" placeholder="Select Auction Type"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionTypeData.auctionType.$error" class="text-red-500">{{
+                            $v.auctionTypeData.auctionType.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if="ifBool(config?.auctionMethodDataVisible, true)" class="w-1/2">
+                    <div class="fm-group">
+                        <label for="step2">Auction Method<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.auctionMethodDataReadonly" v-model="auctionMethodData" variant="filled"
+                            :options="aucMethod" optionLabel="auctionMethodName" placeholder="Select Auction Method"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionMethodData.auctionMethodName.$error" class="text-red-500">{{
+                            $v.auctionMethodData.auctionMethodName.$errors[0].$message }}</span>
+                    </div>
+                </div> -->
             </div>
         </div>
 
-        <Divider />
-        <div class="fm-row">
-            <div v-if="ifBool(config?.auctionTypeDataVisible, true)" class="w-1/2">
-                <div class="fm-group">
-                    <label for="step1">Auction Type<span class="text-danger">*</span></label>
-                    <!-- {{ $v.auctionTypeData.auctionType }} -->
-                    <Dropdown :disabled="config?.auctionTypeDataReadonly" v-model="auctionTypeData" variant="filled"
-                        :options="aucType" optionLabel="auctionType" placeholder="Select Auction Type"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionTypeData.auctionType.$error" class="text-red-500">{{
-                        $v.auctionTypeData.auctionType.$errors[0].$message }}</span>
-                </div>
-            </div>
-            <div v-if="ifBool(config?.auctionMethodDataVisible, true)" class="w-1/2">
-                <div class="fm-group">
-                    <label for="step2">Auction Method<span class="text-danger">*</span></label>
-                    <!-- {{ $v.auctionMethodData.auctionMethodName }} -->
-                    <Dropdown :disabled="config?.auctionMethodDataReadonly" v-model="auctionMethodData" variant="filled"
-                        :options="aucMethod" optionLabel="auctionMethodName" placeholder="Select Auction Method"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionMethodData.auctionMethodName.$error" class="text-red-500">{{
-                        $v.auctionMethodData.auctionMethodName.$errors[0].$message }}</span>
-                </div>
-            </div>
-        </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-full">
-                <div class="fm-group">
-                    <span class="p-buttonset">
-                        <Button label="Save" @click="InsertAuctionTypeAndMethod" icon="pi pi-trash" />
-                    </span>
-                </div>
-            </div>
+        <div class="wc-action">
+            <Button class="btn-submit" label="Save" @click="InsertAuctionTypeAndMethod" />
         </div>
     </div>
 </template>

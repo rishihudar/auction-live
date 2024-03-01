@@ -1,153 +1,278 @@
 <template>
-    <div class="gap-2  mx-auto">
-        <div class="fm-row">
-            <div class="w-full">
-                <div class="fm-group">
-                    <h1> Auction ID:{{ auctionId }} </h1>
+    <div class="wizard-content">
+        <div class="wc-item">
+            <div class="wc-header">
+                <div class="wc-title">Auction ID: {{ auctionId }}</div>
+            </div>
+
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.referenceNoVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="username">Reference Number</label>
+                        <div class="fm-inner">
+                            <InputText id="username" :disabled="config?.referenceNoReadonly" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionCategoryVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step1">
+                            Auction Category
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
+                            :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category" />
+                        </div>
+                        <div v-if="$v.auctionDetails.auctionCategory.$error" class="fm-error">
+                            {{ $v.auctionDetails.auctionCategory.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionProcessVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Auction Process
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
+                            :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process" />
+                        </div>
+                        <div v-if="$v.auctionDetails.auctionProcess.$error" class="fm-error">
+                            {{ $v.auctionDetails.auctionProcess.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full" v-if="ifBool(config?.descriptionVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Auction Description
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111" placeholder="Enter Description" />
+                        </div>
+                        <div v-if="$v.auctionDetails.description.$error" class="fm-error">
+                            {{ $v.auctionDetails.description.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Department
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
+                            :options="departments" optionLabel="departmentName" placeholder="Select Department" />
+                        </div>
+                        <div v-if="$v.auctionDetails.department.$error" class="fm-error">
+                            {{ $v.auctionDetails.department.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Bid Submission/Placement
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
+                            :options="bidPlacements" optionLabel="bidPlacementName"
+                            placeholder=" Select Bid Submission/Placement" />
+                        </div>
+                        <div v-if="$v.auctionDetails.bidPlacement.$error" class="fm-error">
+                            {{ $v.auctionDetails.bidPlacement.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            Event Processsing Fee Mode
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
+                            :options="paymentModes" optionLabel="paymentModeName"
+                            placeholder="Select Event Processsing Fee Mode" />
+                        </div>
+                        <div v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="fm-error">
+                            {{ $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="username">
+                            Event Processing Fee Amount<span class="text-danger">*</span>
+                        </label>
+                        <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
+                        <div class="fm-inner">
+                            <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" />
+                        </div>
+                        <div v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="fm-error">
+                            {{ $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            EMD Fee Payment Mode
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
+                            :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode" />
+                        </div>
+                        <div v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="fm-error">
+                            {{ $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible,true)">
+                    <div class="fm-group">
+                        <label class="fm-label" for="step2">
+                            EMD Applied For<span class="text-danger">*</span>
+                        </label>
+                        <div class="fm-inner">
+                            <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
+                            :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For" />
+                        </div>
+                        <div v-if="$v.auctionDetails.emdAppliedFor.$error" class="fm-error">
+                            {{ $v.auctionDetails.emdAppliedFor.$errors[0].$message }}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <Divider />
+            <!-- <div class="fm-row">
+                <div v-if= "ifBool(config?.referenceNoVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="username">Reference Number</label>
+                        <InputText id="username" :disabled="config?.referenceNoReadonly" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
+                    </div>
+                </div>
 
-        <div class="fm-row">
-            <div v-if= "ifBool(config?.referenceNoVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="username">Reference Number</label>
-                    <InputText id="username" :disabled="config?.referenceNoReadonly" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
+                <div v-if= "ifBool(config?.auctionCategoryVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step1">Auction Category<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
+                            :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.auctionCategory.$error" class="text-red-500">{{
+                            $v.auctionDetails.auctionCategory.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if= "ifBool(config?.auctionProcessVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">Auction Process<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
+                            :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.auctionProcess.$error" class="text-red-500">{{
+                            $v.auctionDetails.auctionProcess.$errors[0].$message }}</span>
+                    </div>
                 </div>
             </div>
 
-            <div v-if= "ifBool(config?.auctionCategoryVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step1">Auction Category<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
-                        :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.auctionCategory.$error" class="text-red-500">{{
-                        $v.auctionDetails.auctionCategory.$errors[0].$message }}</span>
+            <Divider />
+
+            <div v-if="ifBool(config?.descriptionVisible,true)" class="fm-row">
+                <div class="justify-content-center">
+                    <label for="step2">Auction Description<span class="text-danger">*</span> </label>
+                    <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111"
+                        placeholder="Enter Description" />
+                    <span v-if="$v.auctionDetails.description.$error" class="text-red-500">{{
+                        $v.auctionDetails.description.$errors[0].$message }}</span>
                 </div>
             </div>
-            <div v-if= "ifBool(config?.auctionProcessVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">Auction Process<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
-                        :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.auctionProcess.$error" class="text-red-500">{{
-                        $v.auctionDetails.auctionProcess.$errors[0].$message }}</span>
+
+            <Divider />
+
+            <div class="fm-row">
+                <div v-if= "ifBool(config?.departmentVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">Department<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
+                            :options="departments" optionLabel="departmentName" placeholder="Select Department"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.department.$error" class="text-red-500">{{
+                            $v.auctionDetails.department.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if= "ifBool(config?.bidPlacementVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">Bid Submission/Placement<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
+                            :options="bidPlacements" optionLabel="bidPlacementName"
+                            placeholder=" Select Bid Submission/Placement" class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.bidPlacement.$error" class="text-red-500">{{
+                            $v.auctionDetails.bidPlacement.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if= "ifBool(config?.eventProcesssingFeeModeVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">Event Processsing Fee Mode<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
+                            :options="paymentModes" optionLabel="paymentModeName"
+                            placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="text-red-500">{{
+                            $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <Divider />
+            <Divider />
 
-        <div v-if="ifBool(config?.descriptionVisible,true)" class="fm-row">
-            <!-- <div class="w-full">
-                <div class="fm-group"> -->
-            <div class="justify-content-center">
-                <label for="step2">Auction Description<span class="text-danger">*</span> </label>
-                <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111"
-                    placeholder="Enter Description" />
-                <span v-if="$v.auctionDetails.description.$error" class="text-red-500">{{
-                    $v.auctionDetails.description.$errors[0].$message }}</span>
-            </div>
-            <!-- </div>
+            <div class="fm-row">
+                <div v-if= "ifBool(config?.eventProcessingFeeAmountVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        {{ $v.auctionDetails.eventProcessingFeeAmount}}
+                        <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
+                        <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal"
+                            showButtons :min="0" />
+                        <span v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="text-red-500">{{
+                            $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if= "ifBool(config?.emdFeePaymentModeVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">EMD Fee Payment Mode<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
+                            :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="text-red-500">{{
+                            $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}</span>
+                    </div>
+                </div>
+                <div v-if= "ifBool(config?.emdAppliedForVisible,true)" class="w-1/3">
+                    <div class="fm-group">
+                        <label for="step2">EMD Applied For<span class="text-danger">*</span></label>
+                        <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
+                            :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For"
+                            class="w-full md:w-14rem" />
+                        <span v-if="$v.auctionDetails.emdAppliedFor.$error" class="text-red-500">{{
+                            $v.auctionDetails.emdAppliedFor.$errors[0].$message }}</span>
+                    </div>
+                </div>
             </div> -->
+
         </div>
 
-        <Divider />
-
-        <div class="fm-row">
-            <div v-if= "ifBool(config?.departmentVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">Department<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
-                        :options="departments" optionLabel="departmentName" placeholder="Select Department"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.department.$error" class="text-red-500">{{
-                        $v.auctionDetails.department.$errors[0].$message }}</span>
-                </div>
-            </div>
-            <div v-if= "ifBool(config?.bidPlacementVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">Bid Submission/Placement<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
-                        :options="bidPlacements" optionLabel="bidPlacementName"
-                        placeholder=" Select Bid Submission/Placement" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.bidPlacement.$error" class="text-red-500">{{
-                        $v.auctionDetails.bidPlacement.$errors[0].$message }}</span>
-                </div>
-            </div>
-            <div v-if= "ifBool(config?.eventProcesssingFeeModeVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">Event Processsing Fee Mode<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
-                        :options="paymentModes" optionLabel="paymentModeName"
-                        placeholder="Select Event Processsing Fee Mode" class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="text-red-500">{{
-                        $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}</span>
-                </div>
-            </div>
-        </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div v-if= "ifBool(config?.eventProcessingFeeAmountVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
-                    <label for="username">Event Processing Fee Amount<span class="text-danger">*</span></label>
-                    <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal"
-                        showButtons :min="0" />
-                    <span v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="text-red-500">{{
-                        $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}</span>
-                </div>
-            </div>
-            <div v-if= "ifBool(config?.emdFeePaymentModeVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">EMD Fee Payment Mode<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
-                        :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="text-red-500">{{
-                        $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}</span>
-                </div>
-            </div>
-            <div v-if= "ifBool(config?.emdAppliedForVisible,true)" class="w-1/3">
-                <div class="fm-group">
-                    <label for="step2">EMD Applied For<span class="text-danger">*</span></label>
-                    <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
-                        :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For"
-                        class="w-full md:w-14rem" />
-                    <span v-if="$v.auctionDetails.emdAppliedFor.$error" class="text-red-500">{{
-                        $v.auctionDetails.emdAppliedFor.$errors[0].$message }}</span>
-                </div>
-            </div>
-        </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-1/2">
-                <div class="fm-group">
-                    <span class="p-buttonset">
-                        <!-- <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button> -->
-                        <Button @click="prevCallback()" icon="pi pi-check" label="Back"></Button>
-                    </span>
-                </div>
-            </div>
-            <div class="w-full">
-                <div class="fm-group">
-                    <span class="p-buttonset">
-                        <Button @click="InsertAuctionDataStep2" icon="pi pi-check" label="Save"></Button>
-                    </span>
-                </div>
-            </div>
+        <div class="wc-action">
+            <!-- <Button @click="$router.push({ name: 'ROLE_MAKER' })" icon="pi pi-check" label="Back"></Button> -->
+            <Button @click="prevCallback()" label="Back" severity="secondary"></Button>
+            <Button @click="InsertAuctionDataStep2" label="Save" class="btn-submit"></Button>
         </div>
     </div>
     <!-- ,$router.push({ name: 'Step3' }) -->
 </template>
+
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import MQL from '@/plugins/mql.js';

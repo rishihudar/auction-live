@@ -1,70 +1,43 @@
-
 <template>
-    <div class="gap-2  mx-auto">
-        <div class="fm-row">
-            <div class="w-full">
-                <h1>Auction ID: {{ auctionId }}</h1>
+    <div class="wizard-content">
+        <div class="wc-item">
+            <div class="wc-header">
+                <div class="wc-title">Auction ID: {{ auctionId }}</div>
             </div>
+
+            <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
+                columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
+                <Column field="inventoryId" header="Inventory Id"></Column>
+                <Column field="inventoryHierarchy" header="Inventory Name"></Column>
+                <Column field="reservePrice" header="Reserved Price"></Column>
+                <Column field="modifierValue" header="Modifier Value"></Column>
+                <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
+                <Column field="action" header="Action">
+                    <template #body="slotProps">
+                        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove"
+                            @click="deleteItem(slotProps.data)" />
+                    </template>
+                </Column>
+            </DataTable>
+            <div v-else>
+                <h4>INVENTORY ITEM NOT AVAILABLE</h4>
+            </div>
+
+            <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" />
         </div>
 
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-full">
-                <div class="card">
-                    <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
-                        columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
-                        <Column field="inventoryId" header="Inventory Id"></Column>
-                        <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                        <Column field="reservePrice" header="Reserved Price"></Column>
-                        <Column field="modifierValue" header="Modifier Value"></Column>
-                        <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
-                        <Column field="action" header="Action">
-                            <template #body="slotProps">
-                                <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove"
-                                    @click="deleteItem(slotProps.data)" />
-                            </template>
-                        </Column>
-                    </DataTable>
-                    <div v-else>
-                        <h4>INVENTORY ITEM NOT AVAILABLE</h4>
-                    </div>
-                </div>
-            </div>
+        <Toast />
+        <ConfirmDialog></ConfirmDialog>
+        
+        <div class="wc-action">
+            <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
+            <Button label="Back" @click="prevCallback()" severity="secondary" />
+            <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
+            <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
+            <Button label="Next" @click="nextCallback()" class="btn-submit" />
         </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-full">
-                <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" icon="pi pi-trash" />
-            </div>
-        </div>
-
-        <Divider />
-
-        <div class="fm-row">
-            <div class="w-1/2">
-                <div class="fm-group">
-                    <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
-                    <Button label="Back" @click="prevCallback()" icon="pi pi-trash" />
-                </div>
-            </div>
-            <Toast />
-            <ConfirmDialog></ConfirmDialog>
-            <div class="w-full">
-                <div class="fm-group">
-                    <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
-                    <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
-                    <Button label="Next" @click="nextCallback()" icon="pi pi-trash" />
-                </div>
-            </div>
-        </div>
-
 
         <!-- --------------------------------------------------------------------------------------- -->
-
-
         <Dialog v-model:visible="visible" modal header="Add Item" :style="{ width: '75rem' }">
             <div class="gap-2  mx-auto">
                 <div class="fm-row">
