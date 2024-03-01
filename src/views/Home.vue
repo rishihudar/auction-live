@@ -283,16 +283,32 @@
                     <i class="isax isax-bold-arrow-right"></i>
                 </div>
             </div>
+            <div class="bx-card">
+                <div class="icon-holder">
+                    <i class="isax isax-bold-profile-2user"></i>
+                </div>
+                <div class="bx-card-name">
+                   <schedule-button :entity-id="'1'" :auction-id="'37'" :item-list="[{item: '78', selected: true}]" v-model:startDate="startDate" v-model:endDate="endDate" v-model:users="users"></schedule-button>
+                    <i class="isax isax-bold-arrow-right"></i>
+                </div>
+            </div>
 		</div>
 	</div>
 </template>
 
 <script setup>
+    import { ref } from "vue"
 	import { useRouter } from "vue-router"
+	import ScheduleButton from '@/components/SchedulerButton.vue'
+    
 	const router = useRouter()
 	function vueMeta() {
 		router.push({ name: "vueMetaExample", params: { title: "Live Demo" } })
 	}
+
+    const startDate = ref(new Date())
+    const endDate = ref(new Date())
+    const users = ref([])
 </script>
 
 <style>
