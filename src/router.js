@@ -71,11 +71,17 @@ const router = createRouter({
       component: loadDashboardView("AdminComponent"),
       meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
+    // {
+    //   path: "/AuctionMakerDashboard",
+    //   name: "ROLE_MAKER",
+    //   component: loadDashboardView("AuctionMakerComponent"),
+    //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    // },
     {
-      path: "/AuctionMakerDashboard",
-      name: "ROLE_MAKER",
-      component: loadDashboardView("AuctionMakerComponent"),
-      meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      path: "/auction-list",
+      name:"ROLE_MAKER",
+      component: loadAdminView("AuctionList"),
+      meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
     },
     {
       path: "/BidderDashboard",
@@ -100,6 +106,12 @@ const router = createRouter({
       name: "ROLE_APPROVER",
       component: loadDashboardView("ApproverComponent"),
       meta: { title: "ApproverComponent", lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
+      path: "/task-details",
+      name: "MyTask",
+      component: loadAdminView("MyTask"),
+      meta: { title: "MyTask",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
       path: "/PublisherDashboard",
