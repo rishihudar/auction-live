@@ -10,11 +10,15 @@
     .fm-label {@apply mb-0;}
     a {@apply text-sm font-medium text-primary-600;}
 }
-.fm-label {@apply mb-1 text-sm font-semibold;}
+.fm-label {@apply mb-1 text-sm font-semibold;
+    .required & {
+        &:after {@apply text-red-600; content: '*';}
+    }
+}
 
 
 .fm-inner {@apply relative;
-    [class*="fm-icon"] {@apply absolute top-0 px-3.5 w-11 h-full *:fill-[var(--neutral-200)];
+    [class*="fm-icon"] {@apply absolute top-0 px-3.5 w-11 h-full pointer-events-none *:fill-[var(--neutral-200)];
         &.fm-prefix {@apply left-0;}
         &.fm-suffix {@apply right-0;}
 
@@ -24,14 +28,17 @@
     &:has(.fm-prefix) .fm-control {@apply pl-10;}
     &:has(.fm-suffix) .fm-control {@apply pr-10;}
 
-    .fm-icon-action {@apply cursor-pointer;}
+    .fm-icon-action {@apply cursor-pointer pointer-events-auto;}
 }
 
 
 .fm-control {@apply px-4 py-3 h-[var(--fm-height)] w-full border border-[var(--fm-border-color)] rounded-[var(--fm-border-radius)] text-[15px] bg-white;
     &::placeholder {@apply text-[var(--neutral-200)];}
     &:focus {@apply border-blue-500 outline-none; box-shadow: 0 0 0 1px theme('colors.blue[500]');}
+
+    .fm-control-disabled {@apply opacity-60 select-none pointer-events-none cursor-default;}
 }
+textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 .fm-select {@apply flex gap-2 cursor-pointer;
     .fm-select-label {@apply block flex-auto leading-5 whitespace-nowrap text-ellipsis overflow-hidden focus:outline-none focus:shadow-none;/* min-width: 0;*/}
     .fm-select-placeholder {@apply text-[var(--neutral-200)];}
@@ -44,11 +51,25 @@
     &.fm-check-vertical {@apply flex-col items-start;}
     &.fm-check-center {@apply mx-auto w-3/4;}
 }
-.fm-checkbox {@apply flex;
+.fm-checkbox, .fm-radiobox {@apply flex;
     label {@apply ml-2 text-[15px] cursor-pointer;}
 }
-.fm-box {@apply border border-[var(--fm-border-color)] rounded-[var(--fm-border-radius)];
+.fm-box {@apply w-6 h-6 flex items-center justify-center border border-[var(--fm-border-color)] rounded-[var(--fm-border-radius)] transition-colors duration-200;
+    &-control {@apply w-full h-full absolute top-0 left-0 z-10 p-0 m-0 opacity-0 outline-none appearance-none cursor-pointer;}
     &-checked {@apply border-primary-400 bg-primary-400;}
+    
+    &-holder {@apply relative w-6 h-6 inline-flex align-bottom cursor-pointer select-none;}
+
+    
+}
+
+.fm-radiobox {
+    .fm-box {@apply rounded-full;}
+    .fm-box-icon {@apply w-3 h-3 rounded-full bg-transparent transition-colors duration-200;}
+
+    .fm-box-checked {
+        .fm-box-icon {@apply bg-white;}
+    }
 }
 
 
