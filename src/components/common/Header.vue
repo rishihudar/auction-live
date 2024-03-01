@@ -42,12 +42,13 @@
 import { main } from "@/store/index"
 import { login } from "../../store/modules/login"
 import { useRouter } from "vue-router";
+import { useAuctionPreparation } from "../../store/auctionPreparation";
 // import faAddressCard from '../../../assets/icons/address-card.svg'
 import faBars from '../../../assets/icons/bars.svg'
 import { ref } from "vue";
 // import faGear from '../../../assets/icons/gear.svg'
 // import faRightFromBracket from '../../../assets/icons/right-from-bracket.svg'
-
+const AuctionStore = useAuctionPreparation()
 const profilemenu = ref(null)
 
 const router = useRouter()
@@ -55,6 +56,8 @@ const router = useRouter()
 
 const logout = () => {
     loginStore.AUTH_LOGOUT()
+    AuctionStore.$reset()
+
 }
 
 const navigateToRoleSelect = () => {

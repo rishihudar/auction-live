@@ -24,7 +24,7 @@ export const login = defineStore("login", {
     menu: (state) => state.menus,
     loginId: (state) => state.loginDetails.loginId,
     entityId: (state) => state.loginDetails.entityId,
-    organizationId: (state) => state.loginDetails.organizationId
+    organizationId: (state) => state.loginDetails.organizationId,
   },
   actions: {
     MUTATE_AUTH_REQUEST() {
@@ -85,14 +85,19 @@ export const login = defineStore("login", {
             if (rs.isValid("UserLogin")) {
               console.log("res.result", res.result);
               let token = rs.getHeaders().authorization;
-              console.log('token',token)
+              console.log("token", token);
               sessionStorage.setItem("user-token", token);
-              this.token = token
-              let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
-              console.log('metaDATA', JSON.parse(JSON.parse(atob(token.split('.')[1])).metadata) )
+              this.token = token;
+              let loginUserDetails = JSON.parse(
+                JSON.parse(atob(token.split(".")[1])).metadata
+              );
+              console.log(
+                "metaDATA",
+                JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata)
+              );
               console.log(loginUserDetails);
               this.menus = res.result.rolesMenuData;
-              this.roles = res.result.roles
+              this.roles = res.result.roles;
               this.SET_LOGIN_USER_DETAILS(loginUserDetails);
               resolve(res);
             } else {
@@ -103,13 +108,31 @@ export const login = defineStore("login", {
       });
     },
 
+    LOGOUT_LOG() {
+      // Automatically generated
+      new MQL()
+        .useLoginServer()
+        .setActivity("o.[LogoutLog]")
+        .setData({ userId: this.loginId })
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity("LogoutLog", true);
+          if (rs.isValid("LogoutLog")) {
+          } else {
+            rs.showErrorToast("LogoutLog");
+          }
+        });
+    },
+
     AUTH_LOGOUT() {
       return new Promise((resolve) => {
         sessionStorage.removeItem("user-token");
+        this.LOGOUT_LOG();
         // remove the axios default header
-        delete axios.defaults.headers.common['Authorization']
-        router.push({name: "login"});
-        this.$reset()
+        // TODO: Add logout log activity
+        delete axios.defaults.headers.common["Authorization"];
+        this.$reset();
+        router.push({ name: "login" });
         resolve();
       });
     },
