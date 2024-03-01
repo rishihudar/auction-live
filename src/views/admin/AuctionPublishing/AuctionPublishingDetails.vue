@@ -79,9 +79,11 @@
                                     </div>
                                 </div>
                                 <div class="col-span-full" v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')">
-                                    <label class="fm-error" for="">
-                                        Start Date should not be equal or after End Date !
-                                    </label>
+                                    <div class="fm-group">
+                                        <label class="fm-error" for="">
+                                            Start Date should not be equal or after End Date !
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <!-- <label for="calendar-12h" class="font-bold block mb-2">
