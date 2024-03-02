@@ -82,7 +82,7 @@ import { storeToRefs } from 'pinia';
 
 
 const loginStore = login();
-const {organizationId, entityId } = storeToRefs(loginStore);
+const {organizationId, entityId, loginId } = storeToRefs(loginStore);
 
 // access the `store` variable anywhere in the component 
 const auctionMethodData = ref({
@@ -233,11 +233,15 @@ function updateAuction() {
 }
 
 function insertAuction() {
-    console.log("OrganizationId, entityId", organizationId.value, entityId.value);    
+    console.log("OrganizationId, entityId, loginId", organizationId.value, entityId.value, loginId.value);    
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, organizationId: organizationId.value  ,entityId: entityId.value })
+        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, 
+            auctionMethodId: auctionMethodData.value.auctionMethodId,
+             statusId: statusId.value, 
+             organizationId: organizationId.value,
+             entityId: entityId.value, createdByUserId: loginId.value})
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
