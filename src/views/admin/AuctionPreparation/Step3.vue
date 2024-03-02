@@ -36,12 +36,14 @@
             <Button label="Back" @click="prevCallback()" severity="secondary" />
             <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
             <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
-            <Button label="Next" @click="nextCallback()" class="btn-submit" />
+            <Button   v-if="getIsClicked"   label="Next" @click="nextCallback()" class="btn-submit" />
         </div>
 
         <!-- --------------------------------------------------------------------------------------- -->
+        <Toast />
         <Dialog v-model:visible="visible" modal header="Add Item" :style="{ width: '75rem' }">
             <div class="form-grid">
+                <Toast />
                 <div class="col-span-full md:col-span-4">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">District</label>
@@ -605,7 +607,7 @@ const onAdvancedUpload = async (event) => {
     console.log("myFile", myFile.value)
     const formData = new FormData();
     formData.append('file', event.files[0]);
-    uploadedFile.value = true;
+    //uploadedFile.value = true;
     //new mqlCDN add-------------------------------------------------------------------------------
     new MQLCdn()
         // .useManagementServer()
@@ -629,7 +631,7 @@ const onAdvancedUpload = async (event) => {
                 console.log("fileName", fileName.value);
                 console.log("filePath", filePath.value);
                 console.log("fullPath", fullPath.value);
-                // uploadedFile.value = true;
+                 uploadedFile.value = true;
                 // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
                 //toaster.success("file uploaded.");
                 toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
@@ -729,7 +731,8 @@ const AddStep3AuctionData = async () => {
         }
 
     if (errorCount == 0) {
-        alert("Form data is valid, form submitted");
+        // alert("Form data is valid, form submitted");
+         toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -765,7 +768,8 @@ const AddStep3AuctionData = async () => {
             })
 
     } else {
-        alert("Form data is invalid, please check the form");
+        // alert("Form data is invalid, please check the form");
+        toast.add({ severity: 'error', summary: 'Drafted', detail: 'Form data is invalid, please check the form', life: 3000 });
     }
 
 
