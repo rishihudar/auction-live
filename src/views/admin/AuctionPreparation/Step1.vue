@@ -77,6 +77,13 @@ import { createToaster } from "@meforma/vue-toaster";
 import { fetchAuctionStatus, ifBool } from "../../../plugins/helpers";
 const toaster = createToaster({ position: "top-right", duration: 3000 })
 
+import { login } from "../../../store/modules/login";
+import { storeToRefs } from 'pinia';
+
+
+const loginStore = login();
+const {organizationId, entityId } = storeToRefs(loginStore);
+
 // access the `store` variable anywhere in the component 
 const auctionMethodData = ref({
     auctionMethodName: '',
@@ -226,10 +233,11 @@ function updateAuction() {
 }
 
 function insertAuction() {
+    console.log("OrganizationId, entityId", organizationId.value, entityId.value);    
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value })
+        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, organizationId: organizationId.value  ,entityId: entityId.value })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
