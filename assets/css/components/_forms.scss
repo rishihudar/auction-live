@@ -99,7 +99,9 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 }
 
 
-.fm-action {@apply pt-2 col-span-full flex flex-wrap gap-2 items-center;}
+.fm-action {@apply pt-2 col-span-full flex flex-wrap gap-2 items-center;
+    &.fm-action-center {@apply justify-center;}
+}
 
 .fm-action-link {@apply mt-4 col-span-full text-center;
     a {@apply text-sm font-medium text-primary-600;}

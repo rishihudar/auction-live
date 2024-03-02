@@ -4,89 +4,106 @@
         <div class="profile-header">
             <h2>Upcoming Auctions</h2>
         </div>
-        <DataTable v-model:expandedRows="expandedRows" :value="auctionDetails" @rowExpand="onRowExpand"
-            @rowCollapse="onRowCollapse" showGridlines tableStyle="min-width: 50rem">
+        <div class="table-custom">
+            <DataTable v-model:expandedRows="expandedRows" :value="auctionDetails" @rowExpand="onRowExpand"
+                @rowCollapse="onRowCollapse" showGridlines tableStyle="min-width: 50rem">
 
-            <Column expander style="width: 50rem">
-                <template #rowtogglericon="">
-                    Details
-                </template>
-            </Column>
-            <template #expansion="slot">
-                <div class="card">
-                    <div class="profile-field">
-                        <label class="bold-label" for="auctionType">Auction Type:</label>
-                        <span>{{ slot.data.auctionType }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="auctionMethodName">Auction Method:</label>
-                        <span>{{ slot.data.auctionMethodName }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="auctionProcessName">Auction Process:</label>
-                        <span>{{ slot.data.auctionProcessName }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="bidPlacementName">Bid Placement:</label>
-                        <span>{{ slot.data.bidPlacementName }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="district">District:</label>
-                        <span>{{ slot.data.district }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="mcName">MC:</label>
-                        <span>{{ slot.data.mcName }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="location">Location:</label>
-                        <span>{{ slot.data.location }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="area">Area:</label>
-                        <span>{{ slot.data.area }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="area">Participants:</label>
-                        <span>{{ slot.data.participants }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="area">Total EMD Paid For:</label>
-                        <span>{{ slot.data.emdPaid }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="itemCount">Properties Available:</label>
-                        <span>Upto {{ slot.data.itemCount }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="eventEmdProcessingFees">EMD:</label>
-                        <span>{{ slot.data.eventEmdProcessingFees }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="reservePrice">Reserve Price:</label>
-                        <span>{{ slot.data.reservePrice }}</span>
-                    </div>
-                    <div class="profile-field">
-                        <label class="bold-label" for="modifierValue">Modifier Value:</label>
-                        <span>{{ slot.data.modifierValue }}</span>
-                    </div>
-                    <div class="profile-field" v-for="(doc, index) in slot.data.auctionDocuments" :key="index">
-                        <span><a :href="doc.documentPath" class="document-link">{{ doc.documentTypeName }}</a></span>
-                    </div>
-
-
-
-                    <Button label="Available Properties" @click="visible6 = true" />
-                    <Dialog v-model:visible="visible6" modal header="Available Properties" :style="{ width: '25rem' }">
-                        <div class="profile-field">
-                            <Listbox :options="slot.data.item" optionLabel="item" class="w-full md:w-14rem" />
+                <Column expander style="width: 50rem">
+                    <template #rowtogglericon="">
+                        Details
+                    </template>
+                </Column>
+                <template #expansion="slot">
+                    <div class="box-section">
+                        <div class="bs-header">
+                            Auction Details
                         </div>
-                    </Dialog>
-                    <schedule-button :entity-id="loginStore.loginDetails.entityId" :auction-id="slot.data.auctionCode" :item-list="slot.data.item"
-                        v-model:startDate="slot.data.auctionStartDate" v-model:endDate="slot.data.auctionEndDate" v-model:users="slot.data.users"></schedule-button>
-                </div>
-            </template>
-        </DataTable>
+                        <div class="bs-item-holder">
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Auction Type:</div>
+                                <div class="bs-value">{{ slot.data.auctionType }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Auction Method:</div>
+                                <div class="bs-value">{{ slot.data.auctionMethodName }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Auction Process:</div>
+                                <div class="bs-value">{{ slot.data.auctionProcessName }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Bid Placement:</div>
+                                <div class="bs-value">{{ slot.data.bidPlacementName }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">District:</div>
+                                <div class="bs-value">{{ slot.data.district }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">MC:</div>
+                                <div class="bs-value">{{ slot.data.mcName }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Location:</div>
+                                <div class="bs-value">{{ slot.data.location }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Area:</div>
+                                <div class="bs-value">{{ slot.data.area }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Participants:</div>
+                                <div class="bs-value">{{ slot.data.participants }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Total EMD Paid For:</div>
+                                <div class="bs-value">{{ slot.data.emdPaid }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Properties Available:</div>
+                                <div class="bs-value">Upto {{ slot.data.itemCount }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">EMD:</div>
+                                <div class="bs-value">{{ slot.data.eventEmdProcessingFees }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Reserve Price:</div>
+                                <div class="bs-value">{{ slot.data.reservePrice }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Modifier Value:</div>
+                                <div class="bs-value">{{ slot.data.modifierValue }}</div>
+                            </div>
+                            <div class="bs-item col-span-6" v-for="(doc, index) in slot.data.auctionDocuments" :key="index">
+                                <div class="bs-buttons">
+                                    <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a>
+                                </div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-buttons">
+                                    <Button @click="visible6 = true">
+                                        Available Properties
+                                        <Dialog v-model:visible="visible6" modal header="Available Properties" :style="{ width: '50rem' }">
+                                            <div class="box-options">
+                                                <Listbox :options="slot.data.item" optionLabel="item" class="w-full md:w-14rem" />
+                                            </div>
+                                        </Dialog>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-buttons">
+                                    <schedule-button :entity-id="loginStore.loginDetails.entityId" :auction-id="slot.data.auctionCode" :item-list="slot.data.item"
+                                    v-model:startDate="slot.data.auctionStartDate" v-model:endDate="slot.data.auctionEndDate" v-model:users="slot.data.users"></schedule-button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </template>
+            </DataTable>
+        </div>
     </div>
 </template>
   

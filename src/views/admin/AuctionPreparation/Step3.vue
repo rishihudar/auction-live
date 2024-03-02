@@ -180,27 +180,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full">
+                <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload  v-if="!uploadedFile" v-model="userDataSheet" :accept="docType" :multiple="false"
+                        <FileUpload  v-model="userDataSheet" :accept="docType" :multiple="false"
                             :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
                                     and images are allowed</p>
                             </template>
+                            <div v-if="$v.uploadedFile.$error" class="fm-error">{{
+                            $v.uploadedFile.$errors[0].$message }}</div>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
-                        </FileUpload>
-                        <span v-if="$v.uploadedFile.$error" class="text-red-500">{{
-                            $v.uploadedFile.$errors[0].$message }}</span>
-                            <Button v-if="uploadedFile" label="View Document" icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    @click="showDocument(fullPath + '/' + filePath)"></Button>
-                                <Button v-if="uploadedFile" label="Remove Document" icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger" @click="uploadedFile = false"></Button>
+                        </FileUpload>                       
                     </div>
                 </div>
-                <div class="fm-action justify-center">
+                <div class="col-span-full fm-action fm-action-center mb-3">                     
+                    <Button v-if="uploadedFile" severity="secondary"
+                            @click="showDocument(fullPath + '/' + filePath)">
+                            <fa-eye></fa-eye> View Document
+                        </Button>
+                        <Button v-if="uploadedFile"
+                            severity="danger" @click="uploadedFile = false">
+                            <fa-trash></fa-trash> Remove Document
+                        </Button>
+                </div>
+                <div class="fm-action  fm-action-center">
                     <Button @click="visible = false" label="Close"></Button>
                     <Button @click="AddStep3AuctionData" label="Add" v-if="itemAreaCount != 0"></Button>
                 </div>
@@ -396,6 +401,10 @@ import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
+
+import faEye from '../../../../assets/icons/eye.svg';
+import faTrash from '../../../../assets/icons/trash.svg';
+
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const store = useAuctionPreparation()
