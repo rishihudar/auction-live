@@ -4,7 +4,7 @@
             <div class="wc-header">
                 <div class="wc-title">Auction ID: {{ auctionId }}</div>
             </div>
-
+            <Toast />
             <div class="form-grid">
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.referenceNoVisible,true)">
                     <div class="fm-group">
@@ -280,6 +280,8 @@ import { helpers, required } from '@vuelidate/validators'
 import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { ifBool } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
+import { useToast } from "primevue/usetoast";
+
 
 const store = useAuctionPreparation()
 const {  getPropertyCategoryId } = storeToRefs(store)
@@ -293,6 +295,9 @@ const { auctionId, config } = defineProps({
         default: null
     },
 })
+
+const toast = useToast();
+
 
 const auctionDetails = ref({
     referenceNo: '',
@@ -468,16 +473,17 @@ const InsertAuctionDataStep2 = async () => {
 
         console.log(auctionDetails.value);
     } else {
-        alert("error, form not submitted")
+        //alert("error, form not submitted")
+        toast.add({ severity: 'error' , summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
     }
 }
 
 
 const rules = computed(() => ({
     auctionDetails: {
-        referenceNo: {
-            required: helpers.withMessage('Reference Number is required', required)
-        },
+        // referenceNo: {
+        //     required: helpers.withMessage('Reference Number is required', required)
+        // },
         description: {
             required: helpers.withMessage('Description is required', required)
         },
