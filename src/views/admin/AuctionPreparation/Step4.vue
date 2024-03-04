@@ -306,7 +306,7 @@ const onAdvancedUpload = async (event, id) => {
           fileName: timeStamp + "_" + myFile.value,
           filePath: res.uploadedFileURL().filePath,
           fullPath:
-            res.uploadedFileURL().cdnServer + res.uploadedFileURL().filePath,
+            res.uploadedFileURL().cdnServer +"/"+ res.uploadedFileURL().filePath,
           documentTypeId: id,
         });
         docTypeId.value = id;
