@@ -1,5 +1,3 @@
-
-
 <template>
     <div>
         <div class="page-header">
@@ -25,16 +23,18 @@
                 <div class="bs-header">
                     Step1 Details
                     <div class="bs-action">
-                        <Button  v-if="config?.step1.editable" severity="secondary" class="btn-sm" @click="visible1 = true" >
-                            <fa-pen-to-square></fa-pen-to-square>  Edit
-                            
+                        <Button v-if="config?.step1.editable" severity="secondary" class="btn-sm"
+                            @click="visible1 = true">
+                            <fa-pen-to-square></fa-pen-to-square> Edit
+
                         </Button>
                         <Dialog v-model:visible="visible1" :draggable="false" modal :style="{ width: '50rem' }">
-                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save()" @previous-tab="step1Save()" />
+                            <Step1 :auction-id="auctionId" :config="config?.step1.fieldConfig" @next-tab="step1Save()"
+                                @previous-tab="step1Save()" />
                         </Dialog>
                     </div>
                 </div>
-                <div class="bs-item-holder" >
+                <div class="bs-item-holder">
                     <div class="bs-item col-span-6">
                         <div class="bs-label">Auction Type:</div>
                         <div class="bs-value">
@@ -53,16 +53,18 @@
                 <div class="bs-header">
                     Step2 Details
                     <div class="bs-action">
-                        <Button v-if="config?.step2.editable" severity="secondary" class="btn-sm" @click="visible2 = true">
-                            <fa-pen-to-square></fa-pen-to-square>  Edit
-                            
+                        <Button v-if="config?.step2.editable" severity="secondary" class="btn-sm"
+                            @click="visible2 = true">
+                            <fa-pen-to-square></fa-pen-to-square> Edit
+
                         </Button>
                         <Dialog v-model:visible="visible2" modal :style="{ width: '75rem' }">
-                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save" @previous-tab="step2Save" />
-                        </Dialog>                            
+                            <Step2 :auction-id="auctionId" :config="config?.step2.fieldConfig" @next-tab="step2Save"
+                                @previous-tab="step2Save" />
+                        </Dialog>
                     </div>
                 </div>
-                <div class="bs-item-holder" >
+                <div class="bs-item-holder">
                     <div class="bs-item col-span-4">
                         <div class="bs-label">Reference Number:</div>
                         <div class="bs-value">
@@ -129,15 +131,17 @@
                 <div class="bs-header">
                     Step3 Details
                     <div class="bs-action">
-                        <Button v-if="config?.step3.editable" severity="secondary" class="btn-sm" @click="visible3 = true">
-                            <fa-pen-to-square></fa-pen-to-square>  Edit                            
-                        </Button> 
+                        <Button v-if="config?.step3.editable" severity="secondary" class="btn-sm"
+                            @click="visible3 = true">
+                            <fa-pen-to-square></fa-pen-to-square> Edit
+                        </Button>
                         <Dialog v-model:visible="visible3" modal :style="{ width: '60rem' }">
-                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save" @previous-tab="step3Save" />
-                        </Dialog>                         
+                            <Step3 :auction-id="auctionId" :config="config?.step3.fieldConfig" @next-tab="step3Save"
+                                @previous-tab="step3Save" />
+                        </Dialog>
                     </div>
                 </div>
-                <div class="bs-item-holder" >
+                <div class="bs-item-holder">
                     <div class="bs-item col-span-4">
                         <div class="bs-label">Item Id:</div>
                         <div class="bs-value">
@@ -170,7 +174,10 @@
                     </div>
                     <div class="bs-item col-span-4">
                         <div class="bs-buttons bs-buttons-left">
-                            <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath" target="_blank"> Auction Item Document</a>
+                            <!-- <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath" target="_blank"> Auction Item Document</a> -->
+                            <button class="btn btn-sm btn-secondary" @click="DownloadDocument(auctionItemDocumentPath)">
+                                Auction
+                                Item Document</button>
                         </div>
                     </div>
                 </div>
@@ -179,15 +186,17 @@
                 <div class="bs-header">
                     Step4 Details
                     <div class="bs-action">
-                        <Button v-if="config?.step4.editable" severity="secondary" class="btn-sm" @click="visible4 = true">
-                            <fa-pen-to-square></fa-pen-to-square>  Edit                            
-                        </Button> 
+                        <Button v-if="config?.step4.editable" severity="secondary" class="btn-sm"
+                            @click="visible4 = true">
+                            <fa-pen-to-square></fa-pen-to-square> Edit
+                        </Button>
                         <Dialog v-model:visible="visible4" modal :style="{ width: '60rem' }">
-                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save" @previous-tab="step4Save" />
-                        </Dialog>                       
+                            <Step4 :auction-id="auctionId" :config="config?.step4.fieldConfig" @next-tab="step4Save"
+                                @previous-tab="step4Save" />
+                        </Dialog>
                     </div>
                 </div>
-                <div class="bs-item-holder" >
+                <div class="bs-item-holder">
                     <div class="bs-item col-span-6">
                         <div class="bs-label">Processing Fee and EMD Payment Start date:</div>
                         <div class="bs-value">
@@ -200,18 +209,23 @@
                             {{ auctionSummary[0].endDate }}
                         </div>
                     </div>
-                    <div class="bs-item col-span-full">                       
+                    <div class="bs-item col-span-full">
                         <div class="bs-buttons">
-                            <a class="btn btn-sm btn-secondary" :href="auctionDocumentPath" target="_blank"> Auction Item</a>
-                            <a class="btn btn-sm btn-secondary" :href="auctionNoticeDocumentPath" target="_blank"> Notice Document</a>
+                            <!-- <a class="btn btn-sm btn-secondary" :href="auctionDocumentPath" target="_blank"> Auction -->
+                                <!-- Item</a> -->
+                            <button class="btn btn-sm btn-secondary" @click="DownloadDocument(auctionDocumentPath)">Auction Document</button>
+                            <!-- <a class="btn btn-sm btn-secondary" :href="auctionNoticeDocumentPath" target="_blank">
+                                Notice
+                                Document</a> -->
+                            <button class="btn btn-sm btn-secondary" @click="DownloadDocument(auctionNoticeDocumentPath)">Notice Document</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
 
-                <History v-if="workflowStepDetailsId" :workflow-step-details-id="workflowStepDetailsId" />
-            
+            <History v-if="workflowStepDetailsId" :workflow-step-details-id="workflowStepDetailsId" />
+
             <!-- <Card class="profile-card">
                 <template #header>
                     <div class="profile-header">
@@ -371,7 +385,7 @@
     </div>
 
 
-    
+
 </template>
 
 <script setup>
@@ -383,7 +397,7 @@ import Step2 from "./admin/AuctionPreparation/Step2.vue";
 import Step3 from "./admin/AuctionPreparation/Step3.vue";
 import Step4 from "./admin/AuctionPreparation/Step4.vue";
 import Dialog from 'primevue/dialog';
-
+import MQLCdn from '@/plugins/mqlCdn.js';
 
 import faPenToSquare from '../../assets/icons/pen-to-square.svg'
 
@@ -456,7 +470,7 @@ function FetchAuctionSummaryByAuctionId() {
                 let updatedAuctionSummary = auctionSummary.value[0]
                 console.log(auctionSummary.value.length, "auctionSummary.value.length")
                 for (let i = 1; i < auctionSummary.value.length; i++) {
-                    let index = i; 
+                    let index = i;
                     let refKey = `ref${index}`;
                     updatedAuctionSummary[refKey] = {
                         "documentPath": auctionSummary.value[i].documentPath,
@@ -485,6 +499,22 @@ function FetchAuctionSummaryByAuctionId() {
             }
         })
 }
+function DownloadDocument(url) {
+    console.log(url, "url")
+    if (url !== "") {
+        new MQLCdn()
+            .setCDNPath(url)
+            .enablePageLoader(true)
+            .downloadFile("downloadBtn")
+            .then((res) => {
+                if (!res.isValid()) {
+                    res.showErrorToast();
+                }
+            });
+    } else {
+        toaster.error("File can'nt be downloaded!")
+    }
+};
 onMounted(() => {
     FetchAuctionSummaryByAuctionId()
 })
