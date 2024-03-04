@@ -40,7 +40,7 @@
           </FileUpload> -->
           <FileUpload
             v-model="userDataSheet"
-            accept=".xlsx.csv,"
+            accept=".xlsx, .csv,"
             :multiple="false"
             :max-file-size="200000" 
             :custom-upload="true" 
