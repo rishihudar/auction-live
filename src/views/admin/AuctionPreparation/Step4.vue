@@ -202,7 +202,7 @@ const serverDate = ref();
 //const endDate = ref(new Date());
 const selectedStartDate = ref();
 const selectedEndDate = ref();
-
+const Vue = window.app;
 const minDate = ref();
 minDate.value = moment().add(1, "minutes").toDate();
 const endMinDate = ref();
@@ -290,7 +290,7 @@ const onAdvancedUpload = async (event, id) => {
       if (res.isValid()) {
         fileName.value = timeStamp + "_" + myFile.value;
         filePath.value = res.uploadedFileURL().filePath;
-        fullPath.value = res.uploadedFileURL().cdnServer;
+        fullPath.value = Vue.getCDNBaseURL();
         console.log("fileName", fileName.value);
         console.log("filePath", filePath.value);
         console.log("fullPath", fullPath.value);

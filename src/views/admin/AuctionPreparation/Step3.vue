@@ -458,6 +458,7 @@ const uploadedFile = ref('');
 const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
+const Vue = window.app;
 
 const modifierValue = ref("");
 const modifierValueExtentionCount = ref('');
@@ -641,7 +642,7 @@ const onAdvancedUpload = async (event) => {
             if (res.isValid()) {
                 fileName.value = timeStamp + "_" + myFile.value.name;
                 filePath.value = res.uploadedFileURL().filePath;
-                fullPath.value = res.uploadedFileURL().cdnServer;
+                fullPath.value = Vue.getCDNBaseURL();
                 console.log("fileName", fileName.value);
                 console.log("filePath", filePath.value);
                 console.log("fullPath", fullPath.value);
