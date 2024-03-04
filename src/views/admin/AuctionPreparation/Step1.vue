@@ -2,7 +2,8 @@
     <div class="wizard-content">
         <div class="wc-item">
             <div class="wc-header">
-                <div class="wc-title">Step 1 Details</div>
+                <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Details</div>
+                <div class="wc-title" v-else>Auction Id: {{getLastInsertedAuctionId}}</div>
             </div>
 
             <div class="form-grid">
@@ -78,11 +79,15 @@ import { fetchAuctionStatus, ifBool } from "../../../plugins/helpers";
 const toaster = createToaster({ position: "top-right", duration: 3000 })
 
 import { login } from "../../../store/modules/login";
+import { useAuctionPreparation } from "../../../store/auctionPreparation";
 import { storeToRefs } from 'pinia';
 
 
 const loginStore = login();
 const {organizationId, entityId, loginId } = storeToRefs(loginStore);
+
+const AuctionStore = useAuctionPreparation();
+const { getLastInsertedAuctionId } = storeToRefs(AuctionStore);
 
 // access the `store` variable anywhere in the component 
 const auctionMethodData = ref({
@@ -217,7 +222,7 @@ function updateAuction() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[UpdateStep1Details]")
-        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: auctionId })
+        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: auctionId, modifiedByUserId: loginId.value })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("UpdateStep1Details", true);
@@ -247,7 +252,7 @@ function insertAuction() {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
             if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
                 console.log("LastInsertedId from response", res.result);
-                lastInsertedId.value = res.result.objectId;
+                lastInsertedId.value = res.result.auctionId;
                 console.log("LastInsertedId from lastInsertedId variable", lastInsertedId.value);
                 emit('submit', lastInsertedId.value);
                 emit('nextTab')
