@@ -16,13 +16,15 @@
             </span>
         </div>
         <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
-            <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{ role.roleName }}</strong></span>
+            <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{
+                role.roleName }}</strong></span>
             <label for="comment" class="font-semibold w-6rem">Comment</label>
             <InputText id="comment" v-model="comment" class="flex-auto" autocomplete="off" />
             <small class="fm-error" v-if="$v.comment.$error">{{ $v.comment.$errors[0].$message }}</small><br />
             <label v-if="workflowStepData.endStep == 0" for="login" class="font-semibold w-6rem">Login</label>
-            <Dropdown v-if="workflowStepData.endStep == 0" v-model="selectedLoginId" :options="logins" optionLabel="fullName" optionValue="userId"
-                placeholder="Select a Login" class="w-full md:w-14rem mb-3" />
+            <Dropdown v-if="workflowStepData.endStep == 0" v-model="selectedLoginId" :options="logins"
+                optionLabel="fullName" optionValue="userId" placeholder="Select a Login"
+                class="w-full md:w-14rem mb-3" />
             <div class="flex justify-content-end gap-2">
                 <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
                 <Button type="button" :label=modalItem.statusDisplayName @click="submitWorkflow"></Button>
@@ -54,12 +56,13 @@ const logins = ref([])
 const modalItem = ref({})
 const auctionId = ref()
 
-const {workflowStepDetailsId} = defineProps({
-  // Basic prop definition
-  workflowStepDetailsId: {
-    type: Number, 
-    required: true, 
-    default: null}
+const { workflowStepDetailsId } = defineProps({
+    // Basic prop definition
+    workflowStepDetailsId: {
+        type: Number,
+        required: true,
+        default: null
+    }
 })
 
 
@@ -132,7 +135,11 @@ function fetchLogin() {
         new MQL()
             .useManagementServer()
             .setActivity("o.[FetchRoleAndLoginFormNextStepAndStatus]")
-            .setData({ "fromStatusId": modalItem.value.statusId, "fromWorkflowStepId": workflowStepData.value.workflowStepId })
+            .setData({
+                "fromStatusId": modalItem.value.statusId,
+                "fromWorkflowStepId": workflowStepData.value.workflowStepId,
+                'entityId': loginStore.entityId
+            })
             .fetch()
             .then(rs => {
                 let res = rs.getActivity("FetchRoleAndLoginFormNextStepAndStatus", true)

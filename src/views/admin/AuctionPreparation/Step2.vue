@@ -281,8 +281,10 @@ import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { ifBool } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
 import { useToast } from "primevue/usetoast";
+import { login } from "../../../store/modules/login";
 
-
+const loginStore = login()
+const { role, loginId } = storeToRefs(loginStore)
 const store = useAuctionPreparation()
 const {  getPropertyCategoryId } = storeToRefs(store)
 const { auctionId, config } = defineProps({
@@ -441,6 +443,7 @@ function FetchAllEMDAppliedFor() {
 
 const InsertAuctionDataStep2 = async () => {
     const result = await $v.value.$validate();
+    console.log("lginId, roleId", loginId.value, role.value.roleId); 
     if (result) {
         new MQL()
             .useManagementServer()
@@ -456,6 +459,8 @@ const InsertAuctionDataStep2 = async () => {
                 eventProcessingFees: auctionDetails.value.eventProcessingFeeAmount,
                 eventEmdFeeMode: auctionDetails.value.emdFeePaymentMode,
                 emdAppliedFor: auctionDetails.value.emdAppliedFor,
+                modifiedByUserId: loginId.value,
+                modifiedByRoleId: role.value.roleId,
                 auctionId: auctionId
             })
             .fetch()
