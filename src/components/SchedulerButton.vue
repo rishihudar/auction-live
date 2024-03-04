@@ -116,7 +116,7 @@ import { fetchAuctionStatus } from "@/plugins/helpers.js";
 
 const props = defineProps({
   itemList: Array,
-  auctionId: String,
+  auctionId: Number,
   entityId: String,
  startDate: String,
   endDate: String,
