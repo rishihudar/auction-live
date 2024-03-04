@@ -1,36 +1,29 @@
 <template>
-    <div class="profile-preview"  v-if="history.length >0">
-        <Card class="profile-card">
-            <template #header>
-                <div class="profile-header">
+    <div class="box-preview-wrapper" v-if="history.length > 0">
+        <div class="box-section box-section-light">
+            <div>
+                <div class="bs-header">
                     <h2>Approval History</h2>
                 </div>
-            </template>
+                <div>
 
-            <template #content>
-                <div class="profile-section">
-                    <div class="profile-field" v-for="(item, index) in history" :key="index">
-                        <span>
-                            Workflow Step:
-                            <span style="font-weight: bold;">
-                                {{ item.StepDisplayName }}
-                            </span>,
-                            last action By
-                            <span style="font-weight: bold;">
-                                {{ item.fullName }}
-                            </span>
-                            ({{ item.roleName }})
-                            On
-                            <span style="font-weight: bold;">
-                                {{ item.createdOn }}
-                            </span>,
-                            , Comment {{ item.comment }}, Decision taken {{ item.statusDisplayName }}
-                        </span>
+                    <div class="bs-item-holder">
+                        <div class="bs-item col-span-12">
+                            <ol v-for="(item, index) in history" :key="index">
+                                <li class="list-disc">
+                                        Workflow Step: <span class="font-bold"> {{ item.StepDisplayName }},</span>
+                                        last action By <span class="font-bold"> {{ item.fullName }} </span>
+                                        ({{ item.roleName }}) On
+                                        <span class="font-bold"> {{ item.createdOn }} </span>
+                                        Comment {{ item.comment }}, Decision taken {{ item.statusDisplayName }}
+                                </li>
 
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </template>
-        </Card>
+            </div>
+        </div>
     </div>
 </template>
 

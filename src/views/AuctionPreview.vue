@@ -170,7 +170,7 @@
                     </div>
                     <div class="bs-item col-span-4">
                         <div class="bs-buttons bs-buttons-left">
-                            <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath"> Auction Item Document</a>
+                            <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath" target="_blank"> Auction Item Document</a>
                         </div>
                     </div>
                 </div>
@@ -202,17 +202,15 @@
                     </div>
                     <div class="bs-item col-span-full">                       
                         <div class="bs-buttons">
-                            <router-link class="btn btn-sm btn-secondary" :to="auctionDocumentPath"> Auction Item</router-link>
-                            <router-link class="btn btn-sm btn-secondary" :to="auctionNoticeDocumentPath"> Notice Document</router-link>
+                            <a class="btn btn-sm btn-secondary" :href="auctionDocumentPath" target="_blank"> Auction Item</a>
+                            <a class="btn btn-sm btn-secondary" :href="auctionNoticeDocumentPath" target="_blank"> Notice Document</a>
                         </div>
                     </div>
                     
                 </div>
             </div>
 
-            <div class="box-section box-section-light">
                 <History v-if="workflowStepDetailsId" :workflow-step-details-id="workflowStepDetailsId" />
-            </div>
             
             <!-- <Card class="profile-card">
                 <template #header>
