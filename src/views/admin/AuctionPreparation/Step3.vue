@@ -199,7 +199,7 @@
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">                     
                     <Button v-if="uploadedFile" severity="secondary"
-                            @click="showDocument(fullPath + '/' + filePath)">
+                            @click="DownloadDocument(fullPath + '/' + filePath)">
                             <fa-eye></fa-eye> View Document
                         </Button>
                         <Button v-if="uploadedFile"
@@ -403,9 +403,14 @@ import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
-
+import { login } from "../../../store/modules/login";
 import faEye from '../../../../assets/icons/eye.svg';
 import faTrash from '../../../../assets/icons/trash.svg';
+
+const loginStore = login()
+const { role, loginId } = storeToRefs(loginStore)
+
+
 
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 
@@ -433,9 +438,9 @@ const locationDetail = ref([]);
 const areaDetail = ref([]);
 const itemAreaCount = ref(0);
 
-const  showDocument = (url) => {
-        window.open(url, '_blank'); 
-    }
+// const  showDocument = (url) => {
+//         window.open(url, '_blank'); 
+//     }
 
 
 
@@ -759,6 +764,8 @@ const AddStep3AuctionData = async () => {
                 documentPath: fullPath.value + "/" + filePath.value,
                 documentFileName: fileName.value,
                 inventoryCategoryId: getPropertyCategoryId.value,
+                modifiedByUserId: loginId.value,
+                modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
             })
             .fetch()
@@ -939,12 +946,15 @@ function RemoveItemFromDB() {
                         "documentFilePath": docFilePath.value,
                         "documentPath": docPath.value,
                         "documentTypeId": docFileTypeId.value,
-                        "statusId": statusId.value
+                        "statusId": statusId.value,
+                        "modifiedByUserId": loginId.value,
+                        "modifiedByRoleId": role.value.roleId
                     })
                     .fetch()
                     .then(rs => {
                         let res = rs.getActivity("DeleteStep3Data", true)
                         if (rs.isValid("DeleteStep3Data")) {
+                            handleClick(false);
                         } else {
                             rs.showErrorToast("DeleteStep3Data")
                         }
@@ -968,7 +978,6 @@ function deleteItem(data) {
             RemoveItemFromDB();
             toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Inventory Item Removed', life: 3000 });
             addedItem.value = addedItem.value.filter((item) => item !== data);
-            handleClick(false);
         },
         reject: () => {
             toast.add({ severity: 'warn', summary: 'Drafted', detail: 'Inventory Item Not Removed', life: 3000 });
@@ -1019,6 +1028,22 @@ const $v = useVuelidate(rules, {
     modifierValueAfterExtention,
     uploadedFile
 });
+
+function DownloadDocument(url) {
+        if (url !== "") {
+          new MQLCdn()
+            .setCDNPath(url)
+            .enablePageLoader(true)
+            .downloadFile("downloadBtn")
+            .then((res) => {
+              if (!res.isValid()) {
+                res.showErrorToast();
+              }
+            });
+        }else{
+          toaster.error("File can'nt be downloaded!")
+        }
+      };
 
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);

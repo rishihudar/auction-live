@@ -7,6 +7,10 @@
             <button class="btn btn-sidebar-toggle" @click="mainStore.toggleSidebar()">
                 <fa-bars></fa-bars>
             </button>
+            <h4>
+               {{ organizationData.organizationName }}
+               {{ entityData.entityName }}
+            </h4>
             <div class="dropdown dropdown-profile">
                 <Button type="button" severity text class="btn-profile" @click="toggle" aria-haspopup="true"
                     aria-controls="ddmenu_profile">
@@ -45,7 +49,10 @@ import { useRouter } from "vue-router";
 import { useAuctionPreparation } from "../../store/auctionPreparation";
 // import faAddressCard from '../../../assets/icons/address-card.svg'
 import faBars from '../../../assets/icons/bars.svg'
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { storeToRefs } from 'pinia';
+import { or } from "@vuelidate/validators";
+import MQL from '@/plugins/mql.js';
 // import faGear from '../../../assets/icons/gear.svg'
 // import faRightFromBracket from '../../../assets/icons/right-from-bracket.svg'
 const AuctionStore = useAuctionPreparation()
@@ -95,9 +102,44 @@ const items = ref([
 ])
 const mainStore = main();
 const loginStore = login();
+const {organizationId, entityId, loginId } = storeToRefs(loginStore);
+
+const entityData = ref({})
+const organizationData = ref({})
+
 function toggle(event) {
     profilemenu.value.toggle(event);
 }
+
+function loadEntityAndOrganization() {	
+    console.log("loadEntityAndOrganization" , entityId.value, organizationId.value)
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[FetchEntityAndOrganization]")
+			.setData({
+            "entityId": entityId.value,
+            "organizationId": organizationId.value
+            })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchEntityAndOrganization",true)
+			if (rs.isValid("FetchEntityAndOrganization")) {
+                entityData.value = res.result.entityData
+                organizationData.value = res.result.organizationData
+                console.log("entityData, ornanizationData", entityData.value, organizationData.value) 
+			} else
+			 { 
+			rs.showErrorToast("FetchEntityAndOrganization")
+			}
+			})
+			
+}
+
+
+
+onMounted (() => {
+    loadEntityAndOrganization()
+})
 </script>
 
 <style></style>
