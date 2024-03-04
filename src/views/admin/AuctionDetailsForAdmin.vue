@@ -70,7 +70,8 @@
                     <div class="bs-item col-span-6" v-for="(doc, index) in auctionDetails.auctionDocuments"
                         :key="index">
                         <div class="bs-buttons">
-                            <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a>
+                            <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
+                            <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</button>
                         </div>
                     </div>
                     <div class="bs-item col-span-6">
@@ -118,14 +119,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import Listbox from 'primevue/listbox';
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
 import ScheduleButton from '@/components/SchedulerButton.vue'
 import { login } from "../../store/modules/login.js";
+import MQLCdn from '@/plugins/mqlCdn.js';
 
 const visible6 = ref(false);
 const expandedRows = ref([]);
@@ -180,7 +179,22 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
             }
         })
 }
-
+function DownloadDocument(url) {
+    console.log(url, "url")
+        if (url !== "") {
+          new MQLCdn()
+            .setCDNPath(url)
+            .enablePageLoader(true)
+            .downloadFile("downloadBtn")
+            .then((res) => {
+              if (!res.isValid()) {
+                res.showErrorToast();
+              }
+            });
+        }else{
+          toaster.error("File can'nt be downloaded!")
+        }
+      };
 onMounted(() => {
     FetchAuctionDetailsByAuctionIdAdmin()
 });
