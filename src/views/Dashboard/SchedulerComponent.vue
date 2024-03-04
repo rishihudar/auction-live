@@ -1,6 +1,6 @@
 
 <template>
-    <div class="card">
+    <div class="table-custom">
       <DataTable :value="products" showGridlines  tableStyle="min-width: 50rem">
         <Column field="auctionId" header="Auction Code"></Column>
         <Column field="auctionDescription" header="Auction Description"></Column>

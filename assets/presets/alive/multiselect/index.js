@@ -2,6 +2,7 @@ export default {
     root: ({ props, state }) => ({
         class: [
             // Display and Position
+            'h-12',
             'inline-flex',
             'relative',
 
@@ -35,7 +36,7 @@ export default {
     },
     label: ({ props }) => ({
         class: [
-            'leading-none',
+            'leading-2',
             'block ',
 
             // Spacing

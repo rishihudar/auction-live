@@ -49,58 +49,63 @@
 
                 <Column expander header="action" style="width: 5rem">
                     <template #rowtogglericon="">
-                        <Button label="Details" />
+                        <fa-eye></fa-eye> Details
                     </template>
                 </Column>
                 <template #expansion="slot">
-                    <div class="card">
-                        <div class="profile-field">
-                            <label class="bold-label" for="auctionType">Auction Type:</label>
-                            <span>{{ slot.data.auctionType }}</span>
+                    <div class="box-section">
+                        <div class="bs-header">
+                            Auction Description
                         </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="auctionMethodName">Auction Method:</label>
-                            <span>{{ slot.data.auctionMethodName }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="auctionProcessName">Auction Process:</label>
-                            <span>{{ slot.data.auctionProcessName }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="bidPlacementName">Bid Placement:</label>
-                            <span>{{ slot.data.bidPlacementName }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="district">District:</label>
-                            <span>{{ slot.data.district }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="mcName">MC:</label>
-                            <span>{{ slot.data.mcName }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="location">Location:</label>
-                            <span>{{ slot.data.location }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="area">Area:</label>
-                            <span>{{ slot.data.AREA }}</span>
-                        </div>
-                        <!-- <div class="profile-field">
-                        <label class="bold-label" for="itemCount">Properties Available:</label>
-                        <span>Upto {{ slot.data.itemCount }}</span>
-                    </div> -->
-                        <div class="profile-field">
-                            <label class="bold-label" for="eventEmdProcessingFees">EMD:</label>
-                            <span>{{ slot.data.eventEmdProcessingFees }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="reservePrice">Reserve Price:</label>
-                            <span>{{ slot.data.reservePrice }}</span>
-                        </div>
-                        <div class="profile-field">
-                            <label class="bold-label" for="modifierValue">Modifier Value:</label>
-                            <span>{{ slot.data.modifierValue }}</span>
+                        <div class="bs-item-holder">
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Auction Type:</div>
+                                <div class="bs-value">{{ slot.data.auctionType }}</div>
+                            </div>
+                            <div class="bs-item col-span-6">
+                                <div class="bs-label">Auction Method:</div>
+                                <div class="bs-value">{{ slot.data.auctionMethodName }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Auction Process:</div>
+                                <div class="bs-value">{{ slot.data.auctionProcessName }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Bid Placement:</div>
+                                <div class="bs-value">{{ slot.data.bidPlacementName }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">District:</div>
+                                <div class="bs-value">{{ slot.data.district }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">MC:</div>
+                                <div class="bs-value">{{ slot.data.mcName }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Location:</div>
+                                <div class="bs-value">{{ slot.data.location }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Area:</div>
+                                <div class="bs-value">{{ slot.data.AREA }}</div>
+                            </div>
+                            <!-- <div class="bs-item col-span-4">
+                            <label class="bold-label" for="itemCount">Properties Available:</div>
+                            <div class="bs-value">Upto {{ slot.data.itemCount }}</div>
+                        </div> -->
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">EMD:</div>
+                                <div class="bs-value">{{ slot.data.eventEmdProcessingFees }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Reserve Price:</div>
+                                <div class="bs-value">{{ slot.data.reservePrice }}</div>
+                            </div>
+                            <div class="bs-item col-span-4">
+                                <div class="bs-label">Modifier Value:</div>
+                                <div class="bs-value">{{ slot.data.modifierValue }}</div>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -127,6 +132,8 @@ const crumbs = ref([
     { label: 'Bidder', route: '/home' },
     { label: 'Auction List' }
 ])
+
+import faEye from '../../../assets/icons/eye.svg'
 
 const customers = ref([]);
 const filters = ref({
