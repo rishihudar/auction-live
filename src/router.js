@@ -115,9 +115,9 @@ const router = createRouter({
     },
     {
       path: "/PublisherDashboard",
-      name: "abcd",
+      name: "ROLE_PUBLISHER",
       component: loadDashboardView("PublisherComponent"),
-      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true  , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true  , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER']},
     },
     {
       path: "/SchedulerDashboard",
