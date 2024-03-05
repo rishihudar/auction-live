@@ -3,7 +3,7 @@
         <div class="page-header">
             <div class="ph-text">
                 <h2 class="title">UI Form Wizard</h2>
-                <Breadcrumb :model="crumbs">
+                <!-- <Breadcrumb :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" @click="navigate">
@@ -14,7 +14,7 @@
                             <span class="bi-label">{{ item.label }}</span>
                         </span>
                     </template>
-                </Breadcrumb>
+                </Breadcrumb> -->
             </div>
         </div>
         <div class="wizard-wrapper">
