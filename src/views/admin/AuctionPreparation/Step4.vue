@@ -57,31 +57,41 @@
           <div class="fm-group">
             <label class="fm-label"> Auction Document </label>
             <div class="fm-inner">
-              <FileUpload
-                :disabled="config?.docNameReadonly"
-                v-model="docName"
-                :accept="docType"
-                :multiple="false"
-                :max-file-size="docSize * 1000"
-                :custom-upload="true"
-                @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
-              >
-                <template #empty>
-                  <p>
-                    Drag and drop files here to upload, Max. file size is 500
-                    KB, Only {{ docType }} are allowed !
-                  </p>
-                </template>
-              </FileUpload>
+              <div class="col-span-full" v-if="!auctionCheck">
+                <FileUpload
+                  :disabled="config?.docNameReadonly"
+                  v-model="docName"
+                  :accept="docType"
+                  :multiple="false"
+                  :max-file-size="docSize * 1000"
+                  :custom-upload="true"
+                  @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
+                >
+                  <template #empty>
+                    <p>
+                      Drag and drop files here to upload, Max. file size is 500
+                      KB, Only {{ docType }} are allowed !
+                    </p>
+                  </template>
+                </FileUpload>
+              </div>
+
               <span v-if="$v.AucUrl.$error" class="text-red-500">{{
                 $v.AucUrl.$errors[0].$message
               }}</span>
 
-              <div v-if="AucUrl">
+              <div v-if="auctionCheck">
                 <Button
                   label="Download Auction Document"
                   @click="DownloadDocument(AucUrl)"
                 />
+                <Button
+                  v-if="auctionCheck"
+                  severity="danger"
+                  @click="auctionCheck = false"
+                >
+                  <fa-trash></fa-trash> Remove Document
+                </Button>
               </div>
             </div>
           </div>
@@ -90,32 +100,42 @@
           <div class="fm-group">
             <label class="fm-label"> Notice Document </label>
             <div class="fm-inner">
-              <FileUpload
-                :disabled="config?.NoticeDocNameReadonly"
-                v-model="NoticeDocName"
-                :accept="NoticeDocType"
-                :multiple="false"
-                :max-file-size="NoticeDocSize * 1000"
-                :custom-upload="true"
-                @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
-              >
-                <template #empty>
-                  <p>
-                    Drag and drop files here to upload, Max. file size is 500
-                    KB, Only {{ docType }} are allowed !
-                  </p>
-                </template>
-              </FileUpload>
+              <div class="col-span-full" v-if="!noticeCheck">
+                <FileUpload
+                  :disabled="config?.NoticeDocNameReadonly"
+                  v-model="noticeCheck"
+                  :accept="NoticeDocType"
+                  :multiple="false"
+                  :max-file-size="NoticeDocSize * 1000"
+                  :custom-upload="true"
+                  @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
+                >
+                  <template #empty>
+                    <p>
+                      Drag and drop files here to upload, Max. file size is 500
+                      KB, Only {{ docType }} are allowed !
+                    </p>
+                  </template>
+                </FileUpload>
+              </div>
+
               <span v-if="$v.NoticeUrl.$error" class="text-red-500">{{
                 $v.NoticeUrl.$errors[0].$message
               }}</span>
 
-              <div v-if="NoticeUrl">
+              <div v-if="noticeCheck">
                 <Button
                   label="Download Notice Document"
                   @click="DownloadDocument(NoticeUrl)"
                 />
               </div>
+              <Button
+                v-if="noticeCheck"
+                severity="danger"
+                @click="noticeCheck = false"
+              >
+                <fa-trash></fa-trash> Remove Document
+              </Button>
             </div>
           </div>
         </div>
@@ -181,7 +201,9 @@ import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
+import { useToast } from "primevue/usetoast";
 
+const toast = useToast();
 const router = useRouter();
 const loginStore = login();
 const AuctionStore = useAuctionPreparation();
@@ -228,7 +250,8 @@ const formattedEndDate = ref();
 const fileName = ref();
 const filePath = ref();
 const fullPath = ref();
-
+const noticeCheck = ref(false);
+const auctionCheck = ref(false);
 const rules = computed(() => ({
   AucUrl: { required: helpers.withMessage("Document is required", required) },
   NoticeUrl: {
@@ -259,6 +282,24 @@ function formattedEndDateCalc() {
     .add(120, "seconds")
     .format("YYYY/MM/DD HH:mm:ss");
   console.log("formattedEndDate.value", formattedEndDate.value);
+}
+
+function showSuccessToast() {
+  toast.add({
+    severity: "success",
+    summary: "Success",
+    detail: "Your operation was successful!",
+    life: 3000, // Optional: Display time in milliseconds
+  });
+}
+
+function showErrorToast() {
+  toast.add({
+    severity: "error",
+    summary: "Error",
+    detail: "An error occurred.",
+    life: 5000, // Optional: Display time in milliseconds
+  });
 }
 
 const onAdvancedUpload = async (event, id) => {
@@ -295,18 +336,22 @@ const onAdvancedUpload = async (event, id) => {
         console.log("filePath", filePath.value);
         console.log("fullPath", fullPath.value);
         if (id == 8) {
-          AucUrl.value = fullPath.value + "/" + filePath.value;
+          AucUrl.value = filePath.value;
           console.log("AucUrl", AucUrl.value);
+          auctionCheck.value = true;
         } else {
-          NoticeUrl.value = fullPath.value + "/" + filePath.value;
+          NoticeUrl.value = filePath.value;
           console.log("NoticeUrl", NoticeUrl.value);
+          noticeCheck.value = true;
         }
 
         documentsArray.value.push({
           fileName: timeStamp + "_" + myFile.value,
           filePath: res.uploadedFileURL().filePath,
           fullPath:
-            res.uploadedFileURL().cdnServer +"/"+ res.uploadedFileURL().filePath,
+            res.uploadedFileURL().cdnServer +
+            "/" +
+            res.uploadedFileURL().filePath,
           documentTypeId: id,
         });
         docTypeId.value = id;
@@ -511,6 +556,7 @@ async function onSave() {
       "minute"
     )
   ) {
+    showErrorToast();
     alert(`Start Date should not be equal or after End Date !`);
   } else {
     await processingFeeEmdPaymentStartEndDate();
