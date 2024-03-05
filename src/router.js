@@ -613,7 +613,7 @@ const router = createRouter({
       path: "/auction-publishing-details",
       name: "AuctionPublishingDetails",
       component: loadAuctionPublishView("AuctionPublishingDetails"),
-      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER', 'ROLE_PUBLISHER']},
     },
     
     // UI
