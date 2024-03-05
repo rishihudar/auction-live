@@ -88,7 +88,7 @@
                 <Button
                   v-if="auctionCheck"
                   severity="danger"
-                  @click="auctionCheck = false"
+                  @click="auctionCheck = false,AucUrl=null"
                 >
                   <fa-trash></fa-trash> Remove Document
                 </Button>
@@ -132,7 +132,7 @@
               <Button
                 v-if="noticeCheck"
                 severity="danger"
-                @click="noticeCheck = false"
+                @click="noticeCheck = false,NoticeUrl=null"
               >
                 <fa-trash></fa-trash> Remove Document
               </Button>
