@@ -219,6 +219,8 @@ async function AuctionList() {
 
 function navigateToRoute() {
     // Navigate to another route
+    AuctionStore.setLastInsertedAuctionId(null)
+    AuctionStore.setPropertyCategoryId("")
     router.push('/auction-preparation')
 }
 
