@@ -185,7 +185,7 @@
                 <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload  v-model="userDataSheet" :accept="docType" :multiple="false"
+                        <FileUpload  v-model="uploadedFile" :accept="docType" :multiple="false"
                             :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
@@ -199,7 +199,7 @@
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">                     
                     <Button v-if="uploadedFile" severity="secondary"
-                            @click="DownloadDocument(fullPath + '/' + filePath)">
+                            @click="DownloadDocument(filePath)">
                             <fa-eye></fa-eye> View Document
                         </Button>
                         <Button v-if="uploadedFile"
@@ -458,6 +458,7 @@ const uploadedFile = ref('');
 const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
+const Vue = window.app;
 
 const modifierValue = ref("");
 const modifierValueExtentionCount = ref('');
@@ -629,7 +630,7 @@ const onAdvancedUpload = async (event) => {
         //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
         .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
         .setFormData(formData) // (required) sets file data
-        .setFileName(timeStamp + "_" + myFile.value.name) // (optional field) if you want to set name to file that is being uploaded
+        .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
         // FIXED: pass buckeyKey instead of name
         .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
         .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
@@ -639,9 +640,9 @@ const onAdvancedUpload = async (event) => {
         .then((res) => {
             // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
             if (res.isValid()) {
-                fileName.value = timeStamp + "_" + myFile.value.name;
+                fileName.value = timeStamp + "_" + myFile.value;
                 filePath.value = res.uploadedFileURL().filePath;
-                fullPath.value = res.uploadedFileURL().cdnServer;
+                // fullPath.value = Vue.getCDNBaseURL();
                 console.log("fileName", fileName.value);
                 console.log("filePath", filePath.value);
                 console.log("fullPath", fullPath.value);
@@ -761,7 +762,7 @@ const AddStep3AuctionData = async () => {
                 modifierValueAfterExtension: modifierValueAfterExtention.value,
                 documentTypeId: docTypeId.value,
                 documentFilePath: filePath.value,
-                documentPath: fullPath.value + "/" + filePath.value,
+                documentPath: "/" + filePath.value,
                 documentFileName: fileName.value,
                 inventoryCategoryId: getPropertyCategoryId.value,
                 modifiedByUserId: loginId.value,

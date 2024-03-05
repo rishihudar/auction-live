@@ -1,0 +1,2 @@
+import{ar as l}from"./index-4336d1e5.js";l.extend({name:"scrolltop",classes:{root:function(l){return["p-scrolltop p-link p-component",{"p-scrolltop-sticky":"window"!==l.props.target}]},icon:"p-scrolltop-icon"}});l.extend({name:"scrollpanel",classes:{root:"p-scrollpanel p-component",wrapper:"p-scrollpanel-wrapper",content:"p-scrollpanel-content",barx:"p-scrollpanel-bar p-scrollpanel-bar-x",bary:"p-scrollpanel-bar p-scrollpanel-bar-y"}});
+//# sourceMappingURL=scrollpanelstyle.esm-116afe56.js.map

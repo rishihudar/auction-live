@@ -1,0 +1,1 @@
+{"version":3,"file":"MenuManagement-184b0592.js","sources":["../../src/views/management/MenuManagement.vue"],"sourcesContent":["<template>\r\n    <h1>\r\n        MenuManagement\r\n    </h1>\r\n</template>"],"names":["_ctx","_cache"],"mappings":"8EACI,SAAAA,EAAAC"}
