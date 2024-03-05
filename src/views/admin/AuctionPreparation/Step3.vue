@@ -24,7 +24,8 @@
                 <div class="box-watermark">Inventory Items Not Available</div>
             </div>
             <div class="box-table-action">
-                <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" />
+                <!-- <Button label="Add Items" @click="visible = true" :disabled="getIsClicked" /> -->
+                <Button label="Add Items" @click="visible = true" :disabled="addedItem && addedItem.length > 0" />
             </div>
         </div>
 
@@ -36,7 +37,8 @@
             <Button label="Back" @click="prevCallback()" severity="secondary" />
             <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
             <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
-            <Button   v-if="getIsClicked"   label="Next" @click="nextCallback()" class="btn-submit" />
+            <!-- <Button   v-if="getIsClicked"   label="Next" @click="nextCallback()" class="btn-submit" /> -->
+            <Button   v-if="addedItem && addedItem.length > 0"   label="Next" @click="nextCallback()" class="btn-submit" />
         </div>
 
         <!-- --------------------------------------------------------------------------------------- -->
@@ -191,10 +193,10 @@
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
                                     and images are allowed</p>
                             </template>
-                            <div v-if="$v.uploadedFile.$error" class="fm-error">{{
-                            $v.uploadedFile.$errors[0].$message }}</div>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
-                        </FileUpload>                       
+                        </FileUpload>     
+                        <div v-if="$v.uploadedFile.$error" class="fm-error">{{
+                            $v.uploadedFile.$errors[0].$message }}</div>                  
                     </div>
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">                     
@@ -776,7 +778,7 @@ const AddStep3AuctionData = async () => {
                 console.log(res)
                 if (rs.isValid("InsertStep3AuctionData")) {
                     addItem();
-                    handleClick(true);
+                    // handleClick(true);
                     visible.value = false
                     console.log("Response of Step 3 Data insert : ", res.result)
                 } else {
@@ -955,7 +957,7 @@ function RemoveItemFromDB() {
                     .then(rs => {
                         let res = rs.getActivity("DeleteStep3Data", true)
                         if (rs.isValid("DeleteStep3Data")) {
-                            handleClick(false);
+                            // handleClick(false);
                         } else {
                             rs.showErrorToast("DeleteStep3Data")
                         }
