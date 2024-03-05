@@ -48,11 +48,15 @@
                 </Column> -->
 
                 <Column expander header="action" style="width: 5rem">
-                    <template #rowtogglericon="">
-                        <fa-eye></fa-eye> Details
+                    <!-- <template #rowtogglericon=""> -->
+                    <template #body="slotProps"> 
+                        <!-- <fa-eye></fa-eye> Details -->
+                        <!-- {{ slotProps.data.auctionCode }}
+                        {{ slotProps.data.inventoryCategoryId }} -->
+                        <Button icon="pi pi-eye" class="p-button-rounded p-button-info" label="Edit" @click=" editAuction(slotProps.data.auctionCode, slotProps.data.inventoryCategoryId)" />
                     </template>
                 </Column>
-                <template #expansion="slot">
+                <!-- <template #expansion="slot">
                     <div class="box-section">
                         <div class="bs-header">
                             Auction Description
@@ -90,10 +94,10 @@
                                 <div class="bs-label">Area:</div>
                                 <div class="bs-value">{{ slot.data.AREA }}</div>
                             </div>
-                            <!-- <div class="bs-item col-span-4">
+                             <div class="bs-item col-span-4">
                             <label class="bold-label" for="itemCount">Properties Available:</div>
                             <div class="bs-value">Upto {{ slot.data.itemCount }}</div>
-                        </div> -->
+                        </div> 
                             <div class="bs-item col-span-4">
                                 <div class="bs-label">EMD:</div>
                                 <div class="bs-value">{{ slot.data.eventEmdProcessingFees }}</div>
@@ -108,7 +112,7 @@
                             </div>
                         </div>
                     </div>
-                </template>
+                </template> -->
             </DataTable>
 
         </div>
@@ -124,6 +128,13 @@ import { useRouter } from 'vue-router'
 import faPlus from '../../../assets/icons/plus.svg'
 import faMagnifyingGlass from '../../../assets/icons/magnifying-glass.svg'
 import { fetchAuctionStatus } from '../../plugins/helpers';
+import { useAuctionPreparation } from "../../store/auctionPreparation.js";
+import { storeToRefs } from 'pinia';
+
+
+const AuctionStore = useAuctionPreparation();
+const { getLastInsertedAuctionId } = storeToRefs(AuctionStore);
+
 const router = useRouter()
 var showCard = ref(false)
 const expandedRows = ref([]);
@@ -211,9 +222,16 @@ function navigateToRoute() {
     router.push('/auction-preparation')
 }
 
+function editAuction(aucId, invCatId) {
+    // Navigate to another route
+    AuctionStore.setLastInsertedAuctionId(aucId)
+    AuctionStore.setPropertyCategoryId(invCatId)
+    router.push('/auction-preparation')
+}
+
 
 onMounted(() => {
-
+    
     AuctionList()
 
 });
