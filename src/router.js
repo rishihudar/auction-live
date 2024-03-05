@@ -115,7 +115,7 @@ const router = createRouter({
     },
     {
       path: "/PublisherDashboard",
-      name: "ROLE_PUBLISHER",
+      name: "PublisherDashboard",
       component: loadDashboardView("PublisherComponent"),
       meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true  , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER']},
     },
@@ -619,9 +619,9 @@ const router = createRouter({
     },
     {
       path: "/auction-publishing-details",
-      name: "AuctionPublishingDetails",
+      name: "ROLE_PUBLISHER",
       component: loadAuctionPublishView("AuctionPublishingDetails"),
-      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER', 'ROLE_PUBLISHER']},
     },
     
     // UI
