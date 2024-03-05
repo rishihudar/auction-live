@@ -105,6 +105,11 @@ var loginURL = '/login-server'
 var cdnBaseURL = '/cdn-server'
 var bidderURL = '/bidder-server'
 var managementURL = '/management-server'
+// var coreURL = '/application/core-server'
+// var loginURL = '/application/login-server'
+// var cdnBaseURL = '/cdn-server'
+// var bidderURL = '/application/bidder-server'
+// var managementURL = '/application/management-server'
 
 vm.use(mqlOptions, {
   coreURL: coreURL,

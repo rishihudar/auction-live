@@ -3,11 +3,11 @@
         <div class="page-header">
             <div class="ph-text">
                 <h2 class="title">Auction Publishing Details</h2>
-                <Breadcrumb :model="crumbs">
+                <!-- <Breadcrumb :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" @click="navigate">
-                                <!-- <span :class="[item.icon, 'text-color']" /> -->
+                                <span :class="[item.icon, 'text-color']" />
                                 <span class="bi-label">{{ item.label }}</span>
                             </a>
                         </router-link>
@@ -15,7 +15,7 @@
                             <span class="bi-label">{{ item.label }}</span>
                         </span>
                     </template>
-                </Breadcrumb>
+                </Breadcrumb> -->
             </div>
         </div>
         <div class="card">

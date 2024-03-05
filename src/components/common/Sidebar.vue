@@ -23,7 +23,11 @@ import { login } from "../../store/modules/login";
 import { computed } from 'vue';
 const loginStore = login()
 const  computedMenu = computed(() => {
-    return loginStore.menu.filter((m) => m.roleName == loginStore.role.roleCode)
+    if (loginStore.menu && loginStore.role) {
+        return loginStore.menu.filter((m) => m.roleName == loginStore.role.roleCode)
+    } else {
+        return false
+    }
 })
 
             // const menu = ref([
