@@ -52,7 +52,7 @@
             <Footer name="box"></Footer>
         </div>
         <Dialog v-model:visible="visible">
-            Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to <strong>bidder</strong> or If issues persist, contact our support team. Thank you!
+            Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to <strong>bidder portal</strong> or If issues persist, contact our support team. Thank you!
         </Dialog>
     </div>
 </template>
