@@ -4,7 +4,6 @@
       <div class="wc-header">
         <div class="wc-title">Auction ID: {{ auctionId }}</div>
       </div>
-
       <div class="form-grid">
         <div class="col-span-full md:col-span-6">
           <div class="fm-group">
@@ -22,7 +21,7 @@
                 :showIcon="true"
               />
             </div>
-            <div
+            <!-- <div
               v-if="
                 moment(selectedEndDate).isSameOrBefore(
                   selectedStartDate,
@@ -32,11 +31,15 @@
               class="col-span-full fm-error"
             >
               Start Date should not be equal or after End Date !
-            </div>
+            </div> -->
+            <span v-if="$v.selectedStartDate.$error" class="text-red-500">{{
+                  $v.selectedStartDate.$errors[0].$message
+              }}</span>
           </div>
         </div>
         <div class="col-span-full md:col-span-6">
           <div class="fm-group">
+            <Toast />
             <label class="fm-label" for="calendar-12h">
               Processing Fee And EMD payment End Date
             </label>
@@ -66,7 +69,7 @@
                   :max-file-size="docSize * 1000"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
-                >
+                  ><Toast />
                   <template #empty>
                     <p>
                       Drag and drop files here to upload, Max. file size is 500
@@ -88,7 +91,7 @@
                 <Button
                   v-if="auctionCheck"
                   severity="danger"
-                  @click="auctionCheck = false,AucUrl=null"
+                  @click="(auctionCheck = false), (AucUrl = null)"
                 >
                   <fa-trash></fa-trash> Remove Document
                 </Button>
@@ -109,7 +112,7 @@
                   :max-file-size="NoticeDocSize * 1000"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
-                >
+                  ><Toast />
                   <template #empty>
                     <p>
                       Drag and drop files here to upload, Max. file size is 500
@@ -132,7 +135,7 @@
               <Button
                 v-if="noticeCheck"
                 severity="danger"
-                @click="noticeCheck = false,NoticeUrl=null"
+                @click="(noticeCheck = false), (NoticeUrl = null)"
               >
                 <fa-trash></fa-trash> Remove Document
               </Button>
@@ -197,10 +200,10 @@ import { fetchAuctionStatus } from "../../../plugins/helpers";
 import { useRouter } from "vue-router";
 import { useAuctionPreparation } from "../../../store/auctionPreparation";
 import { login } from "../../../store/modules/login";
-import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster({ position: "top-right", duration: 5000 });
+// import { createToaster } from "@meforma/vue-toaster";
+// const toaster = createToaster({ position: "top-right", duration: 5000 });
 import { useVuelidate } from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
+import { helpers, required,minValue } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
@@ -257,8 +260,11 @@ const rules = computed(() => ({
   NoticeUrl: {
     required: helpers.withMessage("Document is required", required),
   },
+  selectedStartDate: { 
+    required,validator: helpers.withMessage("End date should not be same or before as that of Start date",checkDates)
+  },
 }));
-const $v = useVuelidate(rules, { AucUrl, NoticeUrl });
+const $v = useVuelidate(rules, { AucUrl, NoticeUrl,selectedStartDate});
 const emit = defineEmits({
   nextTab: null,
   previousTab: null,
@@ -283,25 +289,13 @@ function formattedEndDateCalc() {
     .format("YYYY/MM/DD HH:mm:ss");
   console.log("formattedEndDate.value", formattedEndDate.value);
 }
-
-function showSuccessToast() {
-  toast.add({
-    severity: "success",
-    summary: "Success",
-    detail: "Your operation was successful!",
-    life: 3000, // Optional: Display time in milliseconds
-  });
-}
-
-function showErrorToast() {
-  toast.add({
-    severity: "error",
-    summary: "Error",
-    detail: "An error occurred.",
-    life: 5000, // Optional: Display time in milliseconds
-  });
-}
-
+function checkDates(){
+  if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, "minute")) {
+    console.log("Inside rules vali date check");
+    return false; // Dates are not valid
+  }
+  return true; // Dates are valid
+};
 const onAdvancedUpload = async (event, id) => {
   // try {
   console.log(event, "event");
@@ -366,7 +360,13 @@ const onAdvancedUpload = async (event, id) => {
         // uploadedFiles.value.push(uploadedFile);
 
         //console.log("uploadedFiles", uploadedFiles.value);
-        toaster.success("File Uploaded !!!");
+        toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "File Uploaded",
+          life: 3000,
+        });
+        //toaster.success("File Uploaded !!!");
         // cropVisible.value=false
       } else {
         res.showErrorToast();
@@ -445,7 +445,13 @@ async function processingFeeEmdPaymentStartEndDate() {
   if (resultStatus.error == null) {
     statusId = resultStatus.result.statusId;
   } else {
-    toaster.error("Oops! Please Contact Support");
+    toast.add({
+      severity: "error",
+      summary: "Drafted",
+      detail: "Oops! Please Contact Support",
+      life: 3000,
+    });
+    //toaster.error("Oops! Please Contact Support");
   }
 
   return new Promise((resolve) => {
@@ -509,7 +515,13 @@ async function insertInWorkflow() {
   if (resultStatus.error == null) {
     AUCTION_COMPLETED_ID = resultStatus.result.statusId;
   } else {
-    toaster.error("Oops! Please contact Support");
+    toast.add({
+      severity: "error",
+      summary: "Drafted",
+      detail: "Oops! Please Contact Support",
+      life: 3000,
+    });
+    //toaster.error("Oops! Please contact Support");
   }
   return new Promise((resolve, reject) => {
     console.log(AUCTION_COMPLETED_ID);
@@ -549,19 +561,32 @@ async function onSave() {
   if (!result) {
     return;
   }
-  console.log("Inside checkDates");
+
   if (
     moment(selectedEndDate.value).isSameOrBefore(
       selectedStartDate.value,
       "minute"
     )
   ) {
-    showErrorToast();
-    alert(`Start Date should not be equal or after End Date !`);
+    console.log("Inside checkDates");
+    console.log("inside onsave --------------------------->");
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Start Date should not be equal or after End Date !",
+      life: 5000,
+    });
+    //alert(`Start Date should not be equal or after End Date !`);
   } else {
     await processingFeeEmdPaymentStartEndDate();
     await insertDocumentPathToDb();
-    toaster.success(" Data Saved !!!");
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Data Saved!",
+      life: 3000,
+    });
+    // toaster.success(" Data Saved !!!");
     if (config == null) {
       await insertInWorkflow();
     }
@@ -603,7 +628,13 @@ function DownloadDocument(url) {
         }
       });
   } else {
-    toaster.error("File can'nt be downloaded!");
+    toast.add({
+      severity: "error",
+      summary: "Drafted",
+      detail: "Oops!File can'nt be downloaded!",
+      life: 3000,
+    });
+    //toaster.error("File can'nt be downloaded!");
   }
 }
 
