@@ -9,13 +9,13 @@
     <Column field="auctionStatusName" header="Auction Status"> </Column>
     <Column header="Action">
       <template #body="row">
-        <Button @click="visible = true" label="Details" />
-        <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
-          <ViewAuction :workflowStepDetailsId="row.data.workflowStepDetailsId" />
-        </Dialog>
+        <Button @click="showDialog(row.data.workflowStepDetailsId)" label="Details" />
       </template>
     </Column>
   </DataTable>
+  <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
+    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" />
+  </Dialog>
 </template>
 
 <script setup>
@@ -30,6 +30,13 @@ const auctionDetails = ref([]);
 const loginStore = login()
 const visible = ref(false);
 const expandedRows = ref([]);
+const workflowStepDetailsId = ref(null)
+
+function showDialog(id) {
+  console.log(id);
+  visible.value = true
+  workflowStepDetailsId.value = id
+}
 
 function fetchAuctionDetailsForMyTask() {
   // Automatically generated
