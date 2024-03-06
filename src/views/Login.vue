@@ -111,7 +111,7 @@ let user = ref({
 
 let rules = computed(() => ({
     user: {
-        username: { required, email },
+        username: { required },
         password: { required },
     },
 }));

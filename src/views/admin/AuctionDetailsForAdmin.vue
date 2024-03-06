@@ -71,7 +71,8 @@
                         :key="index">
                         <div class="bs-buttons">
                             <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                            <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</button>
+                            <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                            doc.documentTypeName }}</button>
                         </div>
                     </div>
                     <div class="bs-item col-span-6">
@@ -79,31 +80,34 @@
                             <Button @click="visible6 = true">
                                 Available Properties
 
-                                <Dialog v-model:visible="visible6" modal 
-                                    :style="{ width: '50rem' }">
+                                <Dialog v-model:visible="visible6" modal :style="{ width: '50rem' }">
 
                                     <div class="box-section">
                                         <div class="bs-header">
                                             Available Properties
                                         </div>
                                         <div class="bs-item-holder">
-                                            <div class="bs-item col-span-6" v-for="item in auctionDetails.item" :key="item.id">
+                                            <div class="bs-item col-span-6" v-for="item in auctionDetails.item"
+                                                :key="item.id">
                                                 <div class="bs-label">Item Name:</div>
                                                 <div class="bs-value"> {{ item.item }}</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <span >
+                                    <span>
                                         {{ item }}
                                     </span>
-                                     </Dialog>
+                                </Dialog>
                             </button>
                         </div>
                     </div>
                     <div class="bs-item col-span-6">
                         <div class="bs-buttons">
-                            <schedule-button :entity-id="loginStore.loginDetails.entityId"
-                                :auction-id="auctionDetails.auctionCode" :item-list="auctionDetails.item"
+                            <schedule-button
+                            :disabled="auctionDetails.emdPaid < 3 && auctionDetails.participants < 3" 
+                            :entity-id="loginStore.loginDetails.entityId"
+                                :auction-id="auctionDetails.auctionCode" 
+                                :item-list="auctionDetails.item"
                                 v-model:startDate="auctionDetails.auctionStartDate"
                                 v-model:endDate="auctionDetails.auctionEndDate"
                                 v-model:users="auctionDetails.users"></schedule-button>
@@ -127,7 +131,6 @@ import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
 
 const visible6 = ref(false);
-const expandedRows = ref([]);
 const auctionDetails = ref({});
 import { defineProps } from 'vue';
 const loginStore = login();
@@ -138,7 +141,6 @@ const { auctionId } = defineProps({
 async function FetchAuctionDetailsByAuctionIdAdmin() {
     var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
     var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
-    console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
@@ -170,8 +172,6 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 auctionDetailObj.documentsMap = documentsMap;
 
                 auctionDetails.value = auctionDetailObj;
-                console.log(auctionDetails.value, "auctionDetails.value********");
-                console.log(auctionDetails.value, "auctionDetails.value********");
 
                 // You can access document paths using auctionDetail.documentsMap in the template
             } else {
@@ -181,20 +181,20 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
 }
 function DownloadDocument(url) {
     console.log(url, "url")
-        if (url !== "") {
-          new MQLCdn()
+    if (url !== "") {
+        new MQLCdn()
             .setCDNPath(url)
             .enablePageLoader(true)
             .downloadFile("downloadBtn")
             .then((res) => {
-              if (!res.isValid()) {
-                res.showErrorToast();
-              }
+                if (!res.isValid()) {
+                    res.showErrorToast();
+                }
             });
-        }else{
-          toaster.error("File can'nt be downloaded!")
-        }
-      };
+    } else {
+        toaster.error("File can'nt be downloaded!")
+    }
+};
 onMounted(() => {
     FetchAuctionDetailsByAuctionIdAdmin()
 });
