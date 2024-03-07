@@ -106,7 +106,8 @@
                         </label>
                         <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
                         <div class="fm-inner">
-                            <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" />
+                            <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
+                            <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount"  readonly />
                         </div>
                         <div v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="fm-error">
                             {{ $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}
@@ -284,7 +285,7 @@ import { useToast } from "primevue/usetoast";
 import { login } from "../../../store/modules/login";
 
 const loginStore = login()
-const { role, loginId } = storeToRefs(loginStore)
+const { role, loginId, entityId } = storeToRefs(loginStore)
 const store = useAuctionPreparation()
 const {  getPropertyCategoryId } = storeToRefs(store)
 const { auctionId, config } = defineProps({
@@ -441,6 +442,24 @@ function FetchAllEMDAppliedFor() {
         });
 }
 
+function FetchEventProcessingFees (){
+    new MQL()
+        .useCoreServer()
+        .setActivity('o.[FetchEventProcessingFees]')
+        .setData({ "entityId": entityId.value})
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('FetchEventProcessingFees', true);
+            if (rs.isValid('FetchEventProcessingFees')) {
+                console.log(res.result);
+                auctionDetails.value.eventProcessingFeeAmount = res.result.eventProcessingFeeAmount;
+            } else {
+                rs.showErrorToast('ErrorFetchEventProcessingFees');
+            }
+        });
+
+}
+
 const InsertAuctionDataStep2 = async () => {
     const result = await $v.value.$validate();
     console.log("lginId, roleId", loginId.value, role.value.roleId); 
@@ -564,5 +583,6 @@ onMounted(() => {
     FetchAllPaymentModes();
     FetchAllEMDAppliedFor();
     FetchAllStepsAuctionPreview();
+    FetchEventProcessingFees();
 });
 </script> 
