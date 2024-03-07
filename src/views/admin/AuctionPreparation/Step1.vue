@@ -3,7 +3,7 @@
         <div class="wc-item">
             <div class="wc-header">
                 <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Details</div>
-                <div class="wc-title" v-else>Auction Id: {{getLastInsertedAuctionId}}</div>
+                <div class="wc-title" v-else>Auction Code: {{auctionCodeToShow}}</div>
             </div>
 
             <div class="form-grid">
@@ -106,6 +106,11 @@ const { config, auctionId } = defineProps({
     }
 })
 
+const entityShortName = ref();
+const auctionNumber = ref();
+const auctionCode = ref();
+const auctionCodeToShow = ref();
+
 const aucMethod = ref([]);
 const statusData = ref([]);
 const displayName = ref();
@@ -169,6 +174,33 @@ function FetchAuctionMethods() {
                 rs.showErrorToast('ErrorFetchAllAuctionMethods');
             }
         });
+}
+
+
+function FetchDataForAuctionCode(){
+    // Automatically generated
+			new MQL()
+            .useManagementServer()
+			.setActivity("o.[FetchDataForAuctionCode]")
+			.setData({"entityId":entityId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchDataForAuctionCode",true)
+			if (rs.isValid("FetchDataForAuctionCode")) {
+            console.log("FetchDataForAuctionCode",res.result);
+            entityShortName.value = res.result.entityShortName.entityShortName;
+            console.log("entityShortName",entityShortName.value);
+            auctionNumber.value = res.result.highestAuctionNumber.auctionNumber + 1;
+            console.log("auctionNumber",auctionNumber.value);
+            auctionCode.value = `${entityShortName.value}-${auctionNumber.value}`;
+            console.log("auctionCode",auctionCode.value);
+            
+			} else
+			 { 
+			rs.showErrorToast("FetchDataForAuctionCode")
+			}
+			})
+			
 }
 
 
@@ -242,11 +274,15 @@ function insertAuction() {
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
-        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, 
+        .setData({ 
+            auctionNumber: auctionNumber.value,
+            auctionCode: auctionCode.value,
+            auctionTypeId: auctionTypeData.value.auctionTypeId, 
             auctionMethodId: auctionMethodData.value.auctionMethodId,
-             statusId: statusId.value, 
-             organizationId: organizationId.value,
-             entityId: entityId.value, createdByUserId: loginId.value})
+            statusId: statusId.value, 
+            organizationId: organizationId.value,
+            entityId: entityId.value,
+            createdByUserId: loginId.value})
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
@@ -277,6 +313,7 @@ function FetchAllStepsAuctionPreview() {
                 auctionMethodData.value.auctionMethodId = `${res.result.fetchStep1AuctionPreview.auctionMethodId}`;
                 auctionTypeData.value.auctionType = res.result.fetchStep1AuctionPreview.auctionType;
                 auctionTypeData.value.auctionTypeId = `${res.result.fetchStep1AuctionPreview.auctionTypeId}`;
+                auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
 
             } else {
                 rs.showErrorToast("FetchAllStepsAuctionPreview")
@@ -325,7 +362,8 @@ onMounted(() => {
     FetchAuctionTypes();
     FetchAuctionMethods();
     FetchAllStepsAuctionPreview();
-    FetchAuctionStatus()
+    FetchAuctionStatus();
+    FetchDataForAuctionCode();
 
 });
 
