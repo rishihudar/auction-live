@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
 import { useRoute } from "vue-router";
@@ -35,11 +35,7 @@ const products = ref();
 const entityId = ref("");
 onMounted(() => {
   entityId.value = route.params.id;
-  // console.log("selectedEntityId", id.value);
   fetchPublishedAuctionsBidder();
-});
-onBeforeMount(() => {
-  // fetchPublishedAuctionsBidder();
 });
 
 let auctionId = ref();
