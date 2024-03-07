@@ -2,104 +2,111 @@
     <div class="wizard-content">
         <div class="wc-item">
             <div class="wc-header">
-                <div class="wc-title">Auction ID: {{ auctionId }}</div>
+                <div class="wc-title">Auction Code: {{ auctionCodeToShow }}</div>
             </div>
             <Toast />
             <div class="form-grid">
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.referenceNoVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.referenceNoVisible, true)">
                     <div class="fm-group">
                         <label class="fm-label" for="username">Reference Number</label>
                         <div class="fm-inner">
-                            <InputText id="username" :disabled="config?.referenceNoReadonly" v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
+                            <InputText id="username" :disabled="config?.referenceNoReadonly"
+                                v-model="auctionDetails.referenceNo" placeholder="Enter Reference Number" />
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionCategoryVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionCategoryVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step1">
                             Auction Category
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.auctionCategoryReadonly" v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId" variant="filled"
-                            :options="auctionCategory" optionLabel="propertyCategoryName" placeholder="Select Auction Category" />
+                            <Dropdown :disabled="config?.auctionCategoryReadonly"
+                                v-model="auctionDetails.auctionCategory" option-value="propertyCategoryId"
+                                variant="filled" :options="auctionCategory" optionLabel="propertyCategoryName"
+                                placeholder="Select Auction Category" />
                         </div>
                         <div v-if="$v.auctionDetails.auctionCategory.$error" class="fm-error">
                             {{ $v.auctionDetails.auctionCategory.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionProcessVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.auctionProcessVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Auction Process
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess" option-value="auctionProcessId" variant="filled"
-                            :options="auctionProcess" optionLabel="auctionProcessName" placeholder="Select Auction Process" />
+                            <Dropdown :disabled="config?.auctionProcessReadonly" v-model="auctionDetails.auctionProcess"
+                                option-value="auctionProcessId" variant="filled" :options="auctionProcess"
+                                optionLabel="auctionProcessName" placeholder="Select Auction Process" />
                         </div>
                         <div v-if="$v.auctionDetails.auctionProcess.$error" class="fm-error">
                             {{ $v.auctionDetails.auctionProcess.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full" v-if="ifBool(config?.descriptionVisible,true)">
+                <div class="col-span-full" v-if="ifBool(config?.descriptionVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Auction Description
                         </label>
                         <div class="fm-inner">
-                            <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description" autoResize rows="3" cols="111" placeholder="Enter Description" />
+                            <Textarea :disabled="config?.descriptionReadonly" v-model="auctionDetails.description"
+                                autoResize rows="3" cols="111" placeholder="Enter Description" />
                         </div>
                         <div v-if="$v.auctionDetails.description.$error" class="fm-error">
                             {{ $v.auctionDetails.description.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Department
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department" option-value="departmentId" variant="filled"
-                            :options="departments" optionLabel="departmentName" placeholder="Select Department" />
+                            <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department"
+                                option-value="departmentId" variant="filled" :options="departments"
+                                optionLabel="departmentName" placeholder="Select Department" />
                         </div>
                         <div v-if="$v.auctionDetails.department.$error" class="fm-error">
                             {{ $v.auctionDetails.department.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Bid Submission/Placement
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement" option-value="bidPlacementId" variant="filled"
-                            :options="bidPlacements" optionLabel="bidPlacementName"
-                            placeholder=" Select Bid Submission/Placement" />
+                            <Dropdown :disabled="config?.bidPlacementReadonly" v-model="auctionDetails.bidPlacement"
+                                option-value="bidPlacementId" variant="filled" :options="bidPlacements"
+                                optionLabel="bidPlacementName" placeholder=" Select Bid Submission/Placement" />
                         </div>
                         <div v-if="$v.auctionDetails.bidPlacement.$error" class="fm-error">
                             {{ $v.auctionDetails.bidPlacement.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Event Processsing Fee Mode
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly" v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId" variant="filled"
-                            :options="paymentModes" optionLabel="paymentModeName"
-                            placeholder="Select Event Processsing Fee Mode" />
+                            <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly"
+                                v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId"
+                                variant="filled" :options="paymentModes" optionLabel="paymentModeName"
+                                placeholder="Select Event Processsing Fee Mode" />
                         </div>
                         <div v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="fm-error">
                             {{ $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="username">
                             Event Processing Fee Amount
@@ -107,35 +114,39 @@
                         <!-- {{ $v.auctionDetails.eventProcessingFeeAmount}} -->
                         <div class="fm-inner">
                             <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
-                            <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount"  readonly />
+                            <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly"
+                                v-model="auctionDetails.eventProcessingFeeAmount" readonly />
                         </div>
                         <div v-if="$v.auctionDetails.eventProcessingFeeAmount.$error" class="fm-error">
                             {{ $v.auctionDetails.eventProcessingFeeAmount.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             EMD Fee Payment Mode
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.emdFeePaymentModeReadonly" v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
-                            :options="paymentModes" optionLabel="paymentModeName" placeholder=" Select EMD Fee Payment Mode" />
+                            <Dropdown :disabled="config?.emdFeePaymentModeReadonly"
+                                v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
+                                :options="paymentModes" optionLabel="paymentModeName"
+                                placeholder=" Select EMD Fee Payment Mode" />
                         </div>
                         <div v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="fm-error">
                             {{ $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible,true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             EMD Applied For
                         </label>
                         <div class="fm-inner">
-                            <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor" option-value="emdAppliedForId" variant="filled"
-                            :options="emdAppliedFor" optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For" />
+                            <Dropdown :disabled="config?.emdAppliedForReadonly" v-model="auctionDetails.emdAppliedFor"
+                                option-value="emdAppliedForId" variant="filled" :options="emdAppliedFor"
+                                optionLabel="emdAppliedForName" placeholder=" Select EMD Applied For" />
                         </div>
                         <div v-if="$v.auctionDetails.emdAppliedFor.$error" class="fm-error">
                             {{ $v.auctionDetails.emdAppliedFor.$errors[0].$message }}
@@ -287,7 +298,7 @@ import { login } from "../../../store/modules/login";
 const loginStore = login()
 const { role, loginId, entityId } = storeToRefs(loginStore)
 const store = useAuctionPreparation()
-const {  getPropertyCategoryId } = storeToRefs(store)
+const { getPropertyCategoryId } = storeToRefs(store)
 const { auctionId, config } = defineProps({
     auctionId: {
         type: Number,
@@ -330,6 +341,7 @@ const departments = ref([]);
 const auctionProcess = ref([]);
 const emdAppliedFor = ref([]);
 const paymentModes = ref([]);
+const auctionCodeToShow = ref();
 
 const emit = defineEmits({
     nextTab: null,
@@ -442,11 +454,11 @@ function FetchAllEMDAppliedFor() {
         });
 }
 
-function FetchEventProcessingFees (){
+function FetchEventProcessingFees() {
     new MQL()
         .useCoreServer()
         .setActivity('o.[FetchEventProcessingFees]')
-        .setData({ "entityId": entityId.value})
+        .setData({ "entityId": entityId.value })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchEventProcessingFees', true);
@@ -462,7 +474,7 @@ function FetchEventProcessingFees (){
 
 const InsertAuctionDataStep2 = async () => {
     const result = await $v.value.$validate();
-    console.log("lginId, roleId", loginId.value, role.value.roleId); 
+    console.log("lginId, roleId", loginId.value, role.value.roleId);
     if (result) {
         new MQL()
             .useManagementServer()
@@ -498,7 +510,7 @@ const InsertAuctionDataStep2 = async () => {
         console.log(auctionDetails.value);
     } else {
         //alert("error, form not submitted")
-        toast.add({ severity: 'error' , summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
     }
 }
 
@@ -552,23 +564,26 @@ function FetchAllStepsAuctionPreview() {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
             if (rs.isValid("FetchAllStepsAuctionPreview")) {
                 console.log("FetchAllStepsAuctionPreview", res.result);
-                auctionDetails.value.referenceNo = res.result.fetchStep2AuctionPreview.referenceNumber;
-                auctionDetails.value.auctionCategoryName = res.result.fetchStep2AuctionPreview.inventoryCategoryName;
-                auctionDetails.value.auctionCategory = `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
-                auctionDetails.value.description = res.result.fetchStep2AuctionPreview.auctionDescription;
-                auctionDetails.value.auctionProcessName = res.result.fetchStep2AuctionPreview.auctionProcessName;
-                auctionDetails.value.auctionProcess = `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
-                auctionDetails.value.departmentName = res.result.fetchStep2AuctionPreview.departmentName;
-                auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
-                auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
-                auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
-                auctionDetails.value.eveventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
-                auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
-                auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
-                auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
-                auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
-                auctionDetails.value.emdFeePaymentMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
-                auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+                auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
+                if (res.result.fetchStep2AuctionPreview != null) {
+                    auctionDetails.value.referenceNo = res.result.fetchStep2AuctionPreview.referenceNumber;
+                    auctionDetails.value.auctionCategoryName = res.result.fetchStep2AuctionPreview.inventoryCategoryName;
+                    auctionDetails.value.auctionCategory = `${res.result.fetchStep2AuctionPreview.inventoryCategoryId}`;
+                    auctionDetails.value.description = res.result.fetchStep2AuctionPreview.auctionDescription;
+                    auctionDetails.value.auctionProcessName = res.result.fetchStep2AuctionPreview.auctionProcessName;
+                    auctionDetails.value.auctionProcess = `${res.result.fetchStep2AuctionPreview.auctionProcessId}`;
+                    auctionDetails.value.departmentName = res.result.fetchStep2AuctionPreview.departmentName;
+                    auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
+                    auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
+                    auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
+                    auctionDetails.value.eveventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+                    auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                    auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
+                    auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
+                    auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
+                    auctionDetails.value.emdFeePaymentMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
+                    auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+                }
             } else {
                 rs.showErrorToast("FetchAllStepsAuctionPreview")
             }
@@ -585,4 +600,4 @@ onMounted(() => {
     FetchAllStepsAuctionPreview();
     FetchEventProcessingFees();
 });
-</script> 
+</script>
