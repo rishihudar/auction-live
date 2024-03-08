@@ -1,105 +1,68 @@
 <template>
-  <Button label="Schedule Auction" @click="display = true"></Button>
+  <Button label="Schedule Auction" @click="display = true" :disabled="disabled"></Button>
   <Dialog v-model:visible="display" modal :style="{ width: '75rem' }" header="Scheduler">
     <div class="form-grid mb-4">
-        <div class="col-span-full md:col-span-4">
-            <div class="fm-group">
-                <label for="Start Date" class="fm-label">Start Date</label>
-                <div class="fm-inner">
-                    <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
-                </div>        
-                <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
-                    {{ v$.startDate.$errors[0].$message }}
-                </div>
-                
-            </div>
-        </div>
-        <div class="col-span-full md:col-span-4">
-            <div class="fm-group">
-                <label for="End Date" class="fm-label">Start Date</label>
-                <div class="fm-inner">
-                    <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
-                </div>        
-                <div class="fm-error" v-if="submitted && v$.endDate.$errors[0]">
-                {{ v$.endDate.$errors[0].$message }}
-                </div>
-                
-            </div>
-        </div>
-        <!-- <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
-        <div class="text-danger" v-if="submitted && v$.endDate.$errors[0]">
-          {{ v$.endDate.$errors[0].$message }}
-        </div> -->
-        <div class="col-span-full md:col-span-4">
-            <div class="fm-group">
-                <label for="Start Date" class="fm-label">Select User</label>            
-                <div class="fm-inner">
-                    <Multiselect
-                    class="w-full"
-                    :options="userSelectOptions"
-                    optionLabel="text"
-                    optionValue="value"
-                    v-model="users"
-                    @update:modelValue="emitModalValue"
-                    ></Multiselect>
-                </div>        
-                <div class="fm-error" v-if="submitted && v$.users.$errors[0]">
-                    {{ v$.users.$errors[0].$message }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- <div class="flex justify-center items-center p-2">
-      <div>
-        <Multiselect
-          class="w-full"
-          :options="userSelectOptions"
-          optionLabel="text"
-          optionValue="value"
-          v-model="users"
-          @update:modelValue="emitModalValue"
-        ></Multiselect>
-        <div class="text-danger" v-if="submitted && v$.users.$errors[0]">
-          {{ v$.users.$errors[0].$message }}
+      <div class="col-span-full md:col-span-4">
+        <div class="fm-group">
+          <label for="Start Date" class="fm-label">Start Date</label>
+          <div class="fm-inner">
+            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+          </div>
+          <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
+            {{ v$.startDate.$errors[0].$message }}
+          </div>
+
         </div>
       </div>
-    </div> -->
+      <div class="col-span-full md:col-span-4">
+        <div class="fm-group">
+          <label for="End Date" class="fm-label">End Date</label>
+          <div class="fm-inner">
+            <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+          </div>
+          <div class="fm-error" v-if="submitted && v$.endDate.$errors[0]">
+            {{ v$.endDate.$errors[0].$message }}
+          </div>
 
+        </div>
+      </div>
+      <div class="col-span-full md:col-span-4">
+        <div class="fm-group">
+          <label for="Start Date" class="fm-label">Select User</label>
+          <div class="fm-inner">
+            <Multiselect class="w-full" :options="userSelectOptions" optionLabel="text" optionValue="value"
+              v-model="users" @update:modelValue="emitModalValue"></Multiselect>
+          </div>
+          <div class="fm-error" v-if="submitted && v$.users.$errors[0]">
+            {{ v$.users.$errors[0].$message }}
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="box-section">
-        <div class="bs-header">
-            Items List
+      <div class="bs-header">
+        Items List
+      </div>
+      <div class="bs-item-holder" v-for="(item, index) in props.itemList" :key="index">
+        <div class="bs-item col-span-6">
+          <div class="bs-label">Item Name:</div>
+          <div class="bs-value">
+            {{ item.item }}
+          </div>
         </div>
-        <div class="bs-item-holder"  v-for="(item, index) in props.itemList"
-        :key="index">
-            <div class="bs-item col-span-6">
-                <div class="bs-label">Item Name:</div>
-                <div class="bs-value">
-                    {{ item.item }}
-                </div>
-            </div>
-            <div class="bs-item col-span-6">
-                <div class="bs-label">Selected/ Unselected:</div>
-                <div class="bs-value">
-                    Selected
-                </div>
-            </div>
+        <div class="bs-item col-span-6">
+          <div class="bs-label">Selected/ Unselected:</div>
+          <div class="bs-value">
+            Selected
+          </div>
         </div>
-      <!-- <div class="font-bold">Item Name</div>
-      <div class="font-bold">Selected</div> -->
+      </div>
     </div>
 
-    <!-- <div
-      class="grid grid-cols-2 place-items-center p-2"
-      v-for="(item, index) in props.itemList"
-      :key="index"
-    >
-      <div class="font-bold">{{ item.item }}</div>
-      <div class="">Selected</div>
-    </div> -->
     <div class="col-span-full">
-        <div class="fm-action fm-action-center">
-            <Button label="Schedule" @click="schedule"></Button>
-        </div>
+      <div class="fm-action fm-action-center">
+        <Button label="Schedule" @click="schedule"></Button>
+      </div>
     </div>
   </Dialog>
 </template>
@@ -118,17 +81,18 @@ const props = defineProps({
   itemList: Array,
   auctionId: Number,
   entityId: String,
- startDate: String,
+  startDate: String,
   endDate: String,
-  users: Array
+  users: Array,
+  disabled: Boolean
 });
 
 
 const emit = defineEmits(["update:modelValue"]);
 function emitModalValue() {
-    emit('update:startDate', startDate.value);
-    emit('update:endDate', endDate.value);
-    emit('update:users', users.value);
+  emit('update:startDate', startDate.value);
+  emit('update:endDate', endDate.value);
+  emit('update:users', users.value);
 }
 
 let display = ref(false);
@@ -140,8 +104,8 @@ let submitted = ref(false);
 
 // validation rules
 const rules = {
-startDate: { required, validator: helpers.withMessage("Start date should be less than end date and greater than today", isValidStartDate) },
-  endDate: { required, minValue: helpers.withMessage("End date should be greater than start date", isValidEndDate)},
+  startDate: { required, validator: helpers.withMessage("Start date should be less than end date and greater than today", isValidStartDate) },
+  endDate: { required, minValue: helpers.withMessage("End date should be greater than start date", isValidEndDate) },
   users: {
     required,
     minLength: helpers.withMessage(
@@ -157,14 +121,14 @@ import moment from 'moment';
 function isValidStartDate(date) {
   const today = moment(); // replace with your end date
   const inputDate = moment(date);
-// check if the input date is after today and before the end date
+  // check if the input date is after today and before the end date
   return inputDate.isAfter(today) && inputDate.isBefore(endDate.value);
 }
 // Custom validation functions for end date
 function isValidEndDate(date) {
   const today = moment(); // replace with your end date
   const inputDate = moment(date);
-// check if the input date is after today and after the start date
+  // check if the input date is after today and after the start date
   return inputDate.isAfter(today) && inputDate.isAfter(startDate.value);
 }
 
@@ -197,7 +161,7 @@ async function schedule() {
     .then((rs) => {
       let res = rs.getActivity("ScheduleAuction", true);
       if (rs.isValid("ScheduleAuction")) {
-        if (res && res.result=="SUCCESS") {
+        if (res && res.result == "SUCCESS") {
           display.value = false;
           alert("Auction Scheduled Successfully");
         } else {
@@ -222,7 +186,7 @@ function formatDate(date) {
 
 
 onMounted(() => {
-    // Fetch the users  to be shown in dropdown
+  // Fetch the users  to be shown in dropdown
   FetchUsers();
 });
 

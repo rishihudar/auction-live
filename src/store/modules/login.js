@@ -84,17 +84,19 @@ export const login = defineStore("login", {
             let res = rs.getActivity("UserLogin", true);
             if (rs.isValid("UserLogin")) {
               console.log("res.result", res.result);
+              console.log(res.result.roles);
+              if (res.result.roles.findIndex((r) => r.roleCode == 'ROLE_BIDDER') > -1) {
+                console.log(res.result.roles);
+                reject({
+                  'error': "BIDDER_LOGIN"
+                })
+              }
               let token = rs.getHeaders().authorization;
               console.log("token", token);
               sessionStorage.setItem("user-token", token);
               this.token = token;
-              let loginUserDetails = JSON.parse(
-                JSON.parse(atob(token.split(".")[1])).metadata
-              );
-              console.log(
-                "metaDATA",
-                JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata)
-              );
+              let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
+              console.log("metaDATA", JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata));
               console.log(loginUserDetails);
               this.menus = res.result.rolesMenuData;
               this.roles = res.result.roles;

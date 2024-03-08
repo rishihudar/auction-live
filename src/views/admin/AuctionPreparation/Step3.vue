@@ -2,7 +2,7 @@
     <div class="wizard-content">
         <div class="wc-item">
             <div class="wc-header">
-                <div class="wc-title">Auction ID: {{ auctionId }}</div>
+                <div class="wc-title">Auction Code: {{ auctionCodeToShow }}</div>
             </div>
 
             <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
@@ -461,6 +461,7 @@ const statusData = ref([]);
 const displayName = ref();
 const statusId = ref();
 const Vue = window.app;
+const auctionCodeToShow = ref();
 
 const modifierValue = ref("");
 const modifierValueExtentionCount = ref('');
@@ -880,6 +881,7 @@ function addItem() {
             if (rs.isValid("FetchAllStepsAuctionPreview")) {
                 //if(!res.result.fetchStep3AuctionPreview == null){
                 addedItem.value = res.result.fetchStep3AuctionPreview;
+                auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
                 // Ensure your data is correctly populated
                 console.log("***************", addedItem.value);
 

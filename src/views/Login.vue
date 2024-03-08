@@ -12,13 +12,16 @@
             <form class="form-login form-grid">
                 <div class="col-span-full">
                     <div class="fm-group">
+
+
                         <label class="fm-label" for="username">Username</label>
                         <div class="fm-inner">
                             <InputText id="username" v-model="user.username" aria-describedby="username-help"
                                 placeholder="Enter Your Username"
                                 :class="{ 'p-invalid': submitted && $v.user.username.$error }" />
                         </div>
-                        <div id="username-help" class="fm-info">Your username will be unique across the entire application and it will be used across the entire application.</div>
+                        <div id="username-help" class="fm-info">Your username will be unique across the entire
+                            application and it will be used across the entire application.</div>
                         <div class="fm-error" v-if="submitted && $v.user.username.$error">
                             {{ $v.user.username.$errors[0].$message }}
                         </div>
@@ -47,48 +50,18 @@
                 </div>
             </form>
             <Footer name="box"></Footer>
-            <!-- <FormKit
-                type="form"
-                id="login-example"
-                :form-class="submitted ? 'hide' : 'show'"
-                submit-label="Register"
-                @submit="authenticate"
-                :actions="false"
-                #default="{ value }"
-            >
-                <FormKit
-                    type="text"
-                    name="username"
-                    label="User Name"
-                    v-model="username"
-                    placeholder="User Name"
-                    help="Enter User Name"
-                    validation="required"
-                />
-                <div class="double">
-                    <FormKit
-                        type="password"
-                        name="password"
-                        label="Password"
-                        validation="required|length:6|matches:/[^a-zA-Z]/"
-                        :validation-messages="{
-                        matches: 'Please include at least one symbol',
-                        }"
-                        v-model="password"
-                        placeholder="Your password"
-                        help="Choose a password"
-                    />
-                </div>
-                <FormKit type="submit" label="Login" />
-            </FormKit>-->
         </div>
+        <Dialog v-model:visible="visible">
+            Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to <strong>bidder portal</strong> or If issues persist, contact our support team. Thank you!
+        </Dialog>
     </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import { login } from "../store/modules/login.js";
+import Dialog from "primevue/dialog";
 import { createToaster } from "@meforma/vue-toaster";
 import Footer from "@/components/common/Footer.vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -99,7 +72,9 @@ import { required, email } from "@vuelidate/validators";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
 let submitted = ref(false);
+const visible = ref(false)
 const router = useRouter();
+const link = ref(null)
 
 
 // <-----Validations---->
@@ -111,7 +86,7 @@ let user = ref({
 
 let rules = computed(() => ({
     user: {
-        username: { required, email },
+        username: { required },
         password: { required },
     },
 }));
@@ -136,19 +111,17 @@ function authenticate() {
 
             })
             .catch((err) => {
+                console.log(err);
+                if (err.error == 'BIDDER_LOGIN') {
+                    console.log(window);
+                    visible.value = true
+                    link.value = window.origin + '/applicant'
+                }
                 toaster.error;
             });
     } else {
         console.log("InValid Details");
         toaster.error("Invalid Details")
     }
-
-
 }
-
-// onMounted(() => {
-//     sessionStorage.setItem('user-token','')
-//     loginStore.$reset()
-// }
-// )
 </script>
