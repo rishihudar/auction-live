@@ -83,6 +83,7 @@ const router = createRouter({
       component: loadAdminView("AuctionList"),
       meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
     },
+  
     {
       path: "/BidderDashboard",
       name: "ROLE_BIDDER",
@@ -124,6 +125,12 @@ const router = createRouter({
       name: "ROLE_SCHEDULER",
       component:loadDashboardView("SchedulerComponent"),
       meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+    },
+    {
+      path: "/auction-concluded",
+      name:"Auction Concluded",
+      component: loadAdminView("ConcludedAuctionAdmin"),
+      meta: { title: "ConcludedAuctionAdmin",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_APPROVER']},
     },
     {
       path: "/WatcherDashboard",

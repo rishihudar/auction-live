@@ -1,7 +1,9 @@
+
 <template>
     <div class="box-section">
         <div class="bs-header">
             Auction Details
+            {{ auctionId }}
         </div>
         <div class="bs-item-holder">
             <div class="bs-item col-span-6">
@@ -36,14 +38,7 @@
                 <div class="bs-label">Area:</div>
                 <div class="bs-value">{{ auctionDetails.area }}</div>
             </div>
-            <div class="bs-item col-span-6">
-                <div class="bs-label">Participants:</div>
-                <div class="bs-value">{{ auctionDetails.participants }}</div>
-            </div>
-            <div class="bs-item col-span-6">
-                <div class="bs-label">Total EMD Paid For:</div>
-                <div class="bs-value">{{ auctionDetails.emdPaid }}</div>
-            </div>
+        
             <div class="bs-item col-span-6">
                 <div class="bs-label">Properties Available:</div>
                 <div class="bs-value">Upto {{ auctionDetails.itemCount }}</div>
@@ -55,6 +50,10 @@
             <div class="bs-item col-span-6">
                 <div class="bs-label">Reserve Price:</div>
                 <div class="bs-value">{{ auctionDetails.reservePrice }}</div>
+            </div>
+            <div class="bs-item col-span-6">
+                <div class="bs-label">Number Of Rounds:</div>
+                <div class="bs-value">{{ auctionDetails.numberOfRounds }}</div>
             </div>
             <div class="bs-item col-span-6">
                 <div class="bs-label">Modifier Value:</div>
@@ -92,62 +91,45 @@
                     </button>
                 </div>
             </div>
-            <div class="bs-item col-span-6">
-                <div class="bs-buttons">
-                    <schedule-button :entity-id="loginStore.loginDetails.entityId"
-                        :auction-id="auctionDetails.auctionCode" :item-list="auctionDetails.item"
-                        v-model:startDate="auctionDetails.auctionStartDate"
-                        v-model:endDate="auctionDetails.auctionEndDate"
-                        v-model:users="auctionDetails.users"></schedule-button>
-                </div>
-            </div>
+           
         </div>
 
     </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Listbox from 'primevue/listbox';
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
-import { fetchAuctionStatus } from "../../plugins/helpers";
-import ScheduleButton from '@/components/SchedulerButton.vue'
-import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
-
 const visible6 = ref(false);
 const expandedRows = ref([]);
-const auctionDetails = ref({});
-import { defineProps } from 'vue';
-const loginStore = login();
-const { auctionId } = defineProps({
-    auctionId: Number
-})
+const auctionDetails = ref([]);
 
-async function FetchAuctionDetailsByAuctionIdAdmin() {
-    var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
-    var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
-    console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
+const props = defineProps({
+    auctionId: Number
+});
+
+let auctionId = ref(props.auctionId)
+
+function FetchAuctionDetailsByAuctionId() {
+   
     new MQL()
         .useManagementServer()
-        .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
-        .setData({
-            auctionId: auctionId,
-            participantStatusId: participantsStatusId.result.statusId,
-            emdPaidStatusId: emdStatusId.result.statusId
-        })
+        .setActivity("o.[FetchAuctionDetailsByAuctionId]")
+        .setData({auctionId:auctionId.value})
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchAuctionDetailsByAuctionIdAdmin", true)
-            if (rs.isValid("FetchAuctionDetailsByAuctionIdAdmin")) {
+            let res = rs.getActivity("FetchAuctionDetailsByAuctionId", true)
+            if (rs.isValid("FetchAuctionDetailsByAuctionId")) {
                 console.log(res)
                 res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
-                res.result.fetchAuctionDetails.participants = res.result.participationNEMD.participants;
-                res.result.fetchAuctionDetails.emdPaid = res.result.participationNEMD.emdPaid;
-                res.result.fetchAuctionDetails.users = res.result.users.map(el => el.userId);
                 const auctionDetailObj = res.result.fetchAuctionDetails;
-                console.log(auctionDetailObj, "auctionDetails")
+            
+                console.log(auctionDetailObj,"auctionDetails")
 
                 // Map documents to an object with documentTypeName as key and documentPath as value
                 const documentsMap = {};
@@ -161,31 +143,30 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 auctionDetails.value = auctionDetailObj;
                 console.log(auctionDetails.value, "auctionDetails.value********");
                 console.log(auctionDetails.value, "auctionDetails.value********");
-
-                // You can access document paths using auctionDetail.documentsMap in the template
             } else {
-                rs.showErrorToast("FetchAuctionDetailsByAuctionIdAdmin")
+                rs.showErrorToast("FetchAuctionDetailsByAuctionId")
             }
         })
 }
 function DownloadDocument(url) {
     console.log(url, "url")
-    if (url !== "") {
-        new MQLCdn()
+        if (url !== "") {
+          new MQLCdn()
             .setCDNPath(url)
             .enablePageLoader(true)
             .downloadFile("downloadBtn")
             .then((res) => {
-                if (!res.isValid()) {
-                    res.showErrorToast();
-                }
+              if (!res.isValid()) {
+                res.showErrorToast();
+              }
             });
-    } else {
-        toaster.error("File can'nt be downloaded!")
-    }
-};
+        }else{
+          toaster.error("File can'nt be downloaded!")
+        }
+      };
+
 onMounted(() => {
-    FetchAuctionDetailsByAuctionIdAdmin()
+    FetchAuctionDetailsByAuctionId()
 });
 </script>
 
@@ -194,19 +175,13 @@ onMounted(() => {
     color: blue;
     text-decoration: underline;
 }
-
 .profile-field label {
     display: inline-block;
-    width: 120px;
-    /* Adjust width as needed */
-    margin-right: 10px;
-    /* Example margin between label and span */
+    width: 120px; /* Adjust width as needed */
+    margin-right: 10px; /* Example margin between label and span */
 }
-
 .profile-field {
-    margin-bottom: 10px;
-    /* Example margin */
-    border-bottom: 1px solid #ccc;
-    /* Add border to separate fields */
+    margin-bottom: 10px; /* Example margin */
+    border-bottom: 1px solid #ccc; /* Add border to separate fields */
 }
 </style>
