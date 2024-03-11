@@ -104,7 +104,7 @@
             <div class="fm-action">
               <div class="col-span-full md:col-span-6">
                 <div class="fm-group">
-                  <label class="fm-label" for="password">Password</label>
+                  <label class="fm-label" for="password">Reset Password</label>
                   <div class="fm-inner">
                     <Password v-model="password" toggleMask />
                     <fa-lock class="fm-icon fm-prefix"></fa-lock>
@@ -117,7 +117,7 @@
               <div class="col-span-full md:col-span-6">
                 <div class="fm-group">
                   <label class="fm-label" for="confirmPassword"
-                    >Confirm Password</label
+                    >Confirm Reset Password</label
                   >
                   <div class="fm-inner">
                     <Password v-model="confirmPassword" toggleMask />
