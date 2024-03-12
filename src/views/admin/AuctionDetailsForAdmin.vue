@@ -1,124 +1,124 @@
 <template>
-    <div class="card">
+    <div class="table-custom">
 
-        <div class="profile-header">
-            <h2>Upcoming Auctions</h2>
-        </div>
-        <div class="table-custom">
-
-            <div class="box-section">
-                <div class="bs-header">
-                    Auction Details
+        <div class="box-section">
+            <div class="bs-header">
+                Auction Details
+            </div>
+            <div class="bs-item-holder">
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Auction Type:</div>
+                    <div class="bs-value">{{ auctionDetails.auctionType }}</div>
                 </div>
-                <div class="bs-item-holder">
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Auction Type:</div>
-                        <div class="bs-value">{{ auctionDetails.auctionType }}</div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Auction Method:</div>
+                    <div class="bs-value">{{ auctionDetails.auctionMethodName }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Auction Process:</div>
+                    <div class="bs-value">{{ auctionDetails.auctionProcessName }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Bid Placement:</div>
+                    <div class="bs-value">{{ auctionDetails.bidPlacementName }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">District:</div>
+                    <div class="bs-value">{{ auctionDetails.district }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">MC:</div>
+                    <div class="bs-value">{{ auctionDetails.mcName }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Location:</div>
+                    <div class="bs-value">{{ auctionDetails.location }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Area:</div>
+                    <div class="bs-value">{{ auctionDetails.area }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Participants:</div>
+                    <div class="bs-value">{{ auctionDetails.participants }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Total Joining Fees Paid For:</div>
+                    <div class="bs-value">{{ auctionDetails.joiningPaid }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Total EMD Paid For:</div>
+                    <div class="bs-value">{{ auctionDetails.emdPaid }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Properties Available:</div>
+                    <div class="bs-value">Upto {{ auctionDetails.itemCount }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">EMD:</div>
+                    <div class="bs-value">{{ auctionDetails.eventEmdProcessingFees }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Reserve Price:</div>
+                    <div class="bs-value">{{ auctionDetails.reservePrice }}</div>
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-label">Modifier Value:</div>
+                    <div class="bs-value">{{ auctionDetails.modifierValue }}</div>
+                </div>
+                <div class="bs-item col-span-6" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
+                    <div class="bs-buttons">
+                        <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
+                        <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                        doc.documentTypeName }}</button>
                     </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Auction Method:</div>
-                        <div class="bs-value">{{ auctionDetails.auctionMethodName }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Auction Process:</div>
-                        <div class="bs-value">{{ auctionDetails.auctionProcessName }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Bid Placement:</div>
-                        <div class="bs-value">{{ auctionDetails.bidPlacementName }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">District:</div>
-                        <div class="bs-value">{{ auctionDetails.district }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">MC:</div>
-                        <div class="bs-value">{{ auctionDetails.mcName }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Location:</div>
-                        <div class="bs-value">{{ auctionDetails.location }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Area:</div>
-                        <div class="bs-value">{{ auctionDetails.area }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Participants:</div>
-                        <div class="bs-value">{{ auctionDetails.participants }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Total EMD Paid For:</div>
-                        <div class="bs-value">{{ auctionDetails.emdPaid }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Properties Available:</div>
-                        <div class="bs-value">Upto {{ auctionDetails.itemCount }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">EMD:</div>
-                        <div class="bs-value">{{ auctionDetails.eventEmdProcessingFees }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Reserve Price:</div>
-                        <div class="bs-value">{{ auctionDetails.reservePrice }}</div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-label">Modifier Value:</div>
-                        <div class="bs-value">{{ auctionDetails.modifierValue }}</div>
-                    </div>
-                    <div class="bs-item col-span-6" v-for="(doc, index) in auctionDetails.auctionDocuments"
-                        :key="index">
-                        <div class="bs-buttons">
-                            <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                            <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</button>
-                        </div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-buttons">
-                            <Button @click="visible6 = true">
-                                Available Properties
+                </div>
+                <div class="bs-item col-span-6">
+                    <div class="bs-buttons">
+                        <Button @click="visible6 = true">
+                            Available Properties
 
-                                <Dialog v-model:visible="visible6" modal 
-                                    :style="{ width: '50rem' }">
+                            <Dialog v-model:visible="visible6" modal :style="{ width: '50rem' }">
 
-                                    <div class="box-section">
-                                        <div class="bs-header">
-                                            Available Properties
-                                        </div>
-                                        <div class="bs-item-holder">
-                                            <div class="bs-item col-span-6" v-for="item in auctionDetails.item" :key="item.id">
-                                                <div class="bs-label">Item Name:</div>
-                                                <div class="bs-value"> {{ item.item }}</div>
-                                            </div>
+                                <div class="box-section">
+                                    <div class="bs-header">
+                                        Available Properties
+                                    </div>
+                                    <div class="bs-item-holder">
+                                        <div class="bs-item col-span-6" v-for="item in auctionDetails.item"
+                                            :key="item.id">
+                                            <div class="bs-label">Item Name:</div>
+                                            <div class="bs-value"> {{ item.item }}</div>
                                         </div>
                                     </div>
-                                    <span >
-                                        {{ item }}
-                                    </span>
-                                     </Dialog>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="bs-item col-span-6">
-                        <div class="bs-buttons">
-                            <schedule-button :entity-id="loginStore.loginDetails.entityId"
-                                :auction-id="auctionDetails.auctionCode" :item-list="auctionDetails.item"
-                                v-model:startDate="auctionDetails.auctionStartDate"
-                                v-model:endDate="auctionDetails.auctionEndDate"
-                                v-model:users="auctionDetails.users"></schedule-button>
-                        </div>
+                                </div>
+                                <span>
+                                    {{ item }}
+                                </span>
+                            </Dialog>
+                        </button>
                     </div>
                 </div>
-
+                <div class="bs-item col-span-6">
+                    <p v-if="auctionDetails.emdPaid < auctionDetails.roundRule" class="text-red-400 m-auto">
+                        Number of EMD Paid is less then required amount {{ auctionDetails.roundRule }}
+                    </p>
+                    <div class="bs-buttons">
+                        <schedule-button :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
+                            :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionCode"
+                            :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
+                            v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" />
+                    </div>
+                </div>
             </div>
 
         </div>
+
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineProps } from "vue";
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
@@ -127,9 +127,7 @@ import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
 
 const visible6 = ref(false);
-const expandedRows = ref([]);
 const auctionDetails = ref({});
-import { defineProps } from 'vue';
 const loginStore = login();
 const { auctionId } = defineProps({
     auctionId: Number
@@ -138,14 +136,11 @@ const { auctionId } = defineProps({
 async function FetchAuctionDetailsByAuctionIdAdmin() {
     var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
     var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
-    console.log(participantsStatusId.result.statusId, emdStatusId.result.statusId, auctionId, "participantsStatusId, emdStatusId, auctionId");
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
         .setData({
-            auctionId: auctionId,
-            participantStatusId: participantsStatusId.result.statusId,
-            emdPaidStatusId: emdStatusId.result.statusId
+            auctionId: auctionId
         })
         .fetch()
         .then(rs => {
@@ -154,8 +149,11 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 console.log(res)
                 res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
-                res.result.fetchAuctionDetails.participants = res.result.participationNEMD.participants;
-                res.result.fetchAuctionDetails.emdPaid = res.result.participationNEMD.emdPaid;
+                res.result.fetchAuctionDetails.participants = res.result.counts.TotalParticipants;
+                res.result.fetchAuctionDetails.emdPaid = res.result.counts.TotalEMDPaid;
+                res.result.fetchAuctionDetails.joiningPaid = res.result.counts.TotalJoiningPaid;
+                res.result.fetchAuctionDetails.roundRule = res.result.roundRule.roundRule;
+
                 res.result.fetchAuctionDetails.users = res.result.users.map(el => el.userId);
                 const auctionDetailObj = res.result.fetchAuctionDetails;
                 console.log(auctionDetailObj, "auctionDetails")
@@ -170,8 +168,6 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 auctionDetailObj.documentsMap = documentsMap;
 
                 auctionDetails.value = auctionDetailObj;
-                console.log(auctionDetails.value, "auctionDetails.value********");
-                console.log(auctionDetails.value, "auctionDetails.value********");
 
                 // You can access document paths using auctionDetail.documentsMap in the template
             } else {
@@ -181,20 +177,20 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
 }
 function DownloadDocument(url) {
     console.log(url, "url")
-        if (url !== "") {
-          new MQLCdn()
+    if (url !== "") {
+        new MQLCdn()
             .setCDNPath(url)
             .enablePageLoader(true)
             .downloadFile("downloadBtn")
             .then((res) => {
-              if (!res.isValid()) {
-                res.showErrorToast();
-              }
+                if (!res.isValid()) {
+                    res.showErrorToast();
+                }
             });
-        }else{
-          toaster.error("File can'nt be downloaded!")
-        }
-      };
+    } else {
+        toaster.error("File can'nt be downloaded!")
+    }
+};
 onMounted(() => {
     FetchAuctionDetailsByAuctionIdAdmin()
 });

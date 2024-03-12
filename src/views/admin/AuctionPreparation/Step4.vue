@@ -2,7 +2,7 @@
   <div class="wizard-content">
     <div class="wc-item">
       <div class="wc-header">
-        <div class="wc-title">Auction ID: {{ auctionId }}</div>
+        <div class="wc-title">Auction Code: {{ auctionCodeToShow }}</div>
       </div>
       <div class="form-grid">
         <div class="col-span-full md:col-span-6">
@@ -222,6 +222,8 @@ const { auctionId, config } = defineProps({
   },
 });
 
+
+const auctionCodeToShow = ref();
 const serverDate = ref();
 //const startDate = ref(new Date());
 //const endDate = ref(new Date());
@@ -432,6 +434,7 @@ function fetchAllStepsAuctionPreview() {
         selectedStartDate.value = dbStartDate.value;
         selectedEndDate.value = dbEndDate.value;
       }
+      auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
       } else {
         rs.showErrorToast("FetchAllStepsAuctionPreview");

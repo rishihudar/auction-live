@@ -9,7 +9,7 @@
 
                     <div class="bs-item-holder">
                         <div class="bs-item col-span-12">
-                            <ol v-for="(item, index) in history" :key="index">
+                            <!-- <ol v-for="(item, index) in history" :key="index">
                                 <li class="list-disc">
                                         Workflow Step: <span class="font-bold"> {{ item.StepDisplayName }},</span>
                                         last action By <span class="font-bold"> {{ item.fullName }} </span>
@@ -18,7 +18,15 @@
                                         Comment {{ item.comment }}, Decision taken {{ item.statusDisplayName }}
                                 </li>
 
-                            </ol>
+                            </ol> -->
+                            <DataTable :value="history" showGridlines tableStyle="border-collapse: separate;">
+                        <Column field="stepDisplayName" header="Step"></Column>
+                        <Column field="fullName" header="fullName"></Column>
+                        <Column field="roleName" header="roleName"></Column>
+                        <Column field="createdOn" header="createdOn"></Column>
+                        <Column field="commentW" header="comment"></Column>
+                        <Column field="statusDisplayName" header="statusDisplayName"></Column>
+                    </DataTable>
                         </div>
                     </div>
                 </div>
@@ -29,8 +37,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Card from "primevue/card";
 import MQL from "@/plugins/mql.js";
+import DataTable from 'primevue/datatable';
 import { login } from "../store/modules/login";
 const loginStore = login()
 
@@ -54,13 +62,7 @@ function FetchWorkflowStepDetailsHistory() {
             let res = rs.getActivity("FetchWorkflowStepDetailsHistory", true)
             if (rs.isValid("FetchWorkflowStepDetailsHistory")) {
                 console.log(res)
-
-                // Remove the console.log statement
-                // console.log("res.result",res.result)
-
-                history.value = res.result.fetchWorkflowStepDetailsHistory;
-                history.value.push(res.result.fetchCurrent)
-                console.log(history.value, "history.value")
+                history.value = res.result;
             } else {
                 rs.showErrorToast("FetchWorkflowStepDetailsHistory")
             }
