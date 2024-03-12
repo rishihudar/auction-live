@@ -21,9 +21,9 @@
   </DataTable>
   <Paginator
     :rows="perPage"
+    :rowsPerPageOptions="[5, 10, 15]"
     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-    :rowsPerPageOptions="[5, 10, 15]"
     :totalRecords="totalRows"
     v-if="totalRows > perPage"
     @page="handlePageChange"

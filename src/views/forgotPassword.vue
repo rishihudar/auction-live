@@ -19,12 +19,12 @@
             <Toast />
             <div class="fm-inner">
               <div class="fm-inner">
-                <InputText v-model="emailId" placeholder="a@mail.com"  :disabled="emailchecked"/>
+                <InputText v-model="emailId" placeholder="Enter your Username"  :disabled="emailchecked"/>
                 <fa-email class="fm-icon fm-prefix"></fa-email>
               </div>
               <Button
-                label="Verify Email"
-                @click="isEmailExist(),(emailchecked=true)"
+                label="Verify Username"
+                @click="isEmailExist"
                 :disabled="!emailId ||emailchecked"
               />
 
@@ -348,58 +348,58 @@ function verifyOTPMobile() {
       }
     });
 }
-async function sendOTPEmail() {
-  await isEmailExist();
-  console.log("countEmailUsers is ", countEmailUsers.value);
-  if (countEmailUsers.value > 0) {
-    toaster.error("Email already exist");
-    return;
-  }
+// async function sendOTPEmail() {
+//   await isEmailExist();
+//   console.log("countEmailUsers is ", countEmailUsers.value);
+//   if (countEmailUsers.value > 0) {
+//     toaster.error("Email already exist");
+//     return;
+//   }
 
-  $v.value.fullName.$validate();
-  $v.value.emailId.$validate();
-  // $v.emailId.$validate()
-  // Automatically generated
+//   $v.value.fullName.$validate();
+//   $v.value.emailId.$validate();
+//   // $v.emailId.$validate()
+//   // Automatically generated
 
-  if (!$v.value.emailId.$invalid && !$v.value.fullName.$invalid) {
-    new MQL()
-      .useCoreServer()
-      .setActivity("o.[SendOTPEmail]")
-      .setData({
-        from: "test@mkcl.org",
-        to: emailId.value,
-        fullName: fullName.value,
-      })
-      // .setHeaders({})
-      .fetch()
-      .then((rs) => {
-        let res = rs.getActivity("SendOTPEmail", true);
-        // if (rs.isValid("SendOTPEmail") && res.result == "SUCCESS") {
-        if (rs.isValid("SendOTPEmail")) {
-          console.log("Sending OTP to email", res.result);
+//   if (!$v.value.emailId.$invalid && !$v.value.fullName.$invalid) {
+//     new MQL()
+//       .useCoreServer()
+//       .setActivity("o.[SendOTPEmail]")
+//       .setData({
+//         from: "test@mkcl.org",
+//         to: emailId.value,
+//         fullName: fullName.value,
+//       })
+//       // .setHeaders({})
+//       .fetch()
+//       .then((rs) => {
+//         let res = rs.getActivity("SendOTPEmail", true);
+//         // if (rs.isValid("SendOTPEmail") && res.result == "SUCCESS") {
+//         if (rs.isValid("SendOTPEmail")) {
+//           console.log("Sending OTP to email", res.result);
 
-          isEmailOTPSent.value = true;
-          isEmailOTPVerified.value = false;
+//           isEmailOTPSent.value = true;
+//           isEmailOTPVerified.value = false;
 
-          setTimeout(() => {
-            if (OTPVerified.value == true) {
-              isEmailOTPVerified.value = true;
-              isEmailOTPSent.value = true;
-            } else {
-              isEmailOTPSent.value = false;
+//           setTimeout(() => {
+//             if (OTPVerified.value == true) {
+//               isEmailOTPVerified.value = true;
+//               isEmailOTPSent.value = true;
+//             } else {
+//               isEmailOTPSent.value = false;
 
-              emailOTP.value = "";
-              // isEmailOTPVerified.value = true;
-            }
-          }, 30000);
-        } else {
-          // rs.showErrorToast("SendOTPEmail")
-        }
-      });
-  } else {
-    toaster.error("Invalid Details");
-  }
-}
+//               emailOTP.value = "";
+//               // isEmailOTPVerified.value = true;
+//             }
+//           }, 30000);
+//         } else {
+//           // rs.showErrorToast("SendOTPEmail")
+//         }
+//       });
+//   } else {
+//     toaster.error("Invalid Details");
+//   }
+// }
 
 function verifyOTPEmail() {
   // Automatically generated
@@ -443,16 +443,18 @@ function isEmailExist() {
         toast.add({
           severity: "success",
           summary: "Success",
-          detail: "Email Verified !!!",
+          detail: "Username Verified !!!",
           life: 5000,
         });
+        emailchecked.value=true
       } else {
         toast.add({
           severity: "error",
           summary: "Error",
-          detail: "Email does'nt exist,please kindly check your email!!!",
+          detail: "Username does'nt exist,please kindly check your Username!!!",
           life: 7000,
         });
+        emailchecked.value=false
       }
       if (rs.isValid("ForgetPasswordService")) {
       } else {

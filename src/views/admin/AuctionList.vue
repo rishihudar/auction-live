@@ -42,6 +42,7 @@
             ></fa-magnifying-glass>
           </div>
         </template>
+        <Column field="srNo" header="SrNo." sortable></Column>
         <Column field="auctionCode" header="Auction Code" sortable></Column>
         <Column
           field="auctionDescription"

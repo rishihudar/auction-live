@@ -282,13 +282,13 @@ function nextCallback() {
 function formattedStartDateCalc() {
   formattedStartDate.value = moment(serverDate.value)
     .add(60, "seconds")
-    .format("YYYY/MM/DD HH:mm:ss");
+    .format("DD/MM/YYYY HH:mm:ss");
   console.log("formattedStartDate.value", formattedStartDate.value);
 }
 function formattedEndDateCalc() {
   formattedEndDate.value = moment(serverDate.value)
     .add(120, "seconds")
-    .format("YYYY/MM/DD HH:mm:ss");
+    .format("DD/MM/YYYY HH:mm:ss");
   console.log("formattedEndDate.value", formattedEndDate.value);
 }
 function checkDates(){
