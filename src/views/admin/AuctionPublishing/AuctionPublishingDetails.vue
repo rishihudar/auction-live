@@ -323,11 +323,10 @@
         </DataTable>
         <Paginator
           :rows="perPage"
-          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          :rowsPerPageOptions="[5, 10, 15]"
+          :rowsPerPageOptions="[5, 10, 20]"
           :totalRecords="totalRows"
-          v-if="totalRows > perPage"
+          template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           @page="handlePageChange"
         />
       </div>
@@ -379,6 +378,7 @@ const currentPage = ref(0);
 
 function handlePageChange(event) {
   currentPage.value = event.page;
+  perPage.value = event.rows;
   console.log("event.page", event.page);
   fetchAuctionWithApprovedStatus(currentPage.value);
 }

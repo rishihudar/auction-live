@@ -1,31 +1,40 @@
 <template>
   <div class="table-custom">
-    <DataTable v-model:expandedRows="expandedRows" :value="products" showGridlines tableStyle="min-width: 50rem">
+    <DataTable
+      v-model:expandedRows="expandedRows"
+      :value="products"
+      showGridlines
+      tableStyle="min-width: 50rem"
+    >
       <Column field="srNo" header="SrNo."></Column>
       <Column field="auctionId" header="Auction Code"></Column>
       <Column field="auctionDescription" header="Auction Description"></Column>
       <Column field="auctionCategoryName" header="Auction Category"></Column>
       <Column field="districtName" header="District Name"></Column>
       <Column field="entityName" header="Entity Name"></Column>
-      <Column field="auctionRegStartDate" header="Processing and EMD Fee Pay Start Date/Time"></Column>
-      <Column field="auctionRegEndDate" header="Processing and EMD Fee Pay End Date/Time"></Column>
-      <Column expander style="width: 5rem" field="" header="Action">
-      </Column>
+      <Column
+        field="auctionRegStartDate"
+        header="Processing and EMD Fee Pay Start Date/Time"
+      ></Column>
+      <Column
+        field="auctionRegEndDate"
+        header="Processing and EMD Fee Pay End Date/Time"
+      ></Column>
+      <Column expander style="width: 5rem" field="" header="Action"> </Column>
       <template #expansion="slot">
-        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId"> </AuctionDetailsForAdmin>
+        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId">
+        </AuctionDetailsForAdmin>
       </template>
     </DataTable>
     <Paginator
-    :rows="perPage"
-    :rowsPerPageOptions="[5, 10, 15]"
-    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-    :totalRecords="totalRows"
-    v-if="totalRows > perPage"
-    @page="handlePageChange"
-  />
+      :rows="perPage"
+      :rowsPerPageOptions="[5, 10, 20]"
+      :totalRecords="totalRows"
+      template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      @page="handlePageChange"
+    />
   </div>
-
 </template>
 
 <script setup>
@@ -53,9 +62,9 @@ onMounted(() => {
 
 let auctionId = ref();
 function handlePageChange(event) {
-  
   currentPage.value = event.page;
-  console.log("event.page",event.page);
+  perPage.value = event.rows;
+  console.log("event.page", event.page);
   fetchPublishedAuctionsBidder(currentPage.value);
 }
 function fetchPublishedAuctionsBidder(page) {
@@ -68,29 +77,25 @@ function fetchPublishedAuctionsBidder(page) {
       entityId: login().loginDetails.entityId,
       userId: login().loginDetails.loginId,
       statusCode: "AUCTION_PUBLISHED",
-      skip: String((page) * perPage.value),
+      skip: String(page * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("FetchPublishedAuctionsBidder", true);
       if (rs.isValid("FetchPublishedAuctionsBidder")) {
-        products.value = res.result.publishedAuctions
-        console.log('Published Auctions Scheduler', res.result);
-        auctionId.value = res.result.auctionId
+        products.value = res.result.publishedAuctions;
+        console.log("Published Auctions Scheduler", res.result);
+        auctionId.value = res.result.auctionId;
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length",products.value.length);
+        console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
-          products.value[i].srNo = (page * perPage.value) + i + 1;
-  console.log("SrNo-",(page * perPage.value) + i + 1);
-}
-
+          products.value[i].srNo = page * perPage.value + i + 1;
+          console.log("SrNo-", page * perPage.value + i + 1);
+        }
       } else {
         rs.showErrorToast("FetchPublishedAuctionsBidder");
       }
     });
 }
-
-
-
 </script>
