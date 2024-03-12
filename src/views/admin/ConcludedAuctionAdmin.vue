@@ -12,10 +12,10 @@
                 paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
                 <!-- <template #header>
-                        <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
-                            <h4 class="m-0">Manage Products</h4>
-                        </div>
-                    </template> -->
+                          <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                              <h4 class="m-0">Manage Products</h4>
+                          </div>
+                      </template> -->
 
                 <template #paginatorstart>
                     <div class="fm-inner">
@@ -28,41 +28,92 @@
                 <Column field="auctionCategoryName" header="Auction Category"></Column>
                 <Column field="auctionStartDate" header="Auction StartDate/Time"></Column>
                 <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
-                <Column expander  style="width: 50rem" field="" header="Action">
+
+                <Column expander style="width: 50rem" field="" header="Action">
                 </Column>
-                
+
                 <template #expansion="slot">
-                    <AuctionDetailsForConcludedAuction :auctionId = "slot.data.auctionId" >  </AuctionDetailsForConcludedAuction>
+                    <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId">
+                    </AuctionDetailsForConcludedAuction>
                 </template>
+                <Column expander style="width: 50rem" field="" header="Report">
+                    <template #body="{ data }">
+                        <Button @click=showModal(data.auctionId)>Auction Report</Button>
+                        <Button @click="showModalForH1(data.auctionId)">H1Report</Button>
+                    </template>
+                </Column>
             </DataTable>
         </div>
+        <div>
 
+            <Dialog v-model:visible="displayModal" header="Auction Report">
+                <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+                    <div v-for="(item, index) in auctionDetailsReport" :key="index">
+                        <p>Auction ID: {{ item.auctionId }}</p>
+                        <p>Created On: {{ item.createdOn }}</p>
+                        <p>Full Name: {{ item.fullName }}</p>
+                        <p>Quoted Value: {{ item.quotedValue }}</p>
+                        <p>Round Number: {{ item.roundNumber }}</p>
+                    </div>
+                </div>
+                <Button @click="generatePdf">Generate PDF</Button>
+            </Dialog>
+        </div>
+        <div>
+
+            <Dialog v-model:visible="displayModal1" header="H1Report">
+                <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+                    <h2>Highest Bidder Auction Statement</h2>
+                    <div v-for="(item, index) in auctionH1Report" :key="index">
+                        <p>Auction ID: {{ item.auctionId }}</p>
+                    <p>Item Name:{{ item.inventoryHierarchy}}</p>
+                        <p>Full Name: {{ item.fullName }}</p>
+                        <p>Flat:{{ item.inventoryName }}</p>
+                        <p>Email ID:{{ item.email}}</p>
+                        <p>Bidder Name:{{ item.fullName }}</p>
+                        <p>Round Number:{{ item.soldRoundNumber }}</p>
+                        <p>Highest Quoted Value:{{ item.inventorySoldForPrice }}</p>
+                  
+                    </div>
+                </div>
+                <Button @click="generatePdfH1">Generate PDF</Button>
+            </Dialog>
+        </div>
+    
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { FilterMatchMode } from 'primevue/api'
+import { ref, onMounted } from "vue";
+import { FilterMatchMode } from "primevue/api";
 import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
 import { useRoute } from "vue-router";
+
+import Dialog from 'primevue/dialog';
+
 import AuctionDetailsForConcludedAuction from "./AuctionDetailsForConcludedAuction.vue";
-
+// import Vue3Html2pdf from 'vue3-html2pdf'
+//import teleport from 'vue-teleport';
+import html2pdf from "html2pdf.js";
 const expandedRows = ref([]);
-
+const displayModal = ref(false);
+const displayModal1 = ref(false);
 const route = useRoute();
+const html2PdfRef = ref(null);
 const loginStore = login();
 const products = ref();
 const entityId = ref("");
 let auctionId = ref([]);
 const auctionDetails = ref({});
+let auctionDetailsReport = ref({});
+let auctionH1Report = ref({});
 const filters = ref({
-    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 onMounted(() => {
     entityId.value = route.params.id;
     fetchConcludedAuctionsBidder();
-    
 });
 
 function fetchConcludedAuctionsBidder() {
@@ -75,19 +126,131 @@ function fetchConcludedAuctionsBidder() {
             organizationId: login().loginDetails.organizationId,
             userId: login().loginDetails.loginId,
             statusCode: "AUCTION_CONCLUDED",
+            skip: "0",
+            limit: "1",
+            filter: "%%",
         })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity("FetchConcludedAuctionsBidder", true);
             if (rs.isValid("FetchConcludedAuctionsBidder")) {
-                products.value = res.result;
+                products.value = res.result.concludedAuctions;
                 console.log(res.result, "concluded result**********");
-                auctionId.value = res.result.auctionId
-                console.log(auctionId.value, "auctionId.value@@@@@@")
             } else {
                 rs.showErrorToast("FetchConcludedAuctionsBidder");
             }
         });
 }
+
+
+
+// Function to generate PDF
+async function fetchAuctionDetailsReport(auctionId) {
+    try {
+        console.log("Selected Entity Id", login().loginDetails);
+        const rs = await new MQL()
+            .useManagementServer()
+            .setActivity("r.[FetchAuctionDetailReportByAuctionId]")
+            .setData({
+                auctionId: auctionId,
+            })
+            .fetch();
+
+        const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
+        if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
+            console.log(res.result, "auctionDetailsReport result**********");
+            auctionDetailsReport.value = res.result; // Update the ref value
+            return res.result; // Return the result
+        } else {
+            rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
+            throw new Error("Error fetching auction details report");
+        }
+    } catch (error) {
+        console.error("Error fetching auction details report:", error);
+        throw error;
+    }
+}
+
+async function fetchAuctionReportForH1(auctionId) {
+    try {
+        console.log("Selected Entity Id", login().loginDetails);
+        const rs = await new MQL()
+            .useManagementServer()
+            .setActivity("r.[FetchAuctionReportForH1]")
+            .setData({
+                auctionId: auctionId,
+            })
+            .fetch();
+
+        const res = rs.getActivity("FetchAuctionReportForH1", true);
+        if (rs.isValid("FetchAuctionReportForH1")) {
+            console.log(res.result, "auctionH1Report result!@!@!@!@!@");
+            auctionH1Report.value = res.result; // Update the ref value
+            return res.result; // Return the result
+        } else {
+            rs.showErrorToast("FetchAuctionReportForH1");
+            throw new Error("Error fetching auction h1  report");
+        }
+    } catch (error) {
+        console.error("Error fetching auction details report:", error);
+        throw error;
+    }
+}
+
+
+async function generatePdf(auctionId) {
+    try {
+        // Fetch auction details report
+        // const auctionDetailsReportData = await fetchAuctionDetailsReport(auctionId);
+
+        // Generate the PDF
+        var element = document.getElementById("pdfDiv");
+        const options = {
+            margin: 1,
+            filename: "myfile.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+
+        };
+
+        html2pdf().set(options).from(element).save();
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+    }
+}
+async function generatePdfH1(auctionId) {
+    try {
+        // Generate the PDF
+        var element = document.getElementById("pdfDiv");
+        const options = {
+            margin: 1,
+            filename: "myfile.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+
+        };
+
+        html2pdf().set(options).from(element).save();
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+    }
+}
+
+
+async function showModal(auctionId) {
+    console.log("#####", auctionId)
+    displayModal.value = true;
+    await fetchAuctionDetailsReport(auctionId);
+}
+
+async function showModalForH1(auctionId) {
+    console.log("#####", auctionId)
+    displayModal1.value = true;
+    await fetchAuctionReportForH1(auctionId);
+}
+
+
 
 </script>
