@@ -219,6 +219,12 @@ const router = createRouter({
       meta: { title: "Login", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/forgetPassword",
+      name: "forgetPassword",
+      component: loadView("forgotPassword"),
+      meta: { title: "forgotPassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
       path: "/registration",
       name: "registration",
       component: loadView("Registration"),

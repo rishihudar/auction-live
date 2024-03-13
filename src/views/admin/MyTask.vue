@@ -1,6 +1,12 @@
 <template>
-  <DataTable v-model:expandedRows="expandedRows" :value="auctionDetails" showGridlines tableStyle="min-width: 50rem">
+  <DataTable
+    v-model:expandedRows="expandedRows"
+    :value="auctionDetails"
+    showGridlines
+    tableStyle="min-width: 50rem"
+  >
     <template #empty>No Auctions Found</template>
+    <Column field="srNo" header="SrNo."> </Column>
     <Column field="taskDate" header="Task Date"> </Column>
     <Column field="auctionCode" header="Auction Code"> </Column>
     <Column field="inventoryCategoryName" header="Auction Category"> </Column>
@@ -13,6 +19,16 @@
       </template>
     </Column>
   </DataTable>
+  <Paginator
+    :rows="perPage"
+    :rowsPerPageOptions="[5, 10, 15]"
+    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+    :totalRecords="totalRows"
+    v-if="totalRows > perPage"
+    @page="handlePageChange"
+  />
+
   <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
     <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" />
   </Dialog>
@@ -26,10 +42,23 @@ import Dialog from "primevue/dialog";
 import MQL from "@/plugins/mql.js";
 import { login } from "../../store/modules/login";
 import ViewAuction from "../WorkflowManagement/ViewAuction.vue";
+import Paginator from "primevue/paginator";
+
 const auctionDetails = ref([]);
-const loginStore = login()
+const loginStore = login();
 const visible = ref(false);
 const expandedRows = ref([]);
+const perPage = ref(10);
+const totalRows = ref();
+const currentPage = ref(0);
+
+function handlePageChange(event) {
+  
+  currentPage.value = event.page;
+  console.log("event.page",event.page);
+  fetchAuctionDetailsForMyTask(currentPage.value);
+}
+
 const workflowStepDetailsId = ref(null)
 
 function showDialog(id) {
@@ -38,28 +67,42 @@ function showDialog(id) {
   workflowStepDetailsId.value = id
 }
 
-function fetchAuctionDetailsForMyTask() {
-  // Automatically generated
+function fetchAuctionDetailsForMyTask(page) {
+  console.log("auction details on page:", page);
+
   new MQL()
     .useManagementServer()
     .setActivity("o.[FetchAuctionDetailsForMyTask]")
     .setData({
       assignedLoginId: loginStore.loginId,
       assignedRoleId: loginStore.role.roleId,
+      skip: String((page) * perPage.value),
+      limit: String(perPage.value),
     })
     .fetch()
-    .then((rs) => {
+    .then(function(rs) {
       let res = rs.getActivity("FetchAuctionDetailsForMyTask", true);
-      console.log("log-", res.result.auctionDetails);
-      auctionDetails.value = res.result.auctionDetails;
       if (rs.isValid("FetchAuctionDetailsForMyTask")) {
+        console.log("Fetched auction details:", res.result.auctionDetails);
+        console.log("page.value",page);
+        auctionDetails.value = res.result.auctionDetails;
+        totalRows.value = res.result.rowCount.totalRows;
+        console.log("auctionDetails.value.length",auctionDetails.value.length);
+        for (var i = 0; i < auctionDetails.value.length; i++) {
+  auctionDetails.value[i].srNo = (page * perPage.value) + i + 1;
+  console.log("SrNo-",(page * perPage.value) + i + 1);
+}
+
       } else {
         rs.showErrorToast("FetchAuctionDetailsForMyTask");
       }
+    })
+    .catch(function(error) {
+      console.error("Error fetching auction details:", error);
     });
 }
 onMounted(() => {
-  fetchAuctionDetailsForMyTask();
+  fetchAuctionDetailsForMyTask(currentPage.value);
 });
 </script>
 
