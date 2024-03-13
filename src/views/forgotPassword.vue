@@ -20,7 +20,7 @@
             <div class="fm-inner">
               <div class="fm-inner">
                 <InputText v-model="emailId" placeholder="Enter your Username"  :disabled="emailchecked"/>
-                <fa-email class="fm-icon fm-prefix"></fa-email>
+               
               </div>
               <Button
                 label="Verify Username"
