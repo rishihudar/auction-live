@@ -5,7 +5,17 @@
       :value="auctionDetails"
       showGridlines
       tableStyle="min-width: 50rem"
+      :filters="filter"
     >
+    <div class="fm-inner">
+        <label class="fm-label">Search Auction:</label>
+        <InputText
+          v-model="filter"
+          placeholder="Search By Auction Code..."
+          @input="fetchAuctionDetailsForMyTask"
+        />
+        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+      </div>
       <template #empty>No Auctions Found</template>
       <Column field="srNo" header="SrNo."> </Column>
       <Column field="taskDate" header="Task Date"> </Column>
@@ -56,13 +66,14 @@ const expandedRows = ref([]);
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
+const filter = ref("");
 
 function handlePageChange(event) {
   console.log("event", event);
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchAuctionDetailsForMyTask(currentPage.value);
+  fetchAuctionDetailsForMyTask();
 }
 
 const workflowStepDetailsId = ref(null);
@@ -73,8 +84,8 @@ function showDialog(id) {
   workflowStepDetailsId.value = id;
 }
 
-function fetchAuctionDetailsForMyTask(page) {
-  console.log("auction details on page:", page);
+function fetchAuctionDetailsForMyTask() {
+ 
 
   new MQL()
     .useManagementServer()
@@ -82,7 +93,8 @@ function fetchAuctionDetailsForMyTask(page) {
     .setData({
       assignedLoginId: loginStore.loginId,
       assignedRoleId: loginStore.role.roleId,
-      skip: String(page * perPage.value),
+      filter: "%" + filter.value.trim() + "%",
+      skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
@@ -90,13 +102,13 @@ function fetchAuctionDetailsForMyTask(page) {
       let res = rs.getActivity("FetchAuctionDetailsForMyTask", true);
       if (rs.isValid("FetchAuctionDetailsForMyTask")) {
         console.log("Fetched auction details:", res.result.auctionDetails);
-        console.log("page.value", page);
+        //console.log("page.value", page);
         auctionDetails.value = res.result.auctionDetails;
         totalRows.value = res.result.rowCount.totalRows;
         console.log("auctionDetails.value.length", auctionDetails.value.length);
         for (var i = 0; i < auctionDetails.value.length; i++) {
-          auctionDetails.value[i].srNo = page * perPage.value + i + 1;
-          console.log("SrNo-", page * perPage.value + i + 1);
+          auctionDetails.value[i].srNo = currentPage.value * perPage.value + i + 1;
+          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchAuctionDetailsForMyTask");
@@ -107,7 +119,7 @@ function fetchAuctionDetailsForMyTask(page) {
     });
 }
 onMounted(() => {
-  fetchAuctionDetailsForMyTask(currentPage.value);
+  fetchAuctionDetailsForMyTask();
 });
 </script>
 

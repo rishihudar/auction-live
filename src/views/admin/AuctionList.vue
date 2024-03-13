@@ -28,20 +28,20 @@
       <DataTable
         v-model:expandedRows="expandedRows"
         :value="customers"
-        :filters="filters"
+        :filters="filter"
         sortMode="multiple"
       >
-        <template #paginatorstart>
-          <div class="fm-inner">
-            <InputText
-              v-model="filters['global'].value"
-              placeholder="Search..."
-            />
+      <div class="fm-inner">
+            <label class="fm-label">Search Auction:</label>
+        <InputText
+          v-model="filter"
+          placeholder="Search By Auction Code..."
+          @input="AuctionList"
+        />
             <fa-magnifying-glass
               class="fm-icon fm-prefix"
             ></fa-magnifying-glass>
           </div>
-        </template>
         <Column field="srNo" header="SrNo." sortable></Column>
         <Column field="auctionCode" header="Auction Code" sortable></Column>
         <Column
@@ -79,7 +79,7 @@
               label="Edit"
               @click="
                 editAuction(
-                  slotProps.data.auctionCode,
+                  slotProps.data.auctionId,
                   slotProps.data.inventoryCategoryId
                 )
               "
@@ -186,9 +186,7 @@ const crumbs = ref([
 import faEye from "../../../assets/icons/eye.svg";
 
 const customers = ref([]);
-const filters = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
+const filter = ref('');
 
 const visible = ref(false);
 
@@ -196,9 +194,9 @@ function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  AuctionList(currentPage.value);
+  AuctionList();
 }
-async function AuctionList(page) {
+async function AuctionList() {
   var AUCTION_DRAFTED;
   const resultStatus = await fetchAuctionStatus("AUCTION_DRAFTED");
   if (resultStatus.error == null) {
@@ -207,24 +205,25 @@ async function AuctionList(page) {
   }
   new MQL()
     .useManagementServer()
-    .setActivity("o.[FetchAuctionsWithApprovedStatus]")
+    .setActivity("o.[FetchAuctionsWithDraftedStatus]")
     .setData({
       statusId: AUCTION_DRAFTED,
-      skip: String(page * perPage.value),
+      filter: "%" + filter.value.trim() + "%",
+      skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("FetchAuctionsWithApprovedStatus", true);
-      if (rs.isValid("FetchAuctionsWithApprovedStatus")) {
+      let res = rs.getActivity("FetchAuctionsWithDraftedStatus", true);
+      if (rs.isValid("FetchAuctionsWithDraftedStatus")) {
         customers.value = res.result.auctionData;
         totalRows.value = res.result.rowCount.totalRows;
         for (var i = 0; i < customers.value.length; i++) {
-          customers.value[i].srNo = page * perPage.value + i + 1;
-          console.log("SrNo-", page * perPage.value + i + 1);
+          customers.value[i].srNo = currentPage.value * perPage.value + i + 1;
+          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
-        rs.showErrorToast("FetchAuctionsWithApprovedStatus");
+        rs.showErrorToast("FetchAuctionsWithDraftedStatus");
       }
     });
 
@@ -282,6 +281,6 @@ function editAuction(aucId, invCatId) {
 }
 
 onMounted(() => {
-  AuctionList(currentPage.value);
+  AuctionList();
 });
 </script>

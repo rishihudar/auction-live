@@ -26,6 +26,15 @@
           showGridlines
           tableStyle="min-width: 50rem"
         >
+        <div class="fm-inner">
+        <label class="fm-label">Search Auction:</label>
+        <InputText
+          v-model="filter"
+          placeholder="Search By Auction Code..."
+          @input="fetchAuctionWithApprovedStatus"
+        />
+        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+      </div>
           <template #empty>No Auctions Found</template>
           <Column field="srNo" header="SrNo." sortable></Column>
           <Column field="auctionCode" header="Auction Code"> </Column>
@@ -375,22 +384,24 @@ const dbStartDate = ref();
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
+const filter=ref('');
 
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchAuctionWithApprovedStatus(currentPage.value);
+  fetchAuctionWithApprovedStatus();
 }
 
-function fetchAuctionWithApprovedStatus(page) {
+function fetchAuctionWithApprovedStatus() {
   // Automatically generated
   new MQL()
     .useManagementServer()
     .setActivity("o.[FetchAuctionsWithApprovedStatus]")
     .setData({
       statusId: 28,
-      skip: String(page * perPage.value),
+      filter: "%" + filter.value.trim() + "%",
+      skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
@@ -402,8 +413,8 @@ function fetchAuctionWithApprovedStatus(page) {
         totalRows.value = res.result.rowCount.totalRows;
         console.log("auctionDetails.value.length", auctionData.value.length);
         for (var i = 0; i < auctionData.value.length; i++) {
-          auctionData.value[i].srNo = page * perPage.value + i + 1;
-          console.log("SrNo-", page * perPage.value + i + 1);
+          auctionData.value[i].srNo = currentPage.value * perPage.value + i + 1;
+          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchAuctionsWithApprovedStatus");

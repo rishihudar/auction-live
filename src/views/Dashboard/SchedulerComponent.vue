@@ -6,8 +6,14 @@
       showGridlines
       tableStyle="min-width: 50rem"
     >
+    <label class="fm-label">Search Auction:</label>
+        <InputText
+          v-model="filter"
+          placeholder="Search By Auction Code..."
+          @input="fetchPublishedAuctionsBidder"
+        />
       <Column field="srNo" header="SrNo."></Column>
-      <Column field="auctionId" header="Auction Code"></Column>
+      <Column field="auctionCode" header="Auction Code"></Column>
       <Column field="auctionDescription" header="Auction Description"></Column>
       <Column field="auctionCategoryName" header="Auction Category"></Column>
       <Column field="districtName" header="District Name"></Column>
@@ -53,6 +59,7 @@ const products = ref();
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
+const filter = ref("");
 
 const entityId = ref("");
 onMounted(() => {
@@ -65,9 +72,9 @@ function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchPublishedAuctionsBidder(currentPage.value);
+  fetchPublishedAuctionsBidder();
 }
-function fetchPublishedAuctionsBidder(page) {
+function fetchPublishedAuctionsBidder() {
   console.log("Selected Entity Id", login().loginDetails);
   new MQL()
     .useManagementServer()
@@ -77,7 +84,8 @@ function fetchPublishedAuctionsBidder(page) {
       entityId: login().loginDetails.entityId,
       userId: login().loginDetails.loginId,
       statusCode: "AUCTION_PUBLISHED",
-      skip: String(page * perPage.value),
+      filter: "%" + filter.value.trim() + "%",
+      skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
@@ -90,8 +98,8 @@ function fetchPublishedAuctionsBidder(page) {
         totalRows.value = res.result.rowCount.totalRows;
         console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
-          products.value[i].srNo = page * perPage.value + i + 1;
-          console.log("SrNo-", page * perPage.value + i + 1);
+          products.value[i].srNo = currentPage.value * perPage.value + i + 1;
+          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchPublishedAuctionsBidder");
