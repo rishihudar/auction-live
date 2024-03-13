@@ -48,13 +48,27 @@
 
             <Dialog v-model:visible="displayModal" header="Auction Report">
                 <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-                    <div v-for="(item, index) in auctionDetailsReport" :key="index">
-                        <p>Auction ID: {{ item.auctionId }}</p>
+                    <img src="../../../assets/images/logo_dulb.webp" />
+                    <p>{{ auctionDetailsReport[0].entityName }}</p>
+                    <h2> Auction Details Statement</h2>
+
+                    <p>Auction Code: {{ auctionDetailsReport[0].auctionCode }}</p>
+                    <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
+                        <p>Sr No:{{ index + 1 }}</p>
                         <p>Created On: {{ item.createdOn }}</p>
                         <p>Full Name: {{ item.fullName }}</p>
                         <p>Quoted Value: {{ item.quotedValue }}</p>
                         <p>Round Number: {{ item.roundNumber }}</p>
-                    </div>
+                    </div> -->
+                    <DataTable :value="auctionDetailsReport">
+                            <Column field="srNo" header="Sr No"></Column>
+                            <Column field="quotedValue" header="Quoted Value"></Column>
+                            <Column field="fullName" header="Full Name"></Column>
+                            <Column field="createdOn" header="Created On"></Column>
+                            <Column field="roundNumber" header="Round Number"></Column>
+
+                          
+                        </DataTable>
                 </div>
                 <Button @click="generatePdf">Generate PDF</Button>
             </Dialog>
@@ -63,23 +77,39 @@
 
             <Dialog v-model:visible="displayModal1" header="H1Report">
                 <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+                    <img src="../../../assets/images/logo_dulb.webp" />
+                    <p>{{ auctionH1Report[0].entityName }}</p>
                     <h2>Highest Bidder Auction Statement</h2>
-                    <div v-for="(item, index) in auctionH1Report" :key="index">
-                        <p>Auction ID: {{ item.auctionId }}</p>
-                    <p>Item Name:{{ item.inventoryHierarchy}}</p>
+
+                    <p>Auction Code: {{ auctionH1Report[0].auctionCode }}</p>
+                    <p>Publishing Date:{{ auctionH1Report[0].startDate }}{{ auctionH1Report[0].endDate }}</p>
+                    <p>Scheduling Date:{{ auctionH1Report[0].registrationStartDate }}{{
+                auctionH1Report[0].registrationEndDate
+            }}</p>
+                    <p>Item Name:{{ auctionH1Report[0].inventoryHierarchy }}</p>
+                    <!-- <div v-for="(item, index) in auctionH1Report" :key="index">  -->
+                         <!-- <p> Sr. No{{ index+1 }}</p>
                         <p>Full Name: {{ item.fullName }}</p>
                         <p>Flat:{{ item.inventoryName }}</p>
-                        <p>Email ID:{{ item.email}}</p>
+                        <p>Email ID:{{ item.email }}</p>
                         <p>Bidder Name:{{ item.fullName }}</p>
                         <p>Round Number:{{ item.soldRoundNumber }}</p>
-                        <p>Highest Quoted Value:{{ item.inventorySoldForPrice }}</p>
-                  
-                    </div>
-                </div>
+                        <p>Highest Quoted Value:{{ item.inventorySoldForPrice }}</p> -->
+                         <DataTable :value="auctionH1Report">
+                            <Column field="srNo" header="Sr No"></Column>
+                            <Column field="fullName" header="Full Name"></Column>
+                            <Column field="inventoryName" header="Flat"></Column>
+                            <Column field="email" header="Email ID"></Column>
+                            <Column field="soldRoundNumber" header="Round Number"></Column>
+                            <Column field="inventorySoldForPrice" header="Highest Quoted Value"></Column>
+                        </DataTable>
+                     
+                    <!-- </div>  -->
+                 </div> 
                 <Button @click="generatePdfH1">Generate PDF</Button>
             </Dialog>
         </div>
-    
+
     </div>
 </template>
 
@@ -89,7 +119,6 @@ import { FilterMatchMode } from "primevue/api";
 import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
 import { useRoute } from "vue-router";
-
 import Dialog from 'primevue/dialog';
 
 import AuctionDetailsForConcludedAuction from "./AuctionDetailsForConcludedAuction.vue";
@@ -160,6 +189,9 @@ async function fetchAuctionDetailsReport(auctionId) {
         if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
             console.log(res.result, "auctionDetailsReport result**********");
             auctionDetailsReport.value = res.result; // Update the ref value
+            for(var i=0;i<auctionDetailsReport.value.length;i++){
+                auctionDetailsReport.value[i].srNo=i+1;
+            }
             return res.result; // Return the result
         } else {
             rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
@@ -186,6 +218,9 @@ async function fetchAuctionReportForH1(auctionId) {
         if (rs.isValid("FetchAuctionReportForH1")) {
             console.log(res.result, "auctionH1Report result!@!@!@!@!@");
             auctionH1Report.value = res.result; // Update the ref value
+            for(var i=0;i<auctionH1Report.value.length;i++){
+                auctionH1Report.value[i].srNo=i+1;
+            }
             return res.result; // Return the result
         } else {
             rs.showErrorToast("FetchAuctionReportForH1");
@@ -241,14 +276,14 @@ async function generatePdfH1(auctionId) {
 
 async function showModal(auctionId) {
     console.log("#####", auctionId)
-    displayModal.value = true;
     await fetchAuctionDetailsReport(auctionId);
+    displayModal.value = true;
 }
 
 async function showModalForH1(auctionId) {
     console.log("#####", auctionId)
-    displayModal1.value = true;
     await fetchAuctionReportForH1(auctionId);
+    displayModal1.value = true;
 }
 
 
