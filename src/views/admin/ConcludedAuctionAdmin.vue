@@ -61,14 +61,14 @@
                         <p>Round Number: {{ item.roundNumber }}</p>
                     </div> -->
                     <DataTable :value="auctionDetailsReport">
-                            <Column field="srNo" header="Sr No"></Column>
-                            <Column field="quotedValue" header="Quoted Value"></Column>
-                            <Column field="fullName" header="Full Name"></Column>
-                            <Column field="createdOn" header="Created On"></Column>
-                            <Column field="roundNumber" header="Round Number"></Column>
+                        <Column field="srNo" header="Sr No"></Column>
+                        <Column field="quotedValue" header="Quoted Value"></Column>
+                        <Column field="fullName" header="Full Name"></Column>
+                        <Column field="createdOn" header="Created On"></Column>
+                        <Column field="roundNumber" header="Round Number"></Column>
 
-                          
-                        </DataTable>
+
+                    </DataTable>
                 </div>
                 <Button @click="generatePdf">Generate PDF</Button>
             </Dialog>
@@ -78,34 +78,30 @@
             <Dialog v-model:visible="displayModal1" header="H1Report">
                 <div v-show="true" id="pdfDiv" ref="html2PdfRef">
                     <img src="../../../assets/images/logo_dulb.webp" />
-                    <p>{{ auctionH1Report[0].entityName }}</p>
+                    <p>{{ auctionH1Report1.entityName }}</p>
                     <h2>Highest Bidder Auction Statement</h2>
 
-                    <p>Auction Code: {{ auctionH1Report[0].auctionCode }}</p>
-                    <p>Publishing Date:{{ auctionH1Report[0].startDate }}{{ auctionH1Report[0].endDate }}</p>
-                    <p>Scheduling Date:{{ auctionH1Report[0].registrationStartDate }}{{
-                auctionH1Report[0].registrationEndDate
-            }}</p>
-                    <p>Item Name:{{ auctionH1Report[0].inventoryHierarchy }}</p>
-                    <!-- <div v-for="(item, index) in auctionH1Report" :key="index">  -->
-                         <!-- <p> Sr. No{{ index+1 }}</p>
-                        <p>Full Name: {{ item.fullName }}</p>
-                        <p>Flat:{{ item.inventoryName }}</p>
-                        <p>Email ID:{{ item.email }}</p>
-                        <p>Bidder Name:{{ item.fullName }}</p>
-                        <p>Round Number:{{ item.soldRoundNumber }}</p>
-                        <p>Highest Quoted Value:{{ item.inventorySoldForPrice }}</p> -->
-                         <DataTable :value="auctionH1Report">
-                            <Column field="srNo" header="Sr No"></Column>
-                            <Column field="fullName" header="Full Name"></Column>
-                            <Column field="inventoryName" header="Flat"></Column>
-                            <Column field="email" header="Email ID"></Column>
-                            <Column field="soldRoundNumber" header="Round Number"></Column>
-                            <Column field="inventorySoldForPrice" header="Highest Quoted Value"></Column>
-                        </DataTable>
-                     
+                    <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
+                    <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
+                    <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{ auctionH1Report1.registrationEndDate }}</p>
+                    <p>Item Name:{{auctionH1Report1.inventoryHierarchy }}</p>
+
+                    <DataTable :value="auctionH1Report">
+                        <template #empty>
+                            No Bids Found
+                        </template>
+                        <Column field="srNo" header="Sr No"></Column>
+                        <Column field="fullName" header="Full Name"></Column>
+                        <Column field="inventoryName" header="Flat"></Column>
+                        <Column field="email" header="Email ID"></Column>
+                        <Column field="soldRoundNumber" header="Round Number"></Column>
+                        <Column field="inventorySoldForPrice" header="Highest Quoted Value"></Column>
+
+
+                    </DataTable>
+
                     <!-- </div>  -->
-                 </div> 
+                </div>
                 <Button @click="generatePdfH1">Generate PDF</Button>
             </Dialog>
         </div>
@@ -136,7 +132,9 @@ const entityId = ref("");
 let auctionId = ref([]);
 const auctionDetails = ref({});
 let auctionDetailsReport = ref({});
+let auctionDetailsReport1=ref({});
 let auctionH1Report = ref({});
+let auctionH1Report1 = ref({});
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -189,8 +187,11 @@ async function fetchAuctionDetailsReport(auctionId) {
         if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
             console.log(res.result, "auctionDetailsReport result**********");
             auctionDetailsReport.value = res.result; // Update the ref value
-            for(var i=0;i<auctionDetailsReport.value.length;i++){
-                auctionDetailsReport.value[i].srNo=i+1;
+           // auctionDetailsReport1.value=res.result[0];
+            console.log("%%%%%%%",auctionDetailsReport1)
+
+            for (var i = 0; i < auctionDetailsReport.value.length; i++) {
+                auctionDetailsReport.value[i].srNo = i + 1;
             }
             return res.result; // Return the result
         } else {
@@ -217,10 +218,12 @@ async function fetchAuctionReportForH1(auctionId) {
         const res = rs.getActivity("FetchAuctionReportForH1", true);
         if (rs.isValid("FetchAuctionReportForH1")) {
             console.log(res.result, "auctionH1Report result!@!@!@!@!@");
-            auctionH1Report.value = res.result; // Update the ref value
-            for(var i=0;i<auctionH1Report.value.length;i++){
-                auctionH1Report.value[i].srNo=i+1;
+            auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
+            auctionH1Report1.value= res.result.fetchNoBidPlacedReport;
+            for (var i = 0; i < auctionH1Report.value.length; i++) {
+                auctionH1Report.value[i].srNo = i + 1;
             }
+            // console.log("$$$$$")
             return res.result; // Return the result
         } else {
             rs.showErrorToast("FetchAuctionReportForH1");
