@@ -3,7 +3,6 @@
     <div class="box-section">
         <div class="bs-header">
             Auction Details
-            {{ auctionId }}
         </div>
         <div class="bs-item-holder">
             <div class="bs-item col-span-6">
@@ -38,11 +37,7 @@
                 <div class="bs-label">Area:</div>
                 <div class="bs-value">{{ auctionDetails.area }}</div>
             </div>
-        
-            <div class="bs-item col-span-6">
-                <div class="bs-label">Properties Available:</div>
-                <div class="bs-value">Upto {{ auctionDetails.itemCount }}</div>
-            </div>
+    
             <div class="bs-item col-span-6">
                 <div class="bs-label">EMD:</div>
                 <div class="bs-value">{{ auctionDetails.eventEmdProcessingFees }}</div>
@@ -67,29 +62,6 @@
                 </div>
             </div>
             <div class="bs-item col-span-6">
-                <div class="bs-buttons">
-                    <Button @click="visible6 = true">
-                        Available Properties
-
-                        <Dialog v-model:visible="visible6" modal :style="{ width: '50rem' }">
-
-                            <div class="box-section">
-                                <div class="bs-header">
-                                    Available Properties
-                                </div>
-                                <div class="bs-item-holder">
-                                    <div class="bs-item col-span-6" v-for="item in auctionDetails.item" :key="item.id">
-                                        <div class="bs-label">Item Name:</div>
-                                        <div class="bs-value"> {{ item.item }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <span>
-                                {{ item }}
-                            </span>
-                        </Dialog>
-                    </button>
-                </div>
             </div>
            
         </div>
