@@ -83,22 +83,41 @@
 
                     <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
                     <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
-                    <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{ auctionH1Report1.registrationEndDate }}</p>
-                    <p>Item Name:{{auctionH1Report1.inventoryHierarchy }}</p>
+                    <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{
+                auctionH1Report1.registrationEndDate }}
+                    </p>
+                    <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
 
-                    <DataTable :value="auctionH1Report">
-                        <template #empty>
-                            No Bids Found
-                        </template>
-                        <Column field="srNo" header="Sr No"></Column>
-                        <Column field="fullName" header="Full Name"></Column>
-                        <Column field="inventoryName" header="Flat"></Column>
-                        <Column field="email" header="Email ID"></Column>
-                        <Column field="soldRoundNumber" header="Round Number"></Column>
-                        <Column field="inventorySoldForPrice" header="Highest Quoted Value"></Column>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Round Number</th>
+                                <th>Full Name</th>
+                                <th>Flat</th>
+                                <th>Email ID</th>
+                                <th>Highest Quoted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(item, index) in auctionH1Report" :key="index">
+                                <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
+                                    <td>{{ item.srNo }}</td>
+                                    <td>{{ item.roundNumber }}</td>
+                                    <td colspan="4">No Bids Received</td>
+                                </tr>
+                                <tr v-else>
+                                    <td>{{ item.srNo }}</td>
+                                    <td>{{ item.roundNumber }}</td>
+                                    <td>{{ item.fullName }}</td>
+                                    <td>{{ item.flat }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.inventorySoldForPrice }}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
 
-
-                    </DataTable>
 
                     <!-- </div>  -->
                 </div>
@@ -110,7 +129,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
@@ -132,7 +151,7 @@ const entityId = ref("");
 let auctionId = ref([]);
 const auctionDetails = ref({});
 let auctionDetailsReport = ref({});
-let auctionDetailsReport1=ref({});
+let auctionDetailsReport1 = ref({});
 let auctionH1Report = ref({});
 let auctionH1Report1 = ref({});
 const filters = ref({
@@ -187,8 +206,7 @@ async function fetchAuctionDetailsReport(auctionId) {
         if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
             console.log(res.result, "auctionDetailsReport result**********");
             auctionDetailsReport.value = res.result; // Update the ref value
-           // auctionDetailsReport1.value=res.result[0];
-            console.log("%%%%%%%",auctionDetailsReport1)
+            console.log("%%%%%%%", auctionDetailsReport1)
 
             for (var i = 0; i < auctionDetailsReport.value.length; i++) {
                 auctionDetailsReport.value[i].srNo = i + 1;
@@ -218,8 +236,10 @@ async function fetchAuctionReportForH1(auctionId) {
         const res = rs.getActivity("FetchAuctionReportForH1", true);
         if (rs.isValid("FetchAuctionReportForH1")) {
             console.log(res.result, "auctionH1Report result!@!@!@!@!@");
-            auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
-            auctionH1Report1.value= res.result.fetchNoBidPlacedReport;
+
+            // auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
+            auctionH1Report.value = res.result.fetchRoundWiseH1Report; // Update the ref value
+            auctionH1Report1.value = res.result.fetchNoBidPlacedReport;
             for (var i = 0; i < auctionH1Report.value.length; i++) {
                 auctionH1Report.value[i].srNo = i + 1;
             }
@@ -288,7 +308,18 @@ async function showModalForH1(auctionId) {
     await fetchAuctionReportForH1(auctionId);
     displayModal1.value = true;
 }
+// Function to check if data is empty
+const isDataEmpty = (item) => {
+    return !item.fullName && !item.inventoryName && !item.email && !item.inventorySoldForPrice;
+};
 
+// Function to check if item exists
+const itemExists = (index) => {
+    return index < auctionH1Report.value.length;
+};
 
-
+// Computed property to check if no bid is placed for a particular row
+const noBidPlaced = (index) => {
+    return isDataEmpty(auctionH1Report.value[index]);
+};
 </script>
