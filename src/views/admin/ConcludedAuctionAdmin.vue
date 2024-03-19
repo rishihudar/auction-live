@@ -28,6 +28,7 @@
           />
           <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
         </div>
+        <Column field="srNo" header="Sr No"></Column>
         <Column field="auctionCode" header=" Auction Code"></Column>
         <Column
           field="auctionDescription"
@@ -67,10 +68,10 @@
       <Dialog v-model:visible="displayModal" header="Auction Report">
         <div v-show="true" id="pdfDiv" ref="html2PdfRef">
           <img src="../../../assets/images/logo_dulb.webp" />
-          <p>{{ auctionDetailsReport[0].entityName }}</p>
+        <p>{{ auctionDetailsReport1.entityName }}</p>
           <h2>Auction Details Statement</h2>
 
-          <p>Auction Code: {{ auctionDetailsReport[0].auctionCode }}</p>
+          <p >Auction Code: {{ auctionDetailsReport1.auctionCode }}</p>
           <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
                         <p>Sr No:{{ index + 1 }}</p>
                         <p>Created On: {{ item.createdOn }}</p>
@@ -79,6 +80,9 @@
                         <p>Round Number: {{ item.roundNumber }}</p>
                     </div> -->
           <DataTable :value="auctionDetailsReport" showGridlines>
+            <template #empty>
+              <div class="p-text-center">No Data Available</div>
+            </template>
             <Column field="srNo" header="Sr No"></Column>
             <Column field="quotedValue" header="Quoted Value"></Column>
             <Column field="fullName" header="Full Name"></Column>
@@ -93,49 +97,58 @@
       <Dialog v-model:visible="displayModal1" header="H1Report">
         <div v-show="true" id="pdfDiv" ref="html2PdfRef">
           <img src="../../../assets/images/logo_dulb.webp" />
-          <p>{{ auctionH1Report[0].entityName }}</p>
+          <p>{{auctionH1Report1.entityName }}</p>
           <h2>Highest Bidder Auction Statement</h2>
 
-          <p>Auction Code: {{ auctionH1Report[0].auctionCode }}</p>
-          <p>
-            Publishing Date:{{ auctionH1Report[0].startDate
-            }}{{ auctionH1Report[0].endDate }}
-          </p>
-          <p>
-            Scheduling Date:{{ auctionH1Report[0].registrationStartDate
-            }}{{ auctionH1Report[0].registrationEndDate }}
-          </p>
-          <p>Item Name:{{ auctionH1Report[0].inventoryHierarchy }}</p>
-          <!-- <div v-for="(item, index) in auctionH1Report" :key="index">  -->
-          <!-- <p> Sr. No{{ index+1 }}</p>
-                        <p>Full Name: {{ item.fullName }}</p>
-                        <p>Flat:{{ item.inventoryName }}</p>
-                        <p>Email ID:{{ item.email }}</p>
-                        <p>Bidder Name:{{ item.fullName }}</p>
-                        <p>Round Number:{{ item.soldRoundNumber }}</p>
-                        <p>Highest Quoted Value:{{ item.inventorySoldForPrice }}</p> -->
-          <DataTable :value="auctionH1Report" showGridlines>
-            <Column field="srNo" header="Sr No"></Column>
-            <Column field="fullName" header="Full Name"></Column>
-            <Column field="inventoryName" header="Flat"></Column>
-            <Column field="email" header="Email ID"></Column>
-            <Column field="soldRoundNumber" header="Round Number"></Column>
-            <Column
-              field="inventorySoldForPrice"
-              header="Highest Quoted Value"
-            ></Column>
-          </DataTable>
+                    <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
+                    <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
+                    <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{
+                auctionH1Report1.registrationEndDate }}
+                    </p>
+                    <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
 
-          <!-- </div>  -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sr No</th>
+                                <th>Round Number</th>
+                                <th>Full Name</th>
+                                <th>Flat</th>
+                                <th>Email ID</th>
+                                <th>Highest Quoted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(item, index) in auctionH1Report" :key="index">
+                                <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
+                                    <td>{{ item.srNo }}</td>
+                                    <td>{{ item.roundNumber }}</td>
+                                    <td colspan="4">No Bids Received</td>
+                                </tr>
+                                <tr v-else>
+                                    <td>{{ item.srNo }}</td>
+                                    <td>{{ item.roundNumber }}</td>
+                                    <td>{{ item.fullName }}</td>
+                                    <td>{{ item.flat }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.inventorySoldForPrice }}</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+
+                    <!-- </div>  -->
+                </div>
+                <Button @click="generatePdfH1">Generate PDF</Button>
+            </Dialog>
         </div>
-        <Button @click="generatePdfH1">Generate PDF</Button>
-      </Dialog>
+
     </div>
-  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
@@ -161,7 +174,9 @@ const filter = ref("");
 let auctionId = ref([]);
 const auctionDetails = ref({});
 let auctionDetailsReport = ref({});
+let auctionDetailsReport1 = ref({});
 let auctionH1Report = ref({});
+let auctionH1Report1 = ref({});
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -197,11 +212,12 @@ function fetchConcludedAuctionsBidder() {
         products.value = res.result.concludedAuctions;
         console.log(res.result, "concluded result**********");
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length", auctionData.value.length);
+        console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
           console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
+        
       } else {
         rs.showErrorToast("FetchConcludedAuctionsBidder");
       }
@@ -220,22 +236,25 @@ async function fetchAuctionDetailsReport(auctionId) {
       })
       .fetch();
 
-    const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
-    if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
-      console.log(res.result, "auctionDetailsReport result**********");
-      auctionDetailsReport.value = res.result; // Update the ref value
-      for (var i = 0; i < auctionDetailsReport.value.length; i++) {
-        auctionDetailsReport.value[i].srNo = i + 1;
-      }
-      return res.result; // Return the result
-    } else {
-      rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
-      throw new Error("Error fetching auction details report");
+        const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
+        if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
+            console.log(res.result, "auctionDetailsReport result**********");
+            auctionDetailsReport.value = res.result.fetchAuctionDetailReportByAuctionId; // Update the ref value
+            auctionDetailsReport1.value = res.result.fetchEntityNameAndAuctionCode;
+            console.log("%%%%%%%", auctionDetailsReport1)
+
+            for (var i = 0; i < auctionDetailsReport.value.length; i++) {
+                auctionDetailsReport.value[i].srNo = i + 1;
+            }
+            return res.result; // Return the result
+        } else {
+            rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
+            throw new Error("Error fetching auction details report");
+        }
+    } catch (error) {
+        console.error("Error fetching auction details report:", error);
+        throw error;
     }
-  } catch (error) {
-    console.error("Error fetching auction details report:", error);
-    throw error;
-  }
 }
 
 async function fetchAuctionReportForH1(auctionId) {
@@ -249,22 +268,26 @@ async function fetchAuctionReportForH1(auctionId) {
       })
       .fetch();
 
-    const res = rs.getActivity("FetchAuctionReportForH1", true);
-    if (rs.isValid("FetchAuctionReportForH1")) {
-      console.log(res.result, "auctionH1Report result!@!@!@!@!@");
-      auctionH1Report.value = res.result; // Update the ref value
-      for (var i = 0; i < auctionH1Report.value.length; i++) {
-        auctionH1Report.value[i].srNo = i + 1;
-      }
-      return res.result; // Return the result
-    } else {
-      rs.showErrorToast("FetchAuctionReportForH1");
-      throw new Error("Error fetching auction h1  report");
+        const res = rs.getActivity("FetchAuctionReportForH1", true);
+        if (rs.isValid("FetchAuctionReportForH1")) {
+            console.log(res.result, "auctionH1Report result!@!@!@!@!@");
+
+            // auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
+            auctionH1Report.value = res.result.fetchRoundWiseH1Report; // Update the ref value
+            auctionH1Report1.value = res.result.fetchNoBidPlacedReport;
+            for (var i = 0; i < auctionH1Report.value.length; i++) {
+                auctionH1Report.value[i].srNo = i + 1;
+            }
+            // console.log("$$$$$")
+            return res.result; // Return the result
+        } else {
+            rs.showErrorToast("FetchAuctionReportForH1");
+            throw new Error("Error fetching auction h1  report");
+        }
+    } catch (error) {
+        console.error("Error fetching auction details report:", error);
+        throw error;
     }
-  } catch (error) {
-    console.error("Error fetching auction details report:", error);
-    throw error;
-  }
 }
 
 async function generatePdf(auctionId) {
@@ -316,4 +339,18 @@ async function showModalForH1(auctionId) {
   await fetchAuctionReportForH1(auctionId);
   displayModal1.value = true;
 }
+// Function to check if data is empty
+const isDataEmpty = (item) => {
+    return !item.fullName && !item.inventoryName && !item.email && !item.inventorySoldForPrice;
+};
+
+// Function to check if item exists
+const itemExists = (index) => {
+    return index < auctionH1Report.value.length;
+};
+
+// Computed property to check if no bid is placed for a particular row
+const noBidPlaced = (index) => {
+    return isDataEmpty(auctionH1Report.value[index]);
+};
 </script>
