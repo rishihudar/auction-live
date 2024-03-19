@@ -16,6 +16,7 @@
                 id="calendar-24h"
                 v-model="selectedStartDate"
                 showTime
+                dateFormat="yy/mm/dd"
                 hourFormat="24"
                 :minDate="minDate"
                 :showIcon="true"
@@ -49,6 +50,7 @@
                 id="calendar"
                 v-model="selectedEndDate"
                 showTime
+                dateFormat="yy/mm/dd"
                 hourFormat="24"
                 :minDate="endMinDate"
                 :showIcon="true"
@@ -282,13 +284,13 @@ function nextCallback() {
 function formattedStartDateCalc() {
   formattedStartDate.value = moment(serverDate.value)
     .add(60, "seconds")
-    .format("DD/MM/YYYY HH:mm:ss");
+    .format("YYYY/MM/DD HH:mm:ss");
   console.log("formattedStartDate.value", formattedStartDate.value);
 }
 function formattedEndDateCalc() {
   formattedEndDate.value = moment(serverDate.value)
     .add(120, "seconds")
-    .format("DD/MM/YYYY HH:mm:ss");
+    .format("YYYY/MM/DD HH:mm:ss");
   console.log("formattedEndDate.value", formattedEndDate.value);
 }
 function checkDates(){
@@ -456,17 +458,20 @@ async function processingFeeEmdPaymentStartEndDate() {
     });
     //toaster.error("Oops! Please Contact Support");
   }
+  
+  
 
   return new Promise((resolve) => {
+
     new MQL()
       .useManagementServer()
       .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
       .setData({
         registrationStartDate: moment(selectedStartDate.value).format(
-          "YYYY/MM/DD HH:mm:ss"
+          "YYYY-MM-DD HH:mm:ss"
         ),
         registrationEndDate: moment(selectedEndDate.value).format(
-          "YYYY/MM/DD HH:mm:ss"
+          "YYYY-MM-DD HH:mm:ss"
         ),
         auctionId: auctionId,
         statusId: statusId,
