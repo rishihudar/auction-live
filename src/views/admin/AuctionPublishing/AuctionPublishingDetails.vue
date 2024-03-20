@@ -62,7 +62,7 @@
                     severity="secondary"
                     class="btn-sm"
                     @click="
-                      viewPublishDetails(slot.data.auctionCode),
+                      viewPublishDetails(slot.data.auctionId),
                         fetchAllStepsAuctionPreview(),
                         (visible = true)
                     "
@@ -73,6 +73,7 @@
                   <Dialog
                     v-model:visible="visible"
                     modal
+                    :draggable="false"
                     header="Publish Auction"
                     :style="{ width: '60rem' }"
                   >
