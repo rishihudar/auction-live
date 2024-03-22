@@ -138,7 +138,7 @@ const router = createRouter({
     },
     {
       path: "/SchedulerDashboard",
-      name: "ROLE_SCHEDULER",
+      name: "ROLE_SCHEDULER_",
       component: loadAuctionSchedulingView("SchedulerComponent"),
       meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     },
