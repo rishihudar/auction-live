@@ -664,6 +664,16 @@ const router = createRouter({
       component: loadAdminView("AuctionList"),
       meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SCHEDULER']},
     },
+    {
+      path: "/admin/AdminAuctionBidding",
+      component: loadAdminView("AdminAuctionBidding"),
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+    },
+    {
+      path: "/current-auction",
+      component: loadAdminView("CurrentAuction"),
+      meta: { title: "Current Auction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+    },
 
   ],
 });

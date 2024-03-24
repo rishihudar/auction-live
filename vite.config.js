@@ -91,6 +91,20 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/management-server/, ""),
       },
+      "/bidding-server-ws":{
+        target:"ws://localhost:4700/",
+        ws: true,
+        secure:false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/bidding-server-ws/,"")
+      },
+      "/bidding-server-http":{
+        target:"http://localhost:4700/",
+        ws: true,
+        secure:false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/bidding-server-http/,"")
+      }
       
     },
   },
