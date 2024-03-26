@@ -6,7 +6,7 @@
         <div class="fm-group">
           <label for="Start Date" class="fm-label">Start Date</label>
           <div class="fm-inner">
-            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
           </div>
           <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
             {{ v$.startDate.$errors[0].$message }}
@@ -18,7 +18,7 @@
         <div class="fm-group">
           <label for="End Date" class="fm-label">End Date</label>
           <div class="fm-inner">
-            <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+            <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
           </div>
           <div class="fm-error" v-if="submitted && v$.endDate.$errors[0]">
             {{ v$.endDate.$errors[0].$message }}
@@ -74,8 +74,10 @@ import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql_management.js";
 import { defineProps } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, helpers, minLength, minValue } from "@vuelidate/validators";
+import { required, helpers, minLength } from "@vuelidate/validators";
 import { fetchAuctionStatus } from "@/plugins/helpers.js";
+import moment from 'moment';
+import { login } from "../store/modules/login";
 
 const props = defineProps({
   itemList: Array,
@@ -86,6 +88,8 @@ const props = defineProps({
   users: Array,
   disabled: Boolean
 });
+
+const loginStore = login()
 
 
 const emit = defineEmits(["update:modelValue"]);
@@ -115,7 +119,6 @@ const rules = {
   },
 };
 
-import moment from 'moment';
 
 // Custom validation functions for start date 
 function isValidStartDate(date) {
@@ -155,6 +158,7 @@ async function schedule() {
       endDate: formatDate(endDate.value),
       startDate: formatDate(startDate.value),
       users: users.value,
+      userId: loginStore.loginId,
       statusId: statusId.result.statusId,
     })
     .fetch()

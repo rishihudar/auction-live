@@ -3,38 +3,17 @@
     <div class="page-header">
       <div class="ph-text">
         <h2 class="title">Auction Publishing Details</h2>
-        <!-- <Breadcrumb :model="crumbs">
-                    <template #item="{ item, props }">
-                        <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                            <a :href="href" v-bind="props.action" @click="navigate">
-                                <span :class="[item.icon, 'text-color']" />
-                                <span class="bi-label">{{ item.label }}</span>
-                            </a>
-                        </router-link>
-                        <span v-else v-bind="props.action">
-                            <span class="bi-label">{{ item.label }}</span>
-                        </span>
-                    </template>
-                </Breadcrumb> -->
       </div>
     </div>
     <div class="card">
       <div class="table-custom">
-        <DataTable
-          v-model:expandedRows="expandedRows"
-          :value="auctionData"
-          showGridlines
-          tableStyle="min-width: 50rem"
-        >
-        <div class="fm-inner">
-        <label class="fm-label">Search Auction:</label>
-        <InputText
-          v-model="filter"
-          placeholder="Search By Auction Code..."
-          @input="fetchAuctionWithApprovedStatus"
-        />
-        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-      </div>
+        <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines tableStyle="min-width: 50rem">
+          <div class="fm-inner">
+            <label class="fm-label">Search Auction:</label>
+            <InputText v-model="filter" placeholder="Search By Auction Code..."
+              @input="fetchAuctionWithApprovedStatus" />
+            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+          </div>
           <template #empty>No Auctions Found</template>
           <Column field="srNo" header="SrNo." sortable></Column>
           <Column field="auctionCode" header="Auction Code"> </Column>
@@ -58,42 +37,22 @@
               <div class="bs-header">
                 Auction Description
                 <div class="bs-action">
-                  <Button
-                    severity="secondary"
-                    class="btn-sm"
-                    @click="
-                      viewPublishDetails(slot.data.auctionCode),
-                        fetchAllStepsAuctionPreview(),
-                        (visible = true)
-                    "
-                  >
+                  <Button severity="secondary" class="btn-sm" @click="viewPublishDetails(slot.data)">
                     <fa-eye></fa-eye> View Publishing Details
                   </Button>
 
-                  <Dialog
-                    v-model:visible="visible"
-                    modal
-                    header="Publish Auction"
-                    :style="{ width: '60rem' }"
-                  >
+                  <Dialog v-model:visible="visible" modal header="Publish Auction" :style="{ width: '60rem' }">
                     <div class="modal-subtitle">
-                      Auction Code: <span> {{ auctionId }}</span>
+                      Auction Code: <span> {{ auctionCode }}</span>
                     </div>
                     <div class="form-grid">
                       <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                          <label class="fm-label" for="Processing Fee"
-                            >Processing Fee And EMD payment Start Date:</label
-                          >
+                          <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment Start
+                            Date:</label>
                           <div class="fm-inner">
-                            <Calendar
-                              id="calendar-24h"
-                              v-model="selectedStartDate"
-                              showTime
-                              hourFormat="24"
-                              :minDate="minDate"
-                              :showIcon="true"
-                            />
+                            <Calendar id="calendar-24h" v-model="selectedStartDate" showTime hourFormat="24"
+                              :minDate="minDate" :showIcon="true" />
                           </div>
                           <div class="fm-info">
                             {{ selectedStartDate }}
@@ -102,36 +61,18 @@
                       </div>
                       <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                          <label class="fm-label" for="Processing Fee"
-                            >Processing Fee And EMD payment End Date:</label
-                          >
+                          <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment End Date:</label>
                           <div class="fm-inner">
-                            <Calendar
-                              id="calendar"
-                              v-model="selectedEndDate"
-                              showTime
-                              hourFormat="24"
-                              :minDate="endMinDate"
-                              :showIcon="true"
-                            />
+                            <Calendar id="calendar" v-model="selectedEndDate" showTime hourFormat="24"
+                              :minDate="endMinDate" :showIcon="true" />
                           </div>
                           <div class="fm-info">
                             {{ selectedEndDate }}
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="col-span-full"
-                        v-if="
-                          moment(selectedEndDate).isSameOrBefore(
-                            selectedStartDate
-                          ) ||
-                          moment(selectedEndDate).isSame(
-                            moment(selectedStartDate),
-                            'minute'
-                          )
-                        "
-                      >
+                      <div class="col-span-full"
+                        v-if="moment(selectedEndDate).isSameOrBefore(moment(selectedStartDate), 'minute')">
                         <div class="fm-group">
                           <label class="fm-error" for="">
                             Start Date should not be equal or after End Date !
@@ -139,66 +80,19 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <label for="calendar-12h" class="font-bold block mb-2">
-                                    Processing Fee And EMD payment Start Date:</label
-                                    >
-                                    <Calendar
-                                    id="calendar-24h"
-                                    v-model="selectedStartDate"
-                                    showTime
-                                    hourFormat="24"
-                                    :minDate="minDate"
-                                    :showIcon="true"
-                                    />
-                                    {{selectedStartDate}}
-                                    <label for="calendar-12h" class="font-bold block mb-2">
-                                    Processing Fee And EMD payment End Date:</label
-                                    >
-                                    <Calendar
-                                    id="calendar"
-                                    v-model="selectedEndDate"
-                                    showTime
-                                    hourFormat="24"
-                                    :minDate="endMinDate"
-                                    :showIcon="true"
-                                    />
-                                    {{selectedEndDate}}
-                                    <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')" style="color: red;">
-                                    Start Date should not be equal or after End Date !
-                                    </div>
-                                    <div>
-                                            <input type="checkbox" id="agreeCheckbox" v-model="agree" />
-                                    <label for="agreeCheckbox">  </label></div>-->
                     <div class="col-span-full">
                       <div class="fm-group">
                         <div class="fm-check-holder fm-check-center">
                           <div class="fm-checkbox">
-                            <input
-                              type="checkbox"
-                              id="agreeCheckbox"
-                              v-model="agree"
-                            />
-                            <label for="agreeCheckbox"
-                              >I agree that to publish.
+                            <input type="checkbox" id="agreeCheckbox" v-model="agree" />
+                            <label for="agreeCheckbox">I agree that to publish.
                             </label>
-                            <!-- <Checkbox
-                                                    v-model="agree"
-                                                    :binary="true"
-                                                    inputId="agreeCheckbox"
-                                                    required
-                                                    />
-                                                    <label for="agreeCheckbox">I agree that to publish.</label> -->
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="modal-action">
-                      <Button
-                        type="button"
-                        label="Publish"
-                        :disabled="!agree"
-                        @click="publishAuction(), (visible = false)"
-                      ></Button>
+                      <Button type="button" label="Publish" :disabled="!agree" @click="publishAuction()"></Button>
                     </div>
                   </Dialog>
                 </div>
@@ -265,79 +159,12 @@
                   </div>
                 </div>
               </div>
-              <!-- <h2>
-                        Auction Code: {{ slot.data.auctionCode }} Auction Category:
-                        {{ slot.data.inventoryCategoryName }} Description:{{
-                        slot.data.auctionDescription
-                        }}
-                        Auction Type:{{ slot.data.auctionType }}
-                    </h2>
-                    <h2>
-                        Auction Method: {{ slot.data.auctionMethodName }} Auction Process:
-                        {{ slot.data.auctionProcessName }} Department:
-                        {{ slot.data.departmentName }} District: {{ slot.data.district }} MC:
-                        {{ slot.data.mcName }}
-                    </h2>
-                    <h2>
-                        Location: {{ slot.data.location }} Area: {{ slot.data.AREA }}
-                    </h2> 
-                    <Button label="View Publishing Details" @click="viewPublishDetails(slot.data.auctionCode),fetchAllStepsAuctionPreview(),visible = true" />
-                    <Dialog
-                        v-model:visible="visible"
-                        modal
-                        header="Publish Auction"
-                        :style="{ width: '60rem' }"
-                    >
-                        <h2>Auction Code: {{ auctionId }}</h2>
-                        <label for="calendar-12h" class="font-bold block mb-2">
-                        Processing Fee And EMD payment Start Date:</label
-                        >
-                        <Calendar
-                        id="calendar-24h"
-                        v-model="selectedStartDate"
-                        showTime
-                        hourFormat="24"
-                        :minDate="minDate"
-                        :showIcon="true"
-                        />
-                        {{selectedStartDate}}
-                        <label for="calendar-12h" class="font-bold block mb-2">
-                        Processing Fee And EMD payment End Date:</label
-                        >
-                        <Calendar
-                        id="calendar"
-                        v-model="selectedEndDate"
-                        showTime
-                        hourFormat="24"
-                        :minDate="endMinDate"
-                        :showIcon="true"
-                        />
-                        {{selectedEndDate}}
-                        <div v-if="moment(selectedEndDate).isSameOrBefore(selectedStartDate) || moment(selectedEndDate).isSame(moment(selectedStartDate),'minute')" style="color: red;">
-                        Start Date should not be equal or after End Date !
-                        </div>
-                        <div> <input type="checkbox" id="agreeCheckbox" v-model="agree" required/>
-                        <label for="agreeCheckbox">  I agree that to publish.</label></div>
-                        <div class="flex justify-content-end gap-2">             
-                        <Button
-                            type="button"
-                            label="Publish"
-                            :disabled="!agree"
-                            @click="publishAuction(),visible=false"
-                        ></Button>
-                        </div>
-                    </Dialog>-->
             </div>
           </template>
         </DataTable>
-        <Paginator
-          :rows="perPage"
-          :rowsPerPageOptions="[5, 10, 20]"
-          :totalRecords="totalRows"
+        <Paginator :rows="perPage" :rowsPerPageOptions="[5, 10, 20]" :totalRecords="totalRows"
           template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          @page="handlePageChange"
-        />
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
       </div>
     </div>
   </div>
@@ -369,6 +196,7 @@ const auctionData = ref([]);
 const visible = ref(false);
 const expandedRows = ref([]);
 const auctionId = ref();
+const auctionCode = ref()
 
 const agree = ref(false);
 
@@ -384,7 +212,7 @@ const dbStartDate = ref();
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
-const filter=ref('');
+const filter = ref('');
 
 function handlePageChange(event) {
   currentPage.value = event.page;
@@ -432,12 +260,7 @@ function fetchAllStepsAuctionPreview() {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
       dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
       dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log(
-        "dbStartDate.value",
-        dbStartDate.value,
-        "dbEndDate.value",
-        dbEndDate.value
-      );
+      console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
       selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
@@ -447,21 +270,18 @@ function fetchAllStepsAuctionPreview() {
     });
 }
 function processingFeeEmdPaymentStartEndDate() {
+  let data = {
+    registrationStartDate: moment(selectedStartDate.value).format("YYYY/MM/DD HH:mm:ss"),
+    registrationEndDate: moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
+    statusId: 17,
+    auctionId: auctionId.value,
+  }
   // store.setLastInsertedAuctionId(31);
   // Automatically generated
   new MQL()
     .useManagementServer()
     .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
-    .setData({
-      registrationStartDate: moment(selectedStartDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      registrationEndDate: moment(selectedEndDate.value).format(
-        "YYYY/MM/DD HH:mm:ss"
-      ),
-      statusId: 17,
-      auctionId: auctionId.value,
-    })
+    .setData(data)
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
@@ -473,31 +293,26 @@ function processingFeeEmdPaymentStartEndDate() {
     });
 }
 
-function viewPublishDetails(rowAuctionId) {
-  console.log("rowAuctionId", rowAuctionId);
-  auctionId.value = rowAuctionId;
+function viewPublishDetails(row) {
+  console.log("rowAuctionId", row);
+  auctionId.value = row.auctionId;
+  auctionCode.value = row.auctionCode
+  fetchAllStepsAuctionPreview(),
+    visible.value = true
 }
 
 function publishAuction() {
-  if (
-    moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) ||
-    moment(selectedEndDate.value).isSame(
-      moment(selectedStartDate.value),
-      "minute"
-    )
-  ) {
+  if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
     console.log(
       "log-",
-      moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value) ||
-        moment(selectedEndDate.value).isSame(
-          moment(selectedStartDate.value),
-          "minute"
-        )
+      moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
     );
     alert(`Start Date should not be equal or after End Date !`);
   } else {
     processingFeeEmdPaymentStartEndDate();
     iAgreeStatusUpdate();
+    visible.value = false
+    fetchAuctionWithApprovedStatus()
     toaster.success("Auction Published !!!");
   }
 }
@@ -519,7 +334,6 @@ function iAgreeStatusUpdate() {
 }
 
 onMounted(() => {
-  fetchAuctionWithApprovedStatus(currentPage.value);
-  //fetchAuctionDetailsForPublishing();
+  fetchAuctionWithApprovedStatus();
 });
 </script>
