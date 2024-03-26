@@ -6,7 +6,7 @@
         <div class="fm-group">
           <label for="Start Date" class="fm-label">Start Date</label>
           <div class="fm-inner">
-            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
           </div>
           <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
             {{ v$.startDate.$errors[0].$message }}
@@ -18,7 +18,7 @@
         <div class="fm-group">
           <label for="End Date" class="fm-label">End Date</label>
           <div class="fm-inner">
-            <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime appendTo=".modal"></Calendar>
+            <Calendar v-model="endDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
           </div>
           <div class="fm-error" v-if="submitted && v$.endDate.$errors[0]">
             {{ v$.endDate.$errors[0].$message }}
