@@ -118,7 +118,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
