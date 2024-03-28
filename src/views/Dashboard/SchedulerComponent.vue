@@ -78,7 +78,7 @@ function fetchPublishedAuctionsBidder() {
   console.log("Selected Entity Id", login().loginDetails);
   new MQL()
     .useManagementServer()
-    .setActivity("r.[FetchPublishedAuctionsBidder]")
+    .setActivity("r.[FetchPublishedAuctionsAdmin]")
     .setData({
       organizationId: login().loginDetails.organizationId,
       entityId: login().loginDetails.entityId,
@@ -90,8 +90,8 @@ function fetchPublishedAuctionsBidder() {
     })
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("FetchPublishedAuctionsBidder", true);
-      if (rs.isValid("FetchPublishedAuctionsBidder")) {
+      let res = rs.getActivity("FetchPublishedAuctionsAdmin", true);
+      if (rs.isValid("FetchPublishedAuctionsAdmin")) {
         products.value = res.result.publishedAuctions;
         console.log("Published Auctions Scheduler", res.result);
         auctionId.value = res.result.auctionId;
@@ -102,7 +102,7 @@ function fetchPublishedAuctionsBidder() {
           console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
-        rs.showErrorToast("FetchPublishedAuctionsBidder");
+        rs.showErrorToast("FetchPublishedAuctionsAdmin");
       }
     });
 }
