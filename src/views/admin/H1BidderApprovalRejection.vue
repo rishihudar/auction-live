@@ -82,6 +82,10 @@
         <div>
             <Button label="Submit" @click="submitForm" :disabled="disabled" />
         </div>
+        
+      <strong class="note-instruction">Note: </strong>
+      <span style="color: red;">First payment is calculated as = (Highest quoted value * First Payment Percentage) - EMD amount</span>
+    
     </div>
 </template>
 
