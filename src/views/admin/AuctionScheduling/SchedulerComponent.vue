@@ -45,10 +45,10 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { login } from "../../store/modules/login.js";
+import { login } from "../../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
 import { useRoute } from "vue-router";
-import AuctionDetailsForAdmin from "../admin/AuctionDetailsForAdmin.vue";
+import AuctionDetailsForAdmin from "../AuctionDetailsForAdmin.vue";
 import Paginator from "primevue/paginator";
 
 const expandedRows = ref([]);

@@ -67,7 +67,7 @@
       />
     </div>
     <div>
-      <Dialog v-model:visible="displayModal" header="Auction Report">
+      <Dialog v-model:visible="displayModal" header="Auction Report" :draggable="false">
         <div v-show="true" id="pdfDiv" ref="html2PdfRef">
           <img src="../../../assets/images/logo_dulb.webp" />
         <p>{{ auctionDetailsReport1.entityName }}</p>
@@ -96,7 +96,7 @@
       </Dialog>
     </div>
     <div>
-      <Dialog v-model:visible="displayModal1" header="H1Report">
+      <Dialog v-model:visible="displayModal1" header="H1Report" :draggable="false">
         <div v-show="true" id="pdfDiv" ref="html2PdfRef">
           <img src="../../../assets/images/logo_dulb.webp" />
           <p>{{auctionH1Report1.entityName }}</p>
@@ -302,10 +302,18 @@ async function generatePdf(auctionId) {
     var element = document.getElementById("pdfDiv");
     const options = {
       margin: 1,
-      filename: "myfile.pdf",
+      filename: "AuctionReport.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      jsPDF: { 
+        unit: "in", 
+        format: "letter", 
+        orientation: "portrait",
+        encryption: {
+          userPassword: login().loginDetails.username,
+          userPermissions: ["print"]
+        }
+      },
     };
 
     html2pdf().set(options).from(element).save();
@@ -313,16 +321,41 @@ async function generatePdf(auctionId) {
     console.error("Error generating PDF:", error);
   }
 }
+// async function generatePdfH1(auctionId) {
+//   try {
+//     // Generate the PDF
+//     var element = document.getElementById("pdfDiv");
+//     const options = {
+//       margin: 1,
+//       filename: "myfile.pdf",
+//       image: { type: "jpeg", quality: 0.98 },
+//       html2canvas: { scale: 2 },
+//       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+//     };
+
+//     html2pdf().set(options).from(element).save();
+//   } catch (error) {
+//     console.error("Error generating PDF:", error);
+//   }
+// }
 async function generatePdfH1(auctionId) {
   try {
     // Generate the PDF
     var element = document.getElementById("pdfDiv");
     const options = {
       margin: 1,
-      filename: "myfile.pdf",
+      filename: "H1Report.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      jsPDF: { 
+        unit: "in", 
+        format: "letter", 
+        orientation: "portrait",
+        encryption: {
+          userPassword: login().loginDetails.username,
+          userPermissions: ["print"]
+        }
+      },
     };
 
     html2pdf().set(options).from(element).save();

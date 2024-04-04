@@ -9,24 +9,14 @@
 
                     <div class="bs-item-holder">
                         <div class="bs-item col-span-12">
-                            <!-- <ol v-for="(item, index) in history" :key="index">
-                                <li class="list-disc">
-                                        Workflow Step: <span class="font-bold"> {{ item.StepDisplayName }},</span>
-                                        last action By <span class="font-bold"> {{ item.fullName }} </span>
-                                        ({{ item.roleName }}) On
-                                        <span class="font-bold"> {{ item.createdOn }} </span>
-                                        Comment {{ item.comment }}, Decision taken {{ item.statusDisplayName }}
-                                </li>
-
-                            </ol> -->
                             <DataTable :value="history" showGridlines tableStyle="border-collapse: separate;">
-                        <Column field="stepDisplayName" header="Step"></Column>
-                        <Column field="fullName" header="fullName"></Column>
-                        <Column field="roleName" header="roleName"></Column>
-                        <Column field="createdOn" header="createdOn"></Column>
-                        <Column field="commentW" header="comment"></Column>
-                        <Column field="statusDisplayName" header="statusDisplayName"></Column>
-                    </DataTable>
+                                <Column field="stepDisplayName" header="Step"></Column>
+                                <Column field="fullName" header="User"></Column>
+                                <Column field="roleName" header="Role"></Column>
+                                <Column field="createdOn" header="Created On"></Column>
+                                <Column field="commentW" header="Comment"></Column>
+                                <Column field="statusDisplayName" header="Status"></Column>
+                            </DataTable>
                         </div>
                     </div>
                 </div>
