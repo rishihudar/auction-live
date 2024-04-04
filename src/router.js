@@ -133,6 +133,12 @@ const router = createRouter({
       meta: { title: "ConcludedAuctionAdmin",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_APPROVER']},
     },
     {
+      path: "/h1BiddersApproval",
+      name:"H1 Bidder Approval",
+      component: loadAdminView("H1BidderApprovalRejection"),
+      meta: { title: "H1BidderApprovalRejection",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/WatcherDashboard",
       name: "ROLE_WATCHER",
       component: loadDashboardView("WatcherComponent"),
