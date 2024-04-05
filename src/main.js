@@ -23,7 +23,6 @@ import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 
 import Menu from 'primevue/menu'
-import Steps from 'primevue/steps';
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import DataTable from 'primevue/datatable';
@@ -105,11 +104,6 @@ var loginURL = '/login-server'
 var cdnBaseURL = '/cdn-server'
 var bidderURL = '/bidder-server'
 var managementURL = '/management-server'
-// var coreURL = '/application/core-server'
-// var loginURL = '/application/login-server'
-// var cdnBaseURL = '/cdn-server'
-// var bidderURL = '/application/bidder-server'
-// var managementURL = '/application/management-server'
 
 vm.use(mqlOptions, {
   coreURL: coreURL,

@@ -72,7 +72,6 @@ import { onMounted, ref } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql_management.js";
-import { defineProps } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers, minLength } from "@vuelidate/validators";
 import { fetchAuctionStatus } from "@/plugins/helpers.js";
