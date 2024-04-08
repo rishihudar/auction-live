@@ -53,23 +53,21 @@
             <Column field="currentHigh" header="Current High">
                 <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
-                        <span>{{ data.currentHigh }}</span>
+                        <span>{{ currencyFormat(data.currentHigh) }}</span>
                     </div>
                 </template>
             </Column>
             <Column field="timeLeft" header="Time Left"><template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
+                <div class="flex align-items-center gap-2">
                         <span>
-                            {{ roundHasStarted }} | {{ roundHasEnded }} <br />
-                            {{ auctionDetails[0].roundStartTime }} |{{ auctionDetails[0].roundEndTime }}
                             <!-- Auction is in progress -->
                             <p v-if="roundHasStarted && !roundHasEnded">
-                                <b>The Round Will End In:</b> {{ data.timeLeft }}
+                                <b>The Round Will End In:</b> <span style="color: red;">{{ data.timeLeft }} </span>
                             </p>
 
                             <!-- Auction has not started yet -->
                             <p v-else-if="!roundHasStarted && !roundHasEnded">
-                                <b>The Round Will Start In:</b> {{ data.timeLeft }}
+                                <b>The Round Will Start In:</b> <span style="color: red;">{{ data.timeLeft }}</span>
                             </p>
 
                             <!-- Auction has ended -->
@@ -84,14 +82,13 @@
 
         <!--item selection-->
         <div class="my-3 text-center">
-            <Button label="Open item selection" :disabled="isItemSelectionBtnDisable"
-                @click="openItem()"></Button>
+            <Button label="Open item selection" :disabled="isItemSelectionBtnDisable" @click="openItem()"></Button>
         </div>
 
         <Dialog v-model:visible="visible" maximizable modal header="Item Selection" :style="{ width: '50rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
             <div v-for="category in properties" :key="category.pklAuctionItemsDetails">
-                <RadioButton v-model="selectedCategory"  name="dynamic" :value="category.pklAuctionItemsDetails" />
+                <RadioButton v-model="selectedCategory" name="dynamic" :value="category.pklAuctionItemsDetails" />
                 <label :for="category.pklAuctionItemsDetails" class="ml-2">{{ category.vsInventoryName }}</label>
             </div>
             <Button label="Submit" @click="submitProperty()"></Button>
@@ -102,7 +99,7 @@
                 <ul>
                     <li v-for="(copyData, index) in bidHistory" :key="index">
                         Round : <strong>{{ copyData.roundNumber }}</strong>
-                        Amt: <strong class="my-2">₹ {{ copyData.quoteAmount }}</strong>
+                        Amt: <strong class="my-2">{{ currencyFormat(copyData.quoteAmount) }}</strong>
                         @ <strong>{{ copyData.quoteTime }}</strong>
                     </li>
                     <!-- </li> -->
@@ -147,7 +144,7 @@
         </div>
         <div>
             <Dialog v-model:visible="visible1" modal header="Edit Profile" :style="{ width: '50rem' }">
-            
+
                 <div>
                     <strong class="text-center">
                     You are the highest bidder.
@@ -155,10 +152,11 @@
                     </strong>
                 </div>
                 <template #footer>
-                    <Button label="Ok" text severity="secondary" @click="visible1 = false, isItemSelectionBtnDisable = false" autofocus />
+                    <Button label="Ok" text severity="secondary"
+                        @click="visible1 = false, isItemSelectionBtnDisable = false" autofocus />
                     <!-- <Button label="Save" outlined severity="secondary" @click=" " autofocus /> -->
                 </template>
-            </Dialog>     
+            </Dialog>
         </div>
     </div>
 </template>
@@ -167,10 +165,8 @@
 import { ref, onMounted, computed, onBeforeMount, watch } from 'vue';
 import Dialog from 'primevue/dialog';
 import RadioButton from 'primevue/radiobutton';
-import Dropdown from 'primevue/dropdown'
 import DataTable from 'primevue/datatable';
 import Panel from 'primevue/panel';
-import { createToaster } from "@meforma/vue-toaster"
 import { useAuctionStore } from "../../store/Auction.js";
 import { login } from "../../store/modules/login.js";
 import moment from 'moment';
@@ -189,19 +185,16 @@ const auctionDetails = ref([{
     timeLeft: ""
 }])
 const selectedCategory = ref('')
-const toaster = createToaster({ position: "top-right", duration: 3000 })
 const visible = ref(false);
 const visible1 = ref(false);
-const bidFlag = ref(false)
-const bidValue = ref(null)
-const multiplieries = ref([])
 const wsConnection = ref(null)
 const isItemSelectionBtnDisable = ref(true)
 const isHighestBidder = ref(false)
 const connectionStatus = ref(null)
 const clientLoginIpAddress = ref()
-const count = ref(1);
 const properties = ref([])
+
+
 const itemDetails = ref({
     Description: "Therer bidder biddere ",
     CurrentRound: 1,
@@ -210,13 +203,6 @@ const itemDetails = ref({
     MaxBidAmount: 100000,
     TotalNoOfBids: 0
 })
-
-const categories = ref([
-    { name: 'Flat No 101', key: 'A' },
-    { name: 'Flat No 102', key: 'M' },
-    { name: 'Flat No 103', key: 'P' },
-    { name: 'Flat No 104', key: 'R' }
-]);
 
 const latestTime = ref();
 const bidHistory = ref([]);
@@ -231,28 +217,20 @@ function leaveAuction() {
     // window.close()
 }
 
-function checkH1(incomingBid) {
-    console.log(incomingBid.bidderId,loginStore.loginId);
-    if (incomingBid.bidderId == loginStore.loginId) {
-        isHighestBidder.value = true
-        // isItemSelectionBtnDisable.value = false
-    } else {
-        isHighestBidder.value = false
-        // isItemSelectionBtnDisable.value = true
-    }
-}
 
 function updateHistory(bidObject) {
-    if (bidObject.bidderId == loginStore.loginId) {
-        let bidHistoryObj = {
-            roundNumber: auctionDetails.value[0].roundNumber,
-            quoteAmount: bidObject.bidAmount,
-            quoteTime: latestTime.value
-        }
-        bidHistory.value.unshift(bidHistoryObj)
+    let bidHistoryObj = {
+        roundNumber: auctionDetails.value[0].roundNumber,
+        quoteAmount: bidObject.bidAmount,
+        quoteTime: latestTime.value
     }
+    bidHistory.value.unshift(bidHistoryObj)
 }
 
+
+function currencyFormat(value) {
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 3 }).format(value)
+}
 function websocketConn() {
 
 
@@ -321,69 +299,14 @@ function websocketConn() {
     })
 }
 
-function submitProperty() {
-    visible.value = false;
-    if (selectedCategory.value !== '') {  
-        wsConnection.value.send(
-        JSON.stringify({
-          auctionId: parseInt(auctionStore.auctionObj.pklAuctionId),
-          bidderId: parseInt(loginStore.loginId),
-          auctionUserId: parseInt(auctionStore.auctionObj.pklAuctionUserId),
-          roundNumber: parseInt(auctionDetails.value[0].roundNumber),
-          auctionItemId: parseInt(selectedCategory.value),
-          typeCode: parseInt(300)
-        })
-      )  
-    //   (${selectedCategory.value})
-        toaster.success(`Selected Property is now allocated to you.`);
-
-    }
-}
-
-
-watch(count, (newV) => {
-    totalBid()
-})
-
-
-
-function totalBid() {
-    bidFlag.value = true
-    bidValue.value = parseInt(auctionDetails.value[0].modifierValue) * parseInt(count.value);
-}
-
-async function bidPlaced() {
-    bidFlag.value = false
-    console.log(bidValue.value);
-    let totalvalue = bidValue.value + auctionDetails.value[0].currentHigh
-    count.value = 1
-    // bidHistory.value.push(totalvalue)
-
-
-    wsConnection.value.send(
-        JSON.stringify({
-            auctionId: parseInt(auctionStore.auctionObj.pklAuctionId),
-            bidderId: parseInt(loginStore.loginId),
-            auctionUserId: parseInt(auctionStore.auctionObj.pklAuctionUserId),
-            roundNumber: parseInt(auctionDetails.value[0].roundNumber),
-            currentPrice: parseInt(auctionDetails.value[0].currentHigh),
-            roundEndTime: moment(auctionDetails.value[0].roundEndTime),
-            roundStartTime: moment(auctionDetails.value[0].roundStartTime),
-            bidAmount: totalvalue,
-            itemReservedPrice: 100,
-            typeCode: parseInt(200),
-            clientLoginIpAddress: clientLoginIpAddress.value
-        })
-    )
-}
 
 
 const openItemSelection = computed(() => {
-    if (roundHasEnded.value == true && isHighestBidder.value == true && isItemSelectionBtnDisable.value == true && moment(latestTime.value,"DD/MM/YYYY hh:mm:ss A").isSameOrAfter(moment(auctionDetails.value[0].roundEndTime),'second')) {
+    if (roundHasEnded.value == true && isHighestBidder.value == true && isItemSelectionBtnDisable.value == true && moment(latestTime.value, "DD/MM/YYYY hh:mm:ss A").isSameOrAfter(moment(auctionDetails.value[0].roundEndTime), 'second')) {
         return true
-      } else {
+    } else {
         return false
-      }
+    }
 })
 
 function openItem() {
@@ -522,14 +445,6 @@ onBeforeMount(async () => {
         syncTime()
         updateAuctionTimeLeft()
     }, 1000);
-
-    for (var i = 1; i <= 100; i++) {
-        multiplieries.value.push({
-            'text': i,
-           'value': i
-        });
-    }
-    // setInterval(updateAuctionTimeLeft, 1000);
 });
 
 </script>

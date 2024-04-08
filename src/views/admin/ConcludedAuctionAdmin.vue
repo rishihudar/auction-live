@@ -47,6 +47,8 @@
         <template #expansion="slot">
           <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId">
           </AuctionDetailsForConcludedAuction>
+
+          <H1BidderApprovalRejection :auctionId="slot.data.auctionId"/>
         </template>
         <Column expander style="width: 50rem" field="" header="Report">
           <template #body="{ data }">
@@ -156,6 +158,7 @@ import { useRoute } from "vue-router";
 import Dialog from "primevue/dialog";
 
 import AuctionDetailsForConcludedAuction from "./AuctionDetailsForConcludedAuction.vue";
+import H1BidderApprovalRejection from "./H1BidderApprovalRejection.vue";
 // import Vue3Html2pdf from 'vue3-html2pdf'
 //import teleport from 'vue-teleport';
 import html2pdf from "html2pdf.js";

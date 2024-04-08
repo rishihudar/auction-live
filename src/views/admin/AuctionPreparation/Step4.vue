@@ -191,7 +191,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, defineProps, computed } from "vue";
+import { ref, onMounted, onBeforeMount, computed } from "vue";
 import moment from "moment";
 import Calendar from "primevue/calendar";
 import FileUpload from "primevue/fileupload";

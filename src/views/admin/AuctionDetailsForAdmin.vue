@@ -167,7 +167,7 @@
                     </p>
                     <div class="bs-buttons">
                         <schedule-button :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
-                            :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionCode"
+                            :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId"
                             :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
                             v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" />
                     </div>
@@ -180,7 +180,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
+import { ref, onMounted } from "vue";
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
