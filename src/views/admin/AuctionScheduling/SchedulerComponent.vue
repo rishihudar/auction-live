@@ -10,7 +10,7 @@
         <InputText
           v-model="filter"
           placeholder="Search By Auction Code..."
-          @input="fetchPublishedAuctionsBidder"
+          @input="fetchPublishedAuctionsAdmin"
         />
       <Column field="srNo" header="SrNo."></Column>
       <Column field="auctionCode" header="Auction Code"></Column>
@@ -28,7 +28,7 @@
       ></Column>
       <Column expander style="width: 5rem" field="" header="Action"> </Column>
       <template #expansion="slot">
-        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId">
+        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode">
         </AuctionDetailsForAdmin>
       </template>
     </DataTable>
@@ -64,7 +64,7 @@ const filter = ref("");
 const entityId = ref("");
 onMounted(() => {
   entityId.value = route.params.id;
-  fetchPublishedAuctionsBidder(currentPage.value);
+  fetchPublishedAuctionsAdmin(currentPage.value);
 });
 
 let auctionId = ref();
@@ -72,26 +72,27 @@ function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchPublishedAuctionsBidder();
+  fetchPublishedAuctionsAdmin();
 }
-function fetchPublishedAuctionsBidder() {
+function fetchPublishedAuctionsAdmin() {
   console.log("Selected Entity Id", login().loginDetails);
   new MQL()
     .useManagementServer()
-    .setActivity("r.[FetchPublishedAuctionsBidder]")
+    .setActivity("r.[FetchPublishedAuctionsAdmin]")
     .setData({
       organizationId: login().loginDetails.organizationId,
       entityId: login().loginDetails.entityId,
       userId: login().loginDetails.loginId,
       statusCode: "AUCTION_PUBLISHED",
+      statusCode2: "AUCTION_SCHEDULED",
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
     })
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("FetchPublishedAuctionsBidder", true);
-      if (rs.isValid("FetchPublishedAuctionsBidder")) {
+      let res = rs.getActivity("FetchPublishedAuctionsAdmin", true);
+      if (rs.isValid("FetchPublishedAuctionsAdmin")) {
         products.value = res.result.publishedAuctions;
         console.log("Published Auctions Scheduler", res.result);
         auctionId.value = res.result.auctionId;
@@ -102,7 +103,7 @@ function fetchPublishedAuctionsBidder() {
           console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
-        rs.showErrorToast("FetchPublishedAuctionsBidder");
+        rs.showErrorToast("FetchPublishedAuctionsAdmin");
       }
     });
 }

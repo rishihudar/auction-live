@@ -475,6 +475,7 @@ async function processingFeeEmdPaymentStartEndDate() {
         ),
         auctionId: auctionId,
         statusId: statusId,
+        moduleName:"AP-STEP4"
       })
       .fetch()
       .then((rs) => {

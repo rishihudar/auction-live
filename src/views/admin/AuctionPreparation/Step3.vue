@@ -30,14 +30,14 @@
 
         <Toast />
         <ConfirmDialog></ConfirmDialog>
-        
+
         <div class="wc-action">
             <!-- <Button label="Back" @click="$router.push({ name: 'step2' })" icon="pi pi-trash" /> -->
             <Button label="Back" @click="prevCallback()" severity="secondary" />
             <!-- <Button @click="confirm1(),handleClick(false)" label="Save" outlined></Button> -->
             <!-- <Button label="Save" @click="confirm1()" icon="pi pi-trash" /> -->
             <!-- <Button   v-if="getIsClicked"   label="Next" @click="nextCallback()" class="btn-submit" /> -->
-            <Button   v-if="addedItem && addedItem.length > 0"   label="Next" @click="nextCallback()" class="btn-submit" />
+            <Button v-if="addedItem && addedItem.length > 0" label="Next" @click="nextCallback()" class="btn-submit" />
         </div>
 
         <!-- --------------------------------------------------------------------------------------- -->
@@ -52,9 +52,9 @@
                             <Dropdown v-model="inventoryDistrictDetails.inventoryId" option-value="inventoryId"
                                 variant="filled" :options="districtDetail" optionLabel="inventoryName"
                                 placeholder="Select District"
-                                @change="fetchMCNameFromInventoryMaster(inventoryDistrictDetails.inventoryId)" />                  
+                                @change="fetchMCNameFromInventoryMaster(inventoryDistrictDetails.inventoryId)" />
                         </div>
-                        <div v-if="$v.inventoryDistrictDetails.inventoryId.$error"  class="fm-error">
+                        <div v-if="$v.inventoryDistrictDetails.inventoryId.$error" class="fm-error">
                             {{ $v.inventoryDistrictDetails.inventoryId.$errors[0].$message }}
                         </div>
                     </div>
@@ -63,9 +63,10 @@
                     <div class="fm-group">
                         <label class="fm-label" for="step1">MC Name</label>
                         <div class="fm-inner">
-                            <Dropdown v-model="inventoryMcDetails.inventoryId" option-value="inventoryId" variant="filled"
-                                :options="mcDetail" optionLabel="inventoryName" placeholder="Select MC Type"
-                                @change="fetchLocationFromInventoryMaster(inventoryMcDetails.inventoryId)"/>            
+                            <Dropdown v-model="inventoryMcDetails.inventoryId" option-value="inventoryId"
+                                variant="filled" :options="mcDetail" optionLabel="inventoryName"
+                                placeholder="Select MC Type"
+                                @change="fetchLocationFromInventoryMaster(inventoryMcDetails.inventoryId)" />
                         </div>
                         <div v-if="$v.inventoryMcDetails.inventoryId.$error" class="fm-error">
                             {{ $v.inventoryMcDetails.inventoryId.$errors[0].$message }}
@@ -79,7 +80,7 @@
                             <Dropdown v-model="inventoryLocationDetails.inventoryId" option-value="inventoryId"
                                 variant="filled" :options="locationDetail" optionLabel="inventoryName"
                                 placeholder="Select Location"
-                                @change="fetchAreaFromInventoryMaster(inventoryLocationDetails.inventoryId)" />                  
+                                @change="fetchAreaFromInventoryMaster(inventoryLocationDetails.inventoryId)" />
                         </div>
                         <div v-if="$v.inventoryLocationDetails.inventoryId.$error" class="fm-error">
                             {{ $v.inventoryLocationDetails.inventoryId.$errors[0].$message }}
@@ -91,7 +92,7 @@
                         <label class="fm-label" for="step1">Area</label>
                         <div class="fm-inner">
                             <Dropdown v-model="inventoryAreaDetails" variant="filled" :options="areaDetail"
-                                optionLabel="inventoryName" placeholder="Select Area"/>
+                                optionLabel="inventoryName" placeholder="Select Area" @change="fetchAvailablePropertyCount(inventoryAreaDetails.inventoryId)" />
                         </div>
                         <div v-if="$v.inventoryAreaDetails.inventoryId.$error" class="fm-error">
                             {{ $v.inventoryAreaDetails.inventoryId.$errors[0].$message }}
@@ -103,7 +104,7 @@
                         <label class="fm-label" for="Reserve Price">Reserve Price</label>
                         <div class="fm-inner">
                             <InputText id="username" v-model="inventoryAreaDetails.inventoryReservePrice"
-                                placeholder="Enter Reserve Price" readonly /> 
+                                placeholder="Enter Reserve Price" readonly />
                         </div>
                         <div v-if="$v.inventoryAreaDetails.inventoryReservePrice.$error" class="fm-error">
                             {{ $v.inventoryAreaDetails.inventoryReservePrice.$errors[0].$message }}
@@ -138,7 +139,8 @@
                     <div class="fm-group">
                         <label class="fm-label" for="Modifier Value">Modifier Value</label>
                         <div class="fm-inner">
-                            <InputNumber v-model="modifierValue" inputId="minmax-buttons" mode="decimal" showButtons :min="0" />
+                            <InputNumber v-model="modifierValue" inputId="minmax-buttons" mode="decimal" showButtons
+                                :min="0" />
                         </div>
                         <div v-if="$v.modifierValue.$error" class="fm-error">
                             {{ $v.modifierValue.$errors[0].$message }}
@@ -149,8 +151,9 @@
                     <div class="fm-group">
                         <label class="fm-label" for="Modifier Value Change">Modifier Value Change</label>
                         <div class="fm-inner">
-                            <Dropdown v-model="selectedModifierValueChange" variant="filled" :options="modifiervaluechanges"
-                                optionLabel="modifierValueChangeName" placeholder="Enter Modifier Value"/>
+                            <Dropdown v-model="selectedModifierValueChange" variant="filled"
+                                :options="modifiervaluechanges" optionLabel="modifierValueChangeName"
+                                placeholder="Enter Modifier Value" />
                         </div>
                         <div v-if="$v.selectedModifierValueChange.modifierValueChangeId.$error" class="fm-error">
                             {{ $v.selectedModifierValueChange.modifierValueChangeId.$errors[0].$message }}
@@ -160,10 +163,12 @@
                 <div class="fm-row col-span-full" v-if="selectedModifierValueChange.modifierValueChangeId === '2'">
                     <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After No. Of Extensions</label>
+                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After
+                                No. Of
+                                Extensions</label>
                             <div class="fm-inner">
-                                <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons" mode="decimal"
-                                showButtons :min="0" :max="100" />
+                                <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons"
+                                    mode="decimal" showButtons :min="0" :max="100" />
                             </div>
                             <div v-if="$v.modifierValueExtentionCount.$error" class="fm-error">
                                 {{ $v.modifierValueExtentionCount.$errors[0].$message }}
@@ -172,10 +177,11 @@
                     </div>
                     <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After Extension</label>
+                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After
+                                Extension</label>
                             <div class="fm-inner">
-                                <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons" mode="decimal"
-                                showButtons :min="0" />
+                                <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons"
+                                    mode="decimal" showButtons :min="0" />
                             </div>
                             <div v-if="$v.modifierValueAfterExtention.$error" class="fm-error">
                                 {{ $v.modifierValueAfterExtention.$errors[0].$message }}
@@ -183,30 +189,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-span-full ">
+                    Avalilable Properties:-{{propertyCount}}
+                </div>
                 <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload  v-model="uploadedFile" :accept="docType" :multiple="false"
+                        <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false"
                             :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
-                                <p>Drag and drop files to here to upload, Max. file size {{ docSize }} KB , Only pdf
+                                <p>Drag and drop files to here to upload, Max. file size {{ docSize / 1000 }} KB , Only
+                                    pdf
                                     and images are allowed</p>
                             </template>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
-                        </FileUpload>     
+                        </FileUpload>
                         <div v-if="$v.uploadedFile.$error" class="fm-error">{{
-                            $v.uploadedFile.$errors[0].$message }}</div>                  
+                    $v.uploadedFile.$errors[0].$message }}</div>
                     </div>
                 </div>
-                <div class="col-span-full fm-action fm-action-center mb-3">                     
-                    <Button v-if="uploadedFile" severity="secondary"
-                            @click="DownloadDocument(filePath)">
-                            <fa-eye></fa-eye> View Document
-                        </Button>
-                        <Button v-if="uploadedFile"
-                            severity="danger" @click="uploadedFile = false">
-                            <fa-trash></fa-trash> Remove Document
-                        </Button>
+                <div class="col-span-full fm-action fm-action-center mb-3">
+                    <Button v-if="uploadedFile" severity="secondary" @click="DownloadDocument(filePath)">
+                        <fa-eye></fa-eye> View Document
+                    </Button>
+                    <Button v-if="uploadedFile" severity="danger" @click="uploadedFile = false">
+                        <fa-trash></fa-trash> Remove Document
+                    </Button>
                 </div>
                 <div class="fm-action  fm-action-center">
                     <Button @click="visible = false" label="Close"></Button>
@@ -276,7 +284,7 @@ const itemAreaCount = ref(0);
 //     }
 
 
-
+const propertyCount=ref();
 const myFile = ref("");
 const fileName = ref("");
 const fullPath = ref("");
@@ -480,7 +488,7 @@ const onAdvancedUpload = async (event) => {
                 console.log("fileName", fileName.value);
                 console.log("filePath", filePath.value);
                 console.log("fullPath", fullPath.value);
-                 uploadedFile.value = true;
+                uploadedFile.value = true;
                 // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
                 //toaster.success("file uploaded.");
                 toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
@@ -574,14 +582,14 @@ const AddStep3AuctionData = async () => {
     //         }
     //     });
     const result = await $v.value.$validate();
-    let errorCount =  $v.value.$errors.length;
-    if (selectedModifierValueChange.value.modifierValueChangeId === '1'){
-            errorCount=errorCount-2    
-        }
+    let errorCount = $v.value.$errors.length;
+    if (selectedModifierValueChange.value.modifierValueChangeId === '1') {
+        errorCount = errorCount - 2
+    }
 
     if (errorCount == 0) {
         // alert("Form data is valid, form submitted");
-         toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -866,20 +874,41 @@ const $v = useVuelidate(rules, {
 });
 
 function DownloadDocument(url) {
-        if (url !== "") {
-          new MQLCdn()
+    if (url !== "") {
+        new MQLCdn()
             .setCDNPath(url)
             .enablePageLoader(true)
             .downloadFile("downloadBtn")
             .then((res) => {
-              if (!res.isValid()) {
-                res.showErrorToast();
-              }
+                if (!res.isValid()) {
+                    res.showErrorToast();
+                }
             });
-        }else{
-          toaster.error("File can'nt be downloaded!")
-        }
-      };
+    } else {
+        toaster.error("File can'nt be downloaded!")
+    }
+};
+function fetchAvailablePropertyCount(id) {
+
+
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchAvailablePropertyCount]")
+        .setData({
+            parentInventoryId: id
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchAvailablePropertyCount", true)
+            if (rs.isValid("FetchAvailablePropertyCount")) {
+                propertyCount.value=res.result.unsoldPropertyCount.propertyCount
+                console.log("count",res.result.unsoldPropertyCount.propertyCount);
+            } else {
+                rs.showErrorToast("FetchAvailablePropertyCount")
+            }
+        })
+
+}
 
 onMounted(() => {
     FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
