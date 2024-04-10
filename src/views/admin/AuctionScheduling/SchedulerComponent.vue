@@ -84,6 +84,7 @@ function fetchPublishedAuctionsBidder() {
       entityId: login().loginDetails.entityId,
       userId: login().loginDetails.loginId,
       statusCode: "AUCTION_PUBLISHED",
+      statusCode2: "AUCTION_SCHEDULED",
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),
       limit: String(perPage.value),
