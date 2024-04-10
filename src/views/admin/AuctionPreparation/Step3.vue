@@ -610,6 +610,7 @@ const AddStep3AuctionData = async () => {
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
+                moduleName:"AP-STEP3"
             })
             .fetch()
             .then(rs => {

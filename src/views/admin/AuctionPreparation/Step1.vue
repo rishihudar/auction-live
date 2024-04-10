@@ -254,7 +254,7 @@ function updateAuction() {
     new MQL()
         .useManagementServer()
         .setActivity("o.[UpdateStep1Details]")
-        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: auctionId, modifiedByUserId: loginId.value })
+        .setData({ auctionTypeId: auctionTypeData.value.auctionTypeId, auctionMethodId: auctionMethodData.value.auctionMethodId, statusId: statusId.value, auctionId: auctionId, modifiedByUserId: loginId.value , moduleName:"AP-STEP1"})
         .fetch()
         .then(rs => {
             let res = rs.getActivity("UpdateStep1Details", true);
@@ -282,7 +282,9 @@ function insertAuction() {
             statusId: statusId.value, 
             organizationId: organizationId.value,
             entityId: entityId.value,
-            createdByUserId: loginId.value})
+            createdByUserId: loginId.value,
+            moduleName:"AP-STEP1"
+        })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);

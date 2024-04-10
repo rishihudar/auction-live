@@ -40,7 +40,8 @@ function FetchUserRole() {
 
 function navigateToAbout(card) {
   console.log("Card Clicked");
-  console.log("card.url", card.url);
+  console.log("card-", card.card);
+  console.log("card url-", card.url);
   router.push({path:card.url});
 }
 

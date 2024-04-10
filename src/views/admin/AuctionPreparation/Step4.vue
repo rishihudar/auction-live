@@ -467,12 +467,10 @@ async function processingFeeEmdPaymentStartEndDate() {
       .useManagementServer()
       .setActivity("o.[step4UpdateDatesAndUploadDocuments]")
       .setData({
-        registrationStartDate: moment(selectedStartDate.value).format(
-          "YYYY-MM-DD HH:mm:ss"
-        ),
-        registrationEndDate: moment(selectedEndDate.value).format(
-          "YYYY-MM-DD HH:mm:ss"
-        ),
+        registrationStartDate: moment(selectedStartDate.value).format("YYYY-MM-DD HH:mm:ss"),
+        registrationEndDate: moment(selectedEndDate.value).format("YYYY-MM-DD HH:mm:ss"),
+        registrationStartDate1: moment(selectedStartDate.value).format("YYYY-MM-DD HH:mm:ss"),
+        registrationEndDate1: moment(selectedEndDate.value).format("YYYY-MM-DD HH:mm:ss"),
         auctionId: auctionId,
         statusId: statusId,
         moduleName:"AP-STEP4"
@@ -488,7 +486,7 @@ async function processingFeeEmdPaymentStartEndDate() {
         }
       });
   });
-  // Automatically generated
+  
 }
 
 async function insertDocumentPathToDb() {
