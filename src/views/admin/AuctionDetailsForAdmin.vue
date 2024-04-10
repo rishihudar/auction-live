@@ -165,11 +165,11 @@
                     <p v-if="auctionDetails.emdPaid < auctionDetails.roundRule" class="text-red-400 m-auto">
                         Number of EMD Paid is less then required amount {{ auctionDetails.roundRule }}
                     </p>
-                    <div class="bs-buttons">
+                    <div class="bs-buttons" v-if="dataFetched">
                         <schedule-button :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
                             :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId"
                             :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
-                            v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" />
+                            v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
                     </div>
                 </div>
             </div>
@@ -211,6 +211,7 @@ endMinDate.value = moment().add(2, "minutes").toDate();
 const dbEndDate = ref();
 const dbStartDate = ref();
 
+let dataFetched = ref(false);
 async function FetchAuctionDetailsByAuctionIdAdmin() {
     var participantsStatusId = await fetchAuctionStatus("AUCTION_PARTICIPATION");
     var emdStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
@@ -246,7 +247,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
                 auctionDetailObj.documentsMap = documentsMap;
 
                 auctionDetails.value = auctionDetailObj;
-
+                dataFetched.value = true;
                 // You can access document paths using auctionDetail.documentsMap in the template
             } else {
                 rs.showErrorToast("FetchAuctionDetailsByAuctionIdAdmin")

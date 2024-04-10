@@ -1,5 +1,8 @@
 <template>
-  <Button label="Schedule Auction" @click="display = true" :disabled="disabled"></Button>
+  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled"></Button>
+    <div v-if="statusCode === 'AUCTION_SCHEDULED'">
+      <Button label="Re-Schedule Auction" @click="display = true" :disabled="disabled"></Button>
+    </div>
   <Dialog v-model:visible="display" modal :style="{ width: '75rem' }" header="Scheduler">
     <div class="form-grid mb-4">
       <div class="col-span-full md:col-span-4">
@@ -61,14 +64,16 @@
 
     <div class="col-span-full">
       <div class="fm-action fm-action-center">
-        <Button label="Schedule" @click="schedule"></Button>
+        <Button label="Schedule" @click="schedule"></Button> 
+   
       </div>
+  
     </div>
   </Dialog>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref,watch } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql_management.js";
@@ -81,11 +86,12 @@ import { login } from "../store/modules/login";
 const props = defineProps({
   itemList: Array,
   auctionId: Number,
-  entityId: String,
+  entityId: Number,
   startDate: String,
   endDate: String,
   users: Array,
-  disabled: Boolean
+  disabled: Boolean,
+  statusCode: String
 });
 
 const loginStore = login()
@@ -99,12 +105,15 @@ function emitModalValue() {
 }
 
 let display = ref(false);
-let startDate = ref(props.startDate);
-let endDate = ref(props.endDate);
+let startDate = ref(new Date(props.startDate));
+let endDate = ref(new Date(props.endDate));
+console.log("NewendDate", endDate)
 let userSelectOptions = ref([]);
 let users = ref(props.users);
+let statusCode=ref(props.statusCode);
+console.log("statusCode",statusCode)
 let submitted = ref(false);
-
+const vsStatusCode=ref();
 // validation rules
 const rules = {
   startDate: { required, validator: helpers.withMessage("Start date should be less than end date and greater than today", isValidStartDate) },
@@ -191,6 +200,13 @@ function formatDate(date) {
 onMounted(() => {
   // Fetch the users  to be shown in dropdown
   FetchUsers();
+  console.log(props.itemList);
+  console.log(props.auctionId);
+  console.log("EntityID", props.entityId);
+  console.log(props.startDate);
+  console.log("@@@@@@@@@@@@@@@", props.endDate);
+  console.log("#############", props.users);
+
 });
 
 
@@ -210,4 +226,12 @@ function FetchUsers() {
       }
     });
 }
+watch(vsStatusCode, (newVal, oldVal) => {
+  if (newVal === 'AUCTION_SCHEDULED') {
+    console.log(vsStatusCode, "vsStatusCode")
+    console.log(newVal, "newVal")
+    console.log(oldVal, "oldVal")
+    display.value = false; 
+  }
+});
 </script>
