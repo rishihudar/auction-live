@@ -10,7 +10,7 @@
         <InputText
           v-model="filter"
           placeholder="Search By Auction Code..."
-          @input="fetchPublishedAuctionsBidder"
+          @input="fetchPublishedAuctionsAdmin"
         />
       <Column field="srNo" header="SrNo."></Column>
       <Column field="auctionCode" header="Auction Code"></Column>
@@ -28,7 +28,7 @@
       ></Column>
       <Column expander style="width: 5rem" field="" header="Action"> </Column>
       <template #expansion="slot">
-        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId">
+        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode">
         </AuctionDetailsForAdmin>
       </template>
     </DataTable>
@@ -64,7 +64,7 @@ const filter = ref("");
 const entityId = ref("");
 onMounted(() => {
   entityId.value = route.params.id;
-  fetchPublishedAuctionsBidder(currentPage.value);
+  fetchPublishedAuctionsAdmin(currentPage.value);
 });
 
 let auctionId = ref();
@@ -72,9 +72,9 @@ function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchPublishedAuctionsBidder();
+  fetchPublishedAuctionsAdmin();
 }
-function fetchPublishedAuctionsBidder() {
+function fetchPublishedAuctionsAdmin() {
   console.log("Selected Entity Id", login().loginDetails);
   new MQL()
     .useManagementServer()

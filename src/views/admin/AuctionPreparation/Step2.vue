@@ -492,7 +492,8 @@ const InsertAuctionDataStep2 = async () => {
                 emdAppliedFor: auctionDetails.value.emdAppliedFor,
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
-                auctionId: auctionId
+                auctionId: auctionId,
+                moduleName:"AP-STEP2"
             })
             .fetch()
             .then((rs) => {
