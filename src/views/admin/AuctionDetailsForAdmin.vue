@@ -101,7 +101,7 @@
                 </div>
                 <div class="bs-item col-span-6">
                     <p v-if="auctionDetails.emdPaid < auctionDetails.roundRule" class="text-red-400 m-auto">
-                        Number of EMD Paid is less then required amount {{ auctionDetails.roundRule }}
+                        Number of EMD Paid is less then required count {{ auctionDetails.roundRule }}
                     </p>
                     <div class="bs-buttons" v-if="dataFetched">
                         <schedule-button :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
