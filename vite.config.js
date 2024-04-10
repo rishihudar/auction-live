@@ -104,6 +104,13 @@ export default defineConfig({
         secure:false,
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/bidding-server-http/,"")
+      },
+      "/upload-server":{
+        target:"http://localhost:8001/",
+        ws: true,
+        secure:false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/upload-server/,"")
       }
       
     },
