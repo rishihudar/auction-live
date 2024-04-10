@@ -93,6 +93,7 @@ const isFileSelected = ref(false);
 
 function fetchInventonryCategories() {
   new MQL()
+  .useCoreServer()
     .setActivity("o.[FetchInventoryCategories]")
     .fetch()
     .then((rs) => {
@@ -175,7 +176,7 @@ function handleUpload() {
   formData.append("organizationId", 1);
   formData.append("entityId", 2);
   axios
-    .post("http://localhost:8000/upload", formData, {
+    .post("/upload-server/upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -223,6 +224,7 @@ function cdnProfileUpload(event) {
 const columnTempNames = ref();
 function fetchInventoryTempColumns() {
   new MQL()
+  .useCoreServer()
     .setActivity("o.[FetchInventoryTemplateColumns]")
     .setData({ inventoryCategoryId: selectedCategory.value })
     .fetch()
