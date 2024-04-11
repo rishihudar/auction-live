@@ -137,6 +137,12 @@ const router = createRouter({
       meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     },
     {
+      path: "/add-Dashboard",
+      name: "ROLE_SCHEDULER",
+      component: loadDashboardView("AddDashboardUI"),
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+    },
+    {
       path: "/SchedulerDashboard",
       name: "ROLE_SCHEDULER_",
       component: loadAuctionSchedulingView("SchedulerComponent"),
