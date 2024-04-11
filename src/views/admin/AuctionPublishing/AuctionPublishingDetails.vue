@@ -276,8 +276,8 @@ function processingFeeEmdPaymentStartEndDate() {
     statusId: 17,
     auctionId: auctionId.value,
     moduleName:"AUCTION_PUBLISHING",
-    registrationStartDate1:dbStartDate,
-    registrationEndDate1:dbEndDate
+    registrationStartDate1:dbStartDate.value,
+    registrationEndDate1:dbEndDate.value
   }
   // store.setLastInsertedAuctionId(31);
   // Automatically generated
