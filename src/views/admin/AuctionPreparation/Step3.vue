@@ -92,7 +92,8 @@
                         <label class="fm-label" for="step1">Area</label>
                         <div class="fm-inner">
                             <Dropdown v-model="inventoryAreaDetails" variant="filled" :options="areaDetail"
-                                optionLabel="inventoryName" placeholder="Select Area" @change="fetchAvailablePropertyCount(inventoryAreaDetails.inventoryId)" />
+                                optionLabel="inventoryName" placeholder="Select Area"
+                                @change="fetchAvailablePropertyCount(inventoryAreaDetails.inventoryId)" />
                         </div>
                         <div v-if="$v.inventoryAreaDetails.inventoryId.$error" class="fm-error">
                             {{ $v.inventoryAreaDetails.inventoryId.$errors[0].$message }}
@@ -190,7 +191,7 @@
                     </div>
                 </div>
                 <div class="col-span-full ">
-                    Avalilable Properties:-{{propertyCount}}
+                    Available Properties:-{{ propertyCount }}
                 </div>
                 <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
@@ -204,8 +205,9 @@
                             </template>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                         </FileUpload>
-                        <div v-if="$v.uploadedFile.$error" class="fm-error">{{
-                    $v.uploadedFile.$errors[0].$message }}</div>
+                        <div v-if="$v.uploadedFile.$error" class="fm-error">
+                            {{ $v.uploadedFile.$errors[0].$message }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">
@@ -218,7 +220,7 @@
                 </div>
                 <div class="fm-action  fm-action-center">
                     <Button @click="visible = false" label="Close"></Button>
-                    <Button @click="AddStep3AuctionData" label="Add" v-if="itemAreaCount != 0"></Button>
+                    <Button @click="AddStep3AuctionData" label="Add" v-if="propertyCount != 0"></Button>
                 </div>
             </div>
         </Dialog>
@@ -284,7 +286,7 @@ const itemAreaCount = ref(0);
 //     }
 
 
-const propertyCount=ref();
+const propertyCount = ref();
 const myFile = ref("");
 const fileName = ref("");
 const fullPath = ref("");
@@ -610,7 +612,7 @@ const AddStep3AuctionData = async () => {
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
-                moduleName:"AP-STEP3"
+                moduleName: "AP-STEP3"
             })
             .fetch()
             .then(rs => {
@@ -895,15 +897,13 @@ function fetchAvailablePropertyCount(id) {
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchAvailablePropertyCount]")
-        .setData({
-            parentInventoryId: id
-        })
+        .setData({ parentInventoryId: id })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAvailablePropertyCount", true)
             if (rs.isValid("FetchAvailablePropertyCount")) {
-                propertyCount.value=res.result.unsoldPropertyCount.propertyCount
-                console.log("count",res.result.unsoldPropertyCount.propertyCount);
+                propertyCount.value = res.result.unsoldPropertyCount.propertyCount
+                console.log("count", res.result.unsoldPropertyCount.propertyCount);
             } else {
                 rs.showErrorToast("FetchAvailablePropertyCount")
             }
