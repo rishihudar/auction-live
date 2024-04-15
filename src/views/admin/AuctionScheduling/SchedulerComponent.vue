@@ -65,6 +65,7 @@ const entityId = ref("");
 onMounted(() => {
   entityId.value = route.params.id;
   fetchPublishedAuctionsAdmin(currentPage.value);
+  
 });
 
 let auctionId = ref();
@@ -107,4 +108,10 @@ function fetchPublishedAuctionsAdmin() {
       }
     });
 }
+function reloadPage() {
+        window.location.reload();
+        }
+
+      
+
 </script>
