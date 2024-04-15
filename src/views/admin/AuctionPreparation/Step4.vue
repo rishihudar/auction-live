@@ -68,7 +68,7 @@
                   v-model="docName"
                   :accept="docType"
                   :multiple="false"
-                  :max-file-size="docSize * 1000"
+                  :max-file-size="docSize * 1024"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
                   ><Toast />
@@ -111,7 +111,7 @@
                   v-model="noticeCheck"
                   :accept="NoticeDocType"
                   :multiple="false"
-                  :max-file-size="NoticeDocSize * 1000"
+                  :max-file-size="NoticeDocSize * 1024"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
                   ><Toast />

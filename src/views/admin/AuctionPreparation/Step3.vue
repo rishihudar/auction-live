@@ -197,7 +197,7 @@
                     <div class="fm-group">
                         <Toast />
                         <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false"
-                            :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
+                            :max-file-size="docSize * 1024" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize / 1000 }} KB , Only
                                     pdf
