@@ -293,7 +293,7 @@ const entityData = ref({
     roundRule: '',
     eventProcessingFees: '',
     emiPaymentPercentage: '',
-    isParent:false
+    isParent: false
 
 
 });
@@ -440,17 +440,18 @@ function reloadPage() {
 }
 
 
-function editEntity(data) {
-    console.log("Before edit: ", data);
+function editEntity(entity) {
+    console.log("Before edit: ", entity);
 
     // Set entityData to the values of the selected state
     entityData.value = {
-        ...data,
-        entityTypeId: parseInt(data.entityTypeId),
-        isParent: data.isParent == 'Yes' ? true : false
-        
+        ...entity,
+        entityTypeId: parseInt(entity.entityTypeId),
+        // isParent: data.isParent == 'Yes' ? true : false
+
     };
-    entityData.value = { ...entityData.value };
+    entityData.value = { ...entityData.value, isParent: entityData.value.isParent == 'Yes' ? true : false };
+
 
 
     console.log("After edit: ", entityData);
@@ -466,6 +467,8 @@ const confirmEdit = (entityData) => {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
+            // entityData.value = { ...entity };
+            // entityData.value = { ...entityData.value, isParent: entityData.value.isParent == 'Yes' ? true : false };
             updateEntity(entityData), changeFlag(0), reloadPage()
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
