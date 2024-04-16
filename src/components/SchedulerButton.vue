@@ -10,6 +10,7 @@
           <label for="Start Date" class="fm-label">Start Date</label>
           <div class="fm-inner">
             <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
+            {{startDate}}
           </div>
           <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
             {{ v$.startDate.$errors[0].$message }}
