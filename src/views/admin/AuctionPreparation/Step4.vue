@@ -68,13 +68,14 @@
                   v-model="docName"
                   :accept="docType"
                   :multiple="false"
-                  :max-file-size="docSize * 1000"
+                  :fileLimit="1"
+                  :max-file-size="docSize * multiplyingFactor"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
                   ><Toast />
                   <template #empty>
                     <p>
-                      Drag and drop files here to upload, Max. file size is 500
+                      Drag and drop files here to upload, Max. file size is {{ docSize }}
                       KB, Only {{ docType }} are allowed !
                     </p>
                   </template>
@@ -104,6 +105,7 @@
         <div class="col-span-full 2xl:col-span-6">
           <div class="fm-group">
             <label class="fm-label"> Notice Document </label>
+            <!-- multiplying Factor :- {{ multiplyingFactor }} -->
             <div class="fm-inner">
               <div class="col-span-full" v-if="!noticeCheck">
                 <FileUpload
@@ -111,13 +113,14 @@
                   v-model="noticeCheck"
                   :accept="NoticeDocType"
                   :multiple="false"
-                  :max-file-size="NoticeDocSize * 1000"
+                  :fileLimit="1"
+                  :max-file-size="NoticeDocSize * multiplyingFactor"
                   :custom-upload="true"
                   @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
                   ><Toast />
                   <template #empty>
                     <p>
-                      Drag and drop files here to upload, Max. file size is 500
+                      Drag and drop files here to upload, Max. file size is {{ NoticeDocSize }}
                       KB, Only {{ docType }} are allowed !
                     </p>
                   </template>
@@ -213,7 +216,7 @@ const router = useRouter();
 const loginStore = login();
 const AuctionStore = useAuctionPreparation();
 
-const { auctionId, config } = defineProps({
+const { auctionId, config, multiplyingFactor } = defineProps({
   auctionId: {
     type: Number,
     default: null,
@@ -222,6 +225,10 @@ const { auctionId, config } = defineProps({
     type: Object,
     default: null,
   },
+  multiplyingFactor : {
+        type : Number,
+        default: null
+    }
 });
 
 
