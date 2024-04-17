@@ -107,6 +107,12 @@ const router = createRouter({
       meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/UpcomingAuction",
+      name:"UpcomingAuction",
+      component: loadDashboardView("UpcomingAuction"),
+      meta: { title: "UpcomingAuction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
+    },
+    {
       path: "/OrganizationAdminDashboard",
       name: "ROLE_ORGANIZATION_ADMIN",
       component: loadDashboardView("OrganizationAdminComponent"),
