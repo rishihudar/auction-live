@@ -26,7 +26,6 @@
                                 :disabled="isAdding" />
                             <label for="ingredient1" class="ml-2">No</label>
                         </div>
-                        <h2>flag:</h2>{{ upcomingFlag }}
                     </div>
                 </div>
                 <div class="fm-group" v-if="upcomingFlag == 1">

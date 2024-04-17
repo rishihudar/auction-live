@@ -102,7 +102,7 @@
                 <div class="bs-item col-span-6">
                     <div class="bs-buttons">
                         <Button @click="visible = true,viewPublishDetails()"><Toast />
-                            Extend Participation Date{{auctionId}}{{auctionCode}}
+                            Extend Participation Date
 
                             <Dialog v-model:visible="visible" modal header="Publish Auction" :position="position" :style="{ width: '50rem' }" :draggable="false">
                     <div class="modal-subtitle">
