@@ -196,7 +196,7 @@
                 <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false"
+                        <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false" :fileLimit="1"
                             :max-file-size="docSize * multiplyingFactor" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
                                 <p>Drag and drop files to here to upload, Max. file size {{ docSize  }} KB , Only
