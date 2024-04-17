@@ -1,5 +1,5 @@
 <template>
-  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled"></Button>
+  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled" ></Button>
     <div v-if="statusCode === 'AUCTION_SCHEDULED'">
       <Button label="Re-Schedule Auction" @click="display = true" :disabled="disabled"></Button>
     </div>
@@ -9,8 +9,7 @@
         <div class="fm-group">
           <label for="Start Date" class="fm-label">Start Date</label>
           <div class="fm-inner">
-            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime></Calendar>
-            {{startDate}}
+            <Calendar v-model="startDate" @update:modelValue="emitModalValue" showIcon showTime ></Calendar>
           </div>
           <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
             {{ v$.startDate.$errors[0].$message }}
@@ -106,8 +105,11 @@ function emitModalValue() {
 }
 
 let display = ref(false);
-let startDate = ref(new Date(props.startDate));
-let endDate = ref(new Date(props.endDate));
+//let startDate = ref(new Date(props.startDate));
+//let endDate = ref(new Date(props.endDate));
+let startDate = ref(props.startDate ? new Date(props.startDate) : new Date()); 
+let endDate = ref(props.endDate ? new Date(props.endDate) : new Date(Date.now() + 60000));
+
 console.log("NewendDate", endDate)
 let userSelectOptions = ref([]);
 let users = ref(props.users);
@@ -177,6 +179,7 @@ async function schedule() {
         if (res && res.result == "SUCCESS") {
           display.value = false;
           alert("Auction Scheduled Successfully");
+          reloadPage();
         } else {
           alert("Auction Scheduling Failed");
         }
@@ -210,7 +213,9 @@ onMounted(() => {
 
 });
 
-
+  function reloadPage() {
+        window.location.reload();
+        }
 function FetchUsers() {
   // Fetch users from the server
   // Automatically generated
