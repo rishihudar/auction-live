@@ -30,11 +30,11 @@
                     <Column expander header="Action" style="width: 5rem">
                         <template #rowtogglericon="">
                             <fa-webhook></fa-webhook>
-                            Action
+                            Action 
                         </template>
                     </Column>
                     <template #expansion="slot">
-                        <div class="box-section">
+                        <!-- <div class="box-section">
                             <div class="bs-header">
                                 Auction Description
                             </div>
@@ -100,7 +100,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+                        {{slot.data.auctionCode  }}
+                        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :upcomingAuctionFlag="upcomingAuctionFlag"/>
                     </template>
                 </DataTable>
                 <Paginator :rows="perPage" :rowsPerPageOptions="[5, 10, 20]" :totalRecords="totalRows"
@@ -116,6 +118,7 @@ import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
 import { login } from "../../store/modules/login";
 import Column from "primevue/column";
+import AuctionDetailsForAdmin from "../admin/AuctionDetailsForAdmin.vue";
 import MQL from "@/plugins/mql.js";
 import Paginator from "primevue/paginator";
 
@@ -126,6 +129,8 @@ const auctionData = ref([]);
 const expandedRows = ref([]);
 
 
+
+const upcomingAuctionFlag=ref(false)
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
@@ -199,6 +204,8 @@ function fetchUpcomingAuctions() {
 };
 
 onMounted(() => {
+    //upcomingAuctionFlag.value=true
+    //console.log("upcomingAuctionFlag",upcomingAuctionFlag.value)
     fetchUpcomingAuctions();
 });
 </script>

@@ -100,9 +100,9 @@
                     </div>
                 </div>
                 <div class="bs-item col-span-6">
-                    <div class="bs-buttons">
+                    <!-- <div class="bs-buttons">
                         <Button @click="visible = true,viewPublishDetails()"><Toast />
-                            Extend Participation Date{{auctionId}}{{auctionCode}}
+                            Extend Participation Date
 
                             <Dialog v-model:visible="visible" modal header="Publish Auction" :position="position" :style="{ width: '50rem' }" :draggable="false">
                     <div class="modal-subtitle">
@@ -159,15 +159,17 @@
                     </div>
                   </Dialog>
                         </button>
-                    </div>
-                </div>
+                    </div> -->
+                    
+                    <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
+                  </div>
                 <div class="bs-item col-span-6">
-                    <p v-if="auctionDetails.emdPaid < auctionDetails.roundRule" class="text-red-400 m-auto">
+                    <p v-if="auctionDetails.emdPaid < auctionDetails.roundRule || upcomingAuctionFlag" class="text-red-400 m-auto">
                       Minimum {{ auctionDetails.roundRule }} participants are required to schedule the auction.
 
                     </p>
                     <div class="bs-buttons" v-if="dataFetched">
-                        <schedule-button :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
+                        <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
                             :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId"
                             :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
                             v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
@@ -186,6 +188,7 @@ import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
 import ScheduleButton from '@/components/SchedulerButton.vue';
+import ExtendButton from '@/components/ExtendParticipationDate.vue'
 import Calendar from "primevue/calendar";
 import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
@@ -198,10 +201,20 @@ const visible6 = ref(false);
 const visible = ref(false);
 const auctionDetails = ref({});
 const loginStore = login();
-const { auctionId,auctionCode } = defineProps({
-    auctionId: Number,
-    auctionCode:String
-})
+
+const props = defineProps({
+  itemList: Array,
+  auctionId: Number,
+  entityId: Number,
+  startDate: String,
+  endDate: String,
+  users: Array,
+  disabled: Boolean,
+  statusCode: String,
+  auctionCode:String,
+  upcomingAuctionFlag:Boolean
+});
+
 const selectedStartDate = ref();
 const selectedEndDate = ref();
 
@@ -220,7 +233,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
         .useManagementServer()
         .setActivity("o.[FetchAuctionDetailsByAuctionIdAdmin]")
         .setData({
-            auctionId: auctionId
+            auctionId: props.auctionId
         })
         .fetch()
         .then(rs => {
@@ -271,20 +284,20 @@ function DownloadDocument(url) {
         toaster.error("File can'nt be downloaded!")
     }
 };
-function viewPublishDetails() {
-  //console.log("rowAuctionId", row);
-//   auctionId.value = auctionId;
-//   auctionCode.value = auctionCode
-  fetchAllStepsAuctionPreview(),
-    visible.value = true
-    console.log("auctionId",auctionId,"auctionCode",auctionCode);
-}
+// function viewPublishDetails() {
+//   //console.log("rowAuctionId", row);
+// //   auctionId.value = auctionId;
+// //   auctionCode.value = auctionCode
+//   fetchAllStepsAuctionPreview(),
+//     visible.value = true
+//     console.log("auctionId",auctionId,"auctionCode",auctionCode);
+// }
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
   new MQL()
     .useManagementServer()
     .setActivity("o.[FetchAllStepsAuctionPreview]")
-    .setData({ auctionId: auctionId })
+    .setData({ auctionId: props.auctionId })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
@@ -299,52 +312,52 @@ function fetchAllStepsAuctionPreview() {
       }
     });
 }
-function UpdateExtendParticipationEndDate() {
-  if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
-    console.log(
-      "log-",
-      moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
-    );
-    alert(`Start Date should not be equal or after End Date !`);
-  } else {
-    extendParticipationEndDate();
-    //iAgreeStatusUpdate();
-    visible.value = false
-    //fetchAuctionWithApprovedStatus()
-    toast.add({
-          severity: "success",
-          summary: "Success",
-          detail: "Extended Participation Date.",
-          life: 3000,
-        });
-  }
-}
-function extendParticipationEndDate() {
-  console.log("endDate-", moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"));
-  console.log("auctionId-",auctionId);
+// function UpdateExtendParticipationEndDate() {
+//   if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
+//     console.log(
+//       "log-",
+//       moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
+//     );
+//     alert(`Start Date should not be equal or after End Date !`);
+//   } else {
+//     extendParticipationEndDate();
+//     //iAgreeStatusUpdate();
+//     visible.value = false
+//     //fetchAuctionWithApprovedStatus()
+//     toast.add({
+//           severity: "success",
+//           summary: "Success",
+//           detail: "Extended Participation Date.",
+//           life: 3000,
+//         });
+//   }
+// }
+// function extendParticipationEndDate() {
+//   console.log("endDate-", moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"));
+//   console.log("auctionId-",auctionId);
   
 				
-          new MQL()
-        .useManagementServer()
-			.setActivity("o.[UpdateExtendParticipationEndDate]")
-			.setData({
-        registrationEndDate:moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
-        auctionId:auctionId,
-        registrationEndDateAudits:dbEndDate.value,
-        moduleName:"AUCTION_SCHEDULING"
-      })
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("UpdateExtendParticipationEndDate",true)
-			if (rs.isValid("UpdateExtendParticipationEndDate")) {
-			} else
-			 { 
-			rs.showErrorToast("UpdateExtendParticipationEndDate")
-			}
-			})
+//           new MQL()
+//         .useManagementServer()
+// 			.setActivity("o.[UpdateExtendParticipationEndDate]")
+// 			.setData({
+//         registrationEndDate:moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"),
+//         auctionId:auctionId,
+//         registrationEndDateAudits:dbEndDate.value,
+//         moduleName:"AUCTION_SCHEDULING"
+//       })
+// 			.fetch()
+// 			 .then(rs => {
+// 			let res = rs.getActivity("UpdateExtendParticipationEndDate",true)
+// 			if (rs.isValid("UpdateExtendParticipationEndDate")) {
+// 			} else
+// 			 { 
+// 			rs.showErrorToast("UpdateExtendParticipationEndDate")
+// 			}
+// 			})
 			
   
-}
+// }
 onMounted(() => {
     FetchAuctionDetailsByAuctionIdAdmin()
 });
