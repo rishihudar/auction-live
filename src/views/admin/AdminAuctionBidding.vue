@@ -331,6 +331,42 @@ function syncTime() {
     })
 }
 
+
+
+function nextRoundReservePrice() {
+    return new Promise(async (resolve) => {
+        // ** New Rules 
+        let previousHRoundBid, RoundNumber
+        if (auctionDetails.value[0].roundNumber == 1) {
+            auctionDetails.value[0].currentHigh = auctionDetails.value[0].currentHigh
+        } else if (auctionDetails.value[0].roundNumber >= 2) {
+            RoundNumber = auctionDetails.value[0].roundNumber - 1
+            previousHRoundBid = await getPreviousRoundHBid(RoundNumber, auctionStore.auctionObj.pklAuctionId, 1)
+            if (previousHRoundBid.bidCount > 0) {
+                if (previousHRoundBid.hnBidAmount > 0) {
+                    auctionDetails.value[0].currentHigh = previousHRoundBid.hnBidAmount
+                } else {
+                    auctionDetails.value[0].currentHigh = auctionDetails.value[0].currentHigh
+                }
+            } else {
+                RoundNumber = auctionDetails.value[0].roundNumber - 2
+                previousHRoundBid = await getPreviousRoundHBid(RoundNumber, auctionStore.auctionObj.pklAuctionId, 2)
+                if (previousHRoundBid.bidCount > 0) {
+                    if (previousHRoundBid.hnBidAmount > 0) {
+                        auctionDetails.value[0].currentHigh = previousHRoundBid.hnBidAmount
+                    } else {
+                        auctionDetails.value[0].currentHigh = auctionDetails.value[0].currentHigh
+                    }
+                } else {
+                    auctionDetails.value[0].currentHigh = auctionDetails.value[0].currentHigh
+                }
+            }
+        }
+        resolve()
+    })
+}
+
+
 function fetchAuctionDetails() {
     return new Promise((resolve) => {
         // Automatically generated
@@ -344,7 +380,7 @@ function fetchAuctionDetails() {
                 if (rs.isValid("FetchDataForBidding")) {
 
                     properties.value = res.result.propertyDetails
-                    bidHistory.value = res.result.auctionHistory
+                    bidHistory.value = res.result.auctionHistoryAdmin
 
                     itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
                     itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
@@ -362,32 +398,12 @@ function fetchAuctionDetails() {
                     clientLoginIpAddress.value = res.result.fetchIPAddress.clientLoginIpAddress
 
 
-                    // ** New Rules 
-                    let previousHRoundBid
-                    if (auctionDetails.value[0].roundNumber == 1) {
-                        // this.curr_highest = this.auctionDetails[0].currentHigh
-                    } else if (auctionDetails.value[0].roundNumber >= 2) {
-                        let RoundNumber = auctionDetails.value[0].roundNumber - 1
-                        previousHRoundBid = await getPreviousRoundHBid(RoundNumber, auctionStore.auctionObj.pklAuctionId, 1)
-                        if (previousHRoundBid.bidCount > 0) {
-                            if (previousHRoundBid.hnBidAmount > 0) {
-                                auctionDetails.value[0].currentHigh = previousHRoundBid.hnBidAmount
-                            } else {
-                                // auctionDetails.value[0].currentHigh = this.auctionDetails[0].currentHigh
-                            }
-                        } else {
-                            let RoundNumber = auctionDetails.value[0].roundNumber - 2
-                            previousHRoundBid = await getPreviousRoundHBid(RoundNumber, auctionStore.auctionObj.pklAuctionId, 2)
-                            if (previousHRoundBid.bidCount > 0) {
-                                if (previousHRoundBid.hnBidAmount > 0) {
-                                    auctionDetails.value[0].currentHigh = previousHRoundBid.hnBidAmount
-                                } else {
-                                    // auctionDetails.value[0].currentHigh = this.auctionDetails[0].currentHigh
-                                }
-                            } else {
-                                // auctionDetails.value[0].currentHigh = this.auctionDetails[0].currentHigh
-                            }
-                        }
+                    if (res.result.inventoryDetails.currentHighestBidderId == loginStore.loginId) {
+                        isHighestBidder.value = true
+                    }
+
+                    if (res.result.inventoryDetails.BidCount == 'NO_BID') {
+                        await nextRoundReservePrice()
                     }
 
                     resolve()
