@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div class="stat-area stat-area-alt">
+    <div class="stat-area stat-area-alt">
       <div
         class="card-wrapper"
         v-for="(card, index) in cards"
@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     
   </div>
 </template>
