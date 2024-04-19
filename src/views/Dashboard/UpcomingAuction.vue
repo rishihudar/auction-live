@@ -17,6 +17,8 @@
                     </div>
                     <template #empty>No Auctions Found</template>
                     <Column field="srNo" header="SrNo." sortable></Column>
+                    <Column field="districtName" header="District Name"> </Column>
+                    <Column field="entityName" header="Entity Name"> </Column>
                     <Column field="auctionCode" header="Auction Code"> </Column>
                     <Column field="auctionDescription" header="Auction Description">
                     </Column>
@@ -30,7 +32,7 @@
                     <Column expander header="Action" style="width: 5rem">
                         <template #rowtogglericon="">
                             <fa-webhook></fa-webhook>
-                            Action 
+                            Details 
                         </template>
                     </Column>
                     <template #expansion="slot">
@@ -101,7 +103,6 @@
                                 </div>
                             </div>
                         </div> -->
-                        {{slot.data.auctionCode  }}
                         <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :upcomingAuctionFlag="upcomingAuctionFlag"/>
                     </template>
                 </DataTable>

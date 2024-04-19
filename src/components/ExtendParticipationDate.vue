@@ -171,7 +171,6 @@ function extendParticipationEndDate() {
   
 }
 onMounted(() => {
-      console.log(props.auctionId);
     fetchAllStepsAuctionPreview();
 });
 </script>
