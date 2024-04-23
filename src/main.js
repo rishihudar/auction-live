@@ -21,8 +21,9 @@ import Alive from '../assets/presets/alive'
 import Breadcrumb from 'primevue/breadcrumb'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
-
 import Menu from 'primevue/menu'
+import InputGroup from 'primevue/inputgroup'
+import InputGroupAddon from 'primevue/inputgroupaddon'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import DataTable from 'primevue/datatable';
@@ -76,8 +77,11 @@ vm.component('Password', Password)
 vm.use(Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
+vm.use(InputGroup)
+vm.component('InputGroup', InputGroup)
+vm.use(InputGroupAddon)
+vm.component('InputGroupAddon', InputGroupAddon)
 vm.use(Accordion)
-
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)

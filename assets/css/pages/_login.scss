@@ -1,7 +1,7 @@
 .box-login-holder {@apply py-4 min-h-screen flex items-center; background: var(--bg-login-image) no-repeat center / cover; background-attachment: fixed;}
 
 .box-top {
-    &-holder {@apply absolute -mt-4 flex items-center justify-between;}
+    &-holder {@apply -mt-4 mb-2 flex items-center justify-between;}
     a {@apply text-sm font-medium text-primary-600;}
 }
 

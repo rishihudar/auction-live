@@ -73,6 +73,10 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 }
 
 
+.fm-input-group-holder {@apply flex gap-3 items-center;
+    .fm-input-group {@apply grow;}
+    > button {@apply text-sm whitespace-nowrap;}
+}
 .fm-input-group {@apply flex;
     .fm-inner {@apply grow;}
     button {@apply text-sm whitespace-nowrap first:rounded-r-none last:rounded-l-none;}
