@@ -144,7 +144,7 @@ const router = createRouter({
     },
     {
       path: "/add-Dashboard",
-      name: "ROLE_SCHEDULER",
+      name: "ROLE_SUPERADMIN",
       component: loadDashboardView("AddDashboardUI"),
       meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     },
