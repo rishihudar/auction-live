@@ -5,7 +5,7 @@
         <h2 class="title">Auction Publishing Details</h2>
       </div>
     </div>
-    <div class="card">
+    <!-- <div class="card"> -->
       <div class="table-custom">
         <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines tableStyle="min-width: 50rem">
           <div class="fm-inner">
@@ -166,7 +166,7 @@
           template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 

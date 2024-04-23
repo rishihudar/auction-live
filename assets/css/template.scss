@@ -30,7 +30,7 @@
 // @import "components/forms-upload";
 @import "components/grids";
 @import "components/modals";
-// @import "components/pagination";
+@import "components/pagination";
 @import "components/tables";
 @import "components/wizards";
 
@@ -38,15 +38,15 @@
 @import "pages/payment";
 
 
-$gray-lightest          : #85858d;
-$blue                   : #B7CADB;
-$yellow                 : #FAF4B7;
-$pink                   : #F2D1D1;
-$green                  : #C4DFAA;
-$indigo                 : #D9D7F1;
-$orange                 : #F6D7A7;
-$red                    : #FFB3B3;
-$gray-lighter           : #5e5a49;
+// $gray-lightest          : #85858d;
+// $blue                   : #B7CADB;
+// $yellow                 : #FAF4B7;
+// $pink                   : #F2D1D1;
+// $green                  : #C4DFAA;
+// $indigo                 : #D9D7F1;
+// $orange                 : #F6D7A7;
+// $red                    : #FFB3B3;
+// $gray-lighter           : #5e5a49;
 
 
 // Reset
@@ -115,36 +115,36 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
 
 
 // Home
-.box {
-    .bx-card {
-        @apply p-5 flex gap-4 items-center rounded-xl text-[#212121] cursor-pointer;
-        box-shadow: 0 1px 3px 0 rgba(#212121, 0.1);
-        .icon-holder {
-            .isax {
-                @apply text-3xl;
-            }
-        }
-        &-name {
-            @apply flex grow items-center justify-between text-xl font-bold;
-            .isax {
-                @apply text-2xl;
-            }
-        }
-        &-desc {
-            display: none;
-        }
-    }
+// .box {
+//     .bx-card {
+//         @apply p-5 flex gap-4 items-center rounded-xl text-[#212121] cursor-pointer;
+//         box-shadow: 0 1px 3px 0 rgba(#212121, 0.1);
+//         .icon-holder {
+//             .isax {
+//                 @apply text-3xl;
+//             }
+//         }
+//         &-name {
+//             @apply flex grow items-center justify-between text-xl font-bold;
+//             .isax {
+//                 @apply text-2xl;
+//             }
+//         }
+//         &-desc {
+//             display: none;
+//         }
+//     }
 
-    .bx-card {
-        $colors: $blue, $yellow, $pink, $green,$indigo, $orange;
-        $repeat: 26;
-        @for $i from 1 through $repeat {
-            &:nth-child(#{length($colors)}n + #{$i}) {
-                background-color: (nth($colors, random(length($colors))));
-            }
-        }
-    }
-}
+//     .bx-card {
+//         $colors: $blue, $yellow, $pink, $green,$indigo, $orange;
+//         $repeat: 26;
+//         @for $i from 1 through $repeat {
+//             &:nth-child(#{length($colors)}n + #{$i}) {
+//                 background-color: (nth($colors, random(length($colors))));
+//             }
+//         }
+//     }
+// }
 
 
 // Login
@@ -162,22 +162,22 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
 
 
 // form controls
-.field {}
+// .field {}
 
-.p-inputtext {
-    @apply w-full;
-}
+// .p-inputtext {
+//     @apply w-full;
+// }
 
-.p-float-label {
-    @apply mt-8 mb-3;
-}
-.p-label {
-    @apply mb-3;
-}
+// .p-float-label {
+//     @apply mt-8 mb-3;
+// }
+// .p-label {
+//     @apply mb-3;
+// }
 
-select.formkit-input {
-    @apply leading-6;
-}
+// select.formkit-input {
+//     @apply leading-6;
+// }
 
 
 // UI Loader
@@ -274,7 +274,7 @@ select.formkit-input {
     background-color: #ef4770;
     overflow: hidden;
     position: relative;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
     transition: all 0.8s ease-in;
     cursor: pointer;
     z-index: 1;

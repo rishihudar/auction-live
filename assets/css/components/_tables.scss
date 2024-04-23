@@ -31,7 +31,7 @@
 //     .p-dropdown-label {@apply w-10;}
 // }
 
-.table-wrapper {--fm-border-color: var(--table-border); @apply relative;}
+.table-custom {--fm-border-color: var(--table-border); @apply relative;}
 
 .table {@apply w-full border-spacing-0 border-separate rounded-lg; border: 1px solid var(--table-border);
     thead tr th {@apply bg-slate-100;}

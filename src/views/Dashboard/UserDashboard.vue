@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="stat-area stat-area-alt">
+    <div class="stat-area stat-area-alt grid gap-5 grid-cols-4">
       <div
         class="card-wrapper"
         v-for="(card, index) in cards"
