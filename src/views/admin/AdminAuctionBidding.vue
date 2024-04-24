@@ -1,9 +1,11 @@
 <template>
     <div>
         <!-- <Toast/> -->
+        <ConfirmDialog></ConfirmDialog>
         <strong>
             <h1>Auction Bidding</h1>
             <h4>IP: {{ clientLoginIpAddress }}</h4>
+            <p class="font-normal">{{ loginStore.username }}</p>
             <div class="my-5 flex item-center justify-between">
                 <div class="py-3 px-10 server-time bg-red-100 rounded-md border border-red-400">
                     <p>Server Time: {{ latestTime }}</p>
@@ -29,6 +31,12 @@
                     <span class="text-sm">Round Number :</span>
                     <span class="text-lg font-semibold text-[var(--neutral-600)]">
                         {{ auctionDetails[0].roundNumber }}
+                    </span>
+                </div>
+                <div class="py-4 px-5 flex flex-col border-t">
+                    <span class="text-sm">Total Rounds :</span>
+                    <span class="text-lg font-semibold text-[var(--neutral-600)]">
+                        {{ itemDetails.numberOfRounds }}
                     </span>
                 </div>
                 <div class="py-4 px-5 flex flex-col border-t col-span-full">
@@ -57,42 +65,61 @@
                     </div>
                 </template>
             </Column>
-            <Column field="timeLeft" header="Time Left"><template #body="{ data }">
-                <div class="flex align-items-center gap-2">
-                        <span>
-                            <!-- Auction is in progress -->
-                            <p v-if="roundHasStarted && !roundHasEnded">
-                                <b>The Round Will End In:</b> <span style="color: red;">{{ data.timeLeft }} </span>
-                            </p>
-
-                            <!-- Auction has not started yet -->
-                            <p v-else-if="!roundHasStarted && !roundHasEnded">
-                                <b>The Round Will Start In:</b> <span style="color: red;">{{ data.timeLeft }}</span>
-                            </p>
-
-                            <!-- Auction has ended -->
-                            <p v-if="roundHasEnded">
-                                <b>Round has ended.</b>
-                            </p>
+            <!-- <Column field="placeBid" header="Place Bid">
+                <template #body="">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex flex-col">
+                            <span> Modifier value : {{ itemDetails.ModifierValue }} </span>
+                            <span class="font-black" v-if="bidFlag && !roundHasEnded && count">
+                                {{ currencyFormat(bidValue) }}
+                            </span>
+                        </div>
+                        <span v-if="bidFlag && !roundHasEnded">
+                            <Dropdown v-model="count" :options="multiplieries" optionLabel="text" optionValue="value"
+                                placeholder="Multiplier" class="w-full md:w-14rem" />
                         </span>
+                        <Button v-if="!bidFlag || roundHasEnded" :disabled="isbidDisabled"
+                            @click="bidFlag = true">Bid</Button>
+                        <Button v-if="bidFlag && !roundHasEnded" :disabled="!count" @click="bidPlaced()">
+                            Place Bid
+                        </Button>
+                    </div>
+                </template>
+            </Column> -->
+            <Column field="timeLeft" header="Time Left"><template #body="">
+                    <div class="flex align-items-center gap-2">
+                        <span ref="timeLeft"></span>
                     </div>
                 </template>
             </Column>
         </DataTable>
 
         <!--item selection-->
-        <div class="my-3 text-center">
+        <!-- <div class="my-3 text-center">
             <Button label="Open item selection" :disabled="isItemSelectionBtnDisable" @click="openItem()"></Button>
         </div>
 
         <Dialog v-model:visible="visible" maximizable modal header="Item Selection" :style="{ width: '50rem' }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-            <div v-for="category in properties" :key="category.pklAuctionItemsDetails">
-                <RadioButton v-model="selectedCategory" name="dynamic" :value="category.pklAuctionItemsDetails" />
-                <label :for="category.pklAuctionItemsDetails" class="ml-2">{{ category.vsInventoryName }}</label>
+
+            <h4>You have been highest quoted bidder for this round. Please select the property of your interest.</h4>
+            <br>
+
+            Item Details: <b>{{ auctionStore.auctionObj.inventoryCategoryName }} : {{
+                auctionStore.auctionObj.inventoryHirarchy
+                }}</b>
+            <br>
+            <b class="float-right">
+                Select property in: <span style="color: red;">{{ time }} </span>
+            </b>
+            <br>
+            <div v-for="property in propertiesToBeSold" :key="property.pklAuctionItemsDetails">
+                <RadioButton v-model="selectedCategory" name="dynamic" :value="property.pklAuctionItemsDetails"
+                    :disabled="property.bInventorySold" />
+                <label :for="property.pklAuctionItemsDetails" class="ml-2">{{ property.vsInventoryName }}</label>
             </div>
             <Button label="Submit" @click="submitProperty()"></Button>
-        </Dialog>
+        </Dialog> -->
 
         <div class="card">
             <Panel header="Bid History" toggleable>
@@ -102,7 +129,6 @@
                         Amt: <strong class="my-2">{{ currencyFormat(copyData.quoteAmount) }}</strong>
                         @ <strong>{{ copyData.quoteTime }}</strong>
                     </li>
-                    <!-- </li> -->
                 </ul>
             </Panel>
             <Panel header="Item Details" toggleable>
@@ -115,7 +141,7 @@
                     <li>TotalNoOfBids : <b>{{ itemDetails.TotalNoOfBids }}</b></li>
                 </ul>
             </Panel>
-            <Panel header="Property Details" toggleable>
+            <Panel header="Property Details" toggleable @toggle="getAuctionProperties">
                 <p>
                     <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}</strong> :
                     {{ auctionStore.auctionObj.inventoryHirarchy }}
@@ -135,7 +161,9 @@
                         <tbody>
                             <tr v-for="property in properties" :key="property.pklAuctionItemsDetails">
                                 <td> <strong>{{ property.vsInventoryName }}</strong> </td>
-                                <td> {{ property.bInventorySold ? 'Sold' : 'Unsold' }} </td>
+                                <td
+                                    :class="{ 'font-bold text-green-600': property.bInventorySold, 'font-bold text-red-600': !property.bInventorySold }">
+                                    {{ property.bInventorySold ? 'Sold' : 'Unsold' }} </td>
                             </tr>
                         </tbody>
                     </table>
@@ -143,17 +171,17 @@
             </Panel>
         </div>
         <div>
-            <Dialog v-model:visible="visible1" modal header="Edit Profile" :style="{ width: '50rem' }">
-
+            <Dialog v-model:visible="visible1" modal header="Highest Bidder" :style="{ width: '50rem' }">
                 <div>
                     <strong class="text-center">
-                    You are the highest bidder.
-                    Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd>   button and select property of your interest
+                        You are the highest bidder.
+                        Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd> button and select property of
+                        your
+                        interest
                     </strong>
                 </div>
                 <template #footer>
-                    <Button label="Ok" text severity="secondary"
-                        @click="visible1 = false, isItemSelectionBtnDisable = false" autofocus />
+                    <Button label="Ok" text severity="secondary" @click="function1" autofocus />
                     <!-- <Button label="Save" outlined severity="secondary" @click=" " autofocus /> -->
                 </template>
             </Dialog>
@@ -165,16 +193,22 @@
 import { ref, onMounted, computed, onBeforeMount, watch } from 'vue';
 import Dialog from 'primevue/dialog';
 import RadioButton from 'primevue/radiobutton';
+import Dropdown from 'primevue/dropdown'
 import DataTable from 'primevue/datatable';
 import Panel from 'primevue/panel';
+import { createToaster } from "@meforma/vue-toaster"
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from 'primevue/confirmdialog';
 import { useAuctionStore } from "../../store/Auction.js";
 import { login } from "../../store/modules/login.js";
 import moment from 'moment';
 import axios from 'axios';
 import MQL from '../../plugins/mql.js';
 
-
+const timeLeft = ref(null)
 const auctionStore = useAuctionStore()
+const confirm = useConfirm();
+const confirm1 = useConfirm();
 const loginStore = login()
 const auctionDetails = ref([{
     auctionNumber: 1076,
@@ -184,24 +218,31 @@ const auctionDetails = ref([{
     placeBid: "",
     timeLeft: ""
 }])
+const itemSelectionTimeLeft = ref(0)
+const time = ref(0)
+const remaningTime = ref(0);
 const selectedCategory = ref('')
+const toaster = createToaster({ position: "top-right", duration: 3000 })
 const visible = ref(false);
 const visible1 = ref(false);
+const bidFlag = ref(false)
+const bidValue = ref(null)
+const multiplieries = ref([])
 const wsConnection = ref(null)
 const isItemSelectionBtnDisable = ref(true)
 const isHighestBidder = ref(false)
 const connectionStatus = ref(null)
 const clientLoginIpAddress = ref()
+const count = ref(1);
 const properties = ref([])
-
-
 const itemDetails = ref({
     Description: "Therer bidder biddere ",
     CurrentRound: 1,
     StartValue: 378000,
     ModifierValue: 1000,
     MaxBidAmount: 100000,
-    TotalNoOfBids: 0
+    TotalNoOfBids: 0,
+    itemSelectionTime: 0
 })
 
 const latestTime = ref();
@@ -211,12 +252,41 @@ const bidHistory = ref([]);
 onMounted(() => {
     connectionStatus.value = navigator.onLine
     websocketConn()
+
 })
-function leaveAuction() {
-    //router.push("BidderCurrentAuctions")
-    // window.close()
+
+
+function currencyFormat(value) {
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 15 }).format(value)
 }
 
+function leaveAuction() {
+    //router.push("BidderCurrentAuctions")
+    confirm1.require({
+        message: 'Are you sure you want to leave?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Leave',
+        accept: () => {
+            window.close()
+        },
+        reject: () => {
+        }
+    });
+}
+
+function checkH1(incomingBid) {
+    // console.log(incomingBid.bidderId, loginStore.loginId);
+    if (incomingBid.bidderId == loginStore.loginId) {
+        isHighestBidder.value = true
+        // isItemSelectionBtnDisable.value = false
+    } else {
+        isHighestBidder.value = false
+        // isItemSelectionBtnDisable.value = true
+    }
+}
 
 function updateHistory(bidObject) {
     let bidHistoryObj = {
@@ -227,16 +297,17 @@ function updateHistory(bidObject) {
     bidHistory.value.unshift(bidHistoryObj)
 }
 
+// function function1() {
+//     visible1.value = false
+//     if (isHighestBidder.value = true) {
+//         isItemSelectionBtnDisable.value = false
+//     }
+// }
 
-function currencyFormat(value) {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 3 }).format(value)
-}
 function websocketConn() {
+    wsConnection.value = new WebSocket(`wss://${window.location.host}/bidding-server-ws/ws/admin-auction`)
 
-
-    wsConnection.value = new WebSocket(`ws://${window.location.host}/bidding-server-ws/ws/admin-auction`)
-
-
+    // opening connection
     wsConnection.value.onopen = function () {
         wsConnection.value.send(
             JSON.stringify({
@@ -249,6 +320,7 @@ function websocketConn() {
     }
 
 
+    // adding message listener
     wsConnection.value.addEventListener('message', function (e) {
         var message
         message = JSON.parse(e.data)
@@ -262,17 +334,20 @@ function websocketConn() {
                 checkH1(message)
                 updateHistory(message)
                 break
+
             case message.typeCode === 100:
                 (message.error)
                 // hot fix
                 if (message.error === "You don't have enough EMD left to bid for a new property" ||
                     message.error === 'You have already joined this auction, If you have already left previous auction then please try again after 20 seconds') {
-                    // window.close()
+                    alert(message.error)
+                    window.close()
                 }
                 break
+
             case message.typeCode === 400:
                 // New Round has begun fetch auction details
-                if (message.bidderId === self.loginId) {
+                if (message.bidderId == loginStore.loginId) {
                     alert(`Congratulations the selected property has been sold to you.`)
                 }
                 // self.getAuctionDetals()
@@ -282,23 +357,89 @@ function websocketConn() {
                 // self.leaveAuction()
                 alert('Auction Ended, Thank you for Participating!')
                 // self.$router.push({ name: 'vendorDashboard' })
-                // window.close()
+                window.close()
 
                 break
             case message.typeCode === 600:
                 alert('The current auction has been cancelled abruptly by the department due to unavoidable circumstances. We regret for the inconvenience caused.')
                 // self.$router.push({ name: 'vendorDashboard' })
-                // window.close()
-
+                window.close()
                 break
 
             default:
-            // self.checkH1(message)
-            // self.updateHistory(message)
+                checkH1(message)
+                updateHistory(message)
         }
+    })
+
+    // adding error listener
+    wsConnection.value.addEventListener('error', function (e) {
+        console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+    })
+
+    // adding close listener
+    wsConnection.value.addEventListener('close', function (e) {
+        console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
     })
 }
 
+// const propertiesToBeSold = computed(() => properties.value.filter((p) => !p.bInventorySold))
+
+// function submitProperty() {
+//     visible.value = false;
+//     isHighestBidder.value = false
+//     isItemSelectionBtnDisable.value = true
+//     if (selectedCategory.value !== '') {
+//         wsConnection.value.send(
+//             JSON.stringify({
+//                 auctionId: parseInt(auctionStore.auctionObj.pklAuctionId),
+//                 bidderId: parseInt(loginStore.loginId),
+//                 auctionUserId: parseInt(auctionStore.auctionObj.pklAuctionUserId),
+//                 roundNumber: parseInt(auctionDetails.value[0].roundNumber),
+//                 auctionItemId: parseInt(selectedCategory.value),
+//                 typeCode: parseInt(300)
+//             })
+//         )
+//         toaster.success(`Selected Property is now allocated to you.`);
+
+//     }
+// }
+
+
+watch(count, (newV) => {
+    totalBid()
+})
+
+
+
+function totalBid() {
+    // bidFlag.value = true
+    bidValue.value = parseInt(auctionDetails.value[0].modifierValue) * parseInt(count.value);
+}
+
+async function bidPlaced() {
+    bidFlag.value = false
+    // console.log(bidValue.value);
+    let totalvalue = parseInt(bidValue.value) + parseInt(auctionDetails.value[0].currentHigh)
+    count.value = 1
+    // bidHistory.value.push(totalvalue)
+
+
+    wsConnection.value.send(
+        JSON.stringify({
+            auctionId: parseInt(auctionStore.auctionObj.pklAuctionId),
+            bidderId: parseInt(loginStore.loginId),
+            auctionUserId: parseInt(auctionStore.auctionObj.pklAuctionUserId),
+            roundNumber: parseInt(auctionDetails.value[0].roundNumber),
+            currentPrice: parseInt(auctionDetails.value[0].currentHigh),
+            roundEndTime: moment(auctionDetails.value[0].roundEndTime),
+            roundStartTime: moment(auctionDetails.value[0].roundStartTime),
+            bidAmount: parseInt(totalvalue),
+            typeCode: parseInt(200),
+            clientLoginIpAddress: clientLoginIpAddress.value
+        })
+    )
+}
 
 
 const openItemSelection = computed(() => {
@@ -327,11 +468,23 @@ watch(openItemSelection, (val) => {
 
 function syncTime() {
     axios.get('/bidding-server-http/o/time').then((res) => {
+        confirm.close()
         latestTime.value = moment(res.data.ServerTime).format('DD/MM/YYYY hh:mm:ss A')
+    }).catch(() => {
+        confirm.require({
+            header: 'It seems that you have lost internet connectivity',
+            message: 'Please refresh your screen once you are reconnected to the internet.',
+            icon: 'pi pi-exclamation-triangle',
+            rejectClass: 'p-button-secondary p-button-outlined',
+            acceptLabel: 'Reload',
+            accept: () => {
+                location.reload()
+            },
+            reject: () => {
+            }
+        })
     })
 }
-
-
 
 function nextRoundReservePrice() {
     return new Promise(async (resolve) => {
@@ -366,7 +519,6 @@ function nextRoundReservePrice() {
     })
 }
 
-
 function fetchAuctionDetails() {
     return new Promise((resolve) => {
         // Automatically generated
@@ -374,6 +526,7 @@ function fetchAuctionDetails() {
             .useCoreServer()
             .setActivity("r.[FetchDataForBidding]")
             .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
+            .enablePageLoader(true)
             .fetch()
             .then(async (rs) => {
                 let res = rs.getActivity("FetchDataForBidding", true)
@@ -382,12 +535,19 @@ function fetchAuctionDetails() {
                     properties.value = res.result.propertyDetails
                     bidHistory.value = res.result.auctionHistoryAdmin
 
+                    isItemSelectionBtnDisable.value = true
+                    isHighestBidder.value = false
+                    visible.value = false
+                    visible1.value = false
+
                     itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
                     itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
                     itemDetails.value.StartValue = res.result.inventoryDetails.auctionItemReservePrice
                     itemDetails.value.ModifierValue = res.result.inventoryDetails.modifierValue
                     itemDetails.value.MaxBidAmount = 100 * res.result.inventoryDetails.modifierValue
                     itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
+                    itemDetails.value.numberOfRounds = res.result.inventoryDetails.numberOfRounds
+                    itemDetails.value.itemSelectionTime = parseInt(res.result.inventoryDetails.itemSelectionTime)
 
                     auctionDetails.value[0].roundStartTime = res.result.inventoryDetails.currentRoundStartTime
                     auctionDetails.value[0].roundEndTime = res.result.inventoryDetails.currentRoundEndTime
@@ -396,7 +556,6 @@ function fetchAuctionDetails() {
                     auctionDetails.value[0].roundNumber = res.result.inventoryDetails.currentRoundNumber
 
                     clientLoginIpAddress.value = res.result.fetchIPAddress.clientLoginIpAddress
-
 
                     if (res.result.inventoryDetails.currentHighestBidderId == loginStore.loginId) {
                         isHighestBidder.value = true
@@ -432,7 +591,8 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
             .then(rs => {
                 let res = rs.getActivity("GetPreviousRoundHBid", true)
                 if (rs.isValid("GetPreviousRoundHBid")) {
-                    resolve(res)
+                    console.log(res.result);
+                    resolve(res.result)
                 } else {
                     rs.showErrorToast("GetPreviousRoundHBid")
                 }
@@ -442,18 +602,98 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
 
 }
 
-function updateAuctionTimeLeft() {
+async function updateAuctionTimeLeft() {
 
-    let remaningTime = roundHasStarted.value ? moment(auctionDetails.value[0].roundEndTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A')) : moment(auctionDetails.value[0].roundStartTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A'));
-    auctionDetails.value[0].timeLeft = `${moment(remaningTime).minutes()}:${moment(remaningTime).seconds()}`;
-    console.log();
+
+    var msg;
+    var finalMsg
+    remaningTime.value = roundHasStarted.value ? moment(auctionDetails.value[0].roundEndTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A')) : moment(auctionDetails.value[0].roundStartTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A'));
+
+    itemSelectionTimeLeft.value = moment(auctionDetails.value[0].roundEndTime).add(itemDetails.value.itemSelectionTime, 'm').diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A'))
+    // console.log("TL", itemSelectionTimeLeft);
+
+    time.value = `${moment.duration(itemSelectionTimeLeft.value).hours()}:${moment.duration(itemSelectionTimeLeft.value).minutes()}:${moment.duration(itemSelectionTimeLeft.value).seconds()}`
+    // console.log("Time", time);
+
+    // auction start or next round start
+    if (!roundHasStarted.value && !roundHasEnded.value) {
+        if (itemDetails.value.CurrentRound == 1) {
+            msg = 'The auction will start in'
+        } else {
+            msg = 'Next round will start in'
+        }
+        if (moment.duration(remaningTime.value).hours()) {
+            finalMsg = `${msg} <b class='text-red-400 font-bold'>${moment.duration(remaningTime.value).hours()} hrs:${moment.duration(remaningTime.value).minutes()} mins:${moment.duration(remaningTime.value).seconds()} secs</b>`;
+        } else {
+            finalMsg = `${msg} <b class='text-red-400 font-bold'>${moment.duration(remaningTime.value).minutes()} mins:${moment.duration(remaningTime.value).seconds()} secs </b>`;
+        }
+        timeLeft.value.innerHTML = finalMsg
+        // round has started
+    } else if (roundHasStarted.value && !roundHasEnded.value) {
+        msg = 'The round will end in'
+        if (moment.duration(remaningTime.value).hours()) {
+            finalMsg = `${msg} <b class='text-red-400 font-bold'>${moment.duration(remaningTime.value).hours()} hrs:${moment.duration(remaningTime.value).minutes()} mins:${moment.duration(remaningTime.value).seconds()} secs</b>`;
+        } else {
+            finalMsg = `${msg} <b class='text-red-400 font-bold'>${moment.duration(remaningTime.value).minutes()} mins:${moment.duration(remaningTime.value).seconds()} secs </b>`;
+        }
+        timeLeft.value.innerHTML = finalMsg
+        // last round has ended or some round has ended in item selection time
+    } else if (roundHasEnded.value && roundHasStarted.value) {
+        if (itemDetails.value.CurrentRound == itemDetails.value.numberOfRounds) {
+            msg = 'The auction will end in'
+        } else {
+            msg = 'Next round will start in'
+        }
+        if (moment.duration(itemSelectionTimeLeft.value).hours()) {
+            finalMsg = `${msg} <b  class='text-red-400 font-bold'>${moment.duration(itemSelectionTimeLeft.value).hours()} hrs:${moment.duration(itemSelectionTimeLeft.value).minutes()} mins:${moment.duration(itemSelectionTimeLeft.value).seconds()} secs</b>`;
+        } else {
+            finalMsg = `${msg} <b  class='text-red-400 font-bold'>${moment.duration(itemSelectionTimeLeft.value).minutes()} mins:${moment.duration(itemSelectionTimeLeft.value).seconds()} secs </b>`;
+        }
+        timeLeft.value.innerHTML = finalMsg
+    }
+
+
+
+
     if (roundHasStarted.value && !roundHasEnded.value) {
         isbidDisabled.value = false; // Auction is ongoing, enable bidding
     } else {
         isbidDisabled.value = true; // Auction has not started yet or has ended, disable bidding
     }
 
+    if (itemSelectionTimeLeft.value < 0) {
+        await fetchAuctionDetails()
+        // await nextRoundReservePrice()
+    }
+
 }
+
+const makeMultiplieries = () => {
+    for (var i = 1; i <= 100; i++) {
+        multiplieries.value.push({
+            'text': i,
+            'value': i
+        });
+    }
+}
+
+const getAuctionProperties = () => {
+    new MQL()
+        .useCoreServer()
+        .setActivity("r.[FetchDataForBidding]")
+        .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity("FetchDataForBidding", true)
+            if (rs.isValid("FetchDataForBidding")) {
+
+                properties.value = res.result.propertyDetails
+            } else {
+                rs.showErrorToast("FetchDataForBidding")
+            }
+        })
+}
+
 
 onBeforeMount(async () => {
     await fetchAuctionDetails()
@@ -461,6 +701,8 @@ onBeforeMount(async () => {
         syncTime()
         updateAuctionTimeLeft()
     }, 1000);
+    makeMultiplieries()
+    totalBid()
 });
 
 </script>

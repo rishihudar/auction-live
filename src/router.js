@@ -689,7 +689,7 @@ const router = createRouter({
     {
       path: "/admin/AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
-      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false },
     },
     {
       path: "/current-auction",
