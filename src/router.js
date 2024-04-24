@@ -52,6 +52,12 @@ const router = createRouter({
       meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/inventoryMasterCard",
+      name: "inventoryMasterCard",
+      component: loadDashboardView("InventoryMasterCard"),
+      meta: { title: "inventoryMasterCard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
       path: "/home",
       name: "home",
       component: loadView("Home"),
