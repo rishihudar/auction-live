@@ -67,7 +67,7 @@ const router = createRouter({
       path: "/add-menu",
       name: "AddMenuUI",
       component: loadAdminView("AddMenuUI"),
-      meta: { title: "AddMenuUI",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+      meta: { title: "AddMenuUI",lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/auction-publishing",
