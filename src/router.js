@@ -98,7 +98,7 @@ const router = createRouter({
       path: "/SuperAdminDashboard",
       name: "ROLE_SUPERADMIN",
       component: loadDashboardView("SuperAdminComponent"),
-      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_SUPERADMIN']},
     },
     // {
     //   path: "/UserDashboard",
@@ -140,7 +140,7 @@ const router = createRouter({
       path: "/UserDashboard",
       name: "UserDashboard",
       component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
     },
     {
       path: "/add-Dashboard",
