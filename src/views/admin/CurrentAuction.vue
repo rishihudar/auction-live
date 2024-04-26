@@ -45,7 +45,7 @@
 import { ref, onMounted } from "vue";
 import MQL from "../../plugins/mql";
 import { login } from "../../store/modules/login.js";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { required, helpers, minLength } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import Dialog from 'primevue/dialog'
@@ -58,6 +58,7 @@ const auctionStore = useAuctionStore()
 
 const loginStore = login();
 const route = useRoute();
+const router = useRouter();
 const entityId = ref(null)
 const visible = ref(false)
 const perPage = ref(10);
@@ -150,6 +151,7 @@ const submitAuctionPassword = async () => {
   console.log(passwordValid);
   if (passwordValid) {
     window.open('/auction/#/admin/AdminAuctionBidding', '_blank')
+    router.push({path:'/UserDashboard'})
   }
 };
 
