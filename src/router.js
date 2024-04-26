@@ -70,6 +70,12 @@ const router = createRouter({
     //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     // },
     {
+      path: "/add-menu",
+      name: "AddMenuUI",
+      component: loadAdminView("AddMenuUI"),
+      meta: { title: "AddMenuUI",lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
+    },
+    {
       path: "/auction-publishing",
       name: "ROLE_ADMIN",
       component: loadDashboardView("AdminComponent"),
