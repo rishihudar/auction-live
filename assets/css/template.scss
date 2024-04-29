@@ -330,6 +330,7 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
       line-height: 56px;
       font-weight: 600;
       margin-bottom: 20px;
+      &-sm {font-size: 30px;}
     }
     .card-name {
       font-size: 14px;

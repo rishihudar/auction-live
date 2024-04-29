@@ -25,23 +25,31 @@
       </div>
     </div>
     <div class="table-custom">
+        <Paginator
+            class="pagination-up"
+            :rows="perPage"
+            :rowsPerPageOptions="[10, 20, 30]"
+            :totalRecords="totalRows"
+            template="RowsPerPageDropdown"
+            @page="handlePageChange"
+        >
+            <template #start>
+                <div class="fm-inner">
+                    <InputText
+                        v-model="filter"
+                        placeholder="Search By Auction Code..."
+                        @input="AuctionList"
+                    />
+                    <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                </div>
+            </template>
+        </Paginator>
       <DataTable
         v-model:expandedRows="expandedRows"
         :value="customers"
         :filters="filter"
         sortMode="multiple"
       >
-      <div class="fm-inner">
-            <label class="fm-label">Search Auction:</label>
-        <InputText
-          v-model="filter"
-          placeholder="Search By Auction Code..."
-          @input="AuctionList"
-        />
-            <fa-magnifying-glass
-              class="fm-icon fm-prefix"
-            ></fa-magnifying-glass>
-          </div>
         <Column field="srNo" header="SrNo." sortable></Column>
         <Column field="auctionCode" header="Auction Code" sortable></Column>
         <Column
@@ -74,16 +82,17 @@
             <!-- {{ slotProps.data.auctionCode }}
                         {{ slotProps.data.inventoryCategoryId }} -->
             <Button
-              icon="pi pi-eye"
-              class="p-button-rounded p-button-info"
-              label="Edit"
+              class="btn-sm"
+              severity="secondary"
               @click="
                 editAuction(
                   slotProps.data.auctionId,
                   slotProps.data.inventoryCategoryId
                 )
               "
-            />
+            >
+                <fa-pen-to-square></fa-pen-to-square>Edit
+            </Button>
           </template>
         </Column>
         <!-- <template #expansion="slot">
@@ -144,14 +153,15 @@
                     </div>
                 </template> -->
       </DataTable>
-      <Paginator
-        :rows="perPage"
-        :rowsPerPageOptions="[5, 10, 20]"
-        :totalRecords="totalRows"
-        template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-        @page="handlePageChange"
-      />
+        <Paginator
+            class="pagination-down"
+            :rows="perPage"
+            :rowsPerPageOptions="[5, 10, 20]"
+            :totalRecords="totalRows"
+            template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+            @page="handlePageChange"
+        />
     </div>
   </div>
 </template>
@@ -163,7 +173,7 @@ import { ref, onMounted } from "vue";
 import { FilterMatchMode } from "primevue/api";
 import { useRouter } from "vue-router";
 import faPlus from "../../../assets/icons/plus.svg";
-import faMagnifyingGlass from "../../../assets/icons/magnifying-glass.svg";
+import faPenToSquare from "../../../assets/icons/pen-to-square.svg";
 import { fetchAuctionStatus } from "../../plugins/helpers";
 import { useAuctionPreparation } from "../../store/auctionPreparation.js";
 import { storeToRefs } from "pinia";

@@ -114,7 +114,7 @@ export default {
                 // 'text-left',
 
                 // Shape
-                { 'first:border-l border-y border-r': context?.showGridlines },
+                // { 'first:border-l border-y border-r': context?.showGridlines },
                 // 'border-0 border-b border-solid',
 
                 // Spacing
@@ -153,21 +153,21 @@ export default {
                 { 'sticky box-border border-b': props.frozen || props.frozen === '' },
 
                 // Alignment
-                'text-left',
+                // 'text-left',
 
                 // Shape
-                'border-0 border-b border-solid',
-                { 'first:border-l border-r border-b': context?.showGridlines },
+                // 'border-0 border-b border-solid',
+                // { 'first:border-l border-r border-b': context?.showGridlines },
                 { 'bg-surface-0 dark:bg-surface-800': parent.instance.frozenRow || props.frozen || props.frozen === '' },
 
                 // Spacing
-                { 'p-2': context?.size === 'small' && !state['d_editing'] },
-                { 'p-5': context?.size === 'large' && !state['d_editing'] },
-                { 'p-4': context?.size !== 'large' && context?.size !== 'small' && !state['d_editing'] },
-                { 'py-[0.6rem] px-2': state['d_editing'] },
+                // { 'p-2': context?.size === 'small' && !state['d_editing'] },
+                // { 'p-5': context?.size === 'large' && !state['d_editing'] },
+                // { 'p-4': context?.size !== 'large' && context?.size !== 'small' && !state['d_editing'] },
+                // { 'py-[0.6rem] px-2': state['d_editing'] },
 
                 // Color
-                'border-surface-200 dark:border-surface-700'
+                // 'border-surface-200 dark:border-surface-700'
             ]
         }),
         footercell: ({ context }) => ({

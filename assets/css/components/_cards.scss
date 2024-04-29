@@ -22,7 +22,10 @@
 
 .card-add-entry {@apply mb-10;}
 
-.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)];
+.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)] overflow-hidden;
+    &:last-child {@apply mb-0;}
+    &:not(:has(.bs-header)) .bs-item-holder {margin-top: -1px;}
+
     .bs-header {@apply flex items-center rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
         .bs-action {@apply ml-auto flex flex-wrap gap-4;
             .btn {@apply text-base px-5;

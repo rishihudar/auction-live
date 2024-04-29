@@ -37,6 +37,7 @@ import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Dialog from 'primevue/dialog';
 import DialogService from 'primevue/dialogservice'
+import faMagnifyingGlass from '../assets/icons/magnifying-glass.svg'
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 // import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -96,6 +97,7 @@ vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
 vm.component('Stepper', Stepper);
 vm.component('StepperPanel', StepperPanel);
+vm.component('faMagnifyingGlass', faMagnifyingGlass);
 vm.use(Vuelidate);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)

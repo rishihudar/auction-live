@@ -39,6 +39,7 @@
 }
 
 .table-custom {
+    .table {background: #fff;}
     .p-datatable-table {border: 2px solid var(--table-border); border-radius: 8px; border-collapse: separate;}
     .p-sortable-column-icon {@apply ml-2;}
     .p-sortable-column-badge {@apply ml-1;}

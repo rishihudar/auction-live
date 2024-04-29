@@ -5,16 +5,32 @@
         <h2 class="title">Auction Publishing Details</h2>
       </div>
     </div>
-    <!-- <div class="card"> -->
-      <div class="table-custom">
-        <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines tableStyle="min-width: 50rem">
-          <div class="fm-inner">
-            <label class="fm-label">Search Auction:</label>
-            <InputText v-model="filter" placeholder="Search By Auction Code..."
-              @input="fetchAuctionWithApprovedStatus" />
-            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-          </div>
-          <template #empty>No Auctions Found</template>
+    <div class="table-custom">
+        <Paginator
+            class="pagination-up"
+            :rows="perPage"
+            :rowsPerPageOptions="[10, 20, 30]"
+            :totalRecords="totalRows"
+            template="RowsPerPageDropdown"
+            @page="handlePageChange"
+        >
+            <template #start>
+                <div class="fm-inner">
+                    <InputText
+                        v-model="filter"
+                        placeholder="Search By Auction Code..."
+                        @input="fetchAuctionWithApprovedStatus"
+                    />
+                    <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                </div>
+            </template>
+        </Paginator>
+        <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines>
+          <template #empty>
+            <div class="box-watermark">
+                No Auctions Found
+            </div>
+          </template>
           <Column field="srNo" header="SrNo." sortable></Column>
           <Column field="auctionCode" header="Auction Code"> </Column>
           <Column field="auctionDescription" header="Auction Description">
@@ -162,11 +178,16 @@
             </div>
           </template>
         </DataTable>
-        <Paginator :rows="perPage" :rowsPerPageOptions="[5, 10, 20]" :totalRecords="totalRows"
-          template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
-      </div>
-    <!-- </div> -->
+        <Paginator
+            class="pagination-down"
+            :rows="perPage"
+            :rowsPerPageOptions="[5, 10, 20]"
+            :totalRecords="totalRows"
+            template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+            @page="handlePageChange"
+        />
+    </div>
   </div>
 </template>
 
