@@ -28,7 +28,7 @@
       ></Column>
       <Column expander style="width: 5rem" field="" header="Action"> </Column>
       <template #expansion="slot">
-        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode">
+        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" :upcomingAuctionFlag="upcomingAuctionFlag">
         </AuctionDetailsForAdmin>
       </template>
     </DataTable>
@@ -52,7 +52,7 @@ import AuctionDetailsForAdmin from "../AuctionDetailsForAdmin.vue";
 import Paginator from "primevue/paginator";
 
 const expandedRows = ref([]);
-
+const upcomingAuctionFlag=ref(true)
 const route = useRoute();
 const loginStore = login();
 const products = ref();

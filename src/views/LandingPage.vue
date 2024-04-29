@@ -42,7 +42,7 @@ const router = useRouter()
 
 function navigateToDashboard(role) {
     loginStore.SET_ROLE(role)
-    router.push({ name: role.roleCode })
+    router.push({ name: 'UserDashboard' })
 }
 
 </script>

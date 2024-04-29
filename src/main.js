@@ -43,6 +43,7 @@ import '../assets/css/template.scss'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import Vuelidate from 'vuelidate';
+import JsonExcel from "vue-json-excel3";
 
 const piniaStore = createPinia()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -57,6 +58,7 @@ vm.use(i18n)
 vm.use(router)
 vm.use(DialogService);
 vm.use(ConfirmationService);
+vm.component("downloadExcel", JsonExcel);
 vm.component('FloatLabel', FloatLabel);
 vm.component('Button', Button);
 vm.component('Card', Card);
