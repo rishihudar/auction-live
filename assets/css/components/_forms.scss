@@ -47,6 +47,14 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
     &.fm-select-disabled {@apply opacity-60 pointer-events-none cursor-default;}
 }
 
+.fm-calendar {@apply relative block;
+    .fm-control {@apply pr-11;}
+    .fm-control-action {@apply absolute top-0 right-0 px-4 flex items-center h-[var(--fm-height)];
+        svg {@apply w-auto h-4;}
+        span {@apply hidden;}
+    }
+}
+
 .fm-check-holder {@apply flex flex-wrap gap-x-5 gap-y-2 items-center;
     &.fm-check-vertical {@apply flex-col items-start;}
     &.fm-check-center {@apply mx-auto justify-center w-3/4;}

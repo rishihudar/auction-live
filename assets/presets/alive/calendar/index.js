@@ -9,7 +9,8 @@ export default {
             // 'w-full',
 
             // Misc
-            { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
+            // { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
+            { 'fm-calendar-disabled': props.disabled }
         ]
     }),
     input: ({ props }) => ({
