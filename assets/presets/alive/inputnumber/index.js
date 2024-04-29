@@ -2,7 +2,7 @@ export default {
     root: ({ props, parent }) => ({
         class: [
             // Flex
-            'inline-flex w-full',
+            // 'inline-flex w-full',
             { 'flex-col': props.showButtons && props.buttonLayout == 'vertical' },
             { 'flex-1 w-[1%]': parent.instance.$name == 'InputGroup' },
 
@@ -18,48 +18,49 @@ export default {
     input: {
         root: ({ parent, context }) => ({
             class: [
+                'fm-control',
                 // Display
-                'flex flex-auto',
+                // 'flex flex-auto',
 
                 // Font
-                'font-sans leading-none',
+                // 'font-sans leading-none',
 
                 //Text
-                { 'text-center': parent.props.showButtons && parent.props.buttonLayout == 'vertical' },
+                // { 'text-center': parent.props.showButtons && parent.props.buttonLayout == 'vertical' },
 
                 // Spacing
-                'p-3',
-                'm-0',
+                // 'p-3',
+                // 'm-0',
 
                 // Shape
-                'rounded-lg',
-                { 'rounded-tr-none rounded-br-none': parent.props.showButtons },
-                { 'rounded-tl-none rounded-bl-none': parent.props.showButtons && parent.props.buttonLayout == 'horizontal' },
-                { 'rounded-none': parent.props.showButtons && parent.props.buttonLayout == 'vertical' },
+                // 'rounded-lg',
+                // { 'rounded-tr-none rounded-br-none': parent.props.showButtons },
+                // { 'rounded-tl-none rounded-bl-none': parent.props.showButtons && parent.props.buttonLayout == 'horizontal' },
+                // { 'rounded-none': parent.props.showButtons && parent.props.buttonLayout == 'vertical' },
 
-                { '!rounded-none': parent.instance.$parentInstance?.$name == 'InputGroup' && !parent.props.showButtons },
-                { 'border-0': parent.instance.$parentInstance?.$name == 'InputGroup' && !parent.props.showButtons },
+                // { '!rounded-none': parent.instance.$parentInstance?.$name == 'InputGroup' && !parent.props.showButtons },
+                // { 'border-0': parent.instance.$parentInstance?.$name == 'InputGroup' && !parent.props.showButtons },
 
                 // Colors
-                'text-surface-600 dark:text-surface-200',
-                'placeholder:text-surface-400 dark:placeholder:text-surface-500',
-                'bg-surface-0 dark:bg-surface-900',
-                'border',
-                { 'border-surface-300 dark:border-surface-600': !parent.props.invalid },
+                // 'text-surface-600 dark:text-surface-200',
+                // 'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+                // 'bg-surface-0 dark:bg-surface-900',
+                // 'border',
+                // { 'border-surface-300 dark:border-surface-600': !parent.props.invalid },
 
                 // Invalid State
-                { 'border-red-500 dark:border-red-400': parent.props.invalid },
+                // { 'border-red-500 dark:border-red-400': parent.props.invalid },
 
                 // States
-                { 'hover:border-primary-500 dark:hover:border-primary-400': !parent.props.invalid },
-                'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50 focus:z-10',
+                // { 'hover:border-primary-500 dark:hover:border-primary-400': !parent.props.invalid },
+                // 'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50 focus:z-10',
                 { 'opacity-60 select-none pointer-events-none cursor-default': context.disabled },
 
                 // Filled State *for FloatLabel
-                { filled: parent.instance?.$name == 'FloatLabel' && context.filled },
+                // { filled: parent.instance?.$name == 'FloatLabel' && context.filled },
 
                 //Position
-                { 'order-2': parent.props.buttonLayout == 'horizontal' || parent.props.buttonLayout == 'vertical' }
+                // { 'order-2': parent.props.buttonLayout == 'horizontal' || parent.props.buttonLayout == 'vertical' }
             ]
         })
     },

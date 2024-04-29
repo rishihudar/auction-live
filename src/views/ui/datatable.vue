@@ -52,7 +52,7 @@
                         <div class="fm-group">
                             <label class="fm-label" for="countryName">Country Name</label>
                             <div class="fm-check-holder">
-                                <div v-for="radio in radios" :key="radio.key" class="fm-checkbox">
+                                <div v-for="radio in radios" :key="radio.key" class="fm-radiobox">
                                     <RadioButton v-model="selectedRadio" :inputId="radio.key" name="radio" :value="radio.name" />
                                     <label :for="radio.key">{{ radio.name }}</label>
                                 </div>

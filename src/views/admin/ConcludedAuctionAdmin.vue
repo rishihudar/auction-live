@@ -45,7 +45,7 @@
             ></Column>
             <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
 
-            <Column expander style="width: 50rem" field="" header="Action">
+            <Column expander field="" header="Action">
             </Column>
 
             <template #expansion="slot">
@@ -54,10 +54,12 @@
 
                 <H1BidderApprovalRejection :auctionId="slot.data.auctionId"/>
             </template>
-            <Column expander style="width: 50rem" field="" header="Report">
+            <Column expander field="" header="Report">
                 <template #body="{ data }">
-                    <Button @click="showModal(data.auctionId)">Auction Report</Button>
-                    <Button @click="showModalForH1(data.auctionId)">H1Report</Button>
+                    <div class="btn-wrapper-table">
+                        <Button class="btn-sm" @click="showModal(data.auctionId)">Auction Report</Button>
+                        <Button severity="secondary" class="btn-sm" @click="showModalForH1(data.auctionId)">H1 Report</Button>
+                    </div>
                 </template>
             </Column>
         </DataTable>
@@ -72,78 +74,78 @@
         />
     </div>
 
-        <Dialog v-model:visible="displayModal" header="Auction Report" :draggable="false">
-            <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-                <img src="../../../assets/images/logo_dulb.webp" />
-                <p>{{ auctionDetailsReport1.entityName }}</p>
-                <h2>Auction Details Statement</h2>
+    <Dialog v-model:visible="displayModal" header="Auction Report" :draggable="false">
+        <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+            <img src="../../../assets/images/logo_dulb.webp" />
+            <p>{{ auctionDetailsReport1.entityName }}</p>
+            <h2>Auction Details Statement</h2>
 
-                <p >Auction Code: {{ auctionDetailsReport1.auctionCode }}</p>
-                <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
-                            <p>Sr No:{{ index + 1 }}</p>
-                            <p>Created On: {{ item.createdOn }}</p>
-                            <p>Full Name: {{ item.fullName }}</p>
-                            <p>Quoted Value: {{ item.quotedValue }}</p>
-                            <p>Round Number: {{ item.roundNumber }}</p>
-                        </div> -->
-                <DataTable :value="auctionDetailsReport" showGridlines>
-                <template #empty>
-                    <div class="p-text-center">No Data Available</div>
-                </template>
-                <Column field="srNo" header="Sr No"></Column>
-                <Column field="quotedValue" header="Quoted Value"></Column>
-                <Column field="fullName" header="Full Name"></Column>
-                <Column field="createdOn" header="Created On"></Column>
-                <Column field="roundNumber" header="Round Number"></Column>
-                </DataTable>
-            </div>
-            <Button @click="generatePdf">Generate PDF</Button>
-        </Dialog>
+            <p >Auction Code: {{ auctionDetailsReport1.auctionCode }}</p>
+            <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
+                        <p>Sr No:{{ index + 1 }}</p>
+                        <p>Created On: {{ item.createdOn }}</p>
+                        <p>Full Name: {{ item.fullName }}</p>
+                        <p>Quoted Value: {{ item.quotedValue }}</p>
+                        <p>Round Number: {{ item.roundNumber }}</p>
+                    </div> -->
+            <DataTable :value="auctionDetailsReport" showGridlines>
+            <template #empty>
+                <div class="p-text-center">No Data Available</div>
+            </template>
+            <Column field="srNo" header="Sr No"></Column>
+            <Column field="quotedValue" header="Quoted Value"></Column>
+            <Column field="fullName" header="Full Name"></Column>
+            <Column field="createdOn" header="Created On"></Column>
+            <Column field="roundNumber" header="Round Number"></Column>
+            </DataTable>
+        </div>
+        <Button @click="generatePdf">Generate PDF</Button>
+    </Dialog>
 
-        <Dialog v-model:visible="displayModal1" header="H1Report" :draggable="false">
-            <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-                <img src="../../../assets/images/logo_dulb.webp" />
-                <p>{{auctionH1Report1.entityName }}</p>
-                <h2>Highest Bidder Auction Statement</h2>
+    <Dialog v-model:visible="displayModal1" header="H1Report" :draggable="false">
+        <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+            <img src="../../../assets/images/logo_dulb.webp" />
+            <p>{{auctionH1Report1.entityName }}</p>
+            <h2>Highest Bidder Auction Statement</h2>
 
-                <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
-                <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
-                <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{ auctionH1Report1.registrationEndDate }}</p>
-                <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
+            <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
+            <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
+            <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{ auctionH1Report1.registrationEndDate }}</p>
+            <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sr No</th>
-                            <th>Round Number</th>
-                            <th>Full Name</th>
-                            <th>Flat</th>
-                            <th>Email ID</th>
-                            <th>Highest Quoted Value</th>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Round Number</th>
+                        <th>Full Name</th>
+                        <th>Flat</th>
+                        <th>Email ID</th>
+                        <th>Highest Quoted Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template v-for="(item, index) in auctionH1Report" :key="index">
+                        <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
+                            <td>{{ item.srNo }}</td>
+                            <td>{{ item.roundNumber }}</td>
+                            <td colspan="4">No Bids Received</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <template v-for="(item, index) in auctionH1Report" :key="index">
-                            <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
-                                <td>{{ item.srNo }}</td>
-                                <td>{{ item.roundNumber }}</td>
-                                <td colspan="4">No Bids Received</td>
-                            </tr>
-                            <tr v-else>
-                                <td>{{ item.srNo }}</td>
-                                <td>{{ item.roundNumber }}</td>
-                                <td>{{ item.fullName }}</td>
-                                <td>{{ item.flat }}</td>
-                                <td>{{ item.email }}</td>
-                                <td>{{ item.inventorySoldForPrice }}</td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-                <!-- </div>  -->
-            </div>
-            <Button @click="generatePdfH1">Generate PDF</Button>
-        </Dialog>
+                        <tr v-else>
+                            <td>{{ item.srNo }}</td>
+                            <td>{{ item.roundNumber }}</td>
+                            <td>{{ item.fullName }}</td>
+                            <td>{{ item.flat }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.inventorySoldForPrice }}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+            <!-- </div>  -->
+        </div>
+        <Button @click="generatePdfH1">Generate PDF</Button>
+    </Dialog>
 
     </div>
 </template>
