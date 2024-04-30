@@ -22,11 +22,11 @@
 
 .card-add-entry {@apply mb-10;}
 
-.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)] overflow-hidden;
+.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)] bg-white overflow-hidden;
     &:last-child {@apply mb-0;}
     &:not(:has(.bs-header)) .bs-item-holder {margin-top: -1px;}
 
-    .bs-header {@apply flex items-center rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
+    .bs-header {@apply flex items-center rounded-t-md border-b text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
         .bs-action {@apply ml-auto flex flex-wrap gap-4;
             .btn {@apply text-base px-5;
                 svg {@apply h-5;}
@@ -43,8 +43,9 @@
     .bs-image {@apply w-36 h-36;
         img {@apply w-full h-full object-contain;}
     }
-    .bs-item {@apply relative flex flex-col border-t; padding: var(--padding-block) var(--padding-inline);
+    .bs-item {@apply relative flex flex-col; padding: var(--padding-block) var(--padding-inline);
         &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
+        &:after {position: absolute; bottom: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
     }
     .bs-label {@apply text-sm text-[var(--neutral-300)];}
     .bs-value {@apply text-[var(--neutral-600)];}

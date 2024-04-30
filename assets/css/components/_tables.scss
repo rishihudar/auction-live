@@ -61,6 +61,8 @@
                     @apply w-auto h-4 fill-white;
                 }
             }
+
+            &[data-pc-section="rowexpansioncell"] {@apply px-8 py-8 bg-slate-50;}
         }
     }
 }
@@ -84,3 +86,15 @@
 
 
 .btn-wrapper-table {@apply flex gap-1;}
+
+
+// Table Expansion
+.table-exp-action {@apply flex gap-1;
+    &.centered {@apply justify-center;}
+
+    .btn {@apply px-10;}
+
+    .table-custom + & {@apply mt-4;}
+}
+
+.table-exp-notice-danger {@apply text-sm text-red-600;}

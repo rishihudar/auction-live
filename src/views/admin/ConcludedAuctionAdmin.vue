@@ -49,10 +49,9 @@
             </Column>
 
             <template #expansion="slot">
-                <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId">
-                </AuctionDetailsForConcludedAuction>
+                <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId" />
 
-                <H1BidderApprovalRejection :auctionId="slot.data.auctionId"/>
+                <H1BidderApprovalRejection :auctionId="slot.data.auctionId" />
             </template>
             <Column expander field="" header="Report">
                 <template #body="{ data }">
