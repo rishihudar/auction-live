@@ -44,7 +44,7 @@
   </div>
 
   <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
-    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" />
+    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" @workflowSubmit="workflowsubmitted" />
   </Dialog>
 </template>
 
@@ -82,10 +82,16 @@ function showDialog(id) {
   console.log(id);
   visible.value = true;
   workflowStepDetailsId.value = id;
+  fetchAuctionDetailsForMyTask();
+
+}
+
+function workflowsubmitted() {
+  visible.value = false;
+  workflowStepDetailsId.value = null
 }
 
 function fetchAuctionDetailsForMyTask() {
- 
 
   new MQL()
     .useManagementServer()

@@ -35,7 +35,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import MQL from '@/plugins/mql.js';
 import Dropdown from 'primevue/dropdown';
 import { login } from "../../store/modules/login";
@@ -46,8 +45,6 @@ import AuctionPreview from "../AuctionPreview.vue";
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login()
-const route = useRoute()
-const router = useRouter()
 
 const visible = ref(false);
 const comment = ref(null)
@@ -66,6 +63,8 @@ const { workflowStepDetailsId } = defineProps({
 })
 
 
+const emit = defineEmits(['workflowsubmit'])
+
 const modalVisible = async (item) => {
     modalItem.value = item
     await fetchLogin()
@@ -78,7 +77,6 @@ const label = ref();
 const workflowStepData = ref({})
 
 const selectedLoginId = ref(null);
-// const { workflowStepDetailsId } = route.params
 
 
 let rules = computed(() => ({
@@ -120,7 +118,9 @@ async function submitWorkflow() {
         .then(rs => {
             let res = rs.getActivity("UpdateWorkflowStepDetails", true)
             if (rs.isValid("UpdateWorkflowStepDetails")) {
-                router.push({ name:'UserDashboard' })
+                modalItem.value = null
+                visible.value = false
+                emit('workflowsubmit')
 
             } else {
                 rs.showErrorToast("UpdateWorkflowStepDetails")
