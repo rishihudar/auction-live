@@ -44,7 +44,7 @@
   </div>
 
   <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
-    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" @workflowSubmit="workflowsubmitted" />
+    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" @workflowsubmit="workflowsubmitted" />
   </Dialog>
 </template>
 
@@ -79,7 +79,6 @@ function handlePageChange(event) {
 const workflowStepDetailsId = ref(null);
 
 function showDialog(id) {
-  console.log(id);
   visible.value = true;
   workflowStepDetailsId.value = id;
   fetchAuctionDetailsForMyTask();
@@ -89,6 +88,7 @@ function showDialog(id) {
 function workflowsubmitted() {
   visible.value = false;
   workflowStepDetailsId.value = null
+  fetchAuctionDetailsForMyTask();
 }
 
 function fetchAuctionDetailsForMyTask() {

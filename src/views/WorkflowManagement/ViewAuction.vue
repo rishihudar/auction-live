@@ -68,7 +68,6 @@ const emit = defineEmits(['workflowsubmit'])
 const modalVisible = async (item) => {
     modalItem.value = item
     await fetchLogin()
-    console.log('Here');
     visible.value = true
 };
 const label = ref();
@@ -118,8 +117,9 @@ async function submitWorkflow() {
         .then(rs => {
             let res = rs.getActivity("UpdateWorkflowStepDetails", true)
             if (rs.isValid("UpdateWorkflowStepDetails")) {
-                modalItem.value = null
                 visible.value = false
+                // modalItem.value = null
+        toaster.success(`${modalItem.value.statusDisplayName} Successfully`)
                 emit('workflowsubmit')
 
             } else {
