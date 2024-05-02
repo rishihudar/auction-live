@@ -142,6 +142,12 @@
 
                     </div>
                 </div>
+                <div class="w-1/2">
+                <label for="countryName">Entity District Name</label>
+                <!-- Bind the selected country to stateData.fklCountryId -->
+                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
+                    optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
+            </div>
                 <div class="w-1/4">
                     <div class="fm-group">
                         <label for="entityAddress">Entity Address</label>
@@ -156,6 +162,37 @@
                         <label for="entityContactNumber">Entity Contact Number</label>
                         <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
                         <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+                    </div>
+                </div>
+
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityContactNumber">Entity Round Rule</label>
+                        <InputText id="entityContactNumber" v-model="entityData.roundRule" />
+                        <small id="username-help">Enter Entity Round Rule E.g 3</small>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityContactNumber">Entity Event Processing Fees</label>
+                        <InputText id="entityContactNumber" v-model="entityData.eventProcessingFees" />
+                        <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityContactNumber">Entity EMI Payment Percentage</label>
+                        <InputText id="entityContactNumber" v-model="entityData.emiPaymentPercentage" />
+                        <small id="username-help">Enter Entity EMI Payment Percentage E.g 25</small>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="entityParent">Entity Parent</label>
+                        <div class="card flex justify-content-center">
+                            <Checkbox v-model="entityData.isParent" :binary="true" />
+                        </div>
+                        <small id="username-help">Enter Entity Parent E.g Yes or NO </small>
                     </div>
                 </div>
                 <div class="w-1/4">
@@ -211,7 +248,12 @@
                 <InputText id="entityShortName" v-model="entityData.entityShortName" />
                 <small id="username-help">Enter Entity Short Name E.g MCF</small>
             </div>
-
+            <div class="w-1/2">
+                <label for="countryName">Entity District Name</label>
+                <!-- Bind the selected country to stateData.fklCountryId -->
+                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
+                    optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
+            </div>
             <div class="w-1/2">
                 <label for="entityAddress">Entity Address</label>
                 <InputText id="entityAddress" v-model="entityData.entityAddress" />
@@ -237,12 +279,12 @@
             <div class="w-1/2">
                 <label for="emiPayPercent">Entity EMI Payment Percentage</label>
                 <InputText id="emiPayPercent" v-model="entityData.emiPaymentPercentage" />
-                <small id="username-help">Enter Entity Event Processing Fees E.g 34 </small>
+                <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small>
             </div>
             <div class="w-1/2">
                 <label for="entityParent">Entity Parent</label>
                 <div class="card flex justify-content-center">
-                    {{ entityData.isParent }}
+
                     <Checkbox v-model="entityData.isParent" :binary="true" />
                 </div>
                 <small id="username-help">Enter Entity Parent E.g Yes or NO </small>
@@ -282,6 +324,7 @@ const toast = useToast();
 const entities = ref([]);
 const loading = ref(true);
 var flag = ref(0);
+const districts = ref([]);
 
 const entityData = ref({
     entityName: '',
@@ -293,7 +336,8 @@ const entityData = ref({
     roundRule: '',
     eventProcessingFees: '',
     emiPaymentPercentage: '',
-    isParent: false
+    isParent: false,
+    districtId: '',
 
 
 });
@@ -377,6 +421,25 @@ function FetchEntityTypeByOrganization(organizationId) {
             loading.value = false; // Move loading to here
         });
 }
+
+function FetchDistrictName() {
+    new MQL()
+        .useCoreServer()
+        .setActivity('o.[FetchAllDistrict]')
+        .setData()
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('FetchAllDistrict', true);
+            if (rs.isValid('FetchAllDistrict')) {
+                console.log(res.result);
+                districts.value = res.result;
+
+            } else {
+                rs.showErrorToast('FetchAllDistrict');
+            }
+            loading.value = false; // Move loading to here
+        });
+}
 const fetchEntityTypesByOrganization = () => {
     FetchEntityTypeByOrganization(organizationId);
 };
@@ -400,24 +463,6 @@ function insertEntity(entityData) {
         });
 }
 function updateEntity(entityData) {
-    // new MQL()
-    //     .useCoreServer()
-    //     .setActivity('o.[UpdateEntityById]')
-    //     .setData(entityData)
-    //     .fetch()
-    //     .then((rs) => {
-    //         let res = rs.getActivity('UpdateEntityById', true);
-    //         if (rs.isValid('UpdateEntityById')) {
-    //             console.log(res.result);
-    //             console.log("entityData update", entityData);
-    //             // Optionally, you can reload the page or update the state list after insertion
-
-    //         } else {
-    //             rs.showErrorToast('UpdateEntityById');
-    //         }
-    //         loading.value = false;
-    //     });
-
     new MQL()
         .useCoreServer()
         .setActivity('o.[UpdateEntityById]')
@@ -532,6 +577,7 @@ onMounted(() => {
     FetchEntities();
     //  FetchEntityTypeByOrganization(organizationId);
     FetchOrganizations();
+    FetchDistrictName();
 
 });
 
