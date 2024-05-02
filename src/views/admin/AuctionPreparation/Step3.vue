@@ -196,12 +196,11 @@
                 <div class="col-span-full " v-if="!uploadedFile">
                     <div class="fm-group">
                         <Toast />
-                        <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false"
-                            :max-file-size="docSize * 1000" :custom-upload="true" @uploader="onAdvancedUpload">
+                        <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false" :fileLimit="1"
+                            :max-file-size="docSize * multiplyingFactor" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
-                                <p>Drag and drop files to here to upload, Max. file size {{ docSize / 1000 }} KB , Only
-                                    pdf
-                                    and images are allowed</p>
+                                <p>Drag and drop files to here to upload, Max. file size {{ docSize  }} KB , Only
+                                    {{docType}}  are allowed</p>
                             </template>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                         </FileUpload>
@@ -244,7 +243,7 @@ import { useAuctionPreparation } from '@/store/auctionPreparation.js'
 import { fetchAuctionStatus } from "../../../plugins/helpers";
 import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
-import { helpers, required } from '@vuelidate/validators'
+import { helpers, integer, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
 import { login } from "../../../store/modules/login";
 import faEye from '../../../../assets/icons/eye.svg';
@@ -260,7 +259,7 @@ const toaster = createToaster({ position: "top-right", duration: 5000 });
 const store = useAuctionPreparation()
 const { getPropertyCategoryId, getIsClicked } = storeToRefs(store)
 
-const { auctionId, config } = defineProps({
+const { auctionId, config, multiplyingFactor } = defineProps({
     auctionId: {
         type: Number,
         default: null,
@@ -268,6 +267,11 @@ const { auctionId, config } = defineProps({
     },
     config: {
         type: Object,
+        default: null
+    },
+
+    multiplyingFactor : {
+        type : Number,
         default: null
     }
 })
