@@ -120,7 +120,7 @@ async function submitWorkflow() {
         .then(rs => {
             let res = rs.getActivity("UpdateWorkflowStepDetails", true)
             if (rs.isValid("UpdateWorkflowStepDetails")) {
-                router.push({ name: loginStore.role.roleCode })
+                router.push({ name:'UserDashboard' })
 
             } else {
                 rs.showErrorToast("UpdateWorkflowStepDetails")
