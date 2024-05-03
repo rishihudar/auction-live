@@ -47,6 +47,26 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
     &.fm-select-disabled {@apply opacity-60 pointer-events-none cursor-default;}
 }
 
+.fm-number {@apply flex;
+    &:has(.fm-control-disabled) {@apply opacity-60 select-none pointer-events-none cursor-default;}
+
+    &:has(.fm-number-action) .fm-control {@apply -mr-[1px] rounded-r-none;}
+    .fm-number-action {@apply w-[52px] flex flex-col;
+        [class*="fm-number-"] {@apply grow flex items-center justify-center border border-primary-600 text-xl font-semibold text-white bg-primary-400 hover:bg-primary-600; line-height: 1;}
+        .fm-number-inc {@apply border-b-0 rounded-tr-[var(--fm-border-radius)];}
+        .fm-number-dec {@apply rounded-br-[var(--fm-border-radius)];}
+        span {@apply hidden;}
+    }
+}
+
+.fm-calendar {@apply relative block;
+    .fm-control {@apply pr-11;}
+    .fm-control-action {@apply absolute top-0 right-0 px-4 flex items-center h-[var(--fm-height)];
+        svg {@apply w-auto h-4;}
+        span {@apply hidden;}
+    }
+}
+
 .fm-check-holder {@apply flex flex-wrap gap-x-5 gap-y-2 items-center;
     &.fm-check-vertical {@apply flex-col items-start;}
     &.fm-check-center {@apply mx-auto justify-center w-3/4;}
@@ -73,6 +93,10 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 }
 
 
+.fm-input-group-holder {@apply flex gap-3 items-center;
+    .fm-input-group {@apply grow;}
+    > button {@apply text-sm whitespace-nowrap;}
+}
 .fm-input-group {@apply flex;
     .fm-inner {@apply grow;}
     button {@apply text-sm whitespace-nowrap first:rounded-r-none last:rounded-l-none;}

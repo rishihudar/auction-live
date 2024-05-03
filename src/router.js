@@ -213,7 +213,7 @@ const router = createRouter({
       path: "/role-select",
       name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false, requiresAuth: false  },
+      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: true, requiresAuth: false  },
       beforeEnter: (to,from) => {
         const loginStore = login()
       console.log(to.meta.roles,loginStore.roles);

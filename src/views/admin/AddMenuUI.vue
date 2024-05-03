@@ -1,61 +1,66 @@
 <template>
-    <div class="wizard-content">
-        <div class="wc-item">
-            <div class="wc-header">
-                <div class="wc-title">Add Role Wise Menu:</div>
-
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Add Role Wise Menu</h2>
             </div>
         </div>
-        <div class="form-grid">
-            <div class="col-span-full md:col-span-6">
-                <div class="fm-group required">
-                    <label class="fm-label" for="cardname">Menu Name</label>
-                    <InputText id="cardname" v-model="menuName" placeholder="Enter Card Name" :disabled="isAdding"
-                        @change="!menuNameAdded" />
-                </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="role">
-                        User Type
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name"
-                            :disabled="isAdding" placeholder="Select Bidder Type" class="w-full md:w-14rem"
-                            @change="selectBidderType(selectedBidder)" />
+        <div class="box-grid">
+            <div class="card col-span-6">
+                <div class="form-grid">
+                    <div class="col-span-full">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="cardname">Menu Name</label>
+                            <InputText id="cardname" v-model="menuName" placeholder="Enter Card Name" :disabled="isAdding"
+                                @change="!menuNameAdded" />
+                        </div>
+                        <div class="fm-group required">
+                            <label class="fm-label" for="role">
+                                User Type
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name"
+                                    :disabled="isAdding" placeholder="Select Bidder Type" class="w-full md:w-14rem"
+                                    @change="selectBidderType(selectedBidder)" />
+                            </div>
+                        </div>
+                        <div class="fm-group">
+                            <label class="fm-label" for="path">Add Routing Path</label>
+                            <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
+                        </div>
+                        <div class="fm-action">
+                            <Button label="Add Menu" @click="addCard('W1'), (isAdding = true)"
+                                :disabled="isAdding || !menuName || !selectedBidder" />
+                        </div>
+                    </div>
+                    <div class="col-span-full" v-if="isAdding">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="cards">
+                                Menus
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedMenuName" editable :options="selectedMenu" optionLabel="menuName"
+                                    placeholder="Select a Card" class="w-full md:w-14rem"
+                                    @change="selectMenu(selectedMenuName)" />
+                            </div>
+                        </div>
+                        <div class="fm-group required">
+                            <label class="fm-label" for="role">
+                                Role Type
+                            </label>
+                            <div class="fm-inner">
+                                <MultiSelect v-model="selectedRole" :options="roles" optionLabel="label"
+                                    placeholder="Select Roles" class="w-full md:w-20rem"/>
+                            </div>
+                        </div>
+                        <div class="fm-action">
+                            <Button label="Add Role To Menu" @click="addCard('W2')" />
+                        </div>
                     </div>
                 </div>
-                <div class="fm-group">
-                    <label class="fm-label" for="path">Add Routing Path</label>
-                    <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
-                </div>
-                <Button label="Add Menu" @click="addCard('W1'), (isAdding = true)"
-                    :disabled="isAdding || !menuName || !selectedBidder" />
-            </div>
-            <div class="col-span-full md:col-span-6" v-if="isAdding">
-                <div class="fm-group required">
-                    <label class="fm-label" for="cards">
-                        Menus
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedMenuName" editable :options="selectedMenu" optionLabel="menuName"
-                            placeholder="Select a Card" class="w-full md:w-14rem"
-                            @change="selectMenu(selectedMenuName)" />
-                    </div>
-                </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="role">
-                        Role Type
-                    </label>
-                    <div class="fm-inner">
-                        <MultiSelect v-model="selectedRole" :options="roles" optionLabel="label"
-                            placeholder="Select Roles" class="w-full md:w-20rem"/>
-                    </div>
-                </div>
-                <Button label="Add Role To Menu" @click="addCard('W2')" />
             </div>
         </div>
     </div>
-
-
 </template>
 
 <script setup>

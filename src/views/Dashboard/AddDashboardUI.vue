@@ -1,79 +1,81 @@
 <template>
-    <div class="wizard-content">
-        <div class="wc-item">
-            <div class="wc-header">
-                <div class="wc-title">Add Role Wise Dashboard Cards :</div>
-
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Add Role Wise Dashboard Cards</h2>
             </div>
         </div>
-        <div class="form-grid">
-            <div class="col-span-full md:col-span-6">
-                <div class="fm-group required">
-                    <label class="fm-label" for="cardname">Card Name</label>
-                    <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
-                </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="path">Upcoming Card</label>
-                    <div class="flex flex-wrap gap-3">
-                        <div class="flex align-items-center">
-                            <RadioButton v-model="upcomingFlag" inputId="flag" name="yes" value="0"
-                                :disabled="isAdding" />
-                            <label for="ingredient1" class="ml-2">Yes</label>
-
+        <div class="box-grid">
+            <div class="card col-span-6">
+                <div class="form-grid">
+                    <div class="col-span-full">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="cardname">Card Name</label>
+                            <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
                         </div>
-                        <div class="flex align-items-center">
-                            <RadioButton v-model="upcomingFlag" inputId="flag1" name="no" value="1"
-                                :disabled="isAdding" />
-                            <label for="ingredient1" class="ml-2">No</label>
+                        <div class="fm-group required">
+                            <label class="fm-label" for="path">Upcoming Card</label>
+                            <div class="fm-check-holder">
+                                <div class="fm-radiobox">
+                                    <RadioButton v-model="upcomingFlag" inputId="flag" name="yes" value="0" :disabled="isAdding" />
+                                    <label for="flag">Yes</label>
+                                </div>
+                                <div class="fm-radiobox">
+                                    <RadioButton v-model="upcomingFlag" inputId="flag1" name="no" value="1" :disabled="isAdding" />
+                                    <label for="flag1">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fm-group" v-if="upcomingFlag == 1">
+                            <label class="fm-label" for="path">Count Query</label>
+                            <Textarea id="query" v-model="countQuery" rows="5" cols="30" :disabled="isAdding" />
+                        </div>
+                        <div class="fm-group required">
+                            <label class="fm-label" for="role">
+                                User Type
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name" :disabled="isAdding"
+                                    placeholder="Select Bidder Type" class="w-full md:w-14rem"
+                                    @change="selectBidderType(selectedBidder),fetchRoles()" />
+                            </div>
+                        </div>
+                        <div class="fm-group">
+                            <label class="fm-label" for="path">Routing Path</label>
+                            <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
+                        </div>
+                        <div class="fm-action">
+                            <Button label="Add Card" @click="addCard('W1')"
+                                :disabled="isAdding || !cardName || !upcomingFlag || !selectedBidder" />
+                        </div>
+                    </div>
+                    <div class="col-span-full" v-if="isAdding">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="cards">
+                                Cards
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedCard" editable :options="cards" optionLabel="cardName"
+                                    placeholder="Select a Card" class="w-full md:w-14rem" @change="selectCard(selectedCard)" />
+                            </div>
+                        </div>
+                        <div class="fm-group required">
+                            <label class="fm-label" for="role">
+                                Role Type
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedRole" editable :options="roles" optionLabel="roleName"
+                                    placeholder="Select a Role" class="w-full md:w-14rem" @change="selectRole(selectedRole)" />
+                            </div>
+                        </div>
+                        <div class="fm-action">
+                            <Button label="Add Role To Card" @click="addCard('W2')" />
                         </div>
                     </div>
                 </div>
-                <div class="fm-group" v-if="upcomingFlag == 1">
-                    <label class="fm-label" for="path">Count Query</label>
-                    <Textarea id="query" v-model="countQuery" rows="5" cols="30" :disabled="isAdding" />
-                </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="role">
-                        User Type
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name" :disabled="isAdding"
-                            placeholder="Select Bidder Type" class="w-full md:w-14rem"
-                            @change="selectBidderType(selectedBidder),fetchRoles()" />
-                    </div>
-                </div>
-                <div class="fm-group">
-                    <label class="fm-label" for="path">Routing Path</label>
-                    <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
-                </div>
-                <Button label="Add Card" @click="addCard('W1')"
-                    :disabled="isAdding || !cardName || !upcomingFlag || !selectedBidder" />
-            </div>
-            <div class="col-span-full md:col-span-6" v-if="isAdding">
-                <div class="fm-group required">
-                    <label class="fm-label" for="cards">
-                        Cards
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedCard" editable :options="cards" optionLabel="cardName"
-                            placeholder="Select a Card" class="w-full md:w-14rem" @change="selectCard(selectedCard)" />
-                    </div>
-                </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="role">
-                        Role Type
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedRole" editable :options="roles" optionLabel="roleName"
-                            placeholder="Select a Role" class="w-full md:w-14rem" @change="selectRole(selectedRole)" />
-                    </div>
-                </div>
-                <Button label="Add Role To Card" @click="addCard('W2')" />
             </div>
         </div>
     </div>
-
-
 </template>
 
 <script setup>
