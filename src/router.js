@@ -48,8 +48,8 @@ const router = createRouter({
     {
       path: "/inventoryMaster",
       name: "inventoryMaster",
-      component: loadView("InventoryMaster"),
-      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      component: loadAdminView("InventoryMaster"),
+      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/inventoryMasterCard",
