@@ -48,8 +48,8 @@ const router = createRouter({
     {
       path: "/inventoryMaster",
       name: "inventoryMaster",
-      component: loadView("InventoryMaster"),
-      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      component: loadAdminView("InventoryMaster"),
+      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/inventoryMasterCard",
@@ -143,6 +143,25 @@ const router = createRouter({
       meta: { title: "MyTask",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/MISReport-details",
+      name: "MISReportDetails",
+      component: loadAdminView("MISReportDetails"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
+      path: "/registration-feeReport",
+      name: "MISRegistrationFeeReport",
+      component: loadAdminView("MISRegistrationFeeReport"),
+      meta: { title: "MISRegistrationFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/processing-feeReport",
+      name: "MISProcessingFeeReport",
+      component: loadAdminView("MISProcessingFeeReport"),
+      meta: { title: "MISProcessingFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+  
+    {
       path: "/PublisherDashboard",
       name: "PublisherDashboard",
       component: loadDashboardView("PublisherComponent"),
@@ -159,6 +178,12 @@ const router = createRouter({
       name: "ROLE_SUPERADMIN",
       component: loadDashboardView("AddDashboardUI"),
       meta: { title: "AddUserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/UserDashboard",
+      name: "ROLE_SUPERADMIN",
+      component: loadDashboardView("UserDashboard"),
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
     },
     {
       path: "/SchedulerDashboard",

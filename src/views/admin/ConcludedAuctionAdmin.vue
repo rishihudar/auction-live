@@ -103,14 +103,16 @@
 
     <Dialog v-model:visible="displayModal1" header="H1Report" :draggable="false">
         <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-            <img src="../../../assets/images/logo_dulb.webp" />
-            <p>{{auctionH1Report1.entityName }}</p>
-            <h2>Highest Bidder Auction Statement</h2>
-
-            <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
-            <p>Publishing Date:{{ auctionH1Report1.startDate }}-{{ auctionH1Report1.endDate }}</p>
-            <p>Scheduling Date:{{ auctionH1Report1.registrationStartDate }} - {{ auctionH1Report1.registrationEndDate }}</p>
-            <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
+          <img src="../../../assets/images/logo_dulb.webp" />
+          <p>{{auctionH1Report1.entityName }}</p>
+          <h2>Highest Bidder Auction Statement</h2>
+        
+                    <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
+                    <p>Publishing Date:{{ auctionH1Report1.registrationStartDate }}-{{ auctionH1Report1.registrationEndDate }}</p>
+                    <p>Scheduling Date:{{ auctionH1Report1.startDate }} - {{
+                auctionH1Report1.endDate }}
+                    </p>
+                    <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
 
             <table>
                 <thead>

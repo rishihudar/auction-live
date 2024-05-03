@@ -572,7 +572,7 @@ async function insertInWorkflow() {
 }
 
 async function onSave() {
-  let result = await $v.value.$validate();
+  let result = await $v.value.$validate(); 
   console.log("here", result);
   if (!result) {
     return;
@@ -611,7 +611,7 @@ async function onSave() {
   if (config != null) {
     nextCallback();
   } else {
-    router.push({ name: loginStore.role.roleCode });
+    router.push({name:'AuctionList'});
   }
 }
 
