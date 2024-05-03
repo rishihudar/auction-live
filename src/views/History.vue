@@ -1,26 +1,15 @@
 <template>
     <div class="box-preview-wrapper" v-if="history.length > 0">
-        <div class="box-section box-section-light">
-            <div>
-                <div class="bs-header">
-                    <h2>Approval History</h2>
-                </div>
-                <div>
-
-                    <div class="bs-item-holder">
-                        <div class="bs-item col-span-12">
-                            <DataTable :value="history" showGridlines tableStyle="border-collapse: separate;">
-                                <Column field="stepDisplayName" header="Step"></Column>
-                                <Column field="fullName" header="User"></Column>
-                                <Column field="roleName" header="Role"></Column>
-                                <Column field="createdOn" header="Created On"></Column>
-                                <Column field="commentW" header="Comment"></Column>
-                                <Column field="statusDisplayName" header="Status"></Column>
-                            </DataTable>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="bp-title">Approval History</div>
+        <div class="table-custom">
+            <DataTable :value="history" showGridlines tableStyle="border-collapse: separate;">
+                <Column field="stepDisplayName" header="Step"></Column>
+                <Column field="fullName" header="User"></Column>
+                <Column field="roleName" header="Role"></Column>
+                <Column field="createdOn" header="Created On"></Column>
+                <Column field="commentW" header="Comment"></Column>
+                <Column field="statusDisplayName" header="Status"></Column>
+            </DataTable>
         </div>
     </div>
 </template>
@@ -65,8 +54,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .workflow-step {
     font-weight: bold;
 }
-</style>
+</style> -->

@@ -1,51 +1,73 @@
 <template>
-  <div class="table-custom">
-    <DataTable
-      v-model:expandedRows="expandedRows"
-      :value="auctionDetails"
-      showGridlines
-      tableStyle="min-width: 50rem"
-      :filters="filter"
-    >
-    <div class="fm-inner">
-        <label class="fm-label">Search Auction:</label>
-        <InputText
-          v-model="filter"
-          placeholder="Search By Auction Code..."
-          @input="fetchAuctionDetailsForMyTask"
-        />
-        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-      </div>
-      <template #empty>No Auctions Found</template>
-      <Column field="srNo" header="SrNo."> </Column>
-      <Column field="taskDate" header="Task Date"> </Column>
-      <Column field="auctionCode" header="Auction Code"> </Column>
-      <Column field="inventoryCategoryName" header="Auction Category"> </Column>
-      <Column field="property" header="Available Properties"> </Column>
-      <Column field="statusName" header="Status"> </Column>
-      <Column field="auctionStatusName" header="Auction Status"> </Column>
-      <Column header="Action">
-        <template #body="row">
-          <Button
-            @click="showDialog(row.data.workflowStepDetailsId)"
-            label="Details"
-          />
-        </template>
-      </Column>
-    </DataTable>
-    <Paginator
-      :rows="perPage"
-      :rowsPerPageOptions="[5, 10, 20]"
-      :totalRecords="totalRows"
-      template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-      @page="handlePageChange"
-    />
-  </div>
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">My Tasks</h2>
+            </div>
+        </div>
+        <div class="table-custom">
+            <Paginator
+                class="pagination-up"
+                :rows="perPage"
+                :rowsPerPageOptions="[10, 20, 30]"
+                :totalRecords="totalRows"
+                template="RowsPerPageDropdown"
+                @page="handlePageChange"
+            >
+                <template #start>
+                    <div class="fm-inner">
+                        <InputText
+                            v-model="filter"
+                            placeholder="Search By Auction Code..."
+                            @input="fetchAuctionDetailsForMyTask"
+                        />
+                        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                    </div>
+                </template>
+            </Paginator>
+            <DataTable
+                v-model:expandedRows="expandedRows"
+                :value="auctionDetails"
+                showGridlines
+                :filters="filter"
+            >
+                <template #empty>
+                    <div class="box-watermark">
+                        No Auctions Found
+                    </div>
+                </template>
+                <Column field="srNo" header="SrNo."> </Column>
+                <Column field="taskDate" header="Task Date"> </Column>
+                <Column field="auctionCode" header="Auction Code"> </Column>
+                <Column field="inventoryCategoryName" header="Auction Category"> </Column>
+                <Column field="property" header="Available Properties"> </Column>
+                <Column field="statusName" header="Status"> </Column>
+                <Column field="auctionStatusName" header="Auction Status"> </Column>
+                <Column header="Action">
+                    <template #body="row">
+                        <Button
+                            @click="showDialog(row.data.workflowStepDetailsId)"
+                            class="btn-sm"
+                            label="Details"
+                        />
+                    </template>
+                </Column>
+            </DataTable>
+            <Paginator
+                class="pagination-down"
+                :rows="perPage"
+                :rowsPerPageOptions="[5, 10, 20]"
+                :totalRecords="totalRows"
+                template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                @page="handlePageChange"
+            />
+        </div>
 
-  <Dialog v-model:visible="visible" modal :style="{ width: '60rem' }">
-    <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" @workflowsubmit="workflowsubmitted" />
-  </Dialog>
+        <Dialog v-model:visible="visible" modal header="Auction Summary" :style="{ width: '60rem' }">
+            <ViewAuction :workflowStepDetailsId="workflowStepDetailsId" @workflowsubmit="workflowsubmitted" />
+        </Dialog>
+    </div>
 </template>
 
 <script setup>
