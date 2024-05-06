@@ -4,20 +4,24 @@
             <div class="wc-header">
                 <div class="wc-title">Auction Code: {{ auctionCodeToShow }}</div>
             </div>
-            <DataTable v-if="addedItem && addedItem.length > 0" :value="addedItem" resizableColumns
-                columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
-                <Column field="inventoryId" header="Inventory Id"></Column>
-                <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                <Column field="reservePrice" header="Reserved Price"></Column>
-                <Column field="modifierValue" header="Modifier Value"></Column>
-                <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
-                <Column field="action" header="Action">
-                    <template #body="slotProps">
-                        <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" label="Remove"
-                            @click="deleteItem(slotProps.data)" />
-                    </template>
-                </Column>
-            </DataTable>
+            <div class="table-custom" v-if="addedItem && addedItem.length > 0">
+                <DataTable :value="addedItem" resizableColumns
+                    columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
+                    <Column field="inventoryId" header="Inventory Id"></Column>
+                    <Column field="inventoryHierarchy" header="Inventory Name"></Column>
+                    <Column field="reservePrice" header="Reserved Price"></Column>
+                    <Column field="modifierValue" header="Modifier Value"></Column>
+                    <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
+                    <Column field="action" header="Action">
+                        <template #body="slotProps">
+                            <Button severity="danger" class="btn-sm" @click="deleteItem(slotProps.data)">
+                                <fa-trash-can></fa-trash-can>
+                                Remove
+                            </Button>
+                        </template>
+                    </Column>
+                </DataTable>
+            </div>
             <div v-else>
                 <!-- <h4>INVENTORY ITEM NOT AVAILABLE</h4> -->
                 <div class="box-watermark">Inventory Items Not Available</div>
@@ -214,7 +218,7 @@
                         <fa-eye></fa-eye> View Document
                     </Button>
                     <Button v-if="uploadedFile" severity="danger" @click="uploadedFile = false">
-                        <fa-trash></fa-trash> Remove Document
+                        <fa-trash-can></fa-trash-can> Remove Document
                     </Button>
                 </div>
                 <div class="fm-action  fm-action-center">
@@ -247,10 +251,10 @@ import { helpers, integer, required } from '@vuelidate/validators'
 import { createToaster } from "@meforma/vue-toaster";
 import { login } from "../../../store/modules/login";
 import faEye from '../../../../assets/icons/eye.svg';
-import faTrash from '../../../../assets/icons/trash.svg';
+import faTrashCan from '../../../../assets/icons/trash-can.svg';
 
 const loginStore = login()
-const { role, loginId } = storeToRefs(loginStore)
+const { role, loginId, entityId } = storeToRefs(loginStore)
 
 
 
@@ -596,6 +600,8 @@ const AddStep3AuctionData = async () => {
     if (errorCount == 0) {
         // alert("Form data is valid, form submitted");
         toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
+
+        console.log("################EntityId: ", entityId.value)
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -616,6 +622,7 @@ const AddStep3AuctionData = async () => {
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
+                entityId: entityId.value,
                 moduleName: "AP-STEP3"
             })
             .fetch()

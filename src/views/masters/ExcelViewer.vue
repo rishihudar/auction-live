@@ -445,7 +445,7 @@ const userDataSheet = ref([]);
 const products = ref([]); // Your products array
 const visible = ref(false);
 const excelData = ref([]);
-const fields = ['Username', 'Password', 'Full Name', 'District', 'Entity Name', 'Organization Name', 'Role', 'Email ID', 'Mobile Number', 'Branch/Department', 'Designation', 'Cadre'];
+const fields = ['Username', 'Full Name', 'District', 'Entity Name', 'Organization Name', 'Role', 'Email ID', 'Mobile Number', 'Branch/Department', 'Designation', 'Cadre'];
 const toast = useToast();
 // const flag = ref(0)
 const loading = ref(true);
@@ -615,7 +615,7 @@ const onAdvancedUpload = async (event) => {
     });
 
     // Send the FormData object to the backend
-    const response = await fetch('http://localhost:8000/api/upload', {
+    const response = await fetch('/upload-server/api/upload', {
       method: 'POST',
       body: formData
     });

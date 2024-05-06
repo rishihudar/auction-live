@@ -1,46 +1,66 @@
 <template>
-  <div class="table-custom">
-    <DataTable
-      v-model:expandedRows="expandedRows"
-      :value="products"
-      showGridlines
-      tableStyle="min-width: 50rem"
-    >
-    <label class="fm-label">Search Auction:</label>
-        <InputText
-          v-model="filter"
-          placeholder="Search By Auction Code..."
-          @input="fetchPublishedAuctionsAdmin"
-        />
-      <Column field="srNo" header="SrNo."></Column>
-      <Column field="auctionCode" header="Auction Code"></Column>
-      <Column field="auctionDescription" header="Auction Description"></Column>
-      <Column field="auctionCategoryName" header="Auction Category"></Column>
-      <Column field="districtName" header="District Name"></Column>
-      <Column field="entityName" header="Entity Name"></Column>
-      <Column
-        field="auctionRegStartDate"
-        header="Processing and EMD Fee Pay Start Date/Time"
-      ></Column>
-      <Column
-        field="auctionRegEndDate"
-        header="Processing and EMD Fee Pay End Date/Time"
-      ></Column>
-      <Column expander style="width: 5rem" field="" header="Action"> </Column>
-      <template #expansion="slot">
-        <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" :upcomingAuctionFlag="upcomingAuctionFlag">
-        </AuctionDetailsForAdmin>
-      </template>
-    </DataTable>
-    <Paginator
-      :rows="perPage"
-      :rowsPerPageOptions="[5, 10, 20]"
-      :totalRecords="totalRows"
-      template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-      @page="handlePageChange"
-    />
-  </div>
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Schedule Auction</h2>
+            </div>
+        </div>
+        <div class="table-custom">
+            <Paginator
+                class="pagination-up"
+                :rows="perPage"
+                :rowsPerPageOptions="[5, 10, 20]"
+                :totalRecords="totalRows"
+                template="RowsPerPageDropdown"
+                @page="handlePageChange"
+            >
+                <template #start>
+                    <div class="fm-inner">
+                        <InputText
+                            v-model="filter"
+                            placeholder="Search By Auction Code..."
+                            @input="fetchPublishedAuctionsAdmin"
+                        />
+                        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                    </div>
+                </template>
+            </Paginator>
+            <DataTable
+                v-model:expandedRows="expandedRows"
+                :value="products"
+                showGridlines
+            >
+                <Column field="srNo" header="SrNo."></Column>
+                <Column field="auctionCode" header="Auction Code"></Column>
+                <Column field="auctionDescription" header="Auction Description"></Column>
+                <Column field="auctionCategoryName" header="Auction Category"></Column>
+                <Column field="districtName" header="District Name"></Column>
+                <Column field="entityName" header="Entity Name"></Column>
+                <Column
+                    field="auctionRegStartDate"
+                    header="Processing and EMD Fee Pay Start Date/Time"
+                ></Column>
+                <Column
+                    field="auctionRegEndDate"
+                    header="Processing and EMD Fee Pay End Date/Time"
+                ></Column>
+                <Column expander style="width: 5rem" field="" header="Action"></Column>
+                <template #expansion="slot">
+                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" :upcomingAuctionFlag="upcomingAuctionFlag">
+                    </AuctionDetailsForAdmin>
+                </template>
+            </DataTable>
+            <Paginator
+                class="pagination-down"
+                :rows="perPage"
+                :rowsPerPageOptions="[5, 10, 20]"
+                :totalRecords="totalRows"
+                template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                @page="handlePageChange"
+            />
+        </div>
+    </div>
 </template>
 
 <script setup>

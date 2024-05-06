@@ -7,10 +7,10 @@
             <button class="btn btn-sidebar-toggle" @click="mainStore.toggleSidebar()">
                 <fa-bars></fa-bars>
             </button>
-            <h4>
-               {{ organizationData.organizationName }}
-               {{ entityData.entityName }}
-            </h4>
+            <div class="navbar-title">
+                <!-- {{ organizationData.organizationName }} -->
+                {{ entityData.entityName }}
+            </div>
             <div class="dropdown dropdown-profile">
                 <Button type="button" severity text class="btn-profile" @click="toggle" aria-haspopup="true"
                     aria-controls="ddmenu_profile">

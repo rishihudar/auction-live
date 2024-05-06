@@ -175,7 +175,7 @@ const router = createRouter({
     },
     {
       path: "/add-Dashboard",
-      name: "ROLE_SUPERADMIN",
+      name: "AddUserDashboard",
       component: loadDashboardView("AddDashboardUI"),
       meta: { title: "AddUserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
     },

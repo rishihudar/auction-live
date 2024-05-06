@@ -1,7 +1,13 @@
+.btn-wrapper {@apply flex gap-1 flex-wrap items-center;
+    &.centered {@apply justify-center}
+}
+
 .btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;
     svg {@apply w-auto h-4;}
 
-    &.btn-sm {@apply h-[var(--fm-height-sm)];}
+    &.btn-sm {@apply h-[var(--fm-height-sm)] text-sm;}
+
+    &-long {@apply px-10;}
 }
 
 .btn-primary {@apply text-white bg-primary-400; box-shadow: 0 10px 20px -10px rgb(var(--primary-400) / 0.6);

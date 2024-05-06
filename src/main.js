@@ -21,8 +21,9 @@ import Alive from '../assets/presets/alive'
 import Breadcrumb from 'primevue/breadcrumb'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
-
 import Menu from 'primevue/menu'
+import InputGroup from 'primevue/inputgroup'
+import InputGroupAddon from 'primevue/inputgroupaddon'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import DataTable from 'primevue/datatable';
@@ -36,6 +37,7 @@ import ConfirmPopup from 'primevue/confirmpopup';
 import ConfirmationService from 'primevue/confirmationservice';
 import Dialog from 'primevue/dialog';
 import DialogService from 'primevue/dialogservice'
+import faMagnifyingGlass from '../assets/icons/magnifying-glass.svg'
 // import '../node_modules/primevue/resources/themes/lara-light-blue/theme.css'
 // import '../assets/fonts/iconsax/style.css'
 import '../assets/css/template.scss'
@@ -78,8 +80,11 @@ vm.component('Password', Password)
 vm.use(Button)
 vm.use(Menu)
 vm.component('Menu', Menu)
+vm.use(InputGroup)
+vm.component('InputGroup', InputGroup)
+vm.use(InputGroupAddon)
+vm.component('InputGroupAddon', InputGroupAddon)
 vm.use(Accordion)
-
 vm.component('Accordion', Accordion)
 vm.use(AccordionTab)
 vm.component('AccordionTab', AccordionTab)
@@ -92,6 +97,7 @@ vm.component('Paginator', Paginator)
 vm.component('simplebar', simplebar)
 vm.component('Stepper', Stepper);
 vm.component('StepperPanel', StepperPanel);
+vm.component('faMagnifyingGlass', faMagnifyingGlass);
 vm.use(Vuelidate);
 vm.use(plugin, defaultConfig(formKitConfig))
 vm.use(defaultConfig)
@@ -101,11 +107,20 @@ vm.use(Toaster, {
   duration: 3000
 })
 
-var coreURL = '/core-server'
-var loginURL = '/login-server'
+// var coreURL = '/core-server'
+// var loginURL = '/login-server'
+// var cdnBaseURL = '/cdn-server'
+// var bidderURL = '/bidder-server'
+// var managementURL = '/management-server'
+
+
+
+// PROD
+var coreURL = '/application/core-server'
+var loginURL = '/application/login-server'
 var cdnBaseURL = '/cdn-server'
-var bidderURL = '/bidder-server'
-var managementURL = '/management-server'
+var bidderURL = '/application/bidder-server'
+var managementURL = '/application/management-server'
 
 vm.use(mqlOptions, {
   coreURL: coreURL,

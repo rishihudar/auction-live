@@ -9,6 +9,7 @@
 }
 
 .card-login {@apply mx-auto p-10 pb-0 w-[500px] max-w-full rounded-xl bg-white shadow;
+    #forgot-password & {@apply w-[600px];}
     #registration &, #bidder-details & {@apply w-[1080px];
         .page-header {@apply mb-6;}
     }
@@ -21,11 +22,17 @@
 
 .card-add-entry {@apply mb-10;}
 
-.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)];
-    .bs-header {@apply flex items-center rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
+.box-preview-wrapper {}
+.bp-title {@apply mb-2 text-lg font-bold;}
+
+.box-section {--padding-block: 12px; --padding-inline: 18px; @apply mb-6 border rounded-[var(--border-radius)] bg-white overflow-hidden;
+    &:last-child {@apply mb-0;}
+    &:not(:has(.bs-header)) .bs-item-holder {margin-top: -1px;}
+
+    .bs-header {@apply flex items-center rounded-t-md border-b text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);
         .bs-action {@apply ml-auto flex flex-wrap gap-4;
-            .btn {@apply text-base px-5;
-                svg {@apply h-5;}
+            .btn {@apply px-5;
+                svg {@apply h-4;}
             }
         }
     }
@@ -39,8 +46,9 @@
     .bs-image {@apply w-36 h-36;
         img {@apply w-full h-full object-contain;}
     }
-    .bs-item {@apply relative flex flex-col border-t; padding: var(--padding-block) var(--padding-inline);
+    .bs-item {@apply relative flex flex-col; padding: var(--padding-block) var(--padding-inline);
         &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
+        &:after {position: absolute; bottom: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
     }
     .bs-label {@apply text-sm text-[var(--neutral-300)];}
     .bs-value {@apply text-[var(--neutral-600)];}
@@ -56,4 +64,47 @@
     }
 }
 
+.card-role-holder {@apply grid gap-8 grid-cols-[repeat(auto-fit,_minmax(200px,_340px))] justify-center;}
+.card-role {
+    --spacing: 10px;
+}
+$roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
+.card-role {@apply relative px-8 py-8 rounded-lg bg-white shadow cursor-pointer; overflow: hidden;
+    &:before {position: absolute; top: 0; left: 0; content: ''; width: 200%; height: 200%;
+        background: linear-gradient(to top,
+            transparent 0, transparent var(--spacing),
+            rgb(var(--primary-600)) var(--spacing), rgb(var(--primary-600)) calc(2 * var(--spacing)),
+            transparent calc(2 * var(--spacing)), transparent calc(3 * var(--spacing)),
+            rgb(var(--primary-600)) calc(3 * var(--spacing)), rgb(var(--primary-600)) calc(4 * var(--spacing)),
+            transparent calc(4 * var(--spacing)), transparent calc(5 * var(--spacing)),
+            rgb(var(--primary-600)) calc(5 * var(--spacing)), rgb(var(--primary-600)) calc(6 * var(--spacing)),
+            rgb(var(--primary-600)) 100%);
+        transform: translate3d(-100%, -100%, 0) rotate3d(0, 0, 1, -45deg); transition: transform 0.7s ease;}
+    
+    @for $i from 1 through length($roleColors) {
+        &:nth-child(#{$i}) {
+            .cr-icon {
+                svg {fill: nth($roleColors, $i); background-color: rgba(nth($roleColors, $i), 0.1);}
+            }
+        }
+    }
+    .cr-content {@apply relative;}
+    .cr-icon {@apply mt-3 mb-8 text-center;
+        svg {@apply w-auto h-[70px] inline-block rounded-lg fill-[var(--neutral-400)]; padding: 16px; transition: fill 0.3s ease;}
+    }
+    .cr-title {@apply mb-2 text-2xl font-bold text-center text-[var(--neutral-600)]; transition: color 0.3s ease;}
+    .cr-text {@apply text-center line-clamp-3; transition: color 0.3s ease;}
+    .cr-action {@apply mt-6 text-center;}
+    .btn {@apply px-8 whitespace-nowrap xl:text-sm 2xl:text-base; transition: all 0.3s ease;}
 
+    &:hover {
+        &:before {transform: translate3d(-20%, -20%, 0) rotate3d(0, 0, 1, -45deg)}
+
+        .cr-icon {
+            svg {@apply bg-white bg-opacity-20 fill-white;}
+        }
+        .cr-title {@apply text-white;}
+        .cr-text {@apply text-white text-opacity-70;}
+        .btn {@apply text-primary-400 bg-white;}
+    }
+}

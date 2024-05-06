@@ -91,4 +91,3 @@ function fetchMultiplyingFactor(){
         fetchMultiplyingFactor()
 })
 </script>
-  
