@@ -1,50 +1,53 @@
 export default {
     root: ({ props }) => ({
         class: [
+            'fm-calendar',
             // Display and Position
-            'inline-flex',
-            'max-w-full',
-            'relative',
-            'w-full',
+            // 'inline-flex',
+            // 'max-w-full',
+            // 'relative',
+            // 'w-full',
 
             // Misc
-            { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
+            // { 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
+            { 'fm-calendar-disabled': props.disabled }
         ]
     }),
     input: ({ props }) => ({
         class: [
+            'fm-control',
             // Display
-            'flex flex-auto',
+            // 'flex flex-auto',
 
             // Font
-            'font-sans leading-none',
+            // 'font-sans leading-none',
 
             // Colors
-            'text-surface-600 dark:text-surface-200',
-            'placeholder:text-surface-400 dark:placeholder:text-surface-500',
-            'bg-surface-0 dark:bg-surface-900',
-            'border',
-            { 'border-surface-300 dark:border-surface-600': !props.invalid },
+            // 'text-surface-600 dark:text-surface-200',
+            // 'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+            // 'bg-surface-0 dark:bg-surface-900',
+            // 'border',
+            // { 'border-surface-300 dark:border-surface-600': !props.invalid },
 
             // Invalid State
-            { 'border-red-500 dark:border-red-400': props.invalid },
+            // { 'border-red-500 dark:border-red-400': props.invalid },
 
             // Spacing
-            'm-0 p-3',
+            // 'm-0 p-3',
 
             // Shape
-            'appearance-none',
-            { 'rounded-md': !props.showIcon || props.iconDisplay == 'input' },
-            { 'rounded-l-md  flex-1 pr-9': props.showIcon && props.iconDisplay !== 'input' },
-            { 'rounded-md flex-1 pr-9': props.showIcon && props.iconDisplay === 'input' },
+            // 'appearance-none',
+            // { 'rounded-md': !props.showIcon || props.iconDisplay == 'input' },
+            // { 'rounded-l-md  flex-1 pr-9': props.showIcon && props.iconDisplay !== 'input' },
+            // { 'rounded-md flex-1 pr-9': props.showIcon && props.iconDisplay === 'input' },
 
             // Transitions
-            'transition-colors',
-            'duration-200',
+            // 'transition-colors',
+            // 'duration-200',
 
             // States
-            { 'hover:border-primary-500 dark:hover:border-primary-400': !props.invalid },
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50'
+            // { 'hover:border-primary-500 dark:hover:border-primary-400': !props.invalid },
+            // 'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50'
         ]
     }),
     inputicon: {
@@ -53,26 +56,27 @@ export default {
     dropdownbutton: {
         root: {
             class: [
-                'relative',
+                'fm-control-action'
+                // 'relative',
 
                 // Alignments
-                'items-center inline-flex text-center align-bottom',
+                // 'items-center inline-flex text-center align-bottom',
 
                 // Shape
-                'rounded-r-md',
+                // 'rounded-r-md',
 
                 // Size
-                'px-4 py-3 leading-none',
+                // 'px-4 py-3 leading-none',
 
                 // Colors
-                'text-white dark:text-surface-900',
-                'bg-primary-400 dark:bg-primary-400',
-                'border border-primary-400 dark:border-primary-400',
+                // 'text-white dark:text-surface-900',
+                // 'bg-primary-400 dark:bg-primary-400',
+                // 'border border-primary-400 dark:border-primary-400',
 
                 // States
-                'focus:outline-none focus:outline-offset-0 focus:ring',
-                'hover:bg-primary-600 dark:hover:bg-primary-300 hover:border-primary-600 dark:hover:border-primary-300',
-                'focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
+                // 'focus:outline-none focus:outline-offset-0 focus:ring',
+                // 'hover:bg-primary-600 dark:hover:bg-primary-300 hover:border-primary-600 dark:hover:border-primary-300',
+                // 'focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
             ]
         }
     },

@@ -1,67 +1,67 @@
 <template>
     <div class="bs-buttons">
-        <Button @click="visible = true, viewPublishDetails()">
-            <Toast />
+        <Button @click="visible = true, viewPublishDetails()" class="btn-sm">
             Extend Participation Date{{ props.auctionId }}{{ props.auctionCode }}
+        </Button>
 
-            <Dialog v-model:visible="visible" modal header="Publish Auction" :position="position"
-                :style="{ width: '50rem' }" :draggable="false">
-                <div class="modal-subtitle">
-                    Auction Code: <span> {{ auctionCode }}</span>
+        <Toast />
+        <Dialog v-model:visible="visible" modal header="Publish Auction" :position="position"
+            :style="{ width: '50rem' }" :draggable="false">
+            <div class="modal-subtitle">
+                Auction Code: <span> {{ auctionCode }}</span>
+            </div>
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment Start
+                            Date:</label>
+                        <div class="fm-inner">
+                            <Calendar id="calendar-24h" v-model="selectedStartDate" showTime dateFormat="yy/mm/dd"
+                                hourFormat="24" :minDate="minDate" :showIcon="true" readonly="true" />
+                        </div>
+                        <div class="fm-info">
+                            {{ selectedStartDate }}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-grid">
-                    <div class="col-span-full md:col-span-6">
-                        <div class="fm-group">
-                            <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment Start
-                                Date:</label>
-                            <div class="fm-inner">
-                                <Calendar id="calendar-24h" v-model="selectedStartDate" showTime dateFormat="yy/mm/dd"
-                                    hourFormat="24" :minDate="minDate" :showIcon="true" readonly="true" />
-                            </div>
-                            <div class="fm-info">
-                                {{ selectedStartDate }}
-                            </div>
+                <div class="col-span-full md:col-span-6">
+                    <div class="fm-group">
+                        <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment End
+                            Date:</label>
+                        <div class="fm-inner">
+                            <Calendar id="calendar" v-model="selectedEndDate" showTime dateFormat="yy/mm/dd"
+                                hourFormat="24" :minDate="endMinDate" :showIcon="true" />
+                        </div>
+                        <div class="fm-info">
+                            {{ selectedEndDate }}
                         </div>
                     </div>
-                    <div class="col-span-full md:col-span-6">
-                        <div class="fm-group">
-                            <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment End
-                                Date:</label>
-                            <div class="fm-inner">
-                                <Calendar id="calendar" v-model="selectedEndDate" showTime dateFormat="yy/mm/dd"
-                                    hourFormat="24" :minDate="endMinDate" :showIcon="true" />
-                            </div>
-                            <div class="fm-info">
-                                {{ selectedEndDate }}
-                            </div>
-                        </div>
+                </div>
+                <div class="col-span-full"
+                    v-if="moment(selectedEndDate).isSameOrBefore(moment(selectedStartDate), 'minute')">
+                    <div class="fm-group">
+                        <label class="fm-error" for="">
+                            Start Date should not be equal or after End Date !
+                        </label>
                     </div>
-                    <div class="col-span-full"
-                        v-if="moment(selectedEndDate).isSameOrBefore(moment(selectedStartDate), 'minute')">
-                        <div class="fm-group">
-                            <label class="fm-error" for="">
-                                Start Date should not be equal or after End Date !
+                </div>
+            </div>
+            <div class="col-span-full">
+                <div class="fm-group">
+                    <div class="fm-check-holder fm-check-center">
+                        <div class="fm-checkbox">
+                            <input type="checkbox" id="agreeCheckbox" v-model="agree" />
+                            <label for="agreeCheckbox">I agree that to Extend Participation Date.
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full">
-                    <div class="fm-group">
-                        <div class="fm-check-holder fm-check-center">
-                            <div class="fm-checkbox">
-                                <input type="checkbox" id="agreeCheckbox" v-model="agree" />
-                                <label for="agreeCheckbox">I agree that to Extend Participation Date.
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-action">
-                    <Button type="button" label="Extend EndDate" :disabled="!agree"
-                        @click="UpdateExtendParticipationEndDate()"></Button>
-                </div>
-            </Dialog>
-        </button>
+            </div>
+            <div class="modal-action">
+                <Button type="button" label="Extend EndDate" :disabled="!agree"
+                    @click="UpdateExtendParticipationEndDate()"></Button>
+            </div>
+        </Dialog>
     </div>
 </template>
 
