@@ -53,31 +53,7 @@ function navigateToAbout(card) {
   router.push({path:card.url});
 }
 
-// function fetchDashboardDetails() {
-//   new MQL()
-//     .useManagementServer()
-//     .setActivity("o.[FetchDashboardAndRoleDetails]")
-//     .setData({
-//       userRoleId: userRole.value,
-//       entityId: loginStore.entityId,
-//       organizationId: loginStore.organizationId,
-//       userId: loginStore.loginId,
-//     })
-//     .fetch()
-//     .then((rs) => {
-//       let res = rs.getActivity("FetchDashboardAndRoleDetails", true);
-//       if (rs.isValid("FetchDashboardAndRoleDetails")) {
-//         cards.value = res.result.dashboardDetails;
-//         console.log("cards", cards.value);
-//       } else {
-//         rs.showErrorToast("FetchDashboardAndRoleDetails");
-//       }
-//     });
-// }
-
 function fetchChildCards(){
-  
-					// Automatically generated
           new MQL()
 			.setActivity("o.[FetchChildCardDetails]")
       .useManagementServer()

@@ -41,7 +41,6 @@
                             @change="selectParentCard(selectedParentCard)" />
                     </div>
                 </div>
-                {{isParent}}
                 <div class="fm-group required">
                     <label class="fm-label" for="cardname">Card Name</label>
                     <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
