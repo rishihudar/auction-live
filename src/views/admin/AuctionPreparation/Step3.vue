@@ -250,7 +250,7 @@ import faEye from '../../../../assets/icons/eye.svg';
 import faTrash from '../../../../assets/icons/trash.svg';
 
 const loginStore = login()
-const { role, loginId } = storeToRefs(loginStore)
+const { role, loginId, entityId } = storeToRefs(loginStore)
 
 
 
@@ -596,6 +596,8 @@ const AddStep3AuctionData = async () => {
     if (errorCount == 0) {
         // alert("Form data is valid, form submitted");
         toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
+
+        console.log("################EntityId: ", entityId.value)
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -616,6 +618,7 @@ const AddStep3AuctionData = async () => {
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
+                entityId: entityId.value,
                 moduleName: "AP-STEP3"
             })
             .fetch()
