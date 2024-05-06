@@ -4,7 +4,7 @@
     img {@apply w-auto max-h-full;}
 }
 
-.header-right {@apply ml-auto pl-5 pr-1 flex flex-grow items-center justify-between border-l border-[var(--border-color)];}
+.header-right {@apply ml-auto pl-5 pr-1 flex gap-5 flex-grow items-center justify-between border-l border-[var(--border-color)];}
 
 .btn.btn-sidebar-toggle {@apply relative h-14 border-none hover:bg-slate-200;
     &:before {content: ''; position: absolute; top: 18%; left: 14%; width: 2px; height: 0%; background: var(--neutral-400); box-shadow: 0 0 0 2px var(--bg-body); transform: rotate3d(0, 0, 1, -50deg); transform-origin: 0 0; transition: box-shadow 0.2s ease, height 0.1s ease;}
@@ -18,3 +18,5 @@
         &:before {height: 100%;}
     }
 }
+
+.navbar-title {@apply text-lg font-bold text-[var(--neutral-300)];}

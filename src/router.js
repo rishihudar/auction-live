@@ -48,8 +48,14 @@ const router = createRouter({
     {
       path: "/inventoryMaster",
       name: "inventoryMaster",
-      component: loadView("InventoryMaster"),
-      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      component: loadAdminView("InventoryMaster"),
+      meta: { title: "inventoryMaster", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/inventoryMasterCard",
+      name: "inventoryMasterCard",
+      component: loadDashboardView("InventoryMasterCard"),
+      meta: { title: "inventoryMasterCard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
       path: "/home",
@@ -57,11 +63,17 @@ const router = createRouter({
       component: loadView("Home"),
       meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
+    // {
+    //   path: "/UserDashboard",
+    //   name: "ROLE_CHECKER",
+    //   component: loadDashboardView("UserDashboard"),
+    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+    // },
     {
-      path: "/UserDashboard",
-      name: "ROLE_CHECKER",
-      component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      path: "/add-menu",
+      name: "AddMenuUI",
+      component: loadAdminView("AddMenuUI"),
+      meta: { title: "AddMenuUI",lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/auction-publishing",
@@ -81,12 +93,12 @@ const router = createRouter({
     //   component: loadDashboardView("AuctionMakerComponent"),
     //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     // },
-    {
-      path: "/UserDashboard",
-      name:"ROLE_MAKER",
-      component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
-    },
+    // {
+    //   path: "/UserDashboard",
+    //   name:"ROLE_MAKER",
+    //   component: loadDashboardView("UserDashboard"),
+    //   meta: { title: "UserDashboard",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
+    // },
   
     {
       path: "/BidderDashboard",
@@ -98,13 +110,19 @@ const router = createRouter({
       path: "/SuperAdminDashboard",
       name: "ROLE_SUPERADMIN",
       component: loadDashboardView("SuperAdminComponent"),
-      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_SUPERADMIN']},
     },
+    // {
+    //   path: "/UserDashboard",
+    //   name: "UserDashboard",
+    //   component: loadDashboardView("UserDashboard"),
+    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    // },
     {
-      path: "/UserDashboard",
-      name: "UserDashboard",
-      component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      path: "/UpcomingAuction",
+      name:"UpcomingAuction",
+      component: loadDashboardView("UpcomingAuction"),
+      meta: { title: "UpcomingAuction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
     },
     {
       path: "/OrganizationAdminDashboard",
@@ -112,18 +130,37 @@ const router = createRouter({
       component: loadDashboardView("OrganizationAdminComponent"),
       meta: { title: "OrganizationAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
-    {
-      path: "/UserDashboard",
-      name: "ROLE_APPROVER",
-      component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    },
+    // {
+    //   path: "/UserDashboard",
+    //   name: "ROLE_APPROVER",
+    //   component: loadDashboardView("UserDashboard"),
+    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    // },
     {
       path: "/task-details",
       name: "MyTask",
       component: loadAdminView("MyTask"),
       meta: { title: "MyTask",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
+    {
+      path: "/MISReport-details",
+      name: "MISReportDetails",
+      component: loadAdminView("MISReportDetails"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
+      path: "/registration-feeReport",
+      name: "MISRegistrationFeeReport",
+      component: loadAdminView("MISRegistrationFeeReport"),
+      meta: { title: "MISRegistrationFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/processing-feeReport",
+      name: "MISProcessingFeeReport",
+      component: loadAdminView("MISProcessingFeeReport"),
+      meta: { title: "MISProcessingFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+  
     {
       path: "/PublisherDashboard",
       name: "PublisherDashboard",
@@ -132,9 +169,21 @@ const router = createRouter({
     },
     {
       path: "/UserDashboard",
-      name: "ROLE_SCHEDULER",
+      name: "UserDashboard",
       component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/add-Dashboard",
+      name: "AddUserDashboard",
+      component: loadDashboardView("AddDashboardUI"),
+      meta: { title: "AddUserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/UserDashboard",
+      name: "ROLE_SUPERADMIN",
+      component: loadDashboardView("UserDashboard"),
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
     },
     {
       path: "/SchedulerDashboard",
@@ -164,7 +213,7 @@ const router = createRouter({
       path: "/role-select",
       name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false, requiresAuth: false  },
+      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: true, requiresAuth: false  },
       beforeEnter: (to,from) => {
         const loginStore = login()
       console.log(to.meta.roles,loginStore.roles);
@@ -689,7 +738,7 @@ const router = createRouter({
     {
       path: "/admin/AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
-      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false },
     },
     {
       path: "/current-auction",

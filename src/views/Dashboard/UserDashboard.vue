@@ -1,26 +1,26 @@
 <template>
-  <div>
-    <div class="stat-area stat-area-alt">
-      <div
-        class="card-wrapper"
-        v-for="(card, index) in cards"
-        :key="index"
-        @click="navigateToAbout(card)"
-      >
-        <div
-          class="card card-stat card-stat-alt"
-          v-if="userRole == card.roleId"
-        >
-          <div class="card-body">
-            <h4 class="card-value">{{ card.countQuery }}</h4>
-            <div class="card-name-holder">
-              <b class="fw-medium card-name">{{ card.card }}</b>
+    <div>
+        <div class="stat-area stat-area-alt grid gap-5 grid-cols-4">
+            <div
+                class="card-wrapper"
+                v-for="(card, index) in cards"
+                :key="index"
+                @click="navigateToAbout(card)"
+            >
+                <div
+                    class="card card-stat card-stat-alt"
+                    v-if="userRole == card.roleId"
+                >
+                    <div class="card-body">
+                        <h4 class="card-value" :class="{ 'card-value-sm': card.countQuery == 'Coming Soon...' }">{{ card.countQuery }}</h4>
+                        <div class="card-name-holder">
+                            <b class="fw-medium card-name">{{ card.card }}</b>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script setup>
