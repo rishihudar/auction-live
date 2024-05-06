@@ -9,9 +9,20 @@
     </h2>
 
     <form></form>
+    
+    <!-- Entity Dropdown -->
+    <Dropdown
+      v-model="selectedEntity"
+      :options="mcNames"
+      placeholder="Select Entity"
+      optionLabel="mcEntityName"
+      optionValue="mcEntityId"
+      @change="showSelectedMC"
+    ></Dropdown>
 
     <!-- Category Dropdown -->
     <Dropdown
+    v-if="selectedEntity"
       v-model="selectedCategory"
       :options="inventoryCategories"
       placeholder="Select Category"
@@ -86,10 +97,14 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import axios from "axios";
 import MQLCdn from "@/plugins/mqlCdn.js";
+import { login } from "../../store/modules/login"
 
+const loginStore = login();
 const inventoryCategories = ref();
 const selectedCategory = ref();
 const isFileSelected = ref(false);
+const organizationId = ref(login().loginDetails.organizationId);
+const entityId = ref(login().loginDetails.entityId);
 
 function fetchInventonryCategories() {
   new MQL()
@@ -99,9 +114,9 @@ function fetchInventonryCategories() {
     .then((rs) => {
       let res = rs.getActivity("FetchInventoryCategories", true);
       if (rs.isValid("FetchInventoryCategories")) {
-        console.log("fetchInventonryCategories result", res.result);
+        // console.log("fetchInventonryCategories result", res.result);
         inventoryCategories.value = res.result;
-        console.log("Inventory Categories", inventoryCategories.value);
+        // console.log("Inventory Categories", inventoryCategories.value);
       } else {
         rs.showErrorToast("FetchInventoryCategories");
       }
@@ -109,7 +124,12 @@ function fetchInventonryCategories() {
 }
 onBeforeMount(() => {
   fetchInventonryCategories();
+  fetchEntitiesList();
 });
+
+function showSelectedMC(){
+console.log('selected ',selectedEntity.value)
+}
 
 const sheet = ref();
 const file = ref();
@@ -173,8 +193,8 @@ function handleUpload() {
   const formData = new FormData();
   formData.append("myFile", myFile.value); // Assuming you only allow one file to be uploaded
   formData.append("categoryId", selectedCategory.value);
-  formData.append("organizationId", 1);
-  formData.append("entityId", 2);
+  formData.append("organizationId", organizationId.value);
+  formData.append("entityId", selectedEntity.value);
   axios
     .post("/upload-server/upload", formData, {
       headers: {
@@ -238,4 +258,28 @@ function fetchInventoryTempColumns() {
       }
     });
 }
+
+
+const mcNames = ref();
+const selectedEntity = ref();
+function fetchEntitiesList(){
+   console.log('orgId',organizationId.value)
+			new MQL()
+      .useCoreServer()
+			.setActivity("o.[FetchEntitiesForInventoryMaster]")
+			.setData({orgId:organizationId.value,organizationId:organizationId.value,entId:entityId.value,entityId:entityId.value,isParent:0})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchEntitiesForInventoryMaster",true)
+			if (rs.isValid("FetchEntitiesForInventoryMaster")) {
+        console.log('Entities List',res.result)
+        mcNames.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchEntitiesForInventoryMaster")
+			}
+			})
+			
+}
+
 </script>

@@ -1,19 +1,13 @@
 <template>
-    <div class="">
-        <div>
-            <h6> {{ workflowStepData.displayName }}</h6>
-        </div>
-
+    <div>
+        <h6>{{ workflowStepData.displayName }}</h6>
         <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
             :auctionId="auctionId" :config="workflowStepData.data1" />
-
     </div>
     <div>
-        <div v-if="showAction" class="ml-auto">
-            <span class="p-buttonset">
-                <Button v-for="item in label" @click="modalVisible(item)" :label="item.statusDisplayName"
-                    :key="item.statusId"></Button>
-            </span>
+        <div v-if="showAction" class="btn-wrapper centered mt-5">
+            <Button class="btn-long" v-for="item in label" @click="modalVisible(item)" :label="item.statusDisplayName"
+                :key="item.statusId"></Button>
         </div>
         <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
             <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{
@@ -35,7 +29,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import MQL from '@/plugins/mql.js';
 import Dropdown from 'primevue/dropdown';
 import { login } from "../../store/modules/login";
@@ -46,8 +39,6 @@ import AuctionPreview from "../AuctionPreview.vue";
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login()
-const route = useRoute()
-const router = useRouter()
 
 const visible = ref(false);
 const comment = ref(null)
@@ -66,10 +57,11 @@ const { workflowStepDetailsId } = defineProps({
 })
 
 
+const emit = defineEmits(['workflowsubmit'])
+
 const modalVisible = async (item) => {
     modalItem.value = item
     await fetchLogin()
-    console.log('Here');
     visible.value = true
 };
 const label = ref();
@@ -78,7 +70,6 @@ const label = ref();
 const workflowStepData = ref({})
 
 const selectedLoginId = ref(null);
-// const { workflowStepDetailsId } = route.params
 
 
 let rules = computed(() => ({
@@ -120,7 +111,10 @@ async function submitWorkflow() {
         .then(rs => {
             let res = rs.getActivity("UpdateWorkflowStepDetails", true)
             if (rs.isValid("UpdateWorkflowStepDetails")) {
-                router.push({ name: loginStore.role.roleCode })
+                visible.value = false
+                // modalItem.value = null
+        toaster.success(`${modalItem.value.statusDisplayName} Successfully`)
+                emit('workflowsubmit')
 
             } else {
                 rs.showErrorToast("UpdateWorkflowStepDetails")

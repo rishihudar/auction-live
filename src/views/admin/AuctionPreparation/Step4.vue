@@ -64,6 +64,7 @@
             <div class="fm-inner">
               <div class="col-span-full" v-if="!auctionCheck">
                 <FileUpload
+                  mode="basic"
                   :disabled="config?.docNameReadonly"
                   v-model="docName"
                   :accept="docType"
@@ -109,6 +110,7 @@
             <div class="fm-inner">
               <div class="col-span-full" v-if="!noticeCheck">
                 <FileUpload
+                  mode="basic"
                   :disabled="config?.NoticeDocNameReadonly"
                   v-model="noticeCheck"
                   :accept="NoticeDocType"
@@ -570,7 +572,7 @@ async function insertInWorkflow() {
 }
 
 async function onSave() {
-  let result = await $v.value.$validate();
+  let result = await $v.value.$validate(); 
   console.log("here", result);
   if (!result) {
     return;
@@ -609,7 +611,7 @@ async function onSave() {
   if (config != null) {
     nextCallback();
   } else {
-    router.push({ name: loginStore.role.roleCode });
+    router.push({name:'AuctionList'});
   }
 }
 
@@ -663,7 +665,7 @@ onBeforeMount(() => {
 });
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .main-date {
   font-size: large;
   font: 700;
@@ -687,4 +689,4 @@ onBeforeMount(() => {
   color: red;
   font-weight: bold;
 }
-</style>
+</style> -->

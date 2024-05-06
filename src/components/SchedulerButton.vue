@@ -1,7 +1,7 @@
 <template>
-  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled" ></Button>
+  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled" class="btn-sm"></Button>
     <div v-if="statusCode === 'AUCTION_SCHEDULED'">
-      <Button label="Re-Schedule Auction" @click="display = true" :disabled="disabled"></Button>
+      <Button label="Re-Schedule Auction" class="btn-sm" @click="display = true" :disabled="disabled"></Button>
     </div>
   <Dialog v-model:visible="display" modal :style="{ width: '75rem' }" header="Scheduler">
     <div class="form-grid mb-4">

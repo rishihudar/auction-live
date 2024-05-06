@@ -1,16 +1,14 @@
 <template>
-
     <div>
-        <label for="horizontal-buttons"> Number of Days </label>
-        <InputNumber v-model="noOfDays" placeholder="Enter number greater than one" showButtons :step="1"
-            :class="{ 'p-invalid': $v.noOfDays.$error }" :disabled="disabled"
-            >
-            <template #incrementbuttonicon>+</template>
-            <template #decrementbuttonicon>-</template>
-        </InputNumber>
-      
-        <div v-if="$v.noOfDays.$error" class="fm-error">
-            {{ $v.noOfDays.$errors[0].$message }}
+        <div class="fm-group">
+            <label class="fm-label" for="horizontal-buttons">Number of Days</label>
+            <InputNumber v-model="noOfDays" placeholder="Enter number greater than one" showButtons :step="1" :disabled="disabled">
+                <template #incrementbuttonicon>+</template>
+                <template #decrementbuttonicon>-</template>
+            </InputNumber>
+            <div v-if="$v.noOfDays.$error" class="fm-error">
+                {{ $v.noOfDays.$errors[0].$message }}
+            </div>
         </div>
 
         <!-- <div>
@@ -24,7 +22,7 @@
               {{ $v.firstPaymentPercentage.$errors[0].$message }}
             </div> -->
 
-        <div>
+        <div class="table-custom">
             <!-- <table>
                 <thead>
                     <tr>
@@ -54,38 +52,36 @@
                     </template>
                 </tbody>
             </table> -->
-<!-- {{ resultList }}  -->
+            <!-- {{ resultList }}  -->
             <DataTable :value="resultList" dataKey="id" :disabled="disabled">
-    <Column field="roundNumber" header="ROUND NUMBER"></Column>
-    <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
-    <Column field="highestQuotedValue" header="HIGHEST QUOTED VALUE (₹)"></Column>
-    <Column field="firstPayment" header="1st payment TO BE PAID (₹)"></Column>
-    <Column header="ELIGIBLE ?">   
-    <template #body="rowData ">
-        <input type="checkbox" :checked="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :disabled="disabled">
-    </template>
-  </Column>
-    <Column header="INTENT_LETTER">
-      <template #body="slotProps">
-        <span>Intent letter</span>
-      </template>
-    </Column>
-    <Column header="ALLOTMENT LETTER">
-      <template #body="slotProps">
-        <span>intent letter</span>
-      </template>
-    </Column>
-  </DataTable>
-
+                <Column field="roundNumber" header="ROUND NUMBER"></Column>
+                <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
+                <Column field="highestQuotedValue" header="HIGHEST QUOTED VALUE (₹)"></Column>
+                <Column field="firstPayment" header="1st payment TO BE PAID (₹)"></Column>
+                <Column header="ELIGIBLE ?">   
+                    <template #body="rowData ">
+                        <input type="checkbox" :checked="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :disabled="disabled">
+                    </template>
+                </Column>
+                <Column header="INTENT_LETTER">
+                    <template #body="slotProps">
+                        <span>Intent letter</span>
+                    </template>
+                    </Column>
+                    <Column header="ALLOTMENT LETTER">
+                    <template #body="slotProps">
+                        <span>intent letter</span>
+                    </template>
+                </Column>
+            </DataTable>
         </div>
 
-        <div>
+        <div class="table-exp-action centered">
             <Button label="Submit" @click="submitForm" :disabled="disabled" />
         </div>
-        
-      <strong class="note-instruction">Note: </strong>
-      <span style="color: red;">First payment is calculated as = (Highest quoted value * First Payment Percentage) - EMD amount</span>
-    
+        <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
+            <strong>Note:</strong> <span>First payment is calculated as = (Highest quoted value * First Payment Percentage) - EMD amount</span>
+        </div>
     </div>
 </template>
 
