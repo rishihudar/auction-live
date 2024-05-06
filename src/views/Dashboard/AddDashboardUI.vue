@@ -9,6 +9,41 @@
         <div class="form-grid">
             <div class="col-span-full md:col-span-6">
                 <div class="fm-group required">
+                    <label class="fm-label" for="role">
+                        User Type
+                    </label>
+                    <div class="fm-inner">
+                        <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name"
+                            :disabled="isAdding" placeholder="Select Bidder Type" class="w-full md:w-14rem"
+                            @change="selectBidderType(selectedBidder), fetchRoles()" />
+                    </div>
+                </div>
+
+
+                <label class="fm-label" for="path">Is Child Card</label>
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex align-items-center">
+                        <RadioButton v-model="isParent" inputId="flag" name="yes" value="1"  />
+                        <label for="ingredient1" class="ml-2">Yes</label>
+
+                    </div>
+                    <div class="flex align-items-center">
+                        <RadioButton v-model="isParent" inputId="flag1" name="no" value="0" />
+                        <label for="ingredient1" class="ml-2">No</label>
+                    </div>
+                </div>
+                <div class="fm-group required" v-if="isParent==1">
+                    <label class="fm-label" for="role">
+                        Parent Cards
+                    </label>
+                    <div class="fm-inner">
+                        <Dropdown v-model="selectedParentCard" editable :options="parentCards" optionLabel="cardName"
+                            :disabled="isAdding" placeholder="Select Bidder Type" class="w-full md:w-14rem"
+                            @change="selectParentCard(selectedParentCard)" />
+                    </div>
+                </div>
+                {{isParent}}
+                <div class="fm-group required">
                     <label class="fm-label" for="cardname">Card Name</label>
                     <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
                 </div>
@@ -32,16 +67,7 @@
                     <label class="fm-label" for="path">Count Query</label>
                     <Textarea id="query" v-model="countQuery" rows="5" cols="30" :disabled="isAdding" />
                 </div>
-                <div class="fm-group required">
-                    <label class="fm-label" for="role">
-                        User Type
-                    </label>
-                    <div class="fm-inner">
-                        <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name" :disabled="isAdding"
-                            placeholder="Select Bidder Type" class="w-full md:w-14rem"
-                            @change="selectBidderType(selectedBidder),fetchRoles()" />
-                    </div>
-                </div>
+
                 <div class="fm-group">
                     <label class="fm-label" for="path">Routing Path</label>
                     <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
@@ -86,6 +112,9 @@ import Textarea from 'primevue/textarea';
 import RadioButton from 'primevue/radiobutton';
 
 
+const isParent = ref(null);
+
+const isChild = ref(null);
 
 const roles = ref([]);
 const cards = ref([]);
@@ -98,13 +127,18 @@ const bidderType = ref([
 const selectedRoleId = ref();
 const selectedCardId = ref();
 const selectedUserType = ref();
+const selectedParentId=ref();
 const selectedBidder = ref();
+const selectedParentCard = ref();
 const countQuery = ref(null);
-
+const parentCards = ref([]);
 const cardName = ref("");
 const path = ref(null);
 const isAdding = ref(false);
 const upcomingFlag = ref(null)
+
+
+const selectedOption = ref(null);
 
 function selectRole(selectedRole) {
     console.log("Rolecode", selectedRole.roleName);
@@ -123,13 +157,20 @@ function selectBidderType(selectedBidder) {
     selectedUserType.value = selectedBidder.name;
 }
 
+function selectParentCard(selectedParentCard) {
+    console.log("Type", selectedParentCard.cardName);
+    //onsole.log("cardId", selectedBidder.bidderId);
+    selectedParentId.value = selectedParentCard.cardId;
+    console.log("CardId",selectedParentCard.cardId);
+}
+
 function fetchRoles() {
 
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchRolesForDashboardUI]")
         .setData({
-            userType:selectedUserType.value
+            userType: selectedUserType.value
         })
         .fetch()
         .then(rs => {
@@ -138,6 +179,8 @@ function fetchRoles() {
                 console.log("result", res.result.roles);
                 roles.value = res.result.roles;
                 cards.value = res.result.cards;
+                parentCards.value = res.result.parentCards;
+
                 //bidderType.value = res.result.bidderType;
                 console.log("bidderType", bidderType.value);
             } else {
@@ -147,6 +190,13 @@ function fetchRoles() {
 }
 
 function addCard(value) {
+    if(isParent.value==0){
+        isParent.value=0
+        console.log("inside if ",isParent.value);
+    }else{
+        isParent.value=selectedParentId.value
+        console.log("inside else ",isParent.value);
+    }
     new MQL()
         .useManagementServer()
         .setActivity("o.[InsertDashboardCard]")
@@ -158,7 +208,8 @@ function addCard(value) {
             cardId: selectedCardId.value,
             userType: selectedUserType.value,
             flag: value,
-            upcomingFlag: upcomingFlag.value
+            upcomingFlag: upcomingFlag.value,
+            bParent: isParent.value // Include isParent value
         })
         .fetch()
         .then(rs => {
@@ -174,5 +225,8 @@ function addCard(value) {
         })
 
 }
+onMounted(() => {
+    fetchRoles()
+})
 
 </script>

@@ -1,30 +1,102 @@
 
-   <template>
-    <Card class="clickable-card registration-card" @click="$router.push('/registration-feeReport')">
-      <template #title>Registration Fees Report</template>
-    </Card>
-    <Card class="clickable-card processing-card" @click="$router.push('/processing-feeReport')">
-      <template #title>Processing Fees Report</template>
-    </Card>
-  </template>
+
+<template>
+  <div>
+    <div class="stat-area stat-area-alt">
+      <div
+        class="card-wrapper"
+        v-for="(card, index) in cardsArray"
+        :key="index"
+        @click="navigateToAbout(card)"
+      >
+        <div
+          class="card card-stat card-stat-alt"
+          v-if="userRole == card.roleId"
+        >
+          <div class="card-body">
+            <h4 class="card-value">{{ card.countQuery }}</h4>
+            <div class="card-name-holder">
+              <b class="fw-medium card-name">{{ card.card }}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</template>
+
+<script setup>
+import { onBeforeMount, ref } from "vue";
+import { login } from "../../store/modules/login";
+import MQL from "@/plugins/mql.js";
+import router from "../../router";
+import { useCardStore } from "../../store/cards";
+import { storeToRefs } from 'pinia';
+
+const cardStore = useCardStore()
+const { cardId } = storeToRefs(cardStore)
+
+const loginStore = login();
+const userRole = ref();
+const cardsArray = ref([]);
+
+function FetchUserRole() {
+  console.log("Role-", loginStore.currentRole.roleId);
+  userRole.value = loginStore.currentRole.roleId;
+}
+
+function navigateToAbout(card) {
+  console.log("Card Clicked");
+  console.log("card-", card.card);
+  console.log("card url-", card.url);
+  router.push({path:card.url});
+}
+
+// function fetchDashboardDetails() {
+//   new MQL()
+//     .useManagementServer()
+//     .setActivity("o.[FetchDashboardAndRoleDetails]")
+//     .setData({
+//       userRoleId: userRole.value,
+//       entityId: loginStore.entityId,
+//       organizationId: loginStore.organizationId,
+//       userId: loginStore.loginId,
+//     })
+//     .fetch()
+//     .then((rs) => {
+//       let res = rs.getActivity("FetchDashboardAndRoleDetails", true);
+//       if (rs.isValid("FetchDashboardAndRoleDetails")) {
+//         cards.value = res.result.dashboardDetails;
+//         console.log("cards", cards.value);
+//       } else {
+//         rs.showErrorToast("FetchDashboardAndRoleDetails");
+//       }
+//     });
+// }
+
+function fetchChildCards(){
   
-  <script setup>
-  import Card from 'primevue/card';
-  </script>
-  
-  <style scoped>
-  .clickable-card {
-    cursor: pointer;
-  }
-  
-  .registration-card {
-    background-color: #f0f0f0; /* Example background color for registration card */
-    border: 1px solid #ccc; /* Example border style for registration card */
-  }
-  
-  .processing-card {
-    background-color: #e6f7ff; /* Example background color for processing card */
-    border: 1px solid #99d6ff; /* Example border style for processing card */
-  }
-  </style>
-  
+					// Automatically generated
+          new MQL()
+			.setActivity("o.[FetchChildCardDetails]")
+      .useManagementServer()
+			.setData({parentId:cardId.value,})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchChildCardDetails",true)
+			if (rs.isValid("FetchChildCardDetails")) {
+        cardsArray.value = res.result.childCards;
+        console.log("cards", cardsArray.value);
+			} else
+			 { 
+			rs.showErrorToast("FetchChildCardDetails")
+			}
+			})		
+}
+
+onBeforeMount(() => {
+  FetchUserRole();
+  fetchChildCards();
+});
+</script>
