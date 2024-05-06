@@ -615,7 +615,7 @@ const onAdvancedUpload = async (event) => {
     });
 
     // Send the FormData object to the backend
-    const response = await fetch('http://localhost:8000/api/upload', {
+    const response = await fetch('/upload-server/api/upload', {
       method: 'POST',
       body: formData
     });
