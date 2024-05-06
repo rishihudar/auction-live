@@ -6,14 +6,14 @@
             @date-select="MISProcessingFeeReport" />
     </div>
     <div>
-        <JsonExcel :data="json_data" type="xlsx" class="btn btn-default" worksheet="My Worksheet" name="filename.xlsx">
+        <JsonExcel :data="json_data" :fields="processingReportFields" type="xlsx" class="btn btn-default" worksheet="My Worksheet" name="ProcessingFeeReport.xlsx">
             Excel Report
         </JsonExcel>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref} from "vue";
 import MQL from "@/plugins/mql.js";
 import JsonExcel from "vue-json-excel3";
 import Calendar from 'primevue/calendar';
@@ -25,7 +25,17 @@ let dates = ref([currentDate1, currentDate2]);
 console.log("dates@@@@@@@@@", dates)
 
 let json_data = ref([]);
-
+const processingReportFields = {
+    
+   'Auction Code':'auctionCode',
+    'Payment Date and Time': 'paymentDate',
+    'Transaction ID': 'transactionId',
+    'Amount': 'amount',
+    'Bidder Name': 'bidderName',
+    'Email Id': 'emailId',
+    'Status': 'status',
+    'MerchantTxnID': 'merchantTxnId'
+};
 function MISProcessingFeeReport() {
     if (dates.value[0] && dates.value[1] !== null) {
     new MQL()
@@ -52,9 +62,6 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-onMounted(() => {
-    //MISRegistrationFeeReport()
-})
 </script>
 
 <style></style>
