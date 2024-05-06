@@ -32,7 +32,7 @@
 		</div>
 		<div class="main-wrapper" :class="[
 			mainStore.sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-open',
-			{ 'main-wrapper-full': !isSideBarVisible },
+			{ 'main-wrapper-full': !(isSideBarVisible) },{ 'pt-24': isHeaderVisible}
 		]">
 			<Header v-if="isHeaderVisible"></Header>
 			<main class="main-content">
@@ -74,7 +74,7 @@ watch(route,(() => {
 		isHeaderVisible.value = true
 	} else {
 		isSideBarVisible.value = route.meta.isSideBarVisible
-		isHeaderVisible.value = route.meta.isSideBarVisible
+		isHeaderVisible.value = route.meta.isHeaderVisible
 		
 	}
 }))
