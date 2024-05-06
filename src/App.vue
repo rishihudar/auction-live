@@ -34,7 +34,7 @@
 			mainStore.sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-open',
 			{ 'main-wrapper-full': !isSideBarVisible },
 		]">
-			<Header v-if="isSideBarVisible"></Header>
+			<Header v-if="isHeaderVisible"></Header>
 			<main class="main-content">
 				<Sidebar v-if="isSideBarVisible"></Sidebar>
 				<div class="content-wrapper">
@@ -57,6 +57,7 @@ import { useRoute } from "vue-router";
 
 const theme = ref("");
 const isSideBarVisible = ref(true);
+const isHeaderVisible = ref(true);
 const route = useRoute();
 
 // useMeta({
@@ -68,11 +69,12 @@ const changeTheme = (theme) => {
 	document.documentElement.setAttribute("data-theme", theme);
 };
 watch(route,(() => {
-	// console.log(route)
 	if (route.meta.isSideBarVisible == undefined) {
 		isSideBarVisible.value = true
+		isHeaderVisible.value = true
 	} else {
 		isSideBarVisible.value = route.meta.isSideBarVisible
+		isHeaderVisible.value = route.meta.isSideBarVisible
 		
 	}
 }))
