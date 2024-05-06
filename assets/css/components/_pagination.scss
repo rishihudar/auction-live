@@ -14,11 +14,14 @@
     }
 }
 
-[data-pc-section="paginatorwrapper"] {@apply mt-3;
-    [data-pc-section="start"], [data-pc-name="rowperpagedropdown"] {@apply hidden;}
-    &:has(+ [data-pc-section="wrapper"]) {@apply mt-0 mb-3;
-        [data-pc-section="start"] {@apply block;}
-        [data-pc-name="rowperpagedropdown"] {@apply flex;}
-        [data-pc-section="current"], [data-pc-group-section="pagebutton"], [data-pc-section="pagebutton"] {@apply hidden;}
-    }
-}
+// [data-pc-section="paginatorwrapper"] {@apply mt-3;
+//     [data-pc-section="start"], [data-pc-name="rowperpagedropdown"] {@apply hidden;}
+//     &:has(+ [data-pc-section="wrapper"]) {@apply mt-0 mb-3;
+//         [data-pc-section="start"] {@apply block;}
+//         [data-pc-name="rowperpagedropdown"] {@apply flex;}
+//         [data-pc-section="current"], [data-pc-group-section="pagebutton"], [data-pc-section="pagebutton"] {@apply hidden;}
+//     }
+// }
+
+.pagination-up {@apply mb-3;}
+.pagination-down {@apply mt-3;}

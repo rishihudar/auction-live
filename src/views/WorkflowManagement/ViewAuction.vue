@@ -1,19 +1,13 @@
 <template>
-    <div class="">
-        <div>
-            <h6> {{ workflowStepData.displayName }}</h6>
-        </div>
-
+    <div>
+        <h6>{{ workflowStepData.displayName }}</h6>
         <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
             :auctionId="auctionId" :config="workflowStepData.data1" />
-
     </div>
     <div>
-        <div v-if="showAction" class="ml-auto">
-            <span class="p-buttonset">
-                <Button v-for="item in label" @click="modalVisible(item)" :label="item.statusDisplayName"
-                    :key="item.statusId"></Button>
-            </span>
+        <div v-if="showAction" class="btn-wrapper centered mt-5">
+            <Button class="btn-long" v-for="item in label" @click="modalVisible(item)" :label="item.statusDisplayName"
+                :key="item.statusId"></Button>
         </div>
         <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
             <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{

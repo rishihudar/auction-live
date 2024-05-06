@@ -1,9 +1,8 @@
 <template>
-    <div class="wizard-content">
-        <div class="wc-item">
-            <div class="wc-header">
-                <div class="wc-title">Add Role Wise Dashboard Cards :</div>
-
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Add Role Wise Dashboard Cards</h2>
             </div>
         </div>
         <div class="form-grid">
@@ -98,8 +97,6 @@
             </div>
         </div>
     </div>
-
-
 </template>
 
 <script setup>

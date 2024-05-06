@@ -5,69 +5,65 @@
             Auction Details
         </div>
         <div class="bs-item-holder">
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Auction Type:</div>
                 <div class="bs-value">{{ auctionDetails.auctionType }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Auction Method:</div>
                 <div class="bs-value">{{ auctionDetails.auctionMethodName }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Auction Process:</div>
                 <div class="bs-value">{{ auctionDetails.auctionProcessName }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Bid Placement:</div>
                 <div class="bs-value">{{ auctionDetails.bidPlacementName }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">District:</div>
                 <div class="bs-value">{{ auctionDetails.district }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">MC:</div>
                 <div class="bs-value">{{ auctionDetails.mcName }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Location:</div>
                 <div class="bs-value">{{ auctionDetails.location }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Area:</div>
                 <div class="bs-value">{{ auctionDetails.area }}</div>
             </div>
-    
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">EMD:</div>
                 <div class="bs-value">{{ auctionDetails.eventEmdProcessingFees }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Reserve Price:</div>
                 <div class="bs-value">{{ auctionDetails.reservePrice }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Number Of Rounds:</div>
                 <div class="bs-value">{{ auctionDetails.numberOfRounds }}</div>
             </div>
-            <div class="bs-item col-span-6">
+            <div class="bs-item col-span-6 2xl:col-span-4">
                 <div class="bs-label">Modifier Value:</div>
                 <div class="bs-value">{{ auctionDetails.modifierValue }}</div>
             </div>
-            <div class="bs-item col-span-6" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
+            <div class="bs-item col-span-6 2xl:col-span-4" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
                 <div class="bs-buttons">
                     <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
                     <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{
                     doc.documentTypeName }}</button>
                 </div>
             </div>
-            <div class="bs-item col-span-6">
-            </div>
-           
         </div>
-
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
@@ -142,7 +138,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .document-link {
     color: blue;
     text-decoration: underline;
@@ -156,4 +152,4 @@ onMounted(() => {
     margin-bottom: 10px; /* Example margin */
     border-bottom: 1px solid #ccc; /* Add border to separate fields */
 }
-</style>
+</style> -->
