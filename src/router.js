@@ -213,7 +213,7 @@ const router = createRouter({
       path: "/role-select",
       name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: true, requiresAuth: false  },
+      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false,isHeaderVisible: true, requiresAuth: false  },
       beforeEnter: (to,from) => {
         const loginStore = login()
       console.log(to.meta.roles,loginStore.roles);
@@ -287,13 +287,13 @@ const router = createRouter({
       path: "/",
       name: "login",
       component: loadView("Login"),
-      meta: { title: "Login", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "Login", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
       path: "/forgetPassword",
       name: "forgetPassword",
       component: loadView("forgotPassword"),
-      meta: { title: "forgotPassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: { title: "forgotPassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false,  roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
       path: "/registration",
@@ -738,7 +738,7 @@ const router = createRouter({
     {
       path: "/admin/AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
-      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false },
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false,  isHeaderVisible: false },
     },
     {
       path: "/current-auction",
