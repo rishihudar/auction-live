@@ -6,7 +6,7 @@
             @date-select="MISRegistrationFeeReport" />
     </div>
     <div>
-        <JsonExcel :data="json_data" type="xlsx" class="btn btn-default" worksheet="My Worksheet" name="filename.xlsx">
+        <JsonExcel :data="json_data" type="xlsx" :fields="registrationReportFields" class="btn btn-default" worksheet="My Worksheet" name="RegistrationFeeReport.xlsx">
             Excel Report
         </JsonExcel>
     </div>
@@ -25,22 +25,18 @@ let dates = ref([currentDate1, currentDate2]);
 console.log("dates@@@@@@@@@", dates)
 
 let json_data = ref([]);
+const registrationReportFields = {
+    
+    'Registration Date and Time': 'registrationDate',
+    'Payment Date and Time': 'paymentDate',
+    'Transaction ID': 'transactionId',
+    'Amount': 'amount',
+    'Bidder Name': 'bidderName',
+    'Email Id': 'emailId',
+    'Status': 'status',
+    'MerchantTxnID': 'merchantTxnId'
+};
 
-// function MISRegistrationFeeReport() {
-//     new MQL()
-//         .useManagementServer()
-//         .setActivity("r.[MISRegistrationFeeReport]")
-//         .setData({ toDate: formatDate(dates.value[0]), fromDate: formatDate(dates.value[1]) })
-//         .fetch()
-//         .then(rs => {
-//             let res = rs.getActivity("MISRegistrationFeeReport", true)
-//             if (rs.isValid("MISRegistrationFeeReport")) {
-//                 json_data.value = res.result;
-//             } else {
-//                 rs.showErrorToast("MISRegistrationFeeReport")
-//             }
-//         })
-// }
 function MISRegistrationFeeReport() {
     // Check if both dates are selected and end date is not null
     if (dates.value[0] && dates.value[1] !== null) {

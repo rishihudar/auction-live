@@ -9,23 +9,30 @@
     }
 
     // Advanced
-    &:has([data-pc-section="buttonbar"]) {border: 1px solid var(--fm-border-color); border-radius: var(--fm-border-radius);
+    &:has([data-pc-section="buttonbar"]) {border: 1px solid var(--fm-border-color); border-radius: var(--fm-border-radius); overflow: hidden;
         input {display: none;}
-        [data-pc-section="buttonbar"] {padding: 15px 15px; display: flex; gap: 8px; align-items: center;}
+        .fm-buttonbar {padding: 15px 15px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid theme('colors.slate[200]'); background-color: theme('colors.slate[50]');
+            .btn {height: var(--fm-height-sm); font-size: 14px;}
+            svg {margin-right: 0; width: 14px;}
+        }
+        .fm-upload {@apply w-auto shadow-none before:hidden; padding: 0 20px; height: var(--fm-height-sm); display: flex; gap: 5px; align-items: center; border-radius: var(--fm-border-radius); font-size: 14px; color: #fff; background: rgb(var(--primary-400)); cursor: pointer;}
         [data-pc-section="empty"] {color: var(--neutral-200);}
-        [data-pc-section="choosebutton"] {padding: 0 20px; height: var(--fm-height); display: flex; gap: 5px; align-items: center; border-radius: var(--fm-border-radius); color: #fff; background: rgb(var(--primary-400)); cursor: pointer;}
 
-        [data-pc-section="content"] {padding: 0 15px 15px;}
-        [data-pc-name="progressbar"] {position: relative; margin-inline: -15px; height: 3px;}
-        [data-pc-section="file"] {margin-top: -1px; margin-bottom: 8px; padding: 14px; display: flex; gap: 8px; align-items: center; border: 1px solid #e0e0e0; border-radius: var(--fm-border-radius);
+        .fm-upload-content {padding: 20px 15px; font-size: 15px;}
+        .fm-progress {height: 5px;}
+        [data-pc-section="file"] {margin-top: -1px; margin-bottom: 8px; padding: 14px; display: flex; gap: 8px; align-items: center; border: 1px solid theme('colors.slate[200]'); border-radius: var(--fm-border-radius);
             &:last-child {margin-bottom: 0;}
 
             img {width: 50px; height: 50px; object-fit: contain;}
         }
+        [data-pc-section="details"] {margin-left: 5px;}
         [data-pc-section="filesize"] {font-size: 14px; color: var(--neutral-200);}
-        [data-pc-name="badge"] {margin-left: 8px;}
-        [data-pc-section="actions"] {margin-left: auto;
-            button span {display: none;}
+        [data-pc-name="badge"] {margin-left: 8px; padding: 0 10px; font-size: 11px;}
+        [data-pc-section="actions"] {margin-left: auto; display: flex; align-items: center;
+            button {padding: 0;
+                svg {margin-right: 0; padding: 5px; width: 30px; height: 30px;}
+                span {display: none;}
+            }
         }
     }
 }
