@@ -118,7 +118,8 @@ const selectedRole = ref([]);
 const selectedCard = ref([]);
 const bidderType = ref([
     { name: 'USER', code: 'user' },
-    { name: 'BIDDER', code: 'bidder' }]);
+    { name: 'BIDDER', code: 'bidder' },
+    { name: 'ADMIN', code: 'admin' }]);
 
 const selectedRoleId = ref();
 const selectedCardId = ref();
