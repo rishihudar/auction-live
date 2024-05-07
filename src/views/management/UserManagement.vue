@@ -12,7 +12,7 @@
                 showGridlines
                 dataKey="id" 
                 :loading="loading"
-                :globalFilterFields="['fullName', 'districtName', 'PASSWORD', 'mobile', 'email', 'loginEmail', 'entityName', 'entityType', 'departmentId', 'cadreId', 'designationId']"
+                :globalFilterFields="['fullName', 'districtName', 'password', 'mobile', 'email', 'loginEmail', 'entityName', 'role', 'departmentName', 'cadreName', 'designationName']"
                 >
                 <template #header>
                     <div class="flex justify-content-between">
@@ -56,8 +56,8 @@
                 <Column field="districtName" header="District Name" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.districtName }}</template>
                 </Column>
-                <Column field="PASSWORD" header="PASSWORD" style="min-width: 12rem">
-                    <template #body="{ data }">{{ data.PASSWORD }}</template>
+                <Column field="password" header="password" style="min-width: 12rem">
+                    <template #body="{ data }">{{ data.password }}</template>
                 </Column>
                 <Column field="mobile" header="Mobile" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.mobile }}</template>
@@ -71,21 +71,22 @@
                 <Column field="entityName" header="Entity Name" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.entityName }}</template>
                 </Column>
-                <Column field="entityType" header="Entity Type" style="min-width: 12rem">
-                    <template #body="{ data }">{{ data.entityType }}</template>
+                <Column field="role" header="Role" style="min-width: 12rem">
+                    <template #body="{ data }">{{ data.role }}</template>
                 </Column>
                 <Column field="departmentId" header="Department" style="min-width: 12rem">
-                    <template #body="{ data }">{{ data.departmentId }}</template>
+                    <template #body="{ data }">{{ data.departmentName }}</template>
                 </Column>
                 <Column field="cadreId" header="Cadre" style="min-width: 12rem">
-                    <template #body="{ data }">{{ data.cadreId }}</template>
+                    <template #body="{ data }">{{ data.cadreName }}</template>
                 </Column>
                 <Column field="designationId" header="Designation" style="min-width: 12rem">
-                    <template #body="{ data }">{{ data.designationId }}</template>
+                    <template #body="{ data }">{{ data.designationName }}</template>
                 </Column>
                 <Column header="Actions"  style="min-width:5rem">
                     <template #body="{ data }">
                         <span class="p-buttonset">
+                            {{ data }}
                             <Button @click="handleEditClick(data)" label="Edit" icon="pi pi-trash" />
                         </span>
                         <!-- <span class="p-buttonset">
@@ -100,6 +101,7 @@
   
   
         <template v-else-if="flag === 3">
+            <!-- ***********Insert Data******************* -->
             <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
                 <div class="fm-row">
                     <div class="w-1/2">
@@ -111,9 +113,9 @@
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <label for="PASSWORD">Password</label>
-                            <InputText id="PASSWORD" v-model="userDetails.PASSWORD" type="PASSWORD" />
-                            <small id="PASSWORD-help">Enter your PASSWORD</small>
+                            <label for="password">Password</label>
+                            <InputText id="password" v-model="userDetails.password" type="password" />
+                            <small id="password-help">Enter your password</small>
                         </div>
                     </div>
                 </div>
@@ -219,6 +221,7 @@
         </template>
 
         <template v-else-if="flag === 4">
+            <!-- ************Upadate Data************** -->
             <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
                 <div class="fm-row">
                     <div class="w-1/2">
@@ -230,9 +233,9 @@
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <label for="PASSWORD">Password</label>
-                            <InputText id="PASSWORD" v-model="userDetails.PASSWORD" type="PASSWORD" />
-                            <small id="PASSWORD-help">Enter your PASSWORD</small>
+                            <label for="password">Password</label>
+                            <InputText id="password" v-model="userDetails.password" type="password" />
+                            <small id="password-help">Enter your password</small>
                         </div>
                     </div>
                 </div>
@@ -248,7 +251,9 @@
                     <div class="w-1/2">
                         <div class="fm-group">
                             <div class="card flex justify-content-center">
-                                <Dropdown v-model="userDetails.district" option-value="districtId" :options="districtMaster" placeholder="Select District" class="w-full md:w-14rem" />
+                                <label for="fullName">District Name</label>
+                                <Dropdown v-model="userDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select District" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your District</small>
                             </div>
                         </div>
                     </div>
@@ -258,24 +263,28 @@
                     <div class="w-1/2">
                         <div class="fm-group">
                             <div class="card flex justify-content-center">
-                                <Dropdown v-model="userDetails.entityName" option-value="entityName" :options="entityMaster" placeholder="Select Entity Name" class="w-full md:w-14rem" />
+                                <label for="fullName">Entity Name</label>
+                                <Dropdown v-model="userDetails.entityId" option-value="entityId" :options="entityMaster" optionLabel="entityName" placeholder="Select Entity Name" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your Entity</small>
                             </div>
                         </div>
                     </div>
-                    <div class="w-1/2">
+                    <!-- <div class="w-1/2">
                         <div class="fm-group">
                             <div class="card flex justify-content-center">
                                 <Dropdown v-model="userDetails.entityType" option-value="entityType" :options="entityTypeMaster" placeholder="Select Entity Type" class="w-full md:w-14rem" />
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="fm-row">
                     <div class="w-1/2">
                         <div class="fm-group">
                             <div class="card flex justify-content-center">
-                                <Dropdown v-model="userDetails.role" option-value="role" :options="roleMaster" placeholder="Select Role" class="w-full md:w-14rem" />
+                                <label for="fullName">Role </label>
+                                <Dropdown v-model="userDetails.roleId" option-value="roleId" :options="roleMaster" optionLabel="roleName" placeholder="Select Role" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your Role</small>
                             </div>
                         </div>
                     </div>
@@ -297,27 +306,27 @@
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="fm-group">
-                            <label for="branch">Branch/Department</label>
-                            <InputText id="branch" v-model="userDetails.departmentId" />
-                            <small id="branch-help">Enter your branch/department</small>
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Branch/Department </label>
+                            <Dropdown v-model="userDetails.departmentId" option-value="departmentId" :options="departmentMaster" optionLabel="departmentName" placeholder="Select Branch/Department" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Branch/Department</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="fm-row">
                     <div class="w-1/2">
-                        <div class="fm-group">
-                            <label for="designation">Designation</label>
-                            <InputText id="designation" v-model="userDetails.designationId" />
-                            <small id="designation-help">Enter your designation</small>
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Designation </label>
+                            <Dropdown v-model="userDetails.designationId" option-value="designationId" :options="designationMaster" optionLabel="designationName" placeholder="Select Designation" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Designation</small>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="fm-group">
-                            <label for="cadre">Cadre</label>
-                            <InputText id="cadre" v-model="userDetails.cadreId" />
-                            <small id="cadre-help">Enter your cadre</small>
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Cadre </label>
+                            <Dropdown v-model="userDetails.cadreId" option-value="cadreId" :options="cadreMaster" optionLabel="cadreName" placeholder="Select Cadre" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Cadre</small>
                         </div>
                     </div>
                 </div>
@@ -354,7 +363,12 @@ import Dialog from 'primevue/dialog';
 import * as XLSX from "xlsx";
 import Dropdown from 'primevue/dropdown';
 
-
+const districtMaster = ref([]);
+const entityMaster = ref([]);
+const roleMaster = ref([]);
+const departmentMaster = ref([]);
+const designationMaster = ref([]);
+const cadreMaster = ref([]);
 const flag = ref(0)
 const loading = ref(true);
 const userData = ref([]);
@@ -362,30 +376,54 @@ const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   fullName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   districtName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  PASSWORD: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  password: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   mobile: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   email: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   loginEmail: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   entityName: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-  entityType: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  role: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   departmentId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   cadreId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   designationId: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
 });
-const userDetails = ref({
-    loginEmail: '',
-    PASSWORD: '',
-    fullName: '',
-    district: '',
-    entityName: '',
-    entityType: '',
-    role: '',
-    email: '',
-    mobile: '',
-    departmentId: '',
-    designationId: '',
-    cadreId: ''
-});
+// const userDetails = ref({
+//     loginEmail: '',
+//     password: '',
+//     fullName: '',
+//     districtName: '',
+//     districtId: 0, 
+//     entityName: '',
+//     entityId:0,
+//     entityType: '',
+//     role: '',
+//     email: '',
+//     mobile: '',
+//     departmentId: '',
+//     designationId: '',
+//     cadreId: ''
+// });
+
+
+const userDetails = ref( {
+        userId: 0,
+        cadreId: 0,
+        cadreName: '',
+        departmentId: 0,
+        departmentName: '',
+        designationId: 0,
+        designationName: '',
+        districtName: '',
+        email: '',
+        entityId: 0,
+        entityName: '',
+        entityType: '',
+        fullName: '' ,
+        loginEmail: '',
+        mobile: 0,
+        password: 0,
+        role: '',
+        roleId: 0
+    });
 
 function reloadPage() {
         window.location.reload();
@@ -404,6 +442,116 @@ function changeFlag(newValue){
   flag.value = newValue
 }
 
+function FetchCadreData(){
+					// Automatically generated
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchCadreData]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchCadreData",true)
+			if (rs.isValid("FetchCadreData")) {
+                cadreMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchCadreData")
+			}
+			})
+			
+}
+
+function FetchDesignationData(){
+					// Automatically generated
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchDesignationData]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchDesignationData",true)
+			if (rs.isValid("FetchDesignationData")) {
+                designationMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchDesignationData")
+			}
+			})
+			
+}
+function FetchAllDepartment(){
+					// Automatically generated
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchAllDepartments]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchAllDepartments",true)
+			if (rs.isValid("FetchAllDepartments")) {
+                departmentMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchAllDepartments")
+			}
+			})
+			
+}
+function FetchRoleData(){		
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchRoleData]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchRoleData",true)
+			if (rs.isValid("FetchRoleData")) {
+                roleMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchRoleData")
+			}
+			})
+			
+}
+function FetchEntityData() {
+					// Automatically generated
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchEntityData]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchEntityData",true)
+			if (rs.isValid("FetchEntityData")) {
+                console.log (res.result)
+                entityMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchEntityData")
+			}
+			})
+			
+}
+
+function FetchDistrictName() {
+    new MQL()
+    .useCoreServer()
+        .setActivity('o.[FetchAllDistrict]')
+        .setData()
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity('FetchAllDistrict', true);
+            if (rs.isValid('FetchAllDistrict')) {
+                console.log(res.result);
+                districtMaster.value = res.result;
+
+            } else {
+                rs.showErrorToast('FetchAllDistrict');
+            }
+            // loading.value = false; // Move loading to here
+        });
+}
 function fetchAllUsers(){
   new MQL()
     .useCoreServer()
@@ -431,7 +579,13 @@ onMounted(async () => {
     // if (excelData.value.length > 0) {
     //   fields.value = Object.keys(excelData.value[0]);
     // }
+    FetchCadreData()
+    FetchDesignationData()
+    FetchAllDepartment()
+    FetchRoleData()
+    FetchEntityData()
     fetchAllUsers()
+    FetchDistrictName()
   } catch (error) {
     console.error('Error fetching data:', error);
   }

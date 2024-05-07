@@ -97,6 +97,7 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
+            <!-- **********Add Data************** -->
         <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
             <div class="fm-row">
                 <div class="w-1/2">
@@ -155,6 +156,7 @@
         </div>
         </template>
         <template v-else-if="flag === 2">
+            <!-- *****************Data Update************** -->
         <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
             <div class="fm-row">
                 <div class="w-1/2">

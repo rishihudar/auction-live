@@ -48,6 +48,7 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
+            <!-- *************Add Data**************** -->
             <div class="fm-row">
                 <div class="w-1/4">
                     <div class="fm-group">
@@ -82,6 +83,7 @@
         </template>
 
         <template v-else-if="flag === 2">
+            <!-- *************Edit Data************ -->
             <div class="fm-row">
                 <div class="w-1/4">
                     <div class="fm-group">
