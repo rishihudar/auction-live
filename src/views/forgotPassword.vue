@@ -115,10 +115,7 @@
                     <Button
                         type="button"
                         @click="changePassword"
-                        :disabled="
-                        !isSmsOTPSent ||
-                        !confirmPassword
-                        "
+                        :disabled="!OTPSmsVerified"
                     >
                         Change Password</Button
                     >
@@ -280,6 +277,11 @@ const $v = useVuelidate(rules, {
   verifyMobileNumber,
   confirmPassword,
 });
+
+
+function changePassword() {
+  show_verify.value = false
+}
 
 async function sendOTPMobile() {
   // console.log("$v.value.mobileNumber.$validate() is ",$v.value.mobileNumber.$invalid)

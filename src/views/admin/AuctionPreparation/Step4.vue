@@ -64,7 +64,6 @@
             <div class="fm-inner">
               <div class="col-span-full" v-if="!auctionCheck">
                 <FileUpload
-                  mode="basic"
                   :disabled="config?.docNameReadonly"
                   v-model="docName"
                   :accept="docType"
@@ -110,7 +109,6 @@
             <div class="fm-inner">
               <div class="col-span-full" v-if="!noticeCheck">
                 <FileUpload
-                  mode="basic"
                   :disabled="config?.NoticeDocNameReadonly"
                   v-model="noticeCheck"
                   :accept="NoticeDocType"

@@ -24,7 +24,7 @@
                         <Step3 v-if="AuctionStore.getLastInsertedAuctionId"
                             :auctionId="AuctionStore.getLastInsertedAuctionId"
                             :multiplyingFactor = "mulfac"
-                             @previousTab="prevCallback()"
+                            @previousTab="prevCallback()"
                             @nextTab="nextCallback()" />
                     </div>
                 </template>
@@ -35,7 +35,7 @@
                         <Step4 v-if="AuctionStore.getLastInsertedAuctionId"
                             :auctionId="AuctionStore.getLastInsertedAuctionId"
                             :multiplyingFactor = "mulfac"
-                             @previousTab="prevCallback()"
+                            @previousTab="prevCallback()"
                             @nextTab="nextCallback()" />
                     </div>
                 </template>

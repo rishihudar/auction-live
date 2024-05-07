@@ -4,30 +4,31 @@ export default {
     },
     buttonbar: {
         class: [
+            'fm-buttonbar',
             // Flexbox
-            'flex',
-            'flex-wrap',
+            // 'flex',
+            // 'flex-wrap',
 
             // Colors
-            'bg-surface-50',
-            'dark:bg-surface-800',
-            'text-surface-700',
-            'dark:text-white/80',
+            // 'bg-surface-50',
+            // 'dark:bg-surface-800',
+            // 'text-surface-700',
+            // 'dark:text-white/80',
 
             // Spacing
-            'p-5',
-            'gap-2',
+            // 'p-5',
+            // 'gap-2',
 
             // Borders
-            'border',
-            'border-solid',
-            'border-surface-200',
-            'dark:border-surface-700',
-            'border-b-0',
+            // 'border',
+            // 'border-solid',
+            // 'border-surface-200',
+            // 'dark:border-surface-700',
+            // 'border-b-0',
 
             // Shape
-            'rounded-tr-lg',
-            'rounded-tl-lg'
+            // 'rounded-tr-lg',
+            // 'rounded-tl-lg'
         ]
     },
     chooseButton: {
@@ -62,42 +63,43 @@ export default {
         ]
     },
     chooseIcon: {
-        class: ['mr-2', 'inline-block']
+        // class: ['mr-2', 'inline-block']
     },
     chooseButtonLabel: {
-        class: ['flex-1', 'font-bold']
+        // class: ['flex-1', 'font-bold']
     },
     uploadbutton: {
         icon: {
-            class: 'mr-2'
+            // class: 'mr-2'
         }
     },
     cancelbutton: {
         icon: {
-            class: 'mr-2'
+            // class: 'mr-2'
         }
     },
     content: {
         class: [
+            'fm-upload-content',
             // Position
             'relative',
 
             // Colors
-            'bg-surface-0',
-            'dark:bg-surface-900',
-            'text-surface-700',
-            'dark:text-white/80',
+            // 'bg-surface-0',
+            // 'dark:bg-surface-900',
+            // 'text-surface-700',
+            // 'dark:text-white/80',
 
             // Spacing
-            'p-8',
+            // 'p-8',
 
             // Borders
-            'border',
-            'border-surface-200',
-            'dark:border-surface-700',
+            // 'border',
+            // 'border-surface-200',
+            // 'dark:border-surface-700',
 
             // Shape
-            'rounded-b-lg'
+            // 'rounded-b-lg'
         ]
     },
     file: {
@@ -113,9 +115,9 @@ export default {
             'last:mb-0',
 
             // Borders
-            'border',
-            'border-surface-200',
-            'dark:border-surface-700',
+            // 'border',
+            // 'border-surface-200',
+            // 'dark:border-surface-700',
             'gap-2',
 
             // Shape
@@ -126,10 +128,12 @@ export default {
         class: 'shrink-0'
     },
     fileName: {
-        class: 'mb-2'
+        // class: 'mb-2'
+        class: 'fm-filename'
     },
     fileSize: {
-        class: 'mr-2'
+        // class: 'mr-2'
+        class: 'fm-filesize'
     },
     uploadicon: {
         class: 'mr-2'
@@ -137,6 +141,7 @@ export default {
     progressbar: {
         root: {
             class: [
+                'fm-progress',
                 // Position and Overflow
                 'overflow-hidden',
                 'absolute top-0 left-0',
