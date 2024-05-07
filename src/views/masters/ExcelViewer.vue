@@ -49,12 +49,15 @@
           />
       </div>
 
-
-      <div>
+      <Toast />
+      <div v-if="excelData.length != 0 && loading == true">
         <DataTable :value="excelData"
+        resizableColumns
+        columnResizeMode="fit"
         showGridlines
-        :loading="loading"
+        tableStyle="min-width: 50rem"
         >
+        <!-- :loading="loading" -->
           <Column
             v-for="field in fields"
             :key="field"
@@ -448,7 +451,7 @@ const excelData = ref([]);
 const fields = ['Username', 'Full Name', 'District', 'Entity Name', 'Organization Name', 'Role', 'Email ID', 'Mobile Number', 'Branch/Department', 'Designation', 'Cadre'];
 const toast = useToast();
 // const flag = ref(0)
-const loading = ref(true);
+const loading = ref(false);
 // const userData = ref([]); // Your data array
 
 // const userDetails = ref({
@@ -602,7 +605,7 @@ const onAdvancedUpload = async (event) => {
       };
 
       reader.readAsArrayBuffer(file);
-      loading.value = false; // Move loading to here
+      // loading.value = false; // Move loading to here
     }
   } catch (error) {
     console.error('Error processing files:', error);
@@ -623,13 +626,16 @@ const onAdvancedUpload = async (event) => {
     if (response.ok) {
       console.log('Files uploaded successfully', response);
       // Handle the response and set the products variable
+      loading.value = true; // Move loading to here
       const data = await response.json();
       products.value = data;
       console.log("Pringing the response ", products.value)
+      toast.add({ severity: 'success', summary: 'Success', detail: 'File Data Uploaded', life: 3000 });
       //products.value = response.result
       //changeFlag(2)
     } else {
       // Handle non-200 response status
+      toast.add({ severity: 'error', summary: 'Drafted', detail: 'File data/Template is invalid, please check the File', life: 3000 });
       console.error('Failed to upload files');
     }
   } catch (error) {
@@ -638,6 +644,7 @@ const onAdvancedUpload = async (event) => {
       console.log('Request aborted by the user');
     } else {
       // Handle other types of errors
+      toast.add({ severity: 'error', summary: 'Drafted', detail: 'File data/Template is invalid, please check the File' , life: 3000 });
       console.error('Error uploading files:', error);
     }
   }
@@ -650,10 +657,10 @@ const onAdvancedUpload = async (event) => {
 
 
 
-  <style scoped>
+<style scoped>
   /* Add your styles if needed */
   .custom-file-upload {
     @apply flex items-center h-[var(--fm-height)] gap-3;
-}
-  </style>
+  }
+</style>
   
