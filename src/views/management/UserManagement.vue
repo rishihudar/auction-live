@@ -74,13 +74,13 @@
                 <Column field="entityType" header="Entity Type" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.entityType }}</template>
                 </Column>
-                <Column field="departmentId" header="Department ID" style="min-width: 12rem">
+                <Column field="departmentId" header="Department" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.departmentId }}</template>
                 </Column>
-                <Column field="cadreId" header="Cadre ID" style="min-width: 12rem">
+                <Column field="cadreId" header="Cadre" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.cadreId }}</template>
                 </Column>
-                <Column field="designationId" header="Designation ID" style="min-width: 12rem">
+                <Column field="designationId" header="Designation" style="min-width: 12rem">
                     <template #body="{ data }">{{ data.designationId }}</template>
                 </Column>
                 <Column header="Actions"  style="min-width:5rem">
