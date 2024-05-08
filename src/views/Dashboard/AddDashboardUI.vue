@@ -18,11 +18,11 @@
                     </div>
                 </div>
 
-
-                <label class="fm-label" for="path">Is Child Card</label>
+                <div class="fm-group required">
+                <label class="fm-label" for="childcard">Is Child Card</label>
                 <div class="flex flex-wrap gap-3">
                     <div class="flex align-items-center">
-                        <RadioButton v-model="isParent" inputId="flag" name="yes" value="1"  />
+                        <RadioButton v-model="isParent" inputId="flag" name="yes" value="1" />
                         <label for="ingredient1" class="ml-2">Yes</label>
 
                     </div>
@@ -30,6 +30,7 @@
                         <RadioButton v-model="isParent" inputId="flag1" name="no" value="0" />
                         <label for="ingredient1" class="ml-2">No</label>
                     </div>
+                </div>
                 </div>
                 <div class="fm-group required" v-if="isParent==1">
                     <label class="fm-label" for="role">
@@ -45,7 +46,7 @@
                     <label class="fm-label" for="cardname">Card Name</label>
                     <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
                 </div>
-                <div class="fm-group required">
+                <div class="fm-group required" v-if="isParent==0">
                     <label class="fm-label" for="path">Upcoming Card</label>
                     <div class="flex flex-wrap gap-3">
                         <div class="flex align-items-center">
@@ -61,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="fm-group" v-if="upcomingFlag == 1">
+                <div class="fm-group" v-if="upcomingFlag == 1 && isParent==0">
                     <label class="fm-label" for="path">Count Query</label>
                     <Textarea id="query" v-model="countQuery" rows="5" cols="30" :disabled="isAdding" />
                 </div>
@@ -71,7 +72,7 @@
                     <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
                 </div>
                 <Button label="Add Card" @click="addCard('W1')"
-                    :disabled="isAdding || !cardName || !upcomingFlag || !selectedBidder" />
+                    :disabled="isAdding || !cardName || !selectedBidder" />
             </div>
             <div class="col-span-full md:col-span-6" v-if="isAdding">
                 <div class="fm-group required">
@@ -132,7 +133,7 @@ const parentCards = ref([]);
 const cardName = ref("");
 const path = ref(null);
 const isAdding = ref(false);
-const upcomingFlag = ref(null)
+const upcomingFlag = ref(0)
 
 
 const selectedOption = ref(null);
