@@ -32,7 +32,7 @@
 		</div>
 		<div class="main-wrapper" :class="[
 			mainStore.sidebarCollapsed ? 'sidebar-collapsed' : 'sidebar-open',
-			{ 'main-wrapper-full': !(isSideBarVisible) },{ 'pt-24': isHeaderVisible}
+			{ 'main-wrapper-full': !(isSideBarVisible) },{ 'pt-24': (isHeaderVisible && !isSideBarVisible)}
 		]">
 			<Header v-if="isHeaderVisible"></Header>
 			<main class="main-content">
