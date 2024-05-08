@@ -39,7 +39,7 @@
 				<Sidebar v-if="isSideBarVisible"></Sidebar>
 				<div class="content-wrapper">
 					<router-view class="content-holder" :key="$route.fullPath" />
-					<Footer v-if="isSideBarVisible"></Footer>
+					<Footer v-if="isHeaderVisible"></Footer>
 				</div>
 			</main>
 		</div>
