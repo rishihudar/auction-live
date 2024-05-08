@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Toast />
         <div class="page-header">
             <div class="ph-text">
                 <h2 class="title">Add Role Wise Dashboard Cards</h2>
@@ -107,12 +108,13 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Textarea from 'primevue/textarea';
 import RadioButton from 'primevue/radiobutton';
+import Toast from 'primevue/toast';
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 
 const isParent = ref(null);
-
 const isChild = ref(null);
-
 const roles = ref([]);
 const cards = ref([]);
 const selectedRole = ref([]);
@@ -217,8 +219,10 @@ function addCard(value) {
                 console.log(path.value);
                 fetchRoles();
                 isAdding.value = true;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Data added successfully', life: 3000 });
             } else {
                 rs.showErrorToast("InsertDashboardCard")
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Error while adding data ', life: 3000 });
             }
         })
 
