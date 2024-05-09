@@ -86,7 +86,7 @@
                 <Column header="Actions"  style="min-width:5rem">
                     <template #body="{ data }">
                         <span class="p-buttonset">
-                            {{ data }}
+                            <!-- {{ data }} -->
                             <Button @click="handleEditClick(data)" label="Edit" icon="pi pi-trash" />
                         </span>
                         <!-- <span class="p-buttonset">
@@ -102,7 +102,7 @@
   
         <template v-else-if="flag === 3">
             <!-- ***********Insert Data******************* -->
-            <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <!-- <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
                 <div class="fm-row">
                     <div class="w-1/2">
                         <div class="fm-group">
@@ -217,11 +217,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </template>
+            </div> -->
 
-        <template v-else-if="flag === 4">
-            <!-- ************Upadate Data************** -->
             <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
                 <div class="fm-row">
                     <div class="w-1/2">
@@ -230,12 +227,18 @@
                             <InputText id="loginEmail" v-model="userDetails.loginEmail" />
                             <small id="loginEmail-help">Enter your loginEmail</small>
                         </div>
+                        <div v-if="$v.userDetails.loginEmail.$error" class="fm-error">
+                            {{ $v.userDetails.loginEmail.$errors[0].$message }}
+                        </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
                             <label for="password">Password</label>
                             <InputText id="password" v-model="userDetails.password" type="password" />
                             <small id="password-help">Enter your password</small>
+                        </div>
+                        <div v-if="$v.userDetails.password.$error" class="fm-error">
+                            {{ $v.userDetails.password.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
@@ -247,6 +250,9 @@
                             <InputText id="fullName" v-model="userDetails.fullName" />
                             <small id="fullName-help">Enter your full name</small>
                         </div>
+                        <div v-if="$v.userDetails.fullName.$error" class="fm-error">
+                            {{ $v.userDetails.fullName.$errors[0].$message }}
+                        </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
@@ -255,6 +261,9 @@
                                 <Dropdown v-model="userDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select District" class="w-full md:w-14rem" />
                                 <small id="email-help">Select your District</small>
                             </div>
+                        </div>
+                        <div v-if="$v.userDetails.districtName.$error" class="fm-error">
+                            {{ $v.userDetails.districtName.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
@@ -267,6 +276,9 @@
                                 <Dropdown v-model="userDetails.entityId" option-value="entityId" :options="entityMaster" optionLabel="entityName" placeholder="Select Entity Name" class="w-full md:w-14rem" />
                                 <small id="email-help">Select your Entity</small>
                             </div>
+                        </div>
+                        <div v-if="$v.userDetails.entityId.$error" class="fm-error">
+                            {{ $v.userDetails.entityId.$errors[0].$message }}
                         </div>
                     </div>
                     <!-- <div class="w-1/2">
@@ -287,12 +299,18 @@
                                 <small id="email-help">Select your Role</small>
                             </div>
                         </div>
+                        <div v-if="$v.userDetails.roleId.$error" class="fm-error">
+                            {{ $v.userDetails.roleId.$errors[0].$message }}
+                        </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
                             <label for="email">Email ID</label>
                             <InputText id="email" v-model="userDetails.email" />
                             <small id="email-help">Enter your email address</small>
+                        </div>
+                        <div v-if="$v.userDetails.email.$error" class="fm-error">
+                            {{ $v.userDetails.email.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
@@ -304,6 +322,9 @@
                             <InputText id="mobileNumber" v-model="userDetails.mobile" />
                             <small id="mobileNumber-help">Enter your mobile number</small>
                         </div>
+                        <div v-if="$v.userDetails.mobile.$error" class="fm-error">
+                            {{ $v.userDetails.mobile.$errors[0].$message }}
+                        </div>
                     </div>
                     <div class="w-1/2">
                         <div class="card flex justify-content-center">
@@ -311,22 +332,42 @@
                             <Dropdown v-model="userDetails.departmentId" option-value="departmentId" :options="departmentMaster" optionLabel="departmentName" placeholder="Select Branch/Department" class="w-full md:w-14rem" />
                             <small id="email-help">Select your Branch/Department</small>
                         </div>
+                        <div v-if="$v.userDetails.departmentName.$error" class="fm-error">
+                            {{ $v.userDetails.departmentName.$errors[0].$message }}
+                        </div>
                     </div>
                 </div>
 
                 <div class="fm-row">
-                    <div class="w-1/2">
+                    <div class="w-1/3">
                         <div class="card flex justify-content-center">
                             <label for="fullName">Designation </label>
                             <Dropdown v-model="userDetails.designationId" option-value="designationId" :options="designationMaster" optionLabel="designationName" placeholder="Select Designation" class="w-full md:w-14rem" />
                             <small id="email-help">Select your Designation</small>
                         </div>
+                        <div v-if="$v.userDetails.designationName.$error" class="fm-error">
+                            {{ $v.userDetails.designationName.$errors[0].$message }}
+                        </div>
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-1/3">
                         <div class="card flex justify-content-center">
                             <label for="fullName">Cadre </label>
                             <Dropdown v-model="userDetails.cadreId" option-value="cadreId" :options="cadreMaster" optionLabel="cadreName" placeholder="Select Cadre" class="w-full md:w-14rem" />
                             <small id="email-help">Select your Cadre</small>
+                        </div>
+                        <div v-if="$v.userDetails.cadreName.$error" class="fm-error">
+                            {{ $v.userDetails.cadreName.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">organization </label>
+                            <Dropdown v-model="userDetails.organizationId" option-value="organizationId" :options="organizationMaster" optionLabel="organizationName" placeholder="Select Cadre" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your organization</small>
+                          
+                        </div>
+                        <div v-if="$v.userDetails.organizationId.$error" class="fm-error">
+                            {{ $v.userDetails.organizationId.$errors[0].$message }}
                         </div>
                     </div>
                 </div>
@@ -334,12 +375,184 @@
                 <div class="fm-row">
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <Button @click="submitForm(userDetails), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
+                            <Button @click="InsertUserData" icon="pi pi-check" label="Submit"></Button>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="fm-group">
-                            <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                            <Button @click="changeFlag(0)" icon="pi pi-check" label="Cancel"></Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </template>
+
+        <template v-else-if="flag === 4">
+            <!-- ************Upadate Data************** -->
+            <div class="gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <label for="loginEmail">Username</label>
+                            <InputText id="loginEmail" v-model="userDetails.loginEmail" />
+                            <small id="loginEmail-help">Enter your loginEmail</small>
+                        </div>
+                        <div v-if="$v.userDetails.loginEmail.$error" class="fm-error">
+                            {{ $v.userDetails.loginEmail.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <label for="password">Password</label>
+                            <InputText id="password" v-model="userDetails.password" type="password" />
+                            <small id="password-help">Enter your password</small>
+                        </div>
+                        <div v-if="$v.userDetails.password.$error" class="fm-error">
+                            {{ $v.userDetails.password.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <label for="fullName">Full Name</label>
+                            <InputText id="fullName" v-model="userDetails.fullName" />
+                            <small id="fullName-help">Enter your full name</small>
+                        </div>
+                        <div v-if="$v.userDetails.fullName.$error" class="fm-error">
+                            {{ $v.userDetails.fullName.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <div class="card flex justify-content-center">
+                                <label for="fullName">District Name</label>
+                                <Dropdown v-model="userDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select District" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your District</small>
+                            </div>
+                        </div>
+                        <div v-if="$v.userDetails.districtName.$error" class="fm-error">
+                            {{ $v.userDetails.districtName.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <div class="card flex justify-content-center">
+                                <label for="fullName">Entity Name</label>
+                                <Dropdown v-model="userDetails.entityId" option-value="entityId" :options="entityMaster" optionLabel="entityName" placeholder="Select Entity Name" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your Entity</small>
+                            </div>
+                        </div>
+                        <div v-if="$v.userDetails.entityId.$error" class="fm-error">
+                            {{ $v.userDetails.entityId.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <!-- <div class="w-1/2">
+                        <div class="fm-group">
+                            <div class="card flex justify-content-center">
+                                <Dropdown v-model="userDetails.entityType" option-value="entityType" :options="entityTypeMaster" placeholder="Select Entity Type" class="w-full md:w-14rem" />
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <div class="card flex justify-content-center">
+                                <label for="fullName">Role </label>
+                                <Dropdown v-model="userDetails.roleId" option-value="roleId" :options="roleMaster" optionLabel="roleName" placeholder="Select Role" class="w-full md:w-14rem" />
+                                <small id="email-help">Select your Role</small>
+                            </div>
+                        </div>
+                        <div v-if="$v.userDetails.roleId.$error" class="fm-error">
+                            {{ $v.userDetails.roleId.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <label for="email">Email ID</label>
+                            <InputText id="email" v-model="userDetails.email" />
+                            <small id="email-help">Enter your email address</small>
+                        </div>
+                        <div v-if="$v.userDetails.email.$error" class="fm-error">
+                            {{ $v.userDetails.email.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <label for="mobileNumber">Mobile Number</label>
+                            <InputText id="mobileNumber" v-model="userDetails.mobile" />
+                            <small id="mobileNumber-help">Enter your mobile number</small>
+                        </div>
+                        <div v-if="$v.userDetails.mobile.$error" class="fm-error">
+                            {{ $v.userDetails.mobile.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Branch/Department </label>
+                            <Dropdown v-model="userDetails.departmentId" option-value="departmentId" :options="departmentMaster" optionLabel="departmentName" placeholder="Select Branch/Department" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Branch/Department</small>
+                        </div>
+                        <div v-if="$v.userDetails.departmentName.$error" class="fm-error">
+                            {{ $v.userDetails.departmentName.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/3">
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Designation </label>
+                            <Dropdown v-model="userDetails.designationId" option-value="designationId" :options="designationMaster" optionLabel="designationName" placeholder="Select Designation" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Designation</small>
+                        </div>
+                        <div v-if="$v.userDetails.designationName.$error" class="fm-error">
+                            {{ $v.userDetails.designationName.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">Cadre </label>
+                            <Dropdown v-model="userDetails.cadreId" option-value="cadreId" :options="cadreMaster" optionLabel="cadreName" placeholder="Select Cadre" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your Cadre</small>
+                        </div>
+                        <div v-if="$v.userDetails.cadreName.$error" class="fm-error">
+                            {{ $v.userDetails.cadreName.$errors[0].$message }}
+                        </div>
+                    </div>
+                    <div class="w-1/3">
+                        <div class="card flex justify-content-center">
+                            <label for="fullName">organization </label>
+                            <Dropdown v-model="userDetails.organizationId" option-value="organizationId" :options="organizationMaster" optionLabel="organizationName" placeholder="Select Cadre" class="w-full md:w-14rem" />
+                            <small id="email-help">Select your organization</small>
+                          
+                        </div>
+                        <div v-if="$v.userDetails.organizationId.$error" class="fm-error">
+                            {{ $v.userDetails.organizationId.$errors[0].$message }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fm-row">
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <Button @click="UpdateUserData" icon="pi pi-check" label="Submit"></Button>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="fm-group">
+                            <Button @click="changeFlag(0)" icon="pi pi-check" label="Cancel"></Button>
                         </div>
                     </div>
                 </div>
@@ -351,7 +564,7 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -362,6 +575,13 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import * as XLSX from "xlsx";
 import Dropdown from 'primevue/dropdown';
+import { login } from "../../store/modules/login";
+import { storeToRefs } from 'pinia'
+import { useVuelidate } from '@vuelidate/core';
+import { helpers, required } from '@vuelidate/validators'
+
+const loginStore = login()
+const { loginId } = storeToRefs(loginStore)
 
 const districtMaster = ref([]);
 const entityMaster = ref([]);
@@ -369,6 +589,7 @@ const roleMaster = ref([]);
 const departmentMaster = ref([]);
 const designationMaster = ref([]);
 const cadreMaster = ref([]);
+const organizationMaster = ref([]);
 const flag = ref(0)
 const loading = ref(true);
 const userData = ref([]);
@@ -422,7 +643,9 @@ const userDetails = ref( {
         mobile: 0,
         password: 0,
         role: '',
-        roleId: 0
+        roleId: 0,
+        organizationId: 0,
+        organizationName:''
     });
 
 function reloadPage() {
@@ -441,6 +664,91 @@ function handleEditClick(rowData) {
 function changeFlag(newValue){
   flag.value = newValue
 }
+
+function FetchOrganizationId(){  
+		// Automatically generated
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[FetchOrganizationDetails]")
+			.setData()
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchOrganizationDetails",true)
+			if (rs.isValid("FetchOrganizationDetails")) {
+                organizationMaster.value = res.result
+			} else
+			 { 
+			rs.showErrorToast("FetchOrganizationDetails")
+			}
+			})
+			
+}
+
+
+const InsertUserData = async () => {
+    const result = await $v.value.$validate();
+
+    if (result) {
+	// Automatically generated
+    console.log ("login id################: ", loginId.value, userDetails.value)
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[UpdateUserData]")
+			.setData({"cadreId":userDetails.value.cadreId,"departmentId":userDetails.value.departmentId,
+            "designationId":userDetails.value.designationId,"districtName":userDetails.value.districtName,
+            "email":userDetails.value.email,"entityId":userDetails.value.entityId,"fullName": userDetails.value.fullName,
+            "loginEmail": userDetails.value.loginEmail,"mobile": userDetails.value.mobile, "password":userDetails.value.password,
+            "modifiedBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId,"userId":userDetails.value.userId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateUserData",true)
+			if (rs.isValid("UpdateUserData")) {
+                changeFlag(0)
+                reloadPage()
+			} else
+			 { 
+			rs.showErrorToast("UpdateUserData")
+			}
+			})
+        } else {
+        //alert("error, form not submitted")
+        // toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
+    }
+			
+}
+
+const UpdateUserData = async () => {
+    const result = await $v.value.$validate();
+
+    if (result) {
+	// Automatically generated
+    console.log ("login id################: ", loginId.value, userDetails.value)
+			new MQL()
+            .useCoreServer()
+			.setActivity("o.[UpdateUserData]")
+			.setData({"cadreId":userDetails.value.cadreId,"departmentId":userDetails.value.departmentId,
+            "designationId":userDetails.value.designationId,"districtName":userDetails.value.districtName,
+            "email":userDetails.value.email,"entityId":userDetails.value.entityId,"fullName": userDetails.value.fullName,
+            "loginEmail": userDetails.value.loginEmail,"mobile": userDetails.value.mobile, "password":userDetails.value.password,
+            "modifiedBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId,"userId":userDetails.value.userId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateUserData",true)
+			if (rs.isValid("UpdateUserData")) {
+                changeFlag(0)
+                reloadPage()
+			} else
+			 { 
+			rs.showErrorToast("UpdateUserData")
+			}
+			})
+        } else {
+        //alert("error, form not submitted")
+        // toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
+    }
+			
+}
+
 
 function FetchCadreData(){
 					// Automatically generated
@@ -570,6 +878,55 @@ function fetchAllUsers(){
     });
 }
 
+
+const rules = computed(() => ({
+    userDetails: {
+        // referenceNo: {
+        //     required: helpers.withMessage('Reference Number is required', required)
+        // },
+        loginEmail: {
+            required: helpers.withMessage('Username is required', required)
+        },
+        password: {
+            required: helpers.withMessage('Password is required', required)
+
+        },
+        fullName: {
+            required: helpers.withMessage('Fullname is required', required)
+        },
+        districtName: {
+            required: helpers.withMessage('District Name is required', required)
+        },
+        entityId: {
+            required: helpers.withMessage('Entity Name is required', required)
+        },
+        roleId: {
+            required: helpers.withMessage('Role is required', required)
+
+        },
+        email: {
+            required: helpers.withMessage('Email Address is required', required)
+        },
+        mobile: {
+            required: helpers.withMessage('Mobile Number is required', required)
+        },
+        departmentName: {
+            required: helpers.withMessage('Department Name is required', required)
+        },
+        designationName: {
+            required: helpers.withMessage('Designation Name is required', required)
+        },
+        cadreName: {
+            required: helpers.withMessage('Cadre Name is required', required)
+        },
+        organizationId: {
+            required: helpers.withMessage('Organization Name is required', required)
+        }
+    }
+}));
+
+const $v = useVuelidate(rules, { userDetails });
+
 onMounted(async () => {
   try {
     // const response = await fetch('http://localhost:8000/ExcelViewer');
@@ -579,6 +936,7 @@ onMounted(async () => {
     // if (excelData.value.length > 0) {
     //   fields.value = Object.keys(excelData.value[0]);
     // }
+    FetchOrganizationId()
     FetchCadreData()
     FetchDesignationData()
     FetchAllDepartment()
