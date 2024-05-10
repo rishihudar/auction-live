@@ -1,191 +1,198 @@
 <template>
-    <div>
-        <!-- <Toast/> -->
-        <ConfirmDialog></ConfirmDialog>
-        <strong>
-            <h1>Auction Bidding</h1>
-            <h4>IP: {{ clientLoginIpAddress }}</h4>
-            <p class="font-normal">{{ loginStore.username }}</p>
-            <div class="my-5 flex item-center justify-between">
-                <div class="py-3 px-10 server-time bg-red-100 rounded-md border border-red-400">
-                    <p>Server Time: {{ latestTime }}</p>
-                </div>
-                <div class="leave-auction">
-                    <Button @click="leaveAuction()">Leave Auction</Button>
-                </div>
-            </div>
-        </strong>
-
-        <!-- Auction Details -->
-        <div class="mb-5 bg-white shadow rounded-md">
-            <h3 class="py-5 px-5 text-2xl font-bold text-[var(--neutral-600)]"><strong>Auction Information</strong></h3>
-            <div class="grid grid-cols-2">
-                <div class="py-4 px-5 flex flex-col border-t border-r">
-                    <span class="text-sm">Auction Code :</span>
-                    <span class="text-lg font-semibold text-[var(--neutral-600)]">
-                        <!-- {{ auctionStore.auctionObj.pklAuctionId }} -->
-                        {{ auctionStore.auctionObj.vsAuctionCode }}
-                    </span>
-                </div>
-                <div class="py-4 px-5 flex flex-col border-t">
-                    <span class="text-sm">Round Number :</span>
-                    <span class="text-lg font-semibold text-[var(--neutral-600)]">
-                        {{ auctionDetails[0].roundNumber }}
-                    </span>
-                </div>
-                <div class="py-4 px-5 flex flex-col border-t">
-                    <span class="text-sm">Total Rounds :</span>
-                    <span class="text-lg font-semibold text-[var(--neutral-600)]">
-                        {{ itemDetails.numberOfRounds }}
-                    </span>
-                </div>
-                <div class="py-4 px-5 flex flex-col border-t col-span-full">
-                    <span class="text-sm">Item Details:</span>
-                    <span class="text-lg font-semibold text-[var(--neutral-600)]">
-                        {{ auctionStore.auctionObj.inventoryCategoryName }} :
-                        {{ auctionStore.auctionObj.inventoryHirarchy }}
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bid History Table -->
-        <DataTable showGridlines :value="auctionDetails">
-            <Column field="auctionNumber" header="Item Code">
-                <template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
-                        <span>{{ data.auctionNumber }}</span>
+    <div class="content-holder-full content-auction-bidding" style="padding: 0;">
+        <div class="h-screen grid grid-cols-[1fr_320px]">
+            <div class="relative py-5 px-8 bg-slate-100">
+                <!-- <Toast/> -->
+                <ConfirmDialog></ConfirmDialog>
+                <div class="mb-5 flex items-start justify-between">
+                    <div class="text">
+                        <div class="text-2xl font-bold text-[var(--neutral-600)]">Auction Bidding</div>
+                        <h4 class="font-medium">IP: {{ clientLoginIpAddress }}</h4>
+                        <p>{{ loginStore.username }}</p>
                     </div>
-                </template>
-            </Column>
-            <Column field="currentHigh" header="Current High">
-                <template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
-                        <span>{{ currencyFormat(data.currentHigh) }}</span>
+                    <div class="py-2 px-8 bg-primary-400 bg-opacity-20 rounded-md border border-primary-400 text-center">
+                        <div class="text-sm text-green-700">Server Time</div>
+                        <div class="text-2xl font-medium text-green-700">{{ latestTime }}</div>
                     </div>
-                </template>
-            </Column>
-            <!-- <Column field="placeBid" header="Place Bid">
-                <template #body="">
-                    <div class="flex align-items-center gap-2">
-                        <div class="flex flex-col">
-                            <span> Modifier value : {{ itemDetails.ModifierValue }} </span>
-                            <span class="font-black" v-if="bidFlag && !roundHasEnded && count">
-                                {{ currencyFormat(bidValue) }}
-                            </span>
+                    <Button style="padding-inline: 30px;" severity="danger" @click="leaveAuction()">Leave</Button>
+                </div>
+
+                <!-- Auction Details -->
+                <div class="box-section">
+                    <div class="bs-header">Auction Information</div>
+                    <div class="bs-item-holder">
+                        <div class="bs-item col-span-4">
+                            <div class="bs-label">Auction Code:</div>
+                            <div class="bs-value">
+                                <!-- {{ auctionStore.auctionObj.pklAuctionId }} -->
+                                {{ auctionStore.auctionObj.vsAuctionCode }}
+                            </div>
                         </div>
-                        <span v-if="bidFlag && !roundHasEnded">
-                            <Dropdown v-model="count" :options="multiplieries" optionLabel="text" optionValue="value"
-                                placeholder="Multiplier" class="w-full md:w-14rem" />
-                        </span>
-                        <Button v-if="!bidFlag || roundHasEnded" :disabled="isbidDisabled"
-                            @click="bidFlag = true">Bid</Button>
-                        <Button v-if="bidFlag && !roundHasEnded" :disabled="!count" @click="bidPlaced()">
-                            Place Bid
-                        </Button>
+                        <div class="bs-item col-span-4">
+                            <div class="bs-label">Round Number:</div>
+                            <div class="bs-value">
+                                {{ auctionDetails[0].roundNumber }}
+                            </div>
+                        </div>
+                        <div class="bs-item col-span-4">
+                            <div class="bs-label">Total Rounds:</div>
+                            <div class="bs-value">
+                                {{ itemDetails.numberOfRounds }}
+                            </div>
+                        </div>
+                        <div class="bs-item col-span-full">
+                            <div class="bs-label">Item Details:</div>
+                            <div class="bs-value">
+                                {{ auctionStore.auctionObj.inventoryCategoryName }} :
+                                {{ auctionStore.auctionObj.inventoryHirarchy }}
+                            </div>
+                        </div>
                     </div>
-                </template>
-            </Column> -->
-            <Column field="timeLeft" header="Time Left"><template #body="">
-                    <div class="flex align-items-center gap-2">
-                        <span ref="timeLeft"></span>
-                    </div>
-                </template>
-            </Column>
-        </DataTable>
-
-        <!--item selection-->
-        <!-- <div class="my-3 text-center">
-            <Button label="Open item selection" :disabled="isItemSelectionBtnDisable" @click="openItem()"></Button>
-        </div>
-
-        <Dialog v-model:visible="visible" maximizable modal header="Item Selection" :style="{ width: '50rem' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-
-            <h4>You have been highest quoted bidder for this round. Please select the property of your interest.</h4>
-            <br>
-
-            Item Details: <b>{{ auctionStore.auctionObj.inventoryCategoryName }} : {{
-                auctionStore.auctionObj.inventoryHirarchy
-                }}</b>
-            <br>
-            <b class="float-right">
-                Select property in: <span style="color: red;">{{ time }} </span>
-            </b>
-            <br>
-            <div v-for="property in propertiesToBeSold" :key="property.pklAuctionItemsDetails">
-                <RadioButton v-model="selectedCategory" name="dynamic" :value="property.pklAuctionItemsDetails"
-                    :disabled="property.bInventorySold" />
-                <label :for="property.pklAuctionItemsDetails" class="ml-2">{{ property.vsInventoryName }}</label>
-            </div>
-            <Button label="Submit" @click="submitProperty()"></Button>
-        </Dialog> -->
-
-        <div class="card">
-            <Panel header="Bid History" toggleable>
-                <ul>
-                    <li v-for="(copyData, index) in bidHistory" :key="index">
-                        Round : <strong>{{ copyData.roundNumber }}</strong>
-                        Amt: <strong class="my-2">{{ currencyFormat(copyData.quoteAmount) }}</strong>
-                        @ <strong>{{ copyData.quoteTime }}</strong>
-                    </li>
-                </ul>
-            </Panel>
-            <Panel header="Item Details" toggleable>
-                <ul>
-                    <li>Description : <b>{{ itemDetails.Description }}</b></li>
-                    <li>CurrentRound : <b>{{ itemDetails.CurrentRound }}</b></li>
-                    <li>StartValue : <b>{{ itemDetails.StartValue }}</b></li>
-                    <li>ModifierValue : <b>{{ itemDetails.ModifierValue }}</b></li>
-                    <li>MaxBidAmount : <b>{{ itemDetails.MaxBidAmount }}</b></li>
-                    <li>TotalNoOfBids : <b>{{ itemDetails.TotalNoOfBids }}</b></li>
-                </ul>
-            </Panel>
-            <Panel header="Property Details" toggleable @toggle="getAuctionProperties">
-                <p>
-                    <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}</strong> :
-                    {{ auctionStore.auctionObj.inventoryHirarchy }}
-                </p>
-                <ul>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Property Name
-                                </th>
-                                <th>
-                                    Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="property in properties" :key="property.pklAuctionItemsDetails">
-                                <td> <strong>{{ property.vsInventoryName }}</strong> </td>
-                                <td
-                                    :class="{ 'font-bold text-green-600': property.bInventorySold, 'font-bold text-red-600': !property.bInventorySold }">
-                                    {{ property.bInventorySold ? 'Sold' : 'Unsold' }} </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </ul>
-            </Panel>
-        </div>
-        <div>
-            <Dialog v-model:visible="visible1" modal header="Highest Bidder" :style="{ width: '50rem' }">
-                <div>
-                    <strong class="text-center">
-                        You are the highest bidder.
-                        Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd> button and select property of
-                        your
-                        interest
-                    </strong>
                 </div>
-                <template #footer>
-                    <Button label="Ok" text severity="secondary" @click="function1" autofocus />
-                    <!-- <Button label="Save" outlined severity="secondary" @click=" " autofocus /> -->
-                </template>
-            </Dialog>
+
+                <!-- Bid History Table -->
+                <div class="table-custom">
+                    <DataTable showGridlines :value="auctionDetails">
+                        <Column field="auctionNumber" header="Item Code">
+                            <template #body="{ data }">
+                                <div class="flex align-items-center gap-2">
+                                    <span>{{ data.auctionNumber }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="currentHigh" header="Current High">
+                            <template #body="{ data }">
+                                <div class="flex align-items-center gap-2">
+                                    <span>{{ currencyFormat(data.currentHigh) }}</span>
+                                </div>
+                            </template>
+                        </Column>
+                        <!-- <Column field="placeBid" header="Place Bid">
+                            <template #body="">
+                                <div class="flex align-items-center gap-2">
+                                    <div class="flex flex-col">
+                                        <span> Modifier value : {{ itemDetails.ModifierValue }} </span>
+                                        <span class="font-black" v-if="bidFlag && !roundHasEnded && count">
+                                            {{ currencyFormat(bidValue) }}
+                                        </span>
+                                    </div>
+                                    <span v-if="bidFlag && !roundHasEnded">
+                                        <Dropdown v-model="count" :options="multiplieries" optionLabel="text" optionValue="value"
+                                            placeholder="Multiplier" class="w-full md:w-14rem" />
+                                    </span>
+                                    <Button v-if="!bidFlag || roundHasEnded" :disabled="isbidDisabled"
+                                        @click="bidFlag = true">Bid</Button>
+                                    <Button v-if="bidFlag && !roundHasEnded" :disabled="!count" @click="bidPlaced()">
+                                        Place Bid
+                                    </Button>
+                                </div>
+                            </template>
+                        </Column> -->
+                        <Column field="timeLeft" header="Time Left"><template #body="">
+                                <div class="flex align-items-center gap-2 text-lg font-medium text-red-600">
+                                    <span ref="timeLeft"></span>
+                                </div>
+                            </template>
+                        </Column>
+                    </DataTable>
+                </div>
+
+                <!--item selection-->
+                <!-- <div class="my-3 text-center">
+                    <Button label="Open item selection" :disabled="isItemSelectionBtnDisable" @click="openItem()"></Button>
+                </div>
+
+                <Dialog v-model:visible="visible" maximizable modal header="Item Selection" :style="{ width: '50rem' }"
+                    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+
+                    <h4>You have been highest quoted bidder for this round. Please select the property of your interest.</h4>
+                    <br>
+
+                    Item Details: <b>{{ auctionStore.auctionObj.inventoryCategoryName }} : {{
+                        auctionStore.auctionObj.inventoryHirarchy
+                        }}</b>
+                    <br>
+                    <b class="float-right">
+                        Select property in: <span style="color: red;">{{ time }} </span>
+                    </b>
+                    <br>
+                    <div v-for="property in propertiesToBeSold" :key="property.pklAuctionItemsDetails">
+                        <RadioButton v-model="selectedCategory" name="dynamic" :value="property.pklAuctionItemsDetails"
+                            :disabled="property.bInventorySold" />
+                        <label :for="property.pklAuctionItemsDetails" class="ml-2">{{ property.vsInventoryName }}</label>
+                    </div>
+                    <Button label="Submit" @click="submitProperty()"></Button>
+                </Dialog> -->
+
+                <div class="absolute bottom-0 left-0 right-0 px-8 pb-5 flex gap-2 justify-between">
+                    <Button severity="secondary" @click="visibleItemDetails = true" style="padding-inline: 30px;">Item Details</Button>
+                    <Button severity="secondary" @click="visiblePropertyDetails = true" style="padding-inline: 30px;">Property Details</Button>
+                </div>
+                
+                <Dialog v-model:visible="visibleItemDetails" modal header="Item Details" :style="{ width: '50rem' }">
+                    <ul>
+                        <li>Description : <b>{{ itemDetails.Description }}</b></li>
+                        <li>CurrentRound : <b>{{ itemDetails.CurrentRound }}</b></li>
+                        <li>StartValue : <b>{{ itemDetails.StartValue }}</b></li>
+                        <li>ModifierValue : <b>{{ itemDetails.ModifierValue }}</b></li>
+                        <li>MaxBidAmount : <b>{{ itemDetails.MaxBidAmount }}</b></li>
+                        <li>TotalNoOfBids : <b>{{ itemDetails.TotalNoOfBids }}</b></li>
+                    </ul>
+                </Dialog>
+                <Dialog v-model:visible="visiblePropertyDetails" modal header="Item Details" :style="{ width: '50rem' }">
+                    <div class="mb-4">
+                        <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}:</strong> {{ auctionStore.auctionObj.inventoryHirarchy }}
+                    </div>
+                    <div class="table-custom">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Property Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="property in properties" :key="property.pklAuctionItemsDetails">
+                                    <td> <strong>{{ property.vsInventoryName }}</strong> </td>
+                                    <td class="text-center">
+                                        <div v-if="property.bInventorySold" class="tag py-1 px-4 inline-flex rounded font-medium text-primary-600 bg-primary-400 bg-opacity-30">Sold</div>
+                                        <div v-if="!property.bInventorySold" class="tag py-1 px-4 inline-flex rounded font-medium text-red-600 bg-red-200">Unsold</div>
+                                        <!-- {{ property.bInventorySold ? 'Sold' : 'Unsold' }} -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </Dialog>
+                <!-- <Panel header="" toggleable @toggle="getAuctionProperties"> -->
+            </div>
+            <div class="border-l border-slate-300 bg-slate-50">
+                <h3 class="px-6 h-20 flex items-center text-xl font-bold text-[var(--neutral-600)]">Bid History</h3>
+                <div class="px-6 h-[calc(100vh_-_5rem)] overflow-auto">
+                    <ul>
+                        <li v-for="(copyData, index) in bidHistory" :key="index">
+                            <div class="relative py-5 px-6 border border-slate-300 rounded-lg bg-white">
+                                <div class="absolute top-0 right-5 py-0.5 px-3 rounded-b bg-slate-300 text-xs font-medium">
+                                    Round: {{ copyData.roundNumber }}
+                                </div>
+                                <div class="item">Amount: <strong>{{ currencyFormat(copyData.quoteAmount) }}</strong></div>
+                                <div class="item">@ <strong>{{ copyData.quoteTime }}</strong></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        <Dialog v-model:visible="visible1" modal header="Highest Bidder" :style="{ width: '30rem' }">
+            <div class="text-center">
+                You are the highest bidder.<br>
+                Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd> button and select property of your interest
+            </div>
+            <template #footer>
+                <Button label="Ok" @click="function1" autofocus />
+                <!-- <Button label="Save" outlined severity="secondary" @click=" " autofocus /> -->
+            </template>
+        </Dialog>
     </div>
 </template>
 
@@ -225,6 +232,8 @@ const selectedCategory = ref('')
 const toaster = createToaster({ position: "top-right", duration: 3000 })
 const visible = ref(false);
 const visible1 = ref(false);
+const visibleItemDetails = ref(false);
+const visiblePropertyDetails = ref(false);
 const bidFlag = ref(false)
 const bidValue = ref(null)
 const multiplieries = ref([])
