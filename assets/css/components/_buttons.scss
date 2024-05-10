@@ -5,6 +5,8 @@
 .btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;
     svg {@apply w-auto h-4;}
 
+    &:focus {box-shadow: none; outline: none;}
+
     &.btn-sm {@apply h-[var(--fm-height-sm)] text-sm;}
 
     &-long {@apply px-10;}

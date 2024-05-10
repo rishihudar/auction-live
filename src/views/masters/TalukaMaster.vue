@@ -1,26 +1,38 @@
 <template>
     <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Taluka Master</h2>
+            </div>
+            <div class="ph-action">
+                <Button @click="changeFlag(1)" class="btn btn-primary btn-add">
+                    <fa-plus></fa-plus>
+                    Add Entry
+                </Button>
+            </div>
+        </div>
         <template v-if="flag === 0">
-            <div class="card">
-                <DataTable responsiveLayout="scroll" v-model:filters="filters" :value="taluka" paginator :rows="10"
-                    dataKey="id" filterDisplay="row" :loading="loading" :globalFilterFields="['talukaName',]">
-                    <template #header>
-                        <div class="flex justify-content-end">
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-                            </span>
-                            <div class="ml-auto">
-                                <span class="p-buttonset">
-                                    <Button label="ADD" @click="changeFlag(1)" icon="pi pi-trash" />
-                                </span>
-                            </div>
-
+            <div class="table-custom">
+                <Paginator
+                    class="pagination-up"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[10, 20, 30]"
+                    :totalRecords="totalRows"
+                    template="RowsPerPageDropdown"
+                    @page="handlePageChange"
+                >
+                    <template #start>
+                        <div class="fm-inner">
+                            <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
                         </div>
                     </template>
+                </Paginator>
+                <DataTable responsiveLayout="scroll" v-model:filters="filters" :value="taluka" paginator :rows="10" dataKey="id" :loading="loading" :globalFilterFields="['talukaName',]">
                     <!-- <template #empty>No talukas found.</template> -->
-                    <template #loading>Loading taluka data. Please wait.</template>
-                    <Column field="talukaName" header="Taluka Name" style="min-width: 12rem">
+                    <template #loading>Loading taluka data. Please wait...</template>
+
+                    <Column field="talukaName" header="Taluka Name">
                         <template #body="{ data }">
                             {{ data.talukaName }}
                         </template>
@@ -30,96 +42,97 @@
                         </template>
                     </Column>
 
-
-                    <Column header="Actions" style="min-width:12rem">
-
+                    <Column header="Actions">
                         <template #body="{ data }">
-
-                            <span class="p-buttonset">
-                                <Button label="Edit" @click="editTaluka(data), changeFlag(2)" icon="pi pi-trash" />
-                            </span>
+                            <Button @click="editTaluka(data), changeFlag(2)" severity="secondary" class="btn-sm">
+                                <fa-pen-to-square></fa-pen-to-square>Edit
+                            </Button>
                             <!-- <span class="p-buttonset">
                                 <Button label="Delete" @click="deleteTaluka(data),reloadPage()" icon="pi pi-trash" />
                             </span> -->
                         </template>
                     </Column>
                 </DataTable>
-
+                <Paginator
+                    class="pagination-down"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[5, 10, 20]"
+                    :totalRecords="totalRows"
+                    template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                    @page="handlePageChange"
+                />
             </div>
         </template>
         <template v-else-if="flag === 1">
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="districtName">District Name</label>
-                        <!-- Bind the selected district to talukaData.fklDistrictId -->
-                        <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
-                            optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Add Entry</div>
                 </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="talukaName">Taluka Name</label>
-                        <!-- Bind the state name to talukaData.vsStateName -->
-                        <InputText id="talukaName" v-model="talukaData.talukaName" />
-                        <small id="talukaName-help">Enter Taluka Name (e.g., Nandurbar)</small>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="districtName">District Name</label>
+                            <div class="fm-inner">
+                                <!-- Bind the selected district to talukaData.fklDistrictId -->
+                                <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts" optionLabel="districtName" placeholder="Select District Name" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <Button @click="insertTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check"
-                            label="Submit"></Button>
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="talukaName">Taluka Name</label>
+                            <div class="fm-inner">
+                                <!-- Bind the state name to talukaData.vsStateName -->
+                                <InputText id="talukaName" v-model="talukaData.talukaName" />
+                            </div>
+                            <div id="talukaName-help" class="fm-info">Enter Taluka Name (e.g., Nandurbar)</div>
+                        </div>
                     </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    <div class="fm-action">
+                        <Button @click="insertTaluka(talukaData), changeFlag(0), reloadPage()" label="Submit"></Button>
+                        <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
             </div>
         </template>
-
         <template v-else-if="flag === 2">
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="districtName">District Name</label>
-                        <!-- Bind the selected district to talukaData.fklDistrictId -->
-                        <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts"
-                            optionLabel="districtName" placeholder="Select District Name" class="w-full md:w-14rem" />
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Add Entry</div>
                 </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="talukaName">taluka Name</label>
-                        <InputText id="talukaName" v-model="talukaData.talukaName" />
-                        <small id="talukaName-help">Enter Taluka name E.g Nandurbar</small>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="districtName">District Name</label>
+                            <div class="fm-inner">
+                                <!-- Bind the selected district to talukaData.fklDistrictId -->
+                                <Dropdown v-model="talukaData.districtId" optionValue="districtId" :options="districts" optionLabel="districtName" placeholder="Select District Name" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <!-- <div>
-                    <h1>{{ talukaData }}</h1>
-                </div> -->
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <Button @click=" updateTaluka(talukaData), changeFlag(0), reloadPage()" icon="pi pi-check"
-                            label="Submit"></Button>
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="talukaName">taluka Name</label>
+                            <div class="fm-inner">
+                                <InputText id="talukaName" v-model="talukaData.talukaName" />
+                            </div>
+                            <div id="talukaName-help" class="fm-info">Enter Taluka name E.g Nandurbar</div>
+                        </div>
                     </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
+                    <!-- <div>
+                        <h1>{{ talukaData }}</h1>
+                    </div> -->
+                    <div class="fm-action">
+                        <Button @click=" updateTaluka(talukaData), changeFlag(0), reloadPage()" label="Submit"></Button>
+                        <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
             </div>
         </template>
-
     </div>
 </template>
-  
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
@@ -129,6 +142,9 @@ import InputText from 'primevue/inputtext';
 import MQL from '@/plugins/mql.js';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+
+import faPlus from "../../../assets/icons/plus.svg";
+import faPenToSquare from "../../../assets/icons/pen-to-square.svg";
 
 const loading = ref(true);
 var flag = ref(0);
@@ -259,8 +275,8 @@ onMounted(() => {
 });
 
 </script>
-  
-<style scoped>
+
+<!-- <style scoped>
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -275,4 +291,4 @@ onMounted(() => {
     margin-bottom: 1rem;
     /* Adjust the margin as needed */
 }
-</style>
+</style> -->

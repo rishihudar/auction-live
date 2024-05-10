@@ -43,7 +43,7 @@
     .p-datatable-table {border: 2px solid var(--table-border); border-radius: 8px; border-collapse: separate;}
     .p-sortable-column-icon {@apply ml-2;}
     .p-sortable-column-badge {@apply ml-1;}
-    thead tr th {padding: var(--table-th-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border-light); border-right: 1px solid var(--table-border-light);
+    thead tr th {padding: var(--table-th-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border-light); border-right: 1px solid var(--table-border-light); line-height: 22px;
         &:first-child {border-top-left-radius: 8px;}
         &:last-child {border-right: none; border-top-right-radius: 8px;}
     }

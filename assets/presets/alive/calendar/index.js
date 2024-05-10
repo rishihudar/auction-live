@@ -82,6 +82,7 @@ export default {
     },
     panel: ({ props }) => ({
         class: [
+            'fm-calender-panel',
             // Display & Position
             {
                 absolute: !props.inline,
@@ -248,7 +249,7 @@ export default {
     table: {
         class: [
             // Font
-            'text-base leading-none',
+            'text-sm leading-none',
             // Size & Shape
             'border-collapse',
             'w-full',
@@ -278,7 +279,8 @@ export default {
     day: {
         class: [
             // Spacing
-            'p-0 md:p-2'
+            // 'p-0 md:p-2'
+            'p-0 md:p-1'
         ]
     },
     weeklabelcontainer: ({ context }) => ({
@@ -317,7 +319,7 @@ export default {
             'mx-auto',
 
             // Shape & Size
-            'w-10 h-10',
+            'w-8 h-8',
             'rounded-full',
             'border-transparent border',
 

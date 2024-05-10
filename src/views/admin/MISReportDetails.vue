@@ -1,29 +1,30 @@
-
-
 <template>
-  <div>
-    <div class="stat-area stat-area-alt">
-      <div
-        class="card-wrapper"
-        v-for="(card, index) in cardsArray"
-        :key="index"
-        @click="navigateToAbout(card)"
-      >
-        <div
-          class="card card-stat card-stat-alt"
-          v-if="userRole == card.roleId"
-        >
-          <div class="card-body">
-            <h4 class="card-value">{{ card.countQuery }}</h4>
-            <div class="card-name-holder">
-              <b class="fw-medium card-name">{{ card.card }}</b>
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">MIS Reports</h2>
             </div>
-          </div>
         </div>
-      </div>
+        <div class="card-stat-wrapper">
+            <template
+                v-for="(card, index) in cardsArray"
+                :key="index"
+            >
+                <div
+                    class="card card-stat"
+                    v-if="userRole == card.roleId"
+                    @click="navigateToAbout(card)"
+                >
+                    <div class="card-body">
+                        <h4 class="card-value">{{ card.countQuery }}</h4>
+                        <div class="card-name-holder">
+                            <b class="fw-medium card-name">{{ card.card }}</b>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
-    
-  </div>
 </template>
 
 <script setup>
