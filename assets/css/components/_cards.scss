@@ -64,12 +64,12 @@
     }
 }
 
-.card-role-holder {@apply grid gap-8 grid-cols-[repeat(auto-fit,_minmax(200px,_340px))] justify-center;}
+.card-role-holder {@apply flex gap-8 flex-wrap justify-center;}
 .card-role {
     --spacing: 10px;
 }
 $roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
-.card-role {@apply relative px-8 py-8 rounded-lg bg-white shadow cursor-pointer; overflow: hidden;
+.card-role {@apply relative px-8 py-8 rounded-lg bg-white shadow cursor-pointer; width: 340px; overflow: hidden;
     &:before {position: absolute; top: 0; left: 0; content: ''; width: 200%; height: 200%;
         background: linear-gradient(to top,
             transparent 0, transparent var(--spacing),
@@ -107,4 +107,9 @@ $roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
         .cr-text {@apply text-white text-opacity-70;}
         .btn {@apply text-primary-400 bg-white;}
     }
+}
+
+.card-master {@apply cursor-pointer;
+    .cm-title {@apply mb-2 text-2xl font-bold text-[var(--neutral-400)];}
+    .cm-content {@apply text-[15px] text-[var(--neutral-300)];}
 }

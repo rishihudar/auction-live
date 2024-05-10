@@ -1,14 +1,30 @@
 <template>
-    <div class="card flex justify-content-center">
-      <h1>  Processing Fee Report</h1>
-        <label>select date</label>
-        <Calendar v-model="dates" selectionMode="range" :manualInput="false" :maxDate="currentDate2"
-            @date-select="MISProcessingFeeReport" />
-    </div>
     <div>
-        <JsonExcel :data="json_data" :fields="processingReportFields" type="xlsx" class="btn btn-default" worksheet="My Worksheet" name="ProcessingFeeReport.xlsx">
-            Excel Report
-        </JsonExcel>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Registration Fee Report</h2>
+            </div>
+        </div>
+        <div class="box-grid">
+            <div class="card col-span-6">
+                <div class="form-grid">
+                    <div class="col-span-full">
+                        <div class="fm-group">
+                            <label class="fm-label">Select Date</label>
+                            <div class="fm-inner">
+                                <Calendar v-model="dates" selectionMode="range" :manualInput="false" :maxDate="currentDate2" :show-icon="true"
+                                    @date-select="MISProcessingFeeReport" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fm-action">
+                        <JsonExcel :data="json_data" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="ProcessingFeeReport.xlsx">
+                            Excel Report
+                        </JsonExcel>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
