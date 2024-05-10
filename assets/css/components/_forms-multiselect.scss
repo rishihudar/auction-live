@@ -1,0 +1,34 @@
+.fm-multiselect {
+    @apply w-full h-[var(--fm-height)] border border-[var(--fm-border-color)] inline-flex relative rounded-md transition-all duration-200 cursor-pointer select-none bg-white;
+    // min-height: calc(var(--fk-height) + 2px);
+    // border: 1px solid var(--fk-border-color);
+    .fm-multiselect-container {
+        @apply overflow-auto flex flex-auto cursor-pointer;
+        .fm-multiselect-placeholder {
+            @apply text-surface-400 text-[15px] font-normal leading-none flex items-center flex-wrap gap-2 transition duration-200 overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis; 
+        }
+        .fm-multiselect-token {
+            @apply inline-flex items-center py-1.5 px-3 mr-0 rounded-[1.14rem] bg-surface-200 text-surface-700 cursor-default;
+            font-size: 13px;
+            font-weight: 500;
+        }
+    }
+}
+.fm-multiselect-panel {
+    @apply absolute top-0 left-0 border-0 rounded-md shadow-md bg-white text-surface-800;
+    .fm-multiselect-panel-header {
+        @apply flex items-center justify-between py-2 px-5 border-b rounded-tl-md rounded-tr-md text-surface-700 bg-surface-100 border-surface-300;
+        .fm-multiselect-panel-header-checkbox {
+            @apply relative inline-flex align-bottom w-6 h-6 mr-2 cursor-pointer select-none;
+        }
+        .fm-multiselect-checkbox {
+            @apply w-full h-full absolute top-0 left-0 z-10 p-0 m-0 opacity-0 rounded-md outline-none border-2 appearance-none cursor-pointer;
+        }
+        .fm-multiselect-checkbox-control {
+           @apply flex items-center justify-center w-6 h-6 rounded-md border-2;
+        }
+        .fm-multiselect-checkbox-icon {
+            @apply text-base leading-none w-4 h-4 text-white transition-all duration-200;
+        }
+    }
+}

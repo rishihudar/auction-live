@@ -66,6 +66,7 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
         span {@apply hidden;}
     }
 }
+.fm-calender-panel {min-width: auto !important;}
 
 .fm-check-holder {@apply flex flex-wrap gap-x-5 gap-y-2 items-center;
     &.fm-check-vertical {@apply flex-col items-start;}

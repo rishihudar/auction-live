@@ -1,146 +1,147 @@
 <template>
     <div>
-<template v-if="flag===0">
-    <div class="card">
-        <DataTable 
-        responsiveLayout="scroll" 
-        v-model:filters="filters"
-        :value="district" 
-        paginator 
-        :rows="10" 
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        showGridlines
-        dataKey="id"
-        filterDisplay="row" 
-        :loading="loading" 
-        :globalFilterFields="['stateId', 'districtName']">
-
-            <template #header>
-                <div class="flex justify-content-between">
-
-                    <div class="mr-auto">
-                        <span class="p-input-icon-left">
-                            <i class="pi pi-search" />
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">District Master</h2>
+            </div>
+            <div class="ph-action">
+                <Button @click="changeFlag(1)" class="btn btn-primary btn-add">
+                    <fa-plus></fa-plus>
+                    Add Entry
+                </Button>
+            </div>
+        </div>
+        <template v-if="flag===0">
+            <div class="table-custom">
+                <Paginator
+                    class="pagination-up"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[10, 20, 30]"
+                    :totalRecords="totalRows"
+                    template="RowsPerPageDropdown"
+                    @page="handlePageChange"
+                >
+                    <template #start>
+                        <div class="fm-inner">
                             <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-                        </span>
-                    </div>
-
-                    <div class="flex flex-wrap align-items-center justify-content-center">
-                        <span class="flex align-items-center">
-                            <h1 class="mr-2">DISTRICT MASTER</h1>
-                        </span>
-                    </div>
+                            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                        </div>
+                    </template>
+                </Paginator>
+                <DataTable 
+                    responsiveLayout="scroll"
+                    v-model:filters="filters"
+                    :value="district" 
+                    paginator 
+                    :rows="10" 
+                    :rowsPerPageOptions="[5, 10, 20, 50]"
+                    showGridlines
+                    dataKey="id"
+                    :loading="loading" 
+                    :globalFilterFields="['stateId', 'districtName']"
+                >
+                    <template #empty>
+                        <div class="box-watermark">
+                            No District found.
+                        </div>
+                    </template>
+                    <template #loading>Loading District data. Please wait...</template>
                     
-                    <div class="ml-auto">
-                        <span class="p-buttonset">
-                            <Button @click="changeFlag(1)" label="Add" icon="pi pi-trash" />
-                        </span>
+                    <Column field="districtName" header="District Name" style="min-width: 12rem">
+                        <template #body="{ data }">
+                            {{ data.districtName }}
+                        </template>
+                        <template #filter="{ filterModel, filterCallback }">
+                            <InputText v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
+                                placeholder="District Name" />
+                        </template>
+                    </Column>
+                
+                    <Column header="Actions">
+                        <template #body="{ data }">
+                            <Button @click="handleEditClick(data)" severity="secondary" class="btn-sm">
+                                <fa-pen-to-square></fa-pen-to-square>Edit
+                            </Button>
+                            <!-- <span class="p-buttonset">
+                                <Button  @click="deleteData(data), reloadPage()" label="Delete" icon="pi pi-trash" />
+                            </span> -->
+                        </template>
+                    </Column>
+                </DataTable>
+                <Paginator
+                    class="pagination-down"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[5, 10, 20]"
+                    :totalRecords="totalRows"
+                    template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                    @page="handlePageChange"
+                />
+            </div>
+        </template>
+        <template v-else-if="flag === 1">
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Add Entry</div>
+                </div>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="selectState">Select State</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="districtData.stateId" option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="districtName">District Name</label>
+                            <div class="fm-inner">
+                                <InputText id="districtName" v-model="districtData.districtName" />
+                            </div>
+                            <div class="fm-info">Enter District name E.g Nandurbar</div>
+                        </div>
+                    </div>
+                    <div class="fm-action">
+                        <Button @click="submitForm(districtData), changeFlag(0), reloadPage()" label="Submit"></Button>
+                        <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
-            </template>
-
-            <template #empty>No District found.</template>
-
-            <template #loading>Loading District data. Please wait.</template>
-            
-            <Column field="districtName" header="District Name" style="min-width: 12rem">
-                <template #body="{ data }">
-                    {{ data.districtName }}
-                </template>
-                <template #filter="{ filterModel, filterCallback }">
-                    <InputText v-model="filterModel.value" @input="filterCallback()" class="p-column-filter"
-                        placeholder="District Name" />
-                </template>
-            </Column>
-           
-            <Column header="Actions"  style="min-width:5rem">
-
-                <template #body="{ data }">
-                
-                    <span class="p-buttonset">
-                        <Button @click="handleEditClick(data)" label="Edit" icon="pi pi-trash" />
-                    </span>
-                
-                    <!-- <span class="p-buttonset">
-                        <Button  @click="deleteData(data), reloadPage()" label="Delete" icon="pi pi-trash" />
-                    </span> -->
-
-                </template>
-            </Column>
-        </DataTable>
-    </div>
-</template>
-<template v-else-if="flag === 1">
-  <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-    
-    <div class="fm-row">
-        <div class="w-1/2">
-            <div class="fm-group">
-                <div class="card flex justify-content-center">
-                    <Dropdown v-model="districtData.stateId"  option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" class="w-full md:w-14rem" />
+            </div>
+        </template>
+        <template v-else-if="flag === 2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Edit Entry</div>
+                </div>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="selectState">Select State</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="districtData.stateId"  option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group">
+                            <label class="fm-label" for="districtName">District Name</label>
+                            <div class="fm-inner">
+                                <InputText id="districtName" v-model="districtData.districtName" />
+                            </div>
+                            <div class="fm-info">Enter District name E.g Nandurbar</div>
+                        </div>
+                    </div>
+                    <div class="fm-action">
+                        <Button @click="updateData(districtData), changeFlag(0), reloadPage()" label="Submit"></Button>
+                        <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
+    </div>
+</template>
 
-        <div class="w-1/2">
-            <div class="fm-group">
-                <label for="districtName">District Name</label>
-                <InputText id="districtName" v-model="districtData.districtName" />
-                <small id="username-help">Enter District name E.g Nandurbar</small>
-            </div>
-        </div>
-    </div>
-    <div class="fm-row">
-        <div class="w-1/2">
-            <div class="fm-group">
-                <Button @click="submitForm(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-            </div>
-        </div>
-        <div class="w-1/2">
-            <div class="fm-group">
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
-            </div>
-        </div>
-    </div>
-  </div>
-</template>
-<template v-else-if="flag === 2">
-  <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
-    
-    <div class="fm-row">
-        <div class="w-1/2">
-            <div class="fm-group">
-                <div class="card flex justify-content-center">
-                    <Dropdown v-model="districtData.stateId"  option-value="stateId" :options="state" optionLabel="stateName" placeholder="Select a State" class="w-full md:w-14rem" />
-                </div>
-            </div>
-        </div>
-    
-        <div class="w-1/2">
-            <div class="fm-group">
-                <label for="districtName">District Name</label>
-                <InputText id="districtName" v-model="districtData.districtName" />
-                <small id="username-help">Enter District name E.g Nandurbar</small>
-            </div>
-        </div>
-    </div>
-    <div class="fm-row">
-        <div class="w-1/2">
-            <div class="fm-group">
-                <Button @click="updateData(districtData), changeFlag(0), reloadPage()" icon="pi pi-check" label="Submit"></Button>
-            </div>
-        </div>
-        <div class="w-1/2">
-            <div class="fm-group">
-                <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button>
-            </div>
-        </div>
-    </div>
-  </div>
-</template>
-</div>
-</template>
-  
 <script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
@@ -154,6 +155,8 @@ import ScrollPanel from 'primevue/scrollpanel';
 import { useToast } from 'primevue/usetoast';
 import Dropdown from 'primevue/dropdown';
 
+import faPlus from "../../../assets/icons/plus.svg";
+import faPenToSquare from "../../../assets/icons/pen-to-square.svg";
 
 
 // export default {
@@ -398,7 +401,7 @@ import Dropdown from 'primevue/dropdown';
 // };
 </script>
 
-<style scoped>
+<!-- <style scoped>
   .flex-column {
     display: flex;
     flex-direction: column;
@@ -411,4 +414,4 @@ import Dropdown from 'primevue/dropdown';
   .form-row {
     margin-bottom: 1rem; /* Adjust the margin as needed */
   }
-</style>
+</style> -->
