@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible, true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Department
@@ -84,7 +84,7 @@
                         </div> -->
 
                     </div>
-                </div> -->
+                </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                 </div>
-               <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible, true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Event Processsing Fee Mode
@@ -119,9 +119,11 @@
                             <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
                             <InputText :disabled="config?.eventProcessingFeeModeReadonly"
                             type="text" v-model="auctionDetails.eventProcesssingFeeModeName" readonly />
+                            {{ auctionDetails.eventProcesssingFeeModeName }}
+
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="username">
@@ -138,7 +140,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible, true)">
+                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             EMD Fee Payment Mode
@@ -158,7 +160,7 @@
                             type="text"  v-model="auctionDetails.emdFeePaymentModeName" readonly />
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
@@ -454,7 +456,7 @@ function FetchAllPaymentModes() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllPaymentModes', true);
             if (rs.isValid('FetchAllPaymentModes')) {
-                console.log(res.result);
+                console.log(res.result[0].paymentModeName);
                 auctionDetails.value.eventProcesssingFeeModeName = res.result[0].paymentModeName;
                 auctionDetails.value.eventProcesssingFeeMode = res.result[0].paymentModeId;
                 auctionDetails.value.emdFeePaymentModeName = res.result[0].paymentModeName;
@@ -608,13 +610,13 @@ function FetchAllStepsAuctionPreview() {
                     auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
                     auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
                     auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
-                    auctionDetails.value.eventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+                    // auctionDetails.value.eventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
                     auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
                     auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
                     auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
-                    auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
+                    // auctionDetails.value.emdAppliedForName = res.result.fetchStep2AuctionPreview.emdAppliedForName;
                     auctionDetails.value.emdFeePaymentMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
-                    auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
+                    // auctionDetails.value.emdFeePaymentModeName = res.result.fetchStep2AuctionPreview.emdFeePaymentModeName;
                 }
             } else {
                 rs.showErrorToast("FetchAllStepsAuctionPreview")
