@@ -9,7 +9,7 @@
                     columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
                     <Column field="inventoryId" header="Inventory Id"></Column>
                     <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                    <Column field="reservePrice" header="Reserved Price"></Column>
+                    <Column field="reservePrice" header="Reserve Price"></Column>
                     <Column field="modifierValue" header="Modifier Value"></Column>
                     <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
                     <Column field="action" header="Action">
@@ -872,7 +872,7 @@ const rules = computed(() => ({
 
     modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
 
-    uploadedFile: { required: helpers.withMessage('Document is required', required) },
+    uploadedFile: { },
 }));
 
 const $v = useVuelidate(rules, {

@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible, true)">
+                <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.departmentVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Department
@@ -74,7 +74,7 @@
                             {{ $v.auctionDetails.department.$errors[0].$message }}
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible, true)">
+               <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcesssingFeeModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             Event Processsing Fee Mode
@@ -105,7 +105,7 @@
                             {{ $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.eventProcessingFeeAmountVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="username">
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible, true)">
+                <!-- <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdFeePaymentModeVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
                             EMD Fee Payment Mode
@@ -137,7 +137,7 @@
                             {{ $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.emdAppliedForVisible, true)">
                     <div class="fm-group required">
                         <label class="fm-label" for="step2">
@@ -531,22 +531,22 @@ const rules = computed(() => ({
         auctionProcess: {
             required: helpers.withMessage('Auction Process is required', required)
         },
-        department: {
-            required: helpers.withMessage('Department is required', required)
-        },
+        // department: {
+        //     required: helpers.withMessage('Department is required', required)
+        // },
         bidPlacement: {
             required: helpers.withMessage('Bid Placement is required', required)
         },
-        eventProcesssingFeeMode: {
-            required: helpers.withMessage('Event Processsing Fee Mode is required', required)
+        // eventProcesssingFeeMode: {
+        //     required: helpers.withMessage('Event Processsing Fee Mode is required', required)
 
-        },
+        // },
         eventProcessingFeeAmount: {
             required: helpers.withMessage('Event Processing Fee Amount is required', required)
         },
-        emdFeePaymentMode: {
-            required: helpers.withMessage('EMD Fee Payment Mode is required', required)
-        },
+        // emdFeePaymentMode: {
+        //     required: helpers.withMessage('EMD Fee Payment Mode is required', required)
+        // },
         emdAppliedFor: {
             required: helpers.withMessage('EMD Applied For is required', required)
         }
