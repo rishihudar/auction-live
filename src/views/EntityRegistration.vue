@@ -107,10 +107,13 @@
                     <div class="fm-group">
 
 
-                        <label for="organization">Select Organization</label>
+                        <label for="organization">Select Organization<span>*</span></label>
                         <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
                             :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
                             class="w-full md:w-14rem" @change="fetchEntityTypesByOrganization" />
+                    </div>
+                    <div v-if="$v.entityData.organizationId.$error" class="fm-error">
+                        {{ $v.entityData.organizationId.$errors[0].$message }}
                     </div>
                 </div>
             </div>
@@ -119,16 +122,23 @@
                     <div class="fm-group">
 
                         <!-- Bind the selected country to entityData.fklENtityTypeId -->
-                        <label for="entityName">Entity Type</label>
+                        <label for="entityName">Entity Type<span>*</span></label>
                         <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
                             optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
                     </div>
+                    <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
+                        {{ $v.entityData.entityTypeId.$errors[0].$message }}
+                    </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityName">Entity Name</label>
-                        <InputText id="entityName" v-model="entityData.entityName" />
-                        <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
+                        <label for="entityName">Entity Name<span>*</span></label>
+                        <!-- <InputText id="entityName" v-model="entityData.entityName" /> -->
+                        <InputText id="entityName" v-model="entityData.entityName" placeholder="Enter Entity Name" />
+
+                    </div>
+                    <div v-if="$v.entityData.entityName.$error" class="fm-error">
+                        {{ $v.entityData.entityName.$errors[0].$message }}
                     </div>
                 </div>
             </div>
@@ -136,63 +146,91 @@
             <div class="fm-row">
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityShortName">Entity Short Name</label>
-                        <InputText id="entityShortName" v-model="entityData.entityShortName" />
-                        <small id="username-help">Enter Entity Short Name E.g MCF</small>
-
+                        <label for="entityShortName">Entity Short Name<span>*</span></label>
+                        <InputText id="entityShortName" v-model="entityData.entityShortName"
+                            placeholder="Enter Entity Short Name" @input="checkEntityShortName" />
+                    </div>
+                    <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                        {{ $v.entityData.entityShortName.$errors[0].$message }}
                     </div>
                 </div>
                 <div class="w-1/2">
-                <label for="countryName">Entity District Name</label>
-                <!-- Bind the selected country to stateData.fklCountryId -->
-                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
-                    optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
-            </div>
+                    <label for="countryName">Entity District Name<span>*</span></label>
+                    <!-- Bind the selected country to stateData.fklCountryId -->
+                    <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
+                        optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
+                </div>
+                <div v-if="$v.entityData.districtId.$error" class="fm-error">
+                    {{ $v.entityData.districtId.$errors[0].$message }}
+                </div>
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityAddress">Entity Address</label>
-                        <InputText id="entityAddress" v-model="entityData.entityAddress" />
-                        <small id="username-help">Enter Entity Address E.g MCF</small>
+                        <label for="entityAddress">Entity Address<span>*</span></label>
+                        <InputText id="entityAddress" v-model="entityData.entityAddress"
+                            placeholder="Enter Entity Address" />
+
+                    </div>
+                    <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
+                        {{ $v.entityData.entityAddress.$errors[0].$message }}
                     </div>
                 </div>
             </div>
             <div class="fm-row">
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityContactNumber">Entity Contact Number</label>
-                        <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
-                        <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+                        <label for="entityContactNumber">Entity Contact Number<span>*</span></label>
+                        <InputText id="entityContactNumber" v-model="entityData.entityContactNumber"
+                            placeholder="Enter Entity Contact Number" />
+                        <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
+                    </div>
+                    <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
+                        {{ $v.entityData.entityContactNumber.$errors[0].$message }}
                     </div>
                 </div>
 
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityContactNumber">Entity Round Rule</label>
-                        <InputText id="entityContactNumber" v-model="entityData.roundRule" />
-                        <small id="username-help">Enter Entity Round Rule E.g 3</small>
+                        <label for="entityContactNumber">Entity Round Rule<span>*</span></label>
+                        <InputText id="entityContactNumber" v-model="entityData.roundRule"
+                            placeholder="Enter Entity Round Rule" />
+                        <!-- <small id="username-help">Enter Entity Round Rule E.g 3</small> -->
+                    </div>
+                    <div v-if="$v.entityData.roundRule.$error" class="fm-error">
+                        {{ $v.entityData.roundRule.$errors[0].$message }}
                     </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityContactNumber">Entity Event Processing Fees</label>
-                        <InputText id="entityContactNumber" v-model="entityData.eventProcessingFees" />
-                        <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small>
+                        <label for="entityContactNumber">Entity Event Processing Fees<span>*</span></label>
+                        <InputText id="entityContactNumber" v-model="entityData.eventProcessingFees"
+                            placeholder="Enter Entity Event Processing Fees" />
+                        <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+                    </div>
+                    <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
+                        {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
                     </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityContactNumber">Entity EMI Payment Percentage</label>
-                        <InputText id="entityContactNumber" v-model="entityData.emiPaymentPercentage" />
-                        <small id="username-help">Enter Entity EMI Payment Percentage E.g 25</small>
+                        <label for="entityContactNumber">Entity EMI Payment Percentage<span>*</span></label>
+                        <InputText id="entityContactNumber" v-model="entityData.emiPaymentPercentage"
+                            placeholder="Enter Entity EMI Payment Percentage " />
+                        <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25</small> -->
+                    </div>
+                    <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
                     </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
-                        <label for="entityParent">Entity Parent</label>
+                        <label for="entityParent">Entity Parent<span>*</span></label>
                         <div class="card flex justify-content-center">
                             <Checkbox v-model="entityData.isParent" :binary="true" />
                         </div>
                         <small id="username-help">Enter Entity Parent E.g Yes or NO </small>
+                    </div>
+                    <div v-if="$v.entityData.isParent.$error" class="fm-error">
+                        {{ $v.entityData.isParent.$errors[0].$message }}
                     </div>
                 </div>
                 <div class="w-1/4">
@@ -201,7 +239,7 @@
                         <ConfirmDialog></ConfirmDialog>
                         <div class="card flex flex-wrap gap-2 justify-content-center">
                             <Button @click="confirmADD(entityData)" icon="pi pi-check" label="Submit"></Button>
-                            <Button @click="changeFlag(0), reloadPage()" icon="pi pi-times" label="Cancel"
+                            <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel"
                                 severity="danger"></Button>
                         </div>
                     </div>
@@ -217,69 +255,98 @@
             <div class="fm-row">
                 <div class="w-1/2">
                     <div class="fm-group">
-                        <label for="organizationName">Select Organization</label>
+                        <label for="organizationName">Select Organization<span>*</span></label>
 
                         <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
                             :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
                             class="w-full md:w-14rem" @change="fetchEntityTypesByOrganization" />
+                    </div>
+
+                    <div v-if="$v.entityData.organizationId.$error" class="fm-error">
+                        {{ $v.entityData.organizationId.$errors[0].$message }}
                     </div>
                 </div>
             </div>
             <div class="fm-row">
                 <div class="w-1/2">
                     <div class="fm-group">
-                        <label for="entityName"> Select Entity Type</label>
+                        <label for="entityName"> Select Entity Type <span>*</span></label>
                         <!-- Bind the selected entitytype to entityData.entityTypeId -->
                         <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
                             optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
+                    </div>
+                    <div v-if="$v.entityData.entityType.$error" class="fm-error">
+                        {{ $v.entityData.entityType.$errors[0].$message }}
                     </div>
                 </div>
 
                 <div class="w-1/2">
                     <div class="fm-group">
-                        <label for="entityName">Entity Name</label>
+                        <label for="entityName">Entity Name<span>*</span></label>
                         <InputText id="entityName" v-model="entityData.entityName" />
-                        <small id="username-help">Enter Entity Name E.g UttarPradesh</small>
+                        <!-- <small id="username-help">Enter Entity Name E.g UttarPradesh</small> -->
+                    </div>
+                    <div v-if="$v.entityData.entityName.$error" class="fm-error">
+                        {{ $v.entityData.entityName.$errors[0].$message }}
                     </div>
                 </div>
             </div>
             <div class="w-1/2">
-                <label for="entityShortName">Entity Short Name</label>
+                <label for="entityShortName">Entity Short Name<span>*</span></label>
                 <InputText id="entityShortName" v-model="entityData.entityShortName" />
-                <small id="username-help">Enter Entity Short Name E.g MCF</small>
+                <!-- <small id="username-help">Enter Entity Short Name E.g MCF</small> -->
+            </div>
+            <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                {{ $v.entityData.entityShortName.$errors[0].$message }}
             </div>
             <div class="w-1/2">
-                <label for="countryName">Entity District Name</label>
+                <label for="countryName">Entity District Name<span>*</span></label>
                 <!-- Bind the selected country to stateData.fklCountryId -->
                 <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
                     optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
             </div>
+            <div v-if="$v.entityData.districtId.$error" class="fm-error">
+                {{ $v.entityData.districtId.$errors[0].$message }}
+            </div>
             <div class="w-1/2">
-                <label for="entityAddress">Entity Address</label>
+                <label for="entityAddress">Entity Address<span>*</span></label>
                 <InputText id="entityAddress" v-model="entityData.entityAddress" />
-                <small id="username-help">Enter Entity Address E.g MCF</small>
+                <!-- <small id="username-help">Enter Entity Address E.g MCF</small> -->
             </div>
-
+            <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
+                {{ $v.entityData.entityAddress.$errors[0].$message }}
+            </div>
             <div class="w-1/2">
-                <label for="entityContactNumber">Entity Contact Number</label>
+                <label for="entityContactNumber">Entity Contact Number<span>*</span></label>
                 <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
-                <small id="username-help">Enter Entity Contact Number E.g 6398302275</small>
+                <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
             </div>
-
+            <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
+                {{ $v.entityData.entityContactNumber.$errors[0].$message }}
+            </div>
             <div class="w-1/2">
-                <label for="roundRule">Entity Round Rule</label>
+                <label for="roundRule">Entity Round Rule<span>*</span></label>
                 <InputText id="roundRule" v-model="entityData.roundRule" />
-                <small id="username-help">Enter Entity Round Rule E.g 1</small>
+                <!-- <small id="username-help">Enter Entity Round Rule E.g 1</small> -->
+            </div>
+            <div v-if="$v.entityData.roundRule.$error" class="fm-error">
+                {{ $v.entityData.roundRule.$errors[0].$message }}
             </div>
             <div class="w-1/2">
-                <label for="eventProFees">Entity Event Processing Fees</label>
+                <label for="eventProFees">Entity Event Processing Fees<span>*</span></label>
                 <InputText id="eventProFees" v-model="entityData.eventProcessingFees" />
-                <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small>
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+            </div>
+            <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
+                {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
             </div>
             <div class="w-1/2">
-                <label for="emiPayPercent">Entity EMI Payment Percentage</label>
+                <label for="emiPayPercent">Entity EMI Payment Percentage<span>*</span></label>
                 <InputText id="emiPayPercent" v-model="entityData.emiPaymentPercentage" />
-                <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small>
+                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
+            </div>
+            <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
             </div>
             <div class="w-1/2">
                 <label for="entityParent">Entity Parent</label>
@@ -287,7 +354,10 @@
 
                     <Checkbox v-model="entityData.isParent" :binary="true" />
                 </div>
-                <small id="username-help">Enter Entity Parent E.g Yes or NO </small>
+                <div v-if="$v.entityData.isParent.$error" class="fm-error">
+                    {{ $v.entityData.isParent.$errors[0].$message }}
+                </div>
+                <!-- <small id="username-help">Enter Entity Parent E.g Yes or NO </small> -->
             </div>
             <Toast />
             <ConfirmDialog></ConfirmDialog>
@@ -295,7 +365,7 @@
                 <div class="fm-group">
                     <Button @click="confirmEdit(entityData)" type="submit"
                         class="p-button p-button-primary">Submit</Button>
-                    <Button @click="changeFlag(0), reloadPage()" icon="pi pi-times" label="Cancel"
+                    <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel"
                         severity="danger"></Button>
                 </div>
 
@@ -306,7 +376,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -319,6 +389,9 @@ import { useToast } from "primevue/usetoast";
 import ConfirmDialog from 'primevue/confirmdialog';
 import { or } from '@vuelidate/validators';
 import Checkbox from 'primevue/checkbox';
+import { useVuelidate } from '@vuelidate/core';
+import { helpers, required } from '@vuelidate/validators';
+
 const confirm = useConfirm();
 const toast = useToast();
 const entities = ref([]);
@@ -338,9 +411,55 @@ const entityData = ref({
     emiPaymentPercentage: '',
     isParent: false,
     districtId: '',
+    entitytype: ''
 
 
 });
+// const $v = useVuelidate(validations, entityData);
+// let rules = ref('')
+//   rules.value=rulesAll
+const rules = computed(() => ({
+    entityData: {
+
+        districtId: {
+            required: helpers.withMessage('District is required', required)
+        },
+        isParent: {
+            required: helpers.withMessage('Check is required', required)
+
+        },
+        emiPaymentPercentage: {
+            required: helpers.withMessage('Emi Payment Percentage is required', required)
+        },
+        eventProcessingFees: {
+            required: helpers.withMessage('Event processing fees is required', required)
+        },
+        roundRule: {
+            required: helpers.withMessage('Round rule is required', required)
+        },
+        organizationId: {
+            required: helpers.withMessage('Organization is required', required)
+
+        },
+        entityTypeId: {
+            required: helpers.withMessage('Entity type is required', required)
+        },
+        entityContactNumber: {
+            required: helpers.withMessage('Entity contact number is required', required)
+        },
+        entityAddress: {
+            required: helpers.withMessage('Entity address is required', required)
+        },
+        entityShortName: {
+            required: helpers.withMessage('Entity short name is required', required)
+        },
+        entityName: {
+            required: helpers.withMessage('Entity name is required', required)
+        }
+    }
+}));
+const $v = useVuelidate(rules, { entityData });
+let count = ref([]);
 const organization = ref([]);
 const organizationId = ref([]);
 const entitytype = ref([]);
@@ -422,6 +541,42 @@ function FetchEntityTypeByOrganization(organizationId) {
         });
 }
 
+async function checkEntityShortName(newValue) {
+    const isShortNameAvailable = await CountEntityShortName(newValue);
+    console.log("shortName",isShortNameAvailable)
+    if (!isShortNameAvailable) {
+        console.log("!isShortNameAvailable",isShortNameAvailable)
+        // Display error message indicating that entity short name already exists
+        toast.add({ severity: 'error', summary: 'Entity Short Name Error', detail: 'Entity short name already exists.', life: 3000 });
+    }
+}
+
+async function CountEntityShortName() {
+    try {
+        const response = await new MQL()
+            .useCoreServer()
+            .setActivity("o.[CountEntityShortName]")
+            .setData({ entityShortName : entityData.value.entityShortName}) // Pass the entityShortName directly
+            .fetch();
+
+        const res = response.getActivity("CountEntityShortName", true);
+
+        if (response.isValid("CountEntityShortName")) {
+            count.value = res.result.countEntity; // Extract the count from the response object
+            console.log("Entity short name count:", count.value);
+            console.log("count",count)
+            return count.value == 0; // Ensure to compare with 0
+        } else {
+            response.showErrorToast("CountEntityShortName");
+            return false;
+        }
+    } catch (error) {
+        console.error("Error counting entity short name:", error);
+        return false;
+    }
+}
+
+
 function FetchDistrictName() {
     new MQL()
         .useCoreServer()
@@ -445,10 +600,11 @@ const fetchEntityTypesByOrganization = () => {
 };
 
 function insertEntity(entityData) {
+    console.log("############", entityData.value)
     new MQL()
         .useCoreServer()
         .setActivity('o.[InsertEntity]')
-        .setData(entityData)
+        .setData(entityData.value)
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('InsertEntity', true);
@@ -462,7 +618,10 @@ function insertEntity(entityData) {
             loading.value = false;
         });
 }
-function updateEntity(entityData) {
+
+
+const updateEntity = async (entityData) => {
+    // function updateEntity(entityData) {
     new MQL()
         .useCoreServer()
         .setActivity('o.[UpdateEntityById]')
@@ -506,37 +665,57 @@ function editEntity(entity) {
 }
 
 
-const confirmEdit = (entityData) => {
-    confirm.require({
-        message: 'Are you sure you want to edit Entity?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-            // entityData.value = { ...entity };
-            // entityData.value = { ...entityData.value, isParent: entityData.value.isParent == 'Yes' ? true : false };
-            updateEntity(entityData), changeFlag(0), reloadPage()
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-        },
-        reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
-    });
+const confirmEdit = async (entityData) => {
+    const result = await $v.value.$validate();
+    if (result) {
+        confirm.require({
+            message: 'Are you sure you want to edit Entity?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                // entityData.value = { ...entity };
+                // entityData.value = { ...entityData.value, isParent: entityData.value.isParent == 'Yes' ? true : false };
+                updateEntity(entityData),
+                    changeFlag(0), reloadPage()
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+            },
+            reject: () => {
+                toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+            }
+        });
+    } else {
+        //alert("error, form not submitted")
+        // toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
+        console.log("eror in validation")
+
+        toast.add({ severity: 'error', summary: 'Validation Error', detail: 'Please fill all required fields.', life: 3000 });
+        return;
+    }
 };
 
-const confirmADD = (entityData) => {
-    confirm.require({
-        message: 'Are you sure you want to add Entity?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-            insertEntity(entityData), changeFlag(0), reloadPage()
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-        },
-        reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
-    });
+
+const confirmADD = async () => {
+    const result = await $v.value.$validate();
+    if (result) {
+        confirm.require({
+            message: 'Are you sure you want to add Entity?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                insertEntity(entityData)
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+            },
+            reject: () => {
+                toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+            }
+        });
+    } else {
+        toast.add({ severity: 'error', summary: 'Validation Error', detail: 'Please fill all required fields.', life: 3000 });
+        return;
+    }
 };
+
+
 
 const confirmDelete = (data) => {
     confirm.require({
@@ -552,9 +731,6 @@ const confirmDelete = (data) => {
         }
     });
 };
-
-
-
 
 function deleteEntity(data) {
     new MQL()
@@ -575,14 +751,10 @@ function deleteEntity(data) {
 
 onMounted(() => {
     FetchEntities();
-    //  FetchEntityTypeByOrganization(organizationId);
     FetchOrganizations();
     FetchDistrictName();
 
 });
-
-
-
 </script>
 <style scoped>
 .flex-column {
