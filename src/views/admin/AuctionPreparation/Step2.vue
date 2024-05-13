@@ -65,14 +65,24 @@
                         <label class="fm-label" for="step2">
                             Department
                         </label>
-                        <div class="fm-inner">
+                        <!-- <div class="fm-inner">
                             <Dropdown :disabled="config?.departmentReadonly" v-model="auctionDetails.department"
                                 option-value="departmentId" variant="filled" :options="departments"
                                 optionLabel="departmentName" placeholder="Select Department" />
                         </div>
                         <div v-if="$v.auctionDetails.department.$error" class="fm-error">
                             {{ $v.auctionDetails.department.$errors[0].$message }}
+                        </div> -->
+                        
+                        <div class="fm-inner">
+                            <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
+                            <InputText :disabled="config?.eventProcessingFeeAmountReadonly"
+                            type="text"  v-model="auctionDetails.departmentName" readonly />
                         </div>
+                        <!-- <div v-if="$v.auctionDetails.departmentName.$error" class="fm-error">
+                            {{ $v.auctionDetails.departmentName.$errors[0].$message }}
+                        </div> -->
+
                     </div>
                 </div> -->
                 <div class="col-span-full md:col-span-4" v-if="ifBool(config?.bidPlacementVisible, true)">
@@ -95,7 +105,7 @@
                         <label class="fm-label" for="step2">
                             Event Processsing Fee Mode
                         </label>
-                        <div class="fm-inner">
+                        <!-- <div class="fm-inner">
                             <Dropdown :disabled="config?.eventProcesssingFeeModeReadonly"
                                 v-model="auctionDetails.eventProcesssingFeeMode" option-value="paymentModeId"
                                 variant="filled" :options="paymentModes" optionLabel="paymentModeName"
@@ -103,6 +113,12 @@
                         </div>
                         <div v-if="$v.auctionDetails.eventProcesssingFeeMode.$error" class="fm-error">
                             {{ $v.auctionDetails.eventProcesssingFeeMode.$errors[0].$message }}
+                        </div> -->
+
+                        <div class="fm-inner">
+                            <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
+                            <InputText :disabled="config?.eventProcessingFeeModeReadonly"
+                            type="text" v-model="auctionDetails.eventProcesssingFeeModeName" readonly />
                         </div>
                     </div>
                 </div> -->
@@ -127,7 +143,7 @@
                         <label class="fm-label" for="step2">
                             EMD Fee Payment Mode
                         </label>
-                        <div class="fm-inner">
+                        <!-- <div class="fm-inner">
                             <Dropdown :disabled="config?.emdFeePaymentModeReadonly"
                                 v-model="auctionDetails.emdFeePaymentMode" option-value="paymentModeId" variant="filled"
                                 :options="paymentModes" optionLabel="paymentModeName"
@@ -135,6 +151,11 @@
                         </div>
                         <div v-if="$v.auctionDetails.emdFeePaymentMode.$error" class="fm-error">
                             {{ $v.auctionDetails.emdFeePaymentMode.$errors[0].$message }}
+                        </div> -->
+                        <div class="fm-inner">
+                            <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
+                            <InputText :disabled="config?.eventProcessingFeeAmountReadonly"
+                            type="text"  v-model="auctionDetails.emdFeePaymentModeName" readonly />
                         </div>
                     </div>
                 </div> -->
@@ -327,7 +348,7 @@ const auctionDetails = ref({
     department: '',
     bidPlacement: '',
     eventProcesssingFeeMode: '',
-    eveventProcesssingFeeModeName: '',
+    eventProcesssingFeeModeName: '',
     eventProcessingFeeAmount: '',
     emdFeePaymentMode: '',
     emdAppliedFor: '',
@@ -397,6 +418,10 @@ function FetchAllDepartments() {
             if (rs.isValid('FetchAllDepartments')) {
                 console.log(res.result);
                 departments.value = res.result;
+                auctionDetails.value.departmentName = res.result[0].departmentName
+                auctionDetails.value.department = res.result[0].departmentId
+
+                console.log("department name: ", auctionDetails.value.departmentName, " department ID: ", auctionDetails.value.department )
             } else {
                 rs.showErrorToast('ErrorFetchAllDepartments');
             }
@@ -430,7 +455,13 @@ function FetchAllPaymentModes() {
             let res = rs.getActivity('FetchAllPaymentModes', true);
             if (rs.isValid('FetchAllPaymentModes')) {
                 console.log(res.result);
-                paymentModes.value = res.result;
+                auctionDetails.value.eventProcesssingFeeModeName = res.result[0].paymentModeName;
+                auctionDetails.value.eventProcesssingFeeMode = res.result[0].paymentModeId;
+                auctionDetails.value.emdFeePaymentModeName = res.result[0].paymentModeName;
+                auctionDetails.value.emdFeePaymentMode = res.result[0].paymentModeId;
+
+                console.log("auctionDetails.value.eventProcesssingFeeModeName", auctionDetails.value.eventProcesssingFeeModeName, "auctionDetails.value.eventProcesssingFeeMode", auctionDetails.value.eventProcesssingFeeMode )
+                console.log("auctionDetails.value.emdFeePaymentModeName", auctionDetails.value.emdFeePaymentModeName, "auctionDetails.value.emdFeePaymentMode", auctionDetails.value.emdFeePaymentMode)
             } else {
                 rs.showErrorToast('ErrorFetchAllPaymentModes');
             }
@@ -577,7 +608,7 @@ function FetchAllStepsAuctionPreview() {
                     auctionDetails.value.department = `${res.result.fetchStep2AuctionPreview.departmentId}`;
                     auctionDetails.value.bidPlacementName = res.result.fetchStep2AuctionPreview.bidPlacementName;
                     auctionDetails.value.bidPlacement = `${res.result.fetchStep2AuctionPreview.bidPlacement}`;
-                    auctionDetails.value.eveventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
+                    auctionDetails.value.eventProcesssingFeeModeName = res.result.fetchStep2AuctionPreview.eventProcessingFeeModeName;
                     auctionDetails.value.eventProcesssingFeeMode = `${res.result.fetchStep2AuctionPreview.eventProcessingFeeMode}`;
                     auctionDetails.value.eventProcessingFeeAmount = res.result.fetchStep2AuctionPreview.eventProcessingFees;
                     auctionDetails.value.emdAppliedFor = `${res.result.fetchStep2AuctionPreview.emdAppliedFor}`;
