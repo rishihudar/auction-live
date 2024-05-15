@@ -3,7 +3,7 @@
         <div class="h-screen grid grid-cols-[1fr_320px]">
             <div class="relative py-5 px-8 bg-slate-100">
                 <!-- <Toast/> -->
-                <ConfirmDialog class="modal-confirm" :closable="false"></ConfirmDialog>
+                <ConfirmDialog class="modal-confirm modal-confirm-danger" :closable="false"></ConfirmDialog>
                 <div class="mb-5 flex items-start justify-between">
                     <div class="text">
                         <div class="text-2xl font-bold text-[var(--neutral-600)]">Auction Bidding</div>

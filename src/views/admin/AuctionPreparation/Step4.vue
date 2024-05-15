@@ -134,18 +134,18 @@
 
               <div class="fm-buttons" v-if="noticeCheck">
                 <Button
-                  @click="DownloadDocument(NoticeUrl)"
+                    @click="DownloadDocument(NoticeUrl)"
                 >
                     <fa-download></fa-download> Download Notice Document
                 </Button>
+                <Button
+                    v-if="noticeCheck"
+                    severity="danger"
+                    @click="(noticeCheck = false), (NoticeUrl = null)"
+                >
+                    <fa-trash-can></fa-trash-can> Remove Document
+                </Button>
               </div>
-              <Button
-                v-if="noticeCheck"
-                severity="danger"
-                @click="(noticeCheck = false), (NoticeUrl = null)"
-              >
-                <fa-trash-can></fa-trash-can> Remove Document
-              </Button>
             </div>
           </div>
         </div>
