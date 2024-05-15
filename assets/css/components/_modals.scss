@@ -8,4 +8,13 @@
     }
 }
 
+.modal-confirm {width: 30rem;
+    .modal-title {@apply pt-10 pb-0 justify-center text-center;}
+    .mt-text {@apply mb-4 text-3xl font-semibold;}
+    .modal-body {@apply pt-0 pb-10 text-xl text-center;}
+    .modal-footer {@apply pb-8 flex-row-reverse justify-center;
+        .btn {@apply px-8;}
+    }
+}
+
 .modal-cropper {@apply w-[500px];}
