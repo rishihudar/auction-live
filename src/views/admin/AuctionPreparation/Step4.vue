@@ -82,21 +82,22 @@
                 </FileUpload>
               </div>
 
-              <span v-if="$v.AucUrl.$error" class="text-red-500">{{
+              <div v-if="$v.AucUrl.$error" class="fm-error">{{
                 $v.AucUrl.$errors[0].$message
-              }}</span>
+              }}</div>
 
-              <div v-if="auctionCheck">
+              <div class="fm-buttons" v-if="auctionCheck">
                 <Button
-                  label="Download Auction Document"
                   @click="DownloadDocument(AucUrl)"
-                />
+                >
+                    <fa-download></fa-download> Download Auction Document
+                </Button>
                 <Button
                   v-if="auctionCheck"
                   severity="danger"
                   @click="(auctionCheck = false), (AucUrl = null)"
                 >
-                  <fa-trash></fa-trash> Remove Document
+                  <fa-trash-can></fa-trash-can> Remove Document
                 </Button>
               </div>
             </div>
@@ -127,22 +128,23 @@
                 </FileUpload>
               </div>
 
-              <span v-if="$v.NoticeUrl.$error" class="text-red-500">{{
+              <div v-if="$v.NoticeUrl.$error" class="fm-error">{{
                 $v.NoticeUrl.$errors[0].$message
-              }}</span>
+              }}</div>
 
-              <div v-if="noticeCheck">
+              <div class="fm-buttons" v-if="noticeCheck">
                 <Button
-                  label="Download Notice Document"
                   @click="DownloadDocument(NoticeUrl)"
-                />
+                >
+                    <fa-download></fa-download> Download Notice Document
+                </Button>
               </div>
               <Button
                 v-if="noticeCheck"
                 severity="danger"
                 @click="(noticeCheck = false), (NoticeUrl = null)"
               >
-                <fa-trash></fa-trash> Remove Document
+                <fa-trash-can></fa-trash-can> Remove Document
               </Button>
             </div>
           </div>
@@ -210,6 +212,9 @@ import { login } from "../../../store/modules/login";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, required,minValue } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
+
+import faDownload from '../../../../assets/icons/download.svg'
+import faTrashCan from '../../../../assets/icons/trash-can.svg'
 
 const toast = useToast();
 const router = useRouter();
