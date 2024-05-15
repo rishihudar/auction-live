@@ -9,7 +9,7 @@
                     columnResizeMode="fit" showGridlines tableStyle="min-width: 50rem">
                     <Column field="inventoryId" header="Inventory Id"></Column>
                     <Column field="inventoryHierarchy" header="Inventory Name"></Column>
-                    <Column field="reservePrice" header="Reserved Price"></Column>
+                    <Column field="reservePrice" header="Reserve Price"></Column>
                     <Column field="modifierValue" header="Modifier Value"></Column>
                     <Column field="modifierValueChangeName" header="Modifier Value Change After"></Column>
                     <Column field="action" header="Action">
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-span-full md:col-span-4">
                     <div class="fm-group">
-                        <label class="fm-label" for="Reserve Price">Reserve Price</label>
+                        <label class="fm-label" for="Reserve Price">Reserve</label>
                         <div class="fm-inner">
                             <InputText id="username" v-model="inventoryAreaDetails.inventoryReservePrice"
                                 placeholder="Enter Reserve Price" readonly />
@@ -208,9 +208,9 @@
                             </template>
                             <!-- <p><strong>Note:- </strong> Max. file size 2 MB, Only pdf and images are allowed</p> -->
                         </FileUpload>
-                        <div v-if="$v.uploadedFile.$error" class="fm-error">
+                        <!-- <div v-if="$v.uploadedFile.$error" class="fm-error">
                             {{ $v.uploadedFile.$errors[0].$message }}
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">
@@ -872,7 +872,7 @@ const rules = computed(() => ({
 
     modifierValueAfterExtention: { required: helpers.withMessage('Modifier Value After Extension is required', required) },
 
-    uploadedFile: { required: helpers.withMessage('Document is required', required) },
+    uploadedFile: { },
 }));
 
 const $v = useVuelidate(rules, {
@@ -884,7 +884,7 @@ const $v = useVuelidate(rules, {
     selectedModifierValueChange,
     modifierValueExtentionCount,
     modifierValueAfterExtention,
-    uploadedFile
+    // uploadedFile
 });
 
 function DownloadDocument(url) {
