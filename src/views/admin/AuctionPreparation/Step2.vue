@@ -119,8 +119,6 @@
                             <!-- <InputNumber :disabled="config?.eventProcessingFeeAmountReadonly" v-model="auctionDetails.eventProcessingFeeAmount" inputId="minmax-buttons" mode="decimal" showButtons :min="0" /> -->
                             <InputText :disabled="config?.eventProcessingFeeModeReadonly"
                             type="text" v-model="auctionDetails.eventProcesssingFeeModeName" readonly />
-                            {{ auctionDetails.eventProcesssingFeeModeName }}
-
                         </div>
                     </div>
                 </div>
