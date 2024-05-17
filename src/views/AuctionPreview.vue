@@ -89,36 +89,36 @@
                             {{ auctionSummary[0].auctionProcessName }}
                         </div>
                     </div>
-                    <div class="bs-item col-span-4">
+                    <!-- <div class="bs-item col-span-4">
                         <div class="bs-label">Department:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].departmentName }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="bs-item col-span-4">
                         <div class="bs-label">Bid Submission/Placement:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].bidPlacementName }}
                         </div>
                     </div>
-                    <div class="bs-item col-span-3">
+                    <!-- <div class="bs-item col-span-3">
                         <div class="bs-label">Event Processing Fee Mode:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].eventProcessingFeeMode }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="bs-item col-span-3">
                         <div class="bs-label">Event Processing Fee Amount:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].eventProcessingFees }}
                         </div>
                     </div>
-                    <div class="bs-item col-span-3">
+                    <!-- <div class="bs-item col-span-3">
                         <div class="bs-label">EMD Fee Payment Mode:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].eventProcessingFeeMode }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="bs-item col-span-3">
                         <div class="bs-label">EMD Applied For:</div>
                         <div class="bs-value">
@@ -155,7 +155,7 @@
                         </div>
                     </div>
                     <div class="bs-item col-span-4">
-                        <div class="bs-label">Reserved Price:</div>
+                        <div class="bs-label">Reserve Price:</div>
                         <div class="bs-value">
                             {{ auctionSummary[0].reservePrice }}
                         </div>
@@ -172,12 +172,12 @@
                             {{ auctionSummary[0].modifierValueChangeName }}
                         </div>
                     </div>
-                    <div class="bs-item col-span-4">
+                    <div class="bs-item col-span-4" v-if="auctionItemDocumentPath != '/'">
                         <div class="bs-buttons bs-buttons-left">
                             <!-- <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath" target="_blank"> Auction Item Document</a> -->
                             <button class="btn btn-sm btn-secondary" @click="DownloadDocument(auctionItemDocumentPath)">
-                                Auction
-                                Item Document</button>
+                                Auction Item Document
+                            </button>
                         </div>
                     </div>
                 </div>
