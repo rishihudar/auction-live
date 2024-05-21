@@ -3,7 +3,7 @@
         <div class="h-screen grid grid-cols-[1fr_320px]">
             <div class="relative py-5 px-8 bg-slate-100">
                 <!-- <Toast/> -->
-                <ConfirmDialog></ConfirmDialog>
+                <ConfirmDialog class="modal-confirm modal-confirm-danger" :closable="false"></ConfirmDialog>
                 <div class="mb-5 flex items-start justify-between">
                     <div class="text">
                         <div class="text-2xl font-bold text-[var(--neutral-600)]">Auction Bidding</div>
@@ -272,11 +272,14 @@ function currencyFormat(value) {
 function leaveAuction() {
     //router.push("BidderCurrentAuctions")
     confirm1.require({
-        message: 'Are you sure you want to leave?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        rejectClass: 'p-button-secondary p-button-outlined',
+        // message: 'Are you sure you want to leave?',
+        // header: 'Confirmation',
+        message: 'You will not be able to participate in the bidding.',
+        header: 'Are you sure?',
+        // icon: 'pi pi-exclamation-triangle',
+        rejectClass: 'btn-grey',
         rejectLabel: 'Cancel',
+        acceptClass: 'btn-danger',
         acceptLabel: 'Leave',
         accept: () => {
             window.close()
@@ -716,7 +719,7 @@ onBeforeMount(async () => {
 
 </script>
 
-<style>
+<!-- <style>
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -738,4 +741,4 @@ onBeforeMount(async () => {
 .error-msg {
     color: red;
 }
-</style>
+</style> -->

@@ -54,10 +54,11 @@ export default {
         ]
     },
     title: {
-        class: ['font-bold text-2xl']
+        class: ['mt-text font-bold text-2xl']
     },
     icons: {
-        class: ['flex items-center']
+        // class: ['flex items-center']
+        class: ['mt-icons']
     },
     closeButton: {
         class: [
@@ -149,6 +150,7 @@ export default {
     },
     content: ({ state, instance }) => ({
         class: [
+            'modal-body',
             // Spacing
             'px-6',
             'pb-8',
@@ -171,6 +173,7 @@ export default {
     }),
     footer: {
         class: [
+            'modal-footer',
             // Flexbox and Alignment
             'flex items-center justify-end',
             'shrink-0',

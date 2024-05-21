@@ -16,7 +16,7 @@
                     @click="navigateToAbout(card)"
                 >
                     <div class="card-body">
-                        <h4 class="card-value">{{ card.countQuery }}</h4>
+                        <h4 class="card-value" :class="{ 'card-value-sm': card.countQuery == 'Coming Soon...' }">{{ card.countQuery }}</h4>
                         <div class="card-name-holder">
                             <b class="fw-medium card-name">{{ card.card }}</b>
                         </div>

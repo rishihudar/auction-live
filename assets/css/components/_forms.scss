@@ -123,6 +123,8 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
     }
 }
 
+.fm-buttons {@apply flex flex-wrap gap-1;}
+
 
 .fm-action {@apply pt-2 col-span-full flex flex-wrap gap-2 items-center;
     &.fm-action-center {@apply justify-center;}

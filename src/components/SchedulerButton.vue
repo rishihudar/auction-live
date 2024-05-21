@@ -160,7 +160,8 @@ async function schedule() {
     alert("Please fill all the fields");
     return;
   }
-  var statusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
+  var bidderStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
+  var userStatusId = await fetchAuctionStatus("AUCTION_USER_SCHEDULED");
   // Automatically generated
   new MQL()
     .setActivity("o.[ScheduleAuction]")
@@ -170,7 +171,8 @@ async function schedule() {
       startDate: formatDate(startDate.value),
       users: users.value,
       userId: loginStore.loginId,
-      statusId: statusId.result.statusId,
+      bidderStatusId: bidderStatusId.result.statusId,
+      userStatusId: userStatusId.result.statusId
     })
     .fetch()
     .then((rs) => {

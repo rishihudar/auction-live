@@ -27,6 +27,11 @@
     &:hover, &:focus {@apply bg-rose-600;}
 }
 
+.btn-grey {@apply text-white bg-slate-400; box-shadow: none;
+    svg {@apply fill-white;}
+    &:hover, &:focus {@apply bg-slate-500; box-shadow: none;}
+}
+
 .btn-outline {@apply border bg-transparent;
     &.btn-danger {@apply border-rose-500 bg-rose-100 text-rose-600;
         &:hover, &:focus {@apply bg-rose-200;}
