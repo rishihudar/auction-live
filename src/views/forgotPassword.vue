@@ -8,12 +8,12 @@
             </div>
             <div class="cl-header">
                 <div class="cl-header-media">
-                <img
-                    src="../../assets/images/logo_dulb.webp"
-                    alt="DULB logo"
-                    width="956"
-                    height="193"
-                />
+                    <img
+                        src="../../assets/images/logo_dulb.webp"
+                        alt="DULB logo"
+                        width="956"
+                        height="193"
+                    />
                 </div>
                 <h1 class="title">Forgot Password</h1>
             </div>
@@ -31,14 +31,14 @@
                                 @click="isEmailExist"
                                 :disabled="!emailId ||emailchecked"
                             />
-                            <!-- <div v-if="$v.emailId.$error" class="fm-error">
-                                    {{ $v.emailId.$errors[0].$message }}
-                                </div> 
-                                <div v-if="OTPVerified" :style="{ color: 'green', fontSize: 'small' }">
-                                    Email Verified 
-                                </div>
-                            </div> -->
                         </InputGroup>
+                        <!-- <div v-if="$v.emailId.$error" class="fm-error">
+                                {{ $v.emailId.$errors[0].$message }}
+                            </div> 
+                            <div v-if="OTPVerified" :style="{ color: 'green', fontSize: 'small' }">
+                                Email Verified 
+                            </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-span-full">
