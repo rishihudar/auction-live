@@ -150,8 +150,11 @@
                         <InputText id="entityShortName" v-model="entityData.entityShortName"
                             placeholder="Enter Entity Short Name" @input="checkEntityShortName" />
                     </div>
-                    <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                    <!-- <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
                         {{ $v.entityData.entityShortName.$errors[0].$message }}
+                    </div> -->
+                    <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                        {{ $v.entityData.entityShortName.$errors[0]?.$message }}
                     </div>
                 </div>
                 <div class="w-1/2">
@@ -239,8 +242,7 @@
                         <ConfirmDialog></ConfirmDialog>
                         <div class="card flex flex-wrap gap-2 justify-content-center">
                             <Button @click="confirmADD(entityData)" icon="pi pi-check" label="Submit"></Button>
-                            <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel"
-                                severity="danger"></Button>
+                            <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel" severity="danger"></Button>
                         </div>
                     </div>
                 </div>
@@ -365,8 +367,7 @@
                 <div class="fm-group">
                     <Button @click="confirmEdit(entityData)" type="submit"
                         class="p-button p-button-primary">Submit</Button>
-                    <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel"
-                        severity="danger"></Button>
+                    <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel" severity="danger"></Button>
                 </div>
 
             </div>
@@ -415,18 +416,65 @@ const entityData = ref({
 
 
 });
-// const $v = useVuelidate(validations, entityData);
-// let rules = ref('')
-//   rules.value=rulesAll
+const isUniqueEntityShortName = helpers.withAsync(async (value) => {
+    if (!value) return true; 
+    const response = await new MQL()
+        .useCoreServer()
+        .setActivity("o.[CountEntityShortName]")
+        .setData({ entityShortName: value }) // Pass the entityShortName directly
+        .fetch();
+
+    const res = response.getActivity("CountEntityShortName", true);
+
+    if (response.isValid("CountEntityShortName")) {
+        const count = res.result.countEntity; // Extract the count from the response object
+        return count === 0; // Ensure to compare with 0
+    } else {
+        response.showErrorToast("CountEntityShortName");
+        return false;
+    }
+});
+
+async function checkEntityShortName(newValue) {
+    const isShortNameAvailable = await CountEntityShortName(newValue);
+    console.log("shortName", isShortNameAvailable)
+    if (!isShortNameAvailable) {
+        console.log("!isShortNameAvailable", isShortNameAvailable)
+        // Display error message indicating that entity short name already exists
+        toast.add({ severity: 'error', summary: 'Entity Short Name Error', detail: 'Entity short name already exists.', life: 3000 });
+    }
+}
+async function CountEntityShortName() {
+    try {
+        const response = await new MQL()
+            .useCoreServer()
+            .setActivity("o.[CountEntityShortName]")
+            .setData({ entityShortName: entityData.value.entityShortName }) // Pass the entityShortName directly
+            .fetch();
+
+        const res = response.getActivity("CountEntityShortName", true);
+
+        if (response.isValid("CountEntityShortName")) {
+            count.value = res.result.countEntity; // Extract the count from the response object
+            console.log("Entity short name count:", count.value);
+            console.log("count", count)
+            return count.value == 0; // Ensure to compare with 0
+        } else {
+            response.showErrorToast("CountEntityShortName");
+            return false;
+        }
+    } catch (error) {
+        console.error("Error counting entity short name:", error);
+        return false;
+    }
+}
 const rules = computed(() => ({
     entityData: {
-
         districtId: {
             required: helpers.withMessage('District is required', required)
         },
         isParent: {
             required: helpers.withMessage('Check is required', required)
-
         },
         emiPaymentPercentage: {
             required: helpers.withMessage('Emi Payment Percentage is required', required)
@@ -439,7 +487,6 @@ const rules = computed(() => ({
         },
         organizationId: {
             required: helpers.withMessage('Organization is required', required)
-
         },
         entityTypeId: {
             required: helpers.withMessage('Entity type is required', required)
@@ -451,7 +498,8 @@ const rules = computed(() => ({
             required: helpers.withMessage('Entity address is required', required)
         },
         entityShortName: {
-            required: helpers.withMessage('Entity short name is required', required)
+            required: helpers.withMessage('Entity short name is required', required),
+            isUniqueEntityShortName: helpers.withMessage('Entity short name already exists', isUniqueEntityShortName)
         },
         entityName: {
             required: helpers.withMessage('Entity name is required', required)
@@ -540,42 +588,6 @@ function FetchEntityTypeByOrganization(organizationId) {
             loading.value = false; // Move loading to here
         });
 }
-
-async function checkEntityShortName(newValue) {
-    const isShortNameAvailable = await CountEntityShortName(newValue);
-    console.log("shortName",isShortNameAvailable)
-    if (!isShortNameAvailable) {
-        console.log("!isShortNameAvailable",isShortNameAvailable)
-        // Display error message indicating that entity short name already exists
-        toast.add({ severity: 'error', summary: 'Entity Short Name Error', detail: 'Entity short name already exists.', life: 3000 });
-    }
-}
-
-async function CountEntityShortName() {
-    try {
-        const response = await new MQL()
-            .useCoreServer()
-            .setActivity("o.[CountEntityShortName]")
-            .setData({ entityShortName : entityData.value.entityShortName}) // Pass the entityShortName directly
-            .fetch();
-
-        const res = response.getActivity("CountEntityShortName", true);
-
-        if (response.isValid("CountEntityShortName")) {
-            count.value = res.result.countEntity; // Extract the count from the response object
-            console.log("Entity short name count:", count.value);
-            console.log("count",count)
-            return count.value == 0; // Ensure to compare with 0
-        } else {
-            response.showErrorToast("CountEntityShortName");
-            return false;
-        }
-    } catch (error) {
-        console.error("Error counting entity short name:", error);
-        return false;
-    }
-}
-
 
 function FetchDistrictName() {
     new MQL()

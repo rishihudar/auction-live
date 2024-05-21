@@ -52,21 +52,22 @@
             <Footer name="box"></Footer>
         </div>
         <Dialog v-model:visible="visible">
-            Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to <strong>bidder portal</strong> or If issues persist, contact our support team. Thank you!
+            Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to
+            <strong>bidder portal</strong> or If issues persist, contact our support team. Thank you!
         </Dialog>
     </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { login } from "../store/modules/login.js";
 import Dialog from "primevue/dialog";
 import { createToaster } from "@meforma/vue-toaster";
 import Footer from "@/components/common/Footer.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
-
+import MQL from '@/plugins/mql.js';
 
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
@@ -90,7 +91,7 @@ let rules = computed(() => ({
         password: { required },
     },
 }));
-
+const count = ref([]);
 const $v = useVuelidate(rules, { user });
 
 // <----Functions---->
@@ -104,10 +105,16 @@ function authenticate() {
                 password: user.value.password,
                 enabled: 1
             })
-            .then((res) => {
+            .then(async (res) => {
                 let roles = loginStore.roleNames;
                 toaster.success("Login Successfully");
-                router.push('/role-select')
+                const passwordCount  = await FetchPasswordCount()
+                if (passwordCount == 0) {
+                    router.push('/changePassword')
+                } else {
+                    router.push('/role-select')
+                }
+
 
             })
             .catch((err) => {
@@ -124,4 +131,28 @@ function authenticate() {
         toaster.error("Invalid Details")
     }
 }
+function FetchPasswordCount() {
+    return new Promise((resolve, reject) => {
+        new MQL()
+            .useLoginServer()
+            .setActivity("o.[FetchPasswordCount]")
+            .setData({ "userId": loginStore.loginDetails.loginId })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("FetchPasswordCount", true)
+                if (rs.isValid("FetchPasswordCount")) {
+                    // count.value=res.result.passwordCount;
+                    console.log("count.value", count.value)
+                    console.log("count", res.result.passwordCount)
+                    resolve(res.result.passwordCount)
+                } else {
+                    rs.showErrorToast("FetchPasswordCount")
+                }
+            })
+    })
+
+}
+onMounted(() => {
+    FetchPasswordCount()
+})
 </script>
