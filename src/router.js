@@ -296,6 +296,12 @@ const router = createRouter({
       meta: { title: "forgotPassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false,  roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/changePassword",
+      name: "changePassword",
+      component: loadView("changePassword"),
+      meta: { title: "changePassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false,  roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
       path: "/registration",
       name: "registration",
       component: loadView("Registration"),
