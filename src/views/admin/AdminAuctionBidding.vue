@@ -319,7 +319,7 @@ function checkH1(incomingBid) {
 function updateHistory(bidObject) {
     if (bidObject.bidderId) {
         let bidHistoryObj = {
-            roundNumber: auctionDetails.value[0].roundNumber,
+            roundNumber: bidObject.bidAmount,
             quoteAmount: bidObject.bidAmount,
             quoteTime: latestTime.value
         }
@@ -554,14 +554,13 @@ const fetchItemDetails = () => {
         .useCoreServer()
         .setActivity("r.[FetchDataForBidding]")
         .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
-        .enablePageLoader(true)
         .fetch()
         .then(async (rs) => {
             let res = rs.getActivity("FetchDataForBidding", true)
             if (rs.isValid("FetchDataForBidding")) {
                 itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
                 itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
-                itemDetails.value.StartValue = res.result.inventoryDetails.auctionItemReservePrice
+                itemDetails.value.StartValue = res.result.inventoryDetails.startValue
                 itemDetails.value.ModifierValue = res.result.inventoryDetails.modifierValue
                 itemDetails.value.MaxBidAmount = 100 * res.result.inventoryDetails.modifierValue
                 itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
@@ -579,7 +578,6 @@ const fetchProperties = () => {
         .useCoreServer()
         .setActivity("r.[FetchDataForBidding]")
         .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
-        .enablePageLoader(true)
         .fetch()
         .then(async (rs) => {
             let res = rs.getActivity("FetchDataForBidding", true)
@@ -616,7 +614,7 @@ function fetchAuctionDetails() {
 
                     itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
                     itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
-                    itemDetails.value.StartValue = res.result.inventoryDetails.auctionItemReservePrice
+                    itemDetails.value.StartValue = res.result.inventoryDetails.startValue
                     itemDetails.value.ModifierValue = res.result.inventoryDetails.modifierValue
                     itemDetails.value.MaxBidAmount = 100 * res.result.inventoryDetails.modifierValue
                     itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
@@ -636,7 +634,9 @@ function fetchAuctionDetails() {
                     }
 
                     if (res.result.inventoryDetails.BidCount == 'NO_BID') {
-                        await nextRoundReservePrice()
+                        auctionDetails.value[0].currentHigh = res.result.inventoryDetails.startValue
+
+                        // await nextRoundReservePrice()
                     }
 
                     resolve()
@@ -659,7 +659,7 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
         // Automatically generated
         new MQL()
             .useCoreServer()
-            .setActivity("r.[GetPreviousRoundHBid]")
+            .setActivity("o.[GetPreviousRoundHBid]")
             .setData(data)
             .fetch()
             .then(rs => {
@@ -750,24 +750,6 @@ const makeMultiplieries = () => {
         });
     }
 }
-
-const getAuctionProperties = () => {
-    new MQL()
-        .useCoreServer()
-        .setActivity("r.[FetchDataForBidding]")
-        .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity("FetchDataForBidding", true)
-            if (rs.isValid("FetchDataForBidding")) {
-
-                properties.value = res.result.propertyDetails
-            } else {
-                rs.showErrorToast("FetchDataForBidding")
-            }
-        })
-}
-
 
 onBeforeMount(async () => {
     await fetchAuctionDetails()
