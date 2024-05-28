@@ -5,6 +5,16 @@
                 <h2 class="title">Inventory Master</h2>
             </div>
         </div>
+        <div class="form-grid">
+            <div class="col-span-2">
+                            <Button
+                                label="Add Items"
+                                severity="secondary"
+                                @click="navigateInventotyUpload"
+                                class="w-full"
+                            />
+            </div>
+                        </div>
         <div class="table-custom">
             <DataTable :value="inventoryMasterDetails">
                 <template #empty>
@@ -79,6 +89,8 @@ import { login } from "../../store/modules/login"
 import JsonExcel from "vue-json-excel3";
 import Button from "primevue/button";
 import MultiSelect from 'primevue/multiselect';
+import router from "../../router";
+
 
 let selectedCategory = ref([])
 const categoryList = ref()
@@ -90,6 +102,10 @@ let inventoryMasterDetails = ref()
 
 let json_data = ref([])
 // let categoryListMql = ref()
+
+function navigateInventotyUpload(){
+    router.push({path:'/inventoryMaster'})
+}
 
 function fetchFilteredData() {
 			

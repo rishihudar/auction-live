@@ -75,12 +75,12 @@
             </div>
         </div>
 
-        <div class="block-header">
+        <div class="block-header" v-if="isFileSelected">
             <div class="sh-text">
                 <h3 class="title">Uploaded Excel List</h3>
             </div>
         </div>
-        <div class="table-custom">
+        <div class="table-custom" v-if="isFileSelected">
             <DataTable :value="sheet">
                 <Column
                     v-for="col of transformedColumns"
@@ -117,6 +117,8 @@ import Column from "primevue/column";
 import axios from "axios";
 import MQLCdn from "@/plugins/mqlCdn.js";
 import { login } from "../../store/modules/login"
+import router from "../../router";
+
 
 const loginStore = login();
 const inventoryCategories = ref();
@@ -201,7 +203,9 @@ function onChange(event) {
       } else {
         console.log("The arrays do not match.");
         alert("Invalid Template");
-        window.location.reload();
+        router.push({path:'/inventoryMasterCard'})
+        // window.location.reload();
+        
       }
     };
     reader.readAsBinaryString(file.value);
@@ -224,7 +228,8 @@ function handleUpload() {
       // Handle successful upload response
       console.log(response.data);
       alert(response.data);
-      window.location.reload();
+      router.push({path:'/inventoryMasterCard'})
+      // window.location.reload();
     })
     .catch((error) => {
       // Handle upload error
