@@ -128,10 +128,12 @@ function fetchFilteredData() {
 const showAddItemBtn = ref(false);
 
 function checkRole() {
-  // console.log('add item btn',showAddItemBtn.value)
-  if ((login().role.roleCode = "ROLE_SUPERADMIN")) {
+   //console.log('add item btn',showAddItemBtn.value)
+   //console.log('curr role',login().role.roleCode)
+   //console.log('####',login().role.roleCode === "ROLE_SUPERADMIN")
+  if ((login().role.roleCode === "ROLE_SUPERADMIN")) {
     showAddItemBtn.value = true;
-    // console.log('add item btn after true',showAddItemBtn.value)
+ // console.log('add item btn after true',showAddItemBtn.value)
   }
 }
 
