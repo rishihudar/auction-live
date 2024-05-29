@@ -7,148 +7,133 @@
     </div>
     <!-- Sample Master tables-->
     <div class="table-custom">
-        <Paginator
-            class="pagination-up"
-            :rows="perPage"
-            :rowsPerPageOptions="[10, 20, 30]"
-            :totalRecords="totalRows"
-            template="RowsPerPageDropdown"
-            @page="handlePageChange"
-        >
-            <template #start>
-                <div class="fm-inner">
-                    <InputText
-                        v-model="filter"
-                        placeholder="Search By Auction Code..."
-                        @input="fetchConcludedAuctionsBidder"
-                    />
-                    <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-                </div>
-            </template>
-        </Paginator>
-        <DataTable
-            v-model:expandedRows="expandedRows"
-            showGridlines
-            :value="products"
-            :filters="filters"
-        >
-            <Column field="srNo" header="Sr No"></Column>
-            <Column field="auctionCode" header=" Auction Code"></Column>
-            <Column
+      <Paginator class="pagination-up" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
+        template="RowsPerPageDropdown" @page="handlePageChange">
+        <template #start>
+          <div class="fm-inner">
+            <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchConcludedAuctionsBidder" />
+            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+          </div>
+        </template>
+      </Paginator>
+      <DataTable v-model:expandedRows="expandedRows" showGridlines :value="products" :filters="filters">
+        <!-- <Column field="srNo" header="Sr No"></Column> -->
+        <Column field="auctionCode" header=" Auction Code"></Column>
+        <!-- <Column
                 field="auctionDescription"
                 header="Auction Description"
             ></Column>
-            <Column field="auctionCategoryName" header="Auction Category"></Column>
-            <Column
-                field="auctionStartDate"
-                header="Auction StartDate/Time"
-            ></Column>
-            <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
+            <Column field="auctionCategoryName" header="Auction Category"></Column> -->
+        <Column header="Auction Category - Auction Description">
+          <template #body="slotProps">
+            <div>
+              {{ slotProps.data.auctionCategoryName }}-
+              {{ slotProps.data.auctionDescription }}<br>
 
-            <Column expander field="" header="Action">
-            </Column>
+            </div>
+          </template>
+        </Column>
+        <Column field="auctionStartDate" header="Auction StartDate/Time"></Column>
+        <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
 
-            <template #expansion="slot">
-                <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId" />
 
-                <H1BidderApprovalRejection :auctionId="slot.data.auctionId" />
-            </template>
-            <Column expander field="" header="Report">
-                <template #body="{ data }">
-                    <div class="btn-wrapper-table">
-                        <Button class="btn-sm" @click="showModal(data.auctionId)">Auction Report</Button>
-                        <Button severity="secondary" class="btn-sm" @click="showModalForH1(data.auctionId)">H1 Report</Button>
-                    </div>
-                </template>
-            </Column>
-        </DataTable>
-        <Paginator
-            class="pagination-down"
-            :rows="perPage"
-            :rowsPerPageOptions="[10, 20, 30]"
-            :totalRecords="totalRows"
-            template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-            @page="handlePageChange"
-        />
+        <Column expander field="" header="Report">
+          <template #body="{ data }">
+            <div class="btn-wrapper-table">
+              <Button class="btn-sm" @click="showModal(data.auctionId)">Auction Report</Button>
+              <Button severity="secondary" class="btn-sm" @click="showModalForH1(data.auctionId)">H1 Report</Button>
+            </div>
+          </template>
+        </Column>
+        <Column expander field="" header="Action"></Column>
+
+        <template #expansion="slot">
+          <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId" />
+
+          <H1BidderApprovalRejection :auctionId="slot.data.auctionId" />
+        </template>
+      </DataTable>
+      <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
     </div>
 
     <Dialog v-model:visible="displayModal" header="Auction Report" :draggable="false">
-        <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-            <img src="../../../assets/images/logo_dulb.webp" />
-            <p>{{ auctionDetailsReport1.entityName }}</p>
-            <h2>Auction Details Statement</h2>
+      <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+        <img src="../../../assets/images/logo_dulb.webp" />
+        <p>{{ auctionDetailsReport1.entityName }}</p>
+        <h2>Auction Details Statement</h2>
 
-            <p >Auction Code: {{ auctionDetailsReport1.auctionCode }}</p>
-            <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
+        <p>Auction Code: {{ auctionDetailsReport1.auctionCode }}</p>
+        <!-- <div v-for="(item, index) in auctionDetailsReport" :key="index">
                         <p>Sr No:{{ index + 1 }}</p>
                         <p>Created On: {{ item.createdOn }}</p>
                         <p>Full Name: {{ item.fullName }}</p>
                         <p>Quoted Value: {{ item.quotedValue }}</p>
                         <p>Round Number: {{ item.roundNumber }}</p>
                     </div> -->
-            <DataTable :value="auctionDetailsReport" showGridlines>
-            <template #empty>
-                <div class="p-text-center">No Data Available</div>
-            </template>
-            <Column field="srNo" header="Sr No"></Column>
-            <Column field="quotedValue" header="Quoted Value"></Column>
-            <Column field="fullName" header="Full Name"></Column>
-            <Column field="createdOn" header="Created On"></Column>
-            <Column field="roundNumber" header="Round Number"></Column>
-            </DataTable>
-        </div>
-        <Button @click="generatePdf">Generate PDF</Button>
+        <DataTable :value="auctionDetailsReport" showGridlines>
+          <template #empty>
+            <div class="p-text-center">No Data Available</div>
+          </template>
+          <Column field="srNo" header="Sr No"></Column>
+          <Column field="quotedValue" header="Quoted Value"></Column>
+          <Column field="fullName" header="Full Name"></Column>
+          <Column field="createdOn" header="Created On"></Column>
+          <Column field="roundNumber" header="Round Number"></Column>
+        </DataTable>
+      </div>
+      <Button @click="generatePdf">Generate PDF</Button>
     </Dialog>
 
     <Dialog v-model:visible="displayModal1" header="H1Report" :draggable="false">
-        <div v-show="true" id="pdfDiv" ref="html2PdfRef">
-          <img src="../../../assets/images/logo_dulb.webp" />
-          <p>{{auctionH1Report1.entityName }}</p>
-          <h2>Highest Bidder Auction Statement</h2>
-        
-                    <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
-                    <p>Publishing Date:{{ auctionH1Report1.registrationStartDate }}-{{ auctionH1Report1.registrationEndDate }}</p>
-                    <p>Scheduling Date:{{ auctionH1Report1.startDate }} - {{
-                auctionH1Report1.endDate }}
-                    </p>
-                    <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
+      <div v-show="true" id="pdfDiv" ref="html2PdfRef">
+        <img src="../../../assets/images/logo_dulb.webp" />
+        <p>{{ auctionH1Report1.entityName }}</p>
+        <h2>Highest Bidder Auction Statement</h2>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sr No</th>
-                        <th>Round Number</th>
-                        <th>Full Name</th>
-                        <th>Flat</th>
-                        <th>Email ID</th>
-                        <th>Highest Quoted Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template v-for="(item, index) in auctionH1Report" :key="index">
-                        <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
-                            <td>{{ item.srNo }}</td>
-                            <td>{{ item.roundNumber }}</td>
-                            <td colspan="4">No Bids Received</td>
-                        </tr>
-                        <tr v-else>
-                            <td>{{ item.srNo }}</td>
-                            <td>{{ item.roundNumber }}</td>
-                            <td>{{ item.fullName }}</td>
-                            <td>{{ item.flat }}</td>
-                            <td>{{ item.email }}</td>
-                            <td>{{ item.inventorySoldForPrice }}</td>
-                        </tr>
-                    </template>
-                </tbody>
-            </table>
-            <!-- </div>  -->
-        </div>
-        <Button @click="generatePdfH1">Generate PDF</Button>
+        <p>Auction Code: {{ auctionH1Report1.auctionCode }}</p>
+        <p>Publishing Date:{{ auctionH1Report1.registrationStartDate }}-{{ auctionH1Report1.registrationEndDate }}</p>
+        <p>Scheduling Date:{{ auctionH1Report1.startDate }} - {{
+        auctionH1Report1.endDate }}
+        </p>
+        <p>Item Name:{{ auctionH1Report1.inventoryHierarchy }}</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Sr No</th>
+              <th>Round Number</th>
+              <th>Full Name</th>
+              <th>Flat</th>
+              <th>Email ID</th>
+              <th>Highest Quoted Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="(item, index) in auctionH1Report" :key="index">
+              <tr v-if="isDataEmpty(item) && itemExists(index) && noBidPlaced(index)">
+                <td>{{ item.srNo }}</td>
+                <td>{{ item.roundNumber }}</td>
+                <td colspan="4">No Bids Received</td>
+              </tr>
+              <tr v-else>
+                <td>{{ item.srNo }}</td>
+                <td>{{ item.roundNumber }}</td>
+                <td>{{ item.fullName }}</td>
+                <td>{{ item.flat }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.inventorySoldForPrice }}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <!-- </div>  -->
+      </div>
+      <Button @click="generatePdfH1">Generate PDF</Button>
     </Dialog>
 
-    </div>
+  </div>
 </template>
 
 <script setup>
@@ -222,7 +207,7 @@ function fetchConcludedAuctionsBidder() {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
           console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
-        
+
       } else {
         rs.showErrorToast("FetchConcludedAuctionsBidder");
       }
@@ -241,25 +226,25 @@ async function fetchAuctionDetailsReport(auctionId) {
       })
       .fetch();
 
-        const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
-        if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
-            console.log(res.result, "auctionDetailsReport result**********");
-            auctionDetailsReport.value = res.result.fetchAuctionDetailReportByAuctionId; // Update the ref value
-            auctionDetailsReport1.value = res.result.fetchEntityNameAndAuctionCode;
-            console.log("%%%%%%%", auctionDetailsReport1)
+    const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
+    if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
+      console.log(res.result, "auctionDetailsReport result**********");
+      auctionDetailsReport.value = res.result.fetchAuctionDetailReportByAuctionId; // Update the ref value
+      auctionDetailsReport1.value = res.result.fetchEntityNameAndAuctionCode;
+      console.log("%%%%%%%", auctionDetailsReport1)
 
-            for (var i = 0; i < auctionDetailsReport.value.length; i++) {
-                auctionDetailsReport.value[i].srNo = i + 1;
-            }
-            return res.result; // Return the result
-        } else {
-            rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
-            throw new Error("Error fetching auction details report");
-        }
-    } catch (error) {
-        console.error("Error fetching auction details report:", error);
-        throw error;
+      for (var i = 0; i < auctionDetailsReport.value.length; i++) {
+        auctionDetailsReport.value[i].srNo = i + 1;
+      }
+      return res.result; // Return the result
+    } else {
+      rs.showErrorToast("FetchAuctionDetailReportByAuctionId");
+      throw new Error("Error fetching auction details report");
     }
+  } catch (error) {
+    console.error("Error fetching auction details report:", error);
+    throw error;
+  }
 }
 
 async function fetchAuctionReportForH1(auctionId) {
@@ -273,26 +258,26 @@ async function fetchAuctionReportForH1(auctionId) {
       })
       .fetch();
 
-        const res = rs.getActivity("FetchAuctionReportForH1", true);
-        if (rs.isValid("FetchAuctionReportForH1")) {
-            console.log(res.result, "auctionH1Report result!@!@!@!@!@");
+    const res = rs.getActivity("FetchAuctionReportForH1", true);
+    if (rs.isValid("FetchAuctionReportForH1")) {
+      console.log(res.result, "auctionH1Report result!@!@!@!@!@");
 
-            // auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
-            auctionH1Report.value = res.result.fetchRoundWiseH1Report; // Update the ref value
-            auctionH1Report1.value = res.result.fetchNoBidPlacedReport;
-            for (var i = 0; i < auctionH1Report.value.length; i++) {
-                auctionH1Report.value[i].srNo = i + 1;
-            }
-            // console.log("$$$$$")
-            return res.result; // Return the result
-        } else {
-            rs.showErrorToast("FetchAuctionReportForH1");
-            throw new Error("Error fetching auction h1  report");
-        }
-    } catch (error) {
-        console.error("Error fetching auction details report:", error);
-        throw error;
+      // auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
+      auctionH1Report.value = res.result.fetchRoundWiseH1Report; // Update the ref value
+      auctionH1Report1.value = res.result.fetchNoBidPlacedReport;
+      for (var i = 0; i < auctionH1Report.value.length; i++) {
+        auctionH1Report.value[i].srNo = i + 1;
+      }
+      // console.log("$$$$$")
+      return res.result; // Return the result
+    } else {
+      rs.showErrorToast("FetchAuctionReportForH1");
+      throw new Error("Error fetching auction h1  report");
     }
+  } catch (error) {
+    console.error("Error fetching auction details report:", error);
+    throw error;
+  }
 }
 
 async function generatePdf(auctionId) {
@@ -307,9 +292,9 @@ async function generatePdf(auctionId) {
       filename: "AuctionReport.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { 
-        unit: "in", 
-        format: "letter", 
+      jsPDF: {
+        unit: "in",
+        format: "letter",
         orientation: "portrait",
         encryption: {
           userPassword: login().loginDetails.username,
@@ -349,9 +334,9 @@ async function generatePdfH1(auctionId) {
       filename: "H1Report.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { 
-        unit: "in", 
-        format: "letter", 
+      jsPDF: {
+        unit: "in",
+        format: "letter",
         orientation: "portrait",
         encryption: {
           userPassword: login().loginDetails.username,
@@ -379,16 +364,16 @@ async function showModalForH1(auctionId) {
 }
 // Function to check if data is empty
 const isDataEmpty = (item) => {
-    return !item.fullName && !item.inventoryName && !item.email && !item.inventorySoldForPrice;
+  return !item.fullName && !item.inventoryName && !item.email && !item.inventorySoldForPrice;
 };
 
 // Function to check if item exists
 const itemExists = (index) => {
-    return index < auctionH1Report.value.length;
+  return index < auctionH1Report.value.length;
 };
 
 // Computed property to check if no bid is placed for a particular row
 const noBidPlaced = (index) => {
-    return isDataEmpty(auctionH1Report.value[index]);
+  return isDataEmpty(auctionH1Report.value[index]);
 };
 </script>

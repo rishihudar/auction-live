@@ -30,11 +30,20 @@
                 :value="products"
                 showGridlines
             >
-                <Column field="srNo" header="SrNo."></Column>
+                <!-- <Column field="srNo" header="SrNo."></Column> -->
                 <Column field="auctionCode" header="Auction Code"></Column>
-                <Column field="auctionDescription" header="Auction Description"></Column>
-                <Column field="auctionCategoryName" header="Auction Category"></Column>
-                <Column field="districtName" header="District Name"></Column>
+                <!-- <Column field="auctionDescription" header="Auction Description"></Column>
+                <Column field="auctionCategoryName" header="Auction Category"></Column> -->
+                <!-- <Column field="districtName" header="District Name"></Column> -->
+                <Column header="Auction Category - Auction Description">
+                    <template #body="slotProps">
+                        <div>
+                            {{ slotProps.data.auctionCategoryName }}-
+                            {{ slotProps.data.auctionDescription }}<br>
+
+                        </div>
+                    </template>
+                </Column>
                 <Column field="entityName" header="Entity Name"></Column>
                 <Column
                     field="auctionRegStartDate"
