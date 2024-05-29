@@ -10,7 +10,8 @@
                         <h4 class="font-medium">IP: {{ clientLoginIpAddress }}</h4>
                         <p>{{ loginStore.username }}</p>
                     </div>
-                    <div class="py-2 px-8 bg-primary-400 bg-opacity-20 rounded-md border border-primary-400 text-center">
+                    <div
+                        class="py-2 px-8 bg-primary-400 bg-opacity-20 rounded-md border border-primary-400 text-center">
                         <div class="text-sm text-green-700">Server Time</div>
                         <div class="text-2xl font-medium text-green-700">{{ latestTime }}</div>
                     </div>
@@ -125,10 +126,16 @@
                 </Dialog> -->
 
                 <div class="absolute bottom-0 left-0 right-0 px-8 pb-5 flex gap-2 justify-between">
-                    <Button severity="secondary" @click="visibleItemDetails = true" style="padding-inline: 30px;">Item Details</Button>
-                    <Button severity="secondary" @click="visiblePropertyDetails = true" style="padding-inline: 30px;">Property Details</Button>
+                    <Button severity="secondary" @click="visibleItemDetails = true; fetchItemDetails()"
+                        style="padding-inline: 30px;">
+                        Item Details
+                    </Button>
+                    <Button severity="secondary" @click="visiblePropertyDetails = true; fetchProperties()"
+                        style="padding-inline: 30px;">
+                        Property Details
+                    </Button>
                 </div>
-                
+
                 <Dialog v-model:visible="visibleItemDetails" modal header="Item Details" :style="{ width: '50rem' }">
                     <ul>
                         <li>Description : <b>{{ itemDetails.Description }}</b></li>
@@ -136,12 +143,14 @@
                         <li>StartValue : <b>{{ itemDetails.StartValue }}</b></li>
                         <li>ModifierValue : <b>{{ itemDetails.ModifierValue }}</b></li>
                         <li>MaxBidAmount : <b>{{ itemDetails.MaxBidAmount }}</b></li>
-                        <li>TotalNoOfBids : <b>{{ itemDetails.TotalNoOfBids }}</b></li>
+                        <li>TotalNoOfBids : <b>{{ bidHistory.length }}</b></li>
                     </ul>
                 </Dialog>
-                <Dialog v-model:visible="visiblePropertyDetails" modal header="Item Details" :style="{ width: '50rem' }">
+                <Dialog v-model:visible="visiblePropertyDetails" modal header="Item Details"
+                    :style="{ width: '50rem' }">
                     <div class="mb-4">
-                        <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}:</strong> {{ auctionStore.auctionObj.inventoryHirarchy }}
+                        <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}:</strong> {{
+                            auctionStore.auctionObj.inventoryHirarchy }}
                     </div>
                     <div class="table-custom">
                         <table class="table">
@@ -155,8 +164,12 @@
                                 <tr v-for="property in properties" :key="property.pklAuctionItemsDetails">
                                     <td> <strong>{{ property.vsInventoryName }}</strong> </td>
                                     <td class="text-center">
-                                        <div v-if="property.bInventorySold" class="tag py-1 px-4 inline-flex rounded font-medium text-primary-600 bg-primary-400 bg-opacity-30">Sold</div>
-                                        <div v-if="!property.bInventorySold" class="tag py-1 px-4 inline-flex rounded font-medium text-red-600 bg-red-200">Unsold</div>
+                                        <div v-if="property.bInventorySold"
+                                            class="tag py-1 px-4 inline-flex rounded font-medium text-primary-600 bg-primary-400 bg-opacity-30">
+                                            Sold</div>
+                                        <div v-if="!property.bInventorySold"
+                                            class="tag py-1 px-4 inline-flex rounded font-medium text-red-600 bg-red-200">
+                                            Unsold</div>
                                         <!-- {{ property.bInventorySold ? 'Sold' : 'Unsold' }} -->
                                     </td>
                                 </tr>
@@ -172,10 +185,12 @@
                     <ul>
                         <li v-for="(copyData, index) in bidHistory" :key="index">
                             <div class="relative py-5 px-6 border border-slate-300 rounded-lg bg-white">
-                                <div class="absolute top-0 right-5 py-0.5 px-3 rounded-b bg-slate-300 text-xs font-medium">
+                                <div
+                                    class="absolute top-0 right-5 py-0.5 px-3 rounded-b bg-slate-300 text-xs font-medium">
                                     Round: {{ copyData.roundNumber }}
                                 </div>
-                                <div class="item">Amount: <strong>{{ currencyFormat(copyData.quoteAmount) }}</strong></div>
+                                <div class="item">Amount: <strong>{{ currencyFormat(copyData.quoteAmount) }}</strong>
+                                </div>
                                 <div class="item">@ <strong>{{ copyData.quoteTime }}</strong></div>
                             </div>
                         </li>
@@ -186,7 +201,8 @@
         <Dialog v-model:visible="visible1" modal header="Highest Bidder" :style="{ width: '30rem' }">
             <div class="text-center">
                 You are the highest bidder.<br>
-                Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd> button and select property of your interest
+                Click on the <kbd class="bg-primary">OPEN ITEM SELECTION</kbd> button and select property of your
+                interest
             </div>
             <template #footer>
                 <Button label="Ok" @click="function1" autofocus />
@@ -301,12 +317,14 @@ function checkH1(incomingBid) {
 }
 
 function updateHistory(bidObject) {
-    let bidHistoryObj = {
-        roundNumber: auctionDetails.value[0].roundNumber,
-        quoteAmount: bidObject.bidAmount,
-        quoteTime: latestTime.value
+    if (bidObject.bidderId) {
+        let bidHistoryObj = {
+            roundNumber: bidObject.bidAmount,
+            quoteAmount: bidObject.bidAmount,
+            quoteTime: latestTime.value
+        }
+        bidHistory.value.unshift(bidHistoryObj)
     }
-    bidHistory.value.unshift(bidHistoryObj)
 }
 
 // function function1() {
@@ -531,6 +549,48 @@ function nextRoundReservePrice() {
     })
 }
 
+const fetchItemDetails = () => {
+    new MQL()
+        .useCoreServer()
+        .setActivity("r.[FetchDataForBidding]")
+        .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
+        .fetch()
+        .then(async (rs) => {
+            let res = rs.getActivity("FetchDataForBidding", true)
+            if (rs.isValid("FetchDataForBidding")) {
+                itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
+                itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
+                itemDetails.value.StartValue = res.result.inventoryDetails.startValue
+                itemDetails.value.ModifierValue = res.result.inventoryDetails.modifierValue
+                itemDetails.value.MaxBidAmount = 100 * res.result.inventoryDetails.modifierValue
+                itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
+                itemDetails.value.numberOfRounds = res.result.inventoryDetails.numberOfRounds
+                itemDetails.value.itemSelectionTime = parseInt(res.result.inventoryDetails.itemSelectionTime)
+            } else {
+                rs.showErrorToast("FetchDataForBidding")
+            }
+        })
+}
+
+
+const fetchProperties = () => {
+    new MQL()
+        .useCoreServer()
+        .setActivity("r.[FetchDataForBidding]")
+        .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
+        .fetch()
+        .then(async (rs) => {
+            let res = rs.getActivity("FetchDataForBidding", true)
+            if (rs.isValid("FetchDataForBidding")) {
+
+                properties.value = res.result.propertyDetails
+
+            } else {
+                rs.showErrorToast("FetchDataForBidding")
+            }
+        })
+}
+
 function fetchAuctionDetails() {
     return new Promise((resolve) => {
         // Automatically generated
@@ -554,7 +614,7 @@ function fetchAuctionDetails() {
 
                     itemDetails.value.Description = res.result.inventoryDetails.auctionDescription
                     itemDetails.value.CurrentRound = res.result.inventoryDetails.currentRoundNumber
-                    itemDetails.value.StartValue = res.result.inventoryDetails.auctionItemReservePrice
+                    itemDetails.value.StartValue = res.result.inventoryDetails.startValue
                     itemDetails.value.ModifierValue = res.result.inventoryDetails.modifierValue
                     itemDetails.value.MaxBidAmount = 100 * res.result.inventoryDetails.modifierValue
                     itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
@@ -574,7 +634,9 @@ function fetchAuctionDetails() {
                     }
 
                     if (res.result.inventoryDetails.BidCount == 'NO_BID') {
-                        await nextRoundReservePrice()
+                        auctionDetails.value[0].currentHigh = res.result.inventoryDetails.startValue
+
+                        // await nextRoundReservePrice()
                     }
 
                     resolve()
@@ -597,7 +659,7 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
         // Automatically generated
         new MQL()
             .useCoreServer()
-            .setActivity("r.[GetPreviousRoundHBid]")
+            .setActivity("o.[GetPreviousRoundHBid]")
             .setData(data)
             .fetch()
             .then(rs => {
@@ -688,24 +750,6 @@ const makeMultiplieries = () => {
         });
     }
 }
-
-const getAuctionProperties = () => {
-    new MQL()
-        .useCoreServer()
-        .setActivity("r.[FetchDataForBidding]")
-        .setData({ "auctionId": auctionStore.auctionObj.pklAuctionId, "userId": loginStore.loginId })
-        .fetch()
-        .then((rs) => {
-            let res = rs.getActivity("FetchDataForBidding", true)
-            if (rs.isValid("FetchDataForBidding")) {
-
-                properties.value = res.result.propertyDetails
-            } else {
-                rs.showErrorToast("FetchDataForBidding")
-            }
-        })
-}
-
 
 onBeforeMount(async () => {
     await fetchAuctionDetails()
