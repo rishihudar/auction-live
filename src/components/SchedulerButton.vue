@@ -83,6 +83,7 @@ import { fetchAuctionStatus } from "@/plugins/helpers.js";
 import moment from 'moment';
 import { login } from "../store/modules/login";
 
+
 const props = defineProps({
   itemList: Array,
   auctionId: Number,
@@ -181,6 +182,7 @@ async function schedule() {
         if (res && res.result == "SUCCESS") {
           display.value = false;
           alert("Auction Scheduled Successfully");
+          NotifyAuctionScheduledAndPasscodes()
           reloadPage();
         } else {
           alert("Auction Scheduling Failed");
@@ -200,6 +202,23 @@ function formatDate(date) {
   const seconds = ("0" + date.getSeconds()).slice(-2);
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function NotifyAuctionScheduledAndPasscodes(){
+			new MQL()
+      .useNotificationServer()
+			.setActivity("r.[FetchAuctionParticipatedBidders]")
+			.setData({"auctionId":props.auctionId,"roleId":1,"statusId":31})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchAuctionParticipatedBidders",true)
+			if (rs.isValid("FetchAuctionParticipatedBidders")) {
+			} else
+			 { 
+			rs.showErrorToast("FetchAuctionParticipatedBidders")
+			}
+			})
+			
 }
 
 
