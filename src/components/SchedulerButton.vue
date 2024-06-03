@@ -76,12 +76,15 @@
 import { onMounted, ref,watch } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
-import MQL from "@/plugins/mql_management.js";
+import MQL from "@/plugins/mql.js";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers, minLength } from "@vuelidate/validators";
 import { fetchAuctionStatus } from "@/plugins/helpers.js";
 import moment from 'moment';
 import { login } from "../store/modules/login";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 })
+
 
 
 const props = defineProps({
@@ -92,7 +95,8 @@ const props = defineProps({
   endDate: String,
   users: Array,
   disabled: Boolean,
-  statusCode: String
+  statusCode: String,
+  auctionCode:String,
 });
 
 const loginStore = login()
@@ -165,6 +169,7 @@ async function schedule() {
   var userStatusId = await fetchAuctionStatus("AUCTION_USER_SCHEDULED");
   // Automatically generated
   new MQL()
+    .useManagementServer()
     .setActivity("o.[ScheduleAuction]")
     .setData({
       auctionId: props.auctionId,
@@ -176,14 +181,15 @@ async function schedule() {
       userStatusId: userStatusId.result.statusId
     })
     .fetch()
-    .then((rs) => {
+    .then(async (rs) => {
       let res = rs.getActivity("ScheduleAuction", true);
       if (rs.isValid("ScheduleAuction")) {
         if (res && res.result == "SUCCESS") {
           display.value = false;
-          alert("Auction Scheduled Successfully");
           NotifyAuctionScheduledAndPasscodes()
-          reloadPage();
+          //alert("Auction Scheduled Successfully");
+          // toaster.success("Auction Scheduled Successfully");
+          // reloadPage();
         } else {
           alert("Auction Scheduling Failed");
         }
@@ -208,11 +214,13 @@ function NotifyAuctionScheduledAndPasscodes(){
 			new MQL()
       .useNotificationServer()
 			.setActivity("r.[FetchAuctionParticipatedBidders]")
-			.setData({"auctionId":props.auctionId,"roleId":1,"statusId":31})
+			.setData({"auctionId":props.auctionCode,"roleId":1,"statusId":31})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchAuctionParticipatedBidders",true)
 			if (rs.isValid("FetchAuctionParticipatedBidders")) {
+        toaster.success("Auction Scheduled Successfully");
+          reloadPage();
 			} else
 			 { 
 			rs.showErrorToast("FetchAuctionParticipatedBidders")
@@ -225,6 +233,7 @@ function NotifyAuctionScheduledAndPasscodes(){
 onMounted(() => {
   // Fetch the users  to be shown in dropdown
   FetchUsers();
+  console.log("Auc Code",props.auctionCode);
   console.log(props.itemList);
   console.log(props.auctionId);
   console.log("EntityID", props.entityId);
@@ -241,6 +250,7 @@ function FetchUsers() {
   // Fetch users from the server
   // Automatically generated
   new MQL()
+  .useManagementServer()
     .setActivity("o.[query_2d1z3bTMBaYu0by4aWLiiPZdLK7]")
     .setData({ entityId: props.entityId })
     .fetch()
