@@ -1,8 +1,8 @@
 <template>
-  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display = true" :disabled="disabled" class="btn-sm"></Button>
-    <div v-if="statusCode === 'AUCTION_SCHEDULED'">
-      <Button label="Re-Schedule Auction" class="btn-sm" @click="display = true" :disabled="disabled"></Button>
-    </div>
+  <Button v-if="statusCode === 'AUCTION_PUBLISHED'" label="Schedule Auction" @click="display=true" :disabled="disabled" class="btn-sm"></Button>
+  <div v-if="statusCode === 'AUCTION_SCHEDULED'">
+    <Button label="Re-Schedule Auction" class="btn-sm" @click="display=true" :disabled="disabled"></Button>
+  </div>
   <Dialog v-model:visible="display" modal :style="{ width: '75rem' }" header="Scheduler">
     <div class="form-grid mb-4">
       <div class="col-span-full md:col-span-4">
@@ -14,7 +14,6 @@
           <div class="fm-error" v-if="submitted && v$.startDate.$errors[0]">
             {{ v$.startDate.$errors[0].$message }}
           </div>
-
         </div>
       </div>
       <div class="col-span-full md:col-span-4">
@@ -26,12 +25,11 @@
           <div class="fm-error" v-if="submitted && v$.endDate.$errors[0]">
             {{ v$.endDate.$errors[0].$message }}
           </div>
-
         </div>
       </div>
       <div class="col-span-full md:col-span-4">
         <div class="fm-group">
-          <label for="Start Date" class="fm-label">Select User</label>
+          <label for="Select User" class="fm-label">Select User</label>
           <div class="fm-inner">
             <Multiselect class="w-full" :options="userSelectOptions" optionLabel="text" optionValue="value"
               v-model="users" @update:modelValue="emitModalValue"></Multiselect>
@@ -43,37 +41,28 @@
       </div>
     </div>
     <div class="box-section">
-      <div class="bs-header">
-        Items List
-      </div>
+      <div class="bs-header">Items List</div>
       <div class="bs-item-holder" v-for="(item, index) in props.itemList" :key="index">
         <div class="bs-item col-span-6">
           <div class="bs-label">Item Name:</div>
-          <div class="bs-value">
-            {{ item.item }}
-          </div>
+          <div class="bs-value">{{ item.item }}</div>
         </div>
         <div class="bs-item col-span-6">
           <div class="bs-label">Selected/ Unselected:</div>
-          <div class="bs-value">
-            Selected
-          </div>
+          <div class="bs-value">Selected</div>
         </div>
       </div>
     </div>
-
     <div class="col-span-full">
       <div class="fm-action fm-action-center">
         <Button label="Schedule" @click="schedule"></Button> 
-   
       </div>
-  
     </div>
   </Dialog>
 </template>
 
 <script setup>
-import { onMounted, ref,watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql_management.js";
@@ -96,7 +85,6 @@ const props = defineProps({
 
 const loginStore = login()
 
-
 const emit = defineEmits(["update:modelValue"]);
 function emitModalValue() {
   emit('update:startDate', startDate.value);
@@ -105,64 +93,55 @@ function emitModalValue() {
 }
 
 let display = ref(false);
-//let startDate = ref(new Date(props.startDate));
-//let endDate = ref(new Date(props.endDate));
-let startDate = ref(props.startDate ? new Date(props.startDate) : new Date()); 
-let endDate = ref(props.endDate ? new Date(props.endDate) : new Date(Date.now() + 60000));
+let startDate = ref(moment(props.startDate).isValid() ? moment(props.startDate).toDate() : moment().toDate()); 
+let endDate = ref(moment(props.endDate).isValid() ? moment(props.endDate).toDate() : moment().add(1, 'minute').toDate());
 
-console.log("NewendDate", endDate)
 let userSelectOptions = ref([]);
 let users = ref(props.users);
-let statusCode=ref(props.statusCode);
-console.log("statusCode",statusCode)
+let statusCode = ref(props.statusCode);
 let submitted = ref(false);
-const vsStatusCode=ref();
-// validation rules
+
+// Validation rules
 const rules = {
   startDate: { required, validator: helpers.withMessage("Start date should be less than end date and greater than today", isValidStartDate) },
   endDate: { required, minValue: helpers.withMessage("End date should be greater than start date", isValidEndDate) },
   users: {
     required,
-    minLength: helpers.withMessage(
-      "Please select at least three users",
-      minLength(3)
-    ),
+    minLength: helpers.withMessage("Please select at least three users", minLength(3)),
   },
 };
 
-
-// Custom validation functions for start date 
+// Custom validation functions for start date
 function isValidStartDate(date) {
-  const today = moment(); // replace with your end date
+  const today = moment();
   const inputDate = moment(date);
-  // check if the input date is after today and before the end date
   return inputDate.isAfter(today) && inputDate.isBefore(endDate.value);
 }
+
 // Custom validation functions for end date
 function isValidEndDate(date) {
-  const today = moment(); // replace with your end date
+  const today = moment();// replace with your end date
   const inputDate = moment(date);
-  // check if the input date is after today and after the start date
+   // check if the input date is after today and after the start date
   return inputDate.isAfter(today) && inputDate.isAfter(startDate.value);
 }
 
 const v$ = useVuelidate(rules, { startDate, endDate, users });
 
 
-
 async function schedule() {
-  // Schedule the auction
+   // Schedule the auction
   // Automatically generated }
   v$.value.$touch();
   submitted.value = true;
   if (v$.value.$error) {
-    // show error message
+      // show error message
     alert("Please fill all the fields");
     return;
   }
   var bidderStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
   var userStatusId = await fetchAuctionStatus("AUCTION_USER_SCHEDULED");
-  // Automatically generated
+   // Automatically generated
   new MQL()
     .setActivity("o.[ScheduleAuction]")
     .setData({
@@ -192,19 +171,11 @@ async function schedule() {
 }
 
 function formatDate(date) {
-  const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
-  const hours = ("0" + date.getHours()).slice(-2);
-  const minutes = ("0" + date.getMinutes()).slice(-2);
-  const seconds = ("0" + date.getSeconds()).slice(-2);
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return moment(date).format('MM/DD/YYYY HH:mm');
 }
 
-
 onMounted(() => {
-  // Fetch the users  to be shown in dropdown
+    // Fetch the users  to be shown in dropdown
   FetchUsers();
   console.log(props.itemList);
   console.log(props.auctionId);
@@ -212,14 +183,14 @@ onMounted(() => {
   console.log(props.startDate);
   console.log("@@@@@@@@@@@@@@@", props.endDate);
   console.log("#############", props.users);
-
 });
 
-  function reloadPage() {
-        window.location.reload();
-        }
+function reloadPage() {
+  window.location.reload();
+}
+
 function FetchUsers() {
-  // Fetch users from the server
+    // Fetch users from the server
   // Automatically generated
   new MQL()
     .setActivity("o.[query_2d1z3bTMBaYu0by4aWLiiPZdLK7]")
@@ -234,12 +205,16 @@ function FetchUsers() {
       }
     });
 }
-watch(vsStatusCode, (newVal, oldVal) => {
+
+watch(display, (newVal) => {
+  if (newVal) {
+    startDate.value = moment().toDate();
+    endDate.value = moment().add(1, 'minute').toDate();
+  }
+});
+watch(statusCode, (newVal) => {
   if (newVal === 'AUCTION_SCHEDULED') {
-    console.log(vsStatusCode, "vsStatusCode")
-    console.log(newVal, "newVal")
-    console.log(oldVal, "oldVal")
-    display.value = false; 
+    display.value = false;
   }
 });
 </script>
