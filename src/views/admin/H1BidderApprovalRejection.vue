@@ -1,12 +1,15 @@
 <template>
     <div>
         <div class="fm-group">
-            <label class="fm-label" for="horizontal-buttons">Number of Days</label>
-            <InputNumber v-model="noOfDays" placeholder="Enter number greater than one" showButtons :step="1"
+            <label class="fm-label" for="horizontal-buttons">Number of Hours</label>
+            <InputNumber v-model="noOfDays" placeholder="Enter number greater than 98" showButtons :step="1" 
                 :disabled="disabled">
                 <template #incrementbuttonicon>+</template>
                 <template #decrementbuttonicon>-</template>
             </InputNumber>
+            <!-- <div v-if="$v.noOfDays.$error" class="fm-error">
+                {{ $v.noOfDays.$errors[0].$message }}
+            </div> -->
             <div v-if="$v.noOfDays.$error" class="fm-error">
                 {{ $v.noOfDays.$errors[0].$message }}
             </div>
@@ -65,7 +68,8 @@
                     </template> -->
                     <template #body="rowData">
 
-                        <Checkbox v-model="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :binary="true"  :disabled="disabled" />
+                        <Checkbox v-model="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)"
+                            :binary="true" :disabled="disabled" />
                     </template>
 
                 </Column>
@@ -103,7 +107,8 @@ import { useVuelidate } from "@vuelidate/core";
 import {
     required,
     minLength,
-    numeric
+    numeric,
+    minValue
 } from "@vuelidate/validators";
 import MQL from "@/plugins/mql.js";
 import InputNumber from 'primevue/inputnumber';
@@ -131,13 +136,14 @@ let resultList = ref()
 // let firstPaymentPercentage = ref()
 const selectedRows = ref([]);
 
-let noOfDays = ref()
+let noOfDays = ref(98)
 let rules = computed(() => ({
 
     noOfDays: {
         required,
         numeric,
-        minLength: minLength(1)
+        minLength: minLength(1),
+        minValue: minValue(98, 'The minimum value for "Number of Hours" is 98')
     }
 
 }
@@ -217,7 +223,7 @@ function submitForm() {
 
     } else {
 
-        toaster.error("Invalid Number of Days");
+        toaster.error("Invalid Number of Hours");
 
     }
 
