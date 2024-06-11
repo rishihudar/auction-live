@@ -146,8 +146,8 @@ import faEmail from "../../assets/icons/envelope.svg";
 import faMobileButton from "../../assets/icons/mobile-button.svg";
 import faLock from "../../assets/icons/lock.svg";
 import { useToast } from "primevue/usetoast";
-
-
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 })
 const router = useRouter()
 const toast = useToast();
 
@@ -259,7 +259,7 @@ async function sendOTPMobile() {
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Mobile Number already exist !!",
+      detail: "OTP Sent",
       life: 3000,
     });
     $v.value.mobileNumber.$validate();
@@ -294,7 +294,7 @@ async function sendOTPMobile() {
               }
             }, 30000);
           } else {
-            toaster.error("");
+            rs.showErrorToast("SendOTPSMS");
           }
         });
     } else {
