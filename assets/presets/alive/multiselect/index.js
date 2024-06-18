@@ -1,43 +1,46 @@
 export default {
     root: ({ props, state }) => ({
         class: [
+            'fm-multiselect',
             // Display and Position
-            'h-12',
-            'inline-flex',
-            'relative',
+            // 'h-12',
+            // 'inline-flex',
+            // 'relative',
 
             // Shape
-            'rounded-md',
+            // 'rounded-md',
 
             // Color and Background
-            'bg-surface-0 dark:bg-surface-900',
-            'border',
-            { 'border-surface-300 dark:border-surface-600': !props.invalid },
+            // 'bg-surface-0 dark:bg-surface-900',
+            // 'border',
+            // { 'border-surface-300 dark:border-surface-600': !props.invalid },
 
             // Invalid State
-            { 'border-red-500 dark:border-red-400': props.invalid },
+            // { 'border-red-500 dark:border-red-400': props.invalid },
 
             // Transitions
-            'transition-all',
-            'duration-200',
+            // 'transition-all',
+            // 'duration-200',
 
             // States
             { 'hover:border-primary-500 dark:hover:border-primary-300': !props.invalid },
             { 'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50': state.focused },
 
             // Misc
-            'cursor-pointer',
-            'select-none',
+            // 'cursor-pointer',
+            // 'select-none',
             { 'opacity-60': props.disabled, 'pointer-events-none': props.disabled, 'cursor-default': props.disabled }
         ]
     }),
     labelContainer: {
-        class: 'overflow-hidden flex flex-auto cursor-pointer '
+        // class: 'overflow-hidden flex flex-auto cursor-pointer'
+        class: 'fm-multiselect-container'
     },
     label: ({ props }) => ({
         class: [
-            'leading-2',
-            'block ',
+            'fm-multiselect-placeholder',
+            // 'leading-2',
+            // 'block ',
 
             // Spacing
             {
@@ -48,32 +51,33 @@ export default {
 
             // Color
             { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-400 dark:text-surface-500': !props.modelValue },
-            'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+            // 'placeholder:text-surface-400 dark:placeholder:text-surface-500',
 
             // Transitions
-            'transition duration-200',
+            // 'transition duration-200',
 
             // Misc
-            'overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis'
+            // 'overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis'
         ]
     }),
     token: {
         class: [
+            'fm-multiselect-token',
             // Flex
-            'inline-flex items-center',
+            // 'inline-flex items-center',
 
             // Spacings
-            'py-1.5 px-3 mr-2',
+            // 'py-1.5 px-3 mr-2',
 
             // Shape
-            'rounded-[1.14rem]',
+            // 'rounded-[1.14rem]',
 
             // Colors
-            'bg-surface-200 dark:bg-surface-700',
-            'text-surface-700 dark:text-white/70',
+            // 'bg-surface-200 dark:bg-surface-700',
+            // 'text-surface-700 dark:text-white/70',
 
             // Misc
-            'cursor-default'
+            // 'cursor-default'
         ]
     },
     removeTokenIcon: {
@@ -114,53 +118,56 @@ export default {
     },
     panel: {
         class: [
+            'fm-multiselect-panel',
             // Position
-            'absolute top-0 left-0',
+            // 'absolute top-0 left-0',
 
             // Shape
-            'border-0 dark:border',
-            'rounded-md',
-            'shadow-md',
+            // 'border-0 dark:border',
+            // 'rounded-md',
+            // 'shadow-md',
 
             // Color
-            'bg-surface-0 dark:bg-surface-800',
-            'text-surface-800 dark:text-white/80',
-            'dark:border-surface-700'
+            // 'bg-surface-0 dark:bg-surface-800',
+            // 'text-surface-800 dark:text-white/80',
+            // 'dark:border-surface-700'
         ]
     },
     header: {
         class: [
-            'flex items-center justify-between',
+            'fm-multiselect-panel-header',
+            // 'flex items-center justify-between',
             // Spacing
-            'py-3 px-5',
-            'm-0',
+            // 'py-3 px-5',
+            // 'm-0',
 
             //Shape
-            'border-b',
-            'rounded-tl-md',
-            'rounded-tr-md',
+            // 'border-b',
+            // 'rounded-tl-md',
+            // 'rounded-tr-md',
 
             // Color
-            'text-surface-700 dark:text-white/80',
-            'bg-surface-100 dark:bg-surface-800',
-            'border-surface-300 dark:border-surface-700'
+            // 'text-surface-700 dark:text-white/80',
+            // 'bg-surface-100 dark:bg-surface-800',
+            // 'border-surface-300 dark:border-surface-700'
         ]
     },
     headerCheckboxContainer: {
         class: [
-            'relative',
+            'fm-multiselect-panel-header-checkbox',
+            // 'relative',
 
             // Alignment
-            'inline-flex',
-            'align-bottom',
+            // 'inline-flex',
+            // 'align-bottom',
 
             // Size
-            'w-6',
-            'h-6',
+            // 'w-6',
+            // 'h-6',
 
             // Misc
-            'cursor-pointer',
-            'select-none'
+            // 'cursor-pointer',
+            // 'select-none'
         ]
     },
     headerCheckbox: {
@@ -186,18 +193,19 @@ export default {
         },
         box: ({ props, context }) => ({
             class: [
+                'fm-multiselect-checkbox-control',
                 // Alignment
-                'flex',
-                'items-center',
-                'justify-center',
+                // 'flex',
+                // 'items-center',
+                // 'justify-center',
 
                 // Size
-                'w-6',
-                'h-6',
+                // 'w-6',
+                // 'h-6',
 
                 // Shape
-                'rounded-md',
-                'border-2',
+                // 'rounded-md',
+                // 'border-2',
 
                 // Colors
                 {
@@ -220,47 +228,49 @@ export default {
         }),
         input: {
             class: [
-                'peer',
+                'fm-multiselect-checkbox',
+                // 'peer',
 
                 // Size
-                'w-full ',
-                'h-full',
+                // 'w-full ',
+                // 'h-full',
 
                 // Position
-                'absolute',
-                'top-0 left-0',
-                'z-10',
+                // 'absolute',
+                // 'top-0 left-0',
+                // 'z-10',
 
                 // Spacing
-                'p-0',
-                'm-0',
+                // 'p-0',
+                // 'm-0',
 
                 // Shape
-                'opacity-0',
-                'rounded-md',
-                'outline-none',
-                'border-2 border-surface-200 dark:border-surface-700',
+                // 'opacity-0',
+                // 'rounded-md',
+                // 'outline-none',
+                // 'border-2 border-surface-200 dark:border-surface-700',
 
                 // Misc
-                'appearance-none',
-                'cursor-pointer'
+                // 'appearance-none',
+                // 'cursor-pointer'
             ]
         },
         icon: {
             class: [
+                'fm-multiselect-checkbox-icon',
                 // Font
-                'text-base leading-none',
+                // 'text-base leading-none',
 
                 // Size
-                'w-4',
-                'h-4',
+                // 'w-4',
+                // 'h-4',
 
                 // Colors
-                'text-white dark:text-surface-900',
+                // 'text-white dark:text-surface-900',
 
                 // Transitions
-                'transition-all',
-                'duration-200'
+                // 'transition-all',
+                // 'duration-200'
             ]
         }
     },

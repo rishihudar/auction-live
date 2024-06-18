@@ -1,78 +1,96 @@
 <template>
-  <div id="inventoryMaster">
-    <h2 class="text-xl font-bold flex gap-2 items-center">
-      <i
-        class="isax isax-bold-arrow-left-2 cursor-pointer"
-        @click="$router.go(-1)"
-      ></i>
-      Inventory Master
-    </h2>
+    <div id="inventoryMaster">
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Inventory Master</h2>
+            </div>
+        </div>
 
-    <form></form>
-    
-    <!-- Entity Dropdown -->
-    <Dropdown
-      v-model="selectedEntity"
-      :options="mcNames"
-      placeholder="Select Entity"
-      optionLabel="mcEntityName"
-      optionValue="mcEntityId"
-      @change="showSelectedMC"
-    ></Dropdown>
+        <form></form>
 
-    <!-- Category Dropdown -->
-    <Dropdown
-    v-if="selectedEntity"
-      v-model="selectedCategory"
-      :options="inventoryCategories"
-      placeholder="Select Category"
-      class="w-full md:w-14rem"
-      optionLabel="propertyCategoryName"
-      optionValue="propertyCategoryId"
-      @change="fetchInventoryTempColumns"
-    ></Dropdown>
+        <div class="card">
+            <div class="form-grid">
+                <div class="col-span-4">
+                    <div class="fm-group">
+                        <label for="selectEntity" class="fm-label">Select Entity</label>
+                        <div class="fm-inner">
+                            <!-- Entity Dropdown -->
+                            <Dropdown
+                                v-model="selectedEntity"
+                                :options="mcNames"
+                                placeholder="Select Entity"
+                                optionLabel="mcEntityName"
+                                optionValue="mcEntityId"
+                                @change="showSelectedMC"
+                            ></Dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-4" v-if="selectedEntity">
+                    <div class="fm-group">
+                        <label for="selectCategory" class="fm-label">Select Category</label>
+                        <div class="fm-inner">
+                            <!-- Category Dropdown -->
+                            <Dropdown
+                                v-model="selectedCategory"
+                                :options="inventoryCategories"
+                                placeholder="Select Category"
+                                optionLabel="propertyCategoryName"
+                                optionValue="propertyCategoryId"
+                                @change="fetchInventoryTempColumns"
+                            ></Dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-4" v-if="selectedCategory">
+                    <div class="fm-group">
+                        <div class="fm-label-holder">
+                            <label for="chooseExcel" class="fm-label">Choose Excel File</label>
+                            <a
+                                v-if="['2', '3', '4', '7'].includes(selectedCategory)"
+                                :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp.xlsx`"
+                                download
+                            >DOWNLOAD TEMPLATE</a>
+                            <a
+                                v-if="['1', '5', '6', '8'].includes(selectedCategory)"
+                                :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx`"
+                                download
+                            >DOWNLOAD TEMPLATE</a>
+                        </div>
+                        <FileUpload
+                            name="excelFile"
+                            label="Choose Excel File"
+                            accept=".xlsx,"
+                            v-model="isFileSelected"
+                            mode="basic"
+                            :auto="true"
+                            :custom-upload="true"
+                            @uploader="onChange"
+                        ></FileUpload>
+                    </div>
+                </div>
+                <div class="fm-action">
+                    <Button label="Upload" v-if="isFileSelected" @click="handleUpload">Upload</Button>
+                </div>
+            </div>
+        </div>
 
-    <a
-      v-if="['2', '3', '4', '7'].includes(selectedCategory)"
-      :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp.xlsx`"
-      download
-      ><br />
-      <Button label="DOWNLOAD TEMPLATE HERE" link
-    /></a>
-    <a
-      v-if="['1', '5', '6', '8'].includes(selectedCategory)"
-      :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx`"
-      download
-      ><br />
-      <Button label="DOWNLOAD TEMPLATE HERE" link
-    /></a>
-
-    <FileUpload
-      name="excelFile"
-      label="Choose Excel File"
-      accept=".xlsx,"
-      v-if="selectedCategory"
-      v-model="isFileSelected"
-      mode="basic"
-      :auto="true"
-      :custom-upload="true"
-      @uploader="onChange"
-    ></FileUpload>
-    <br />
-
-    <Button label="Upload" v-if="isFileSelected" @click="handleUpload">
-      Upload
-    </Button>
-
-    <DataTable :value="sheet" tableStyle="min-width: 50rem">
-      <Column
-        v-for="col of transformedColumns"
-        :key="col.field"
-        :field="col.field"
-        :header="col.field"
-      >
-      </Column>
-    </DataTable>
+        <div class="block-header" v-if="isFileSelected">
+            <div class="sh-text">
+                <h3 class="title">Uploaded Excel List</h3>
+            </div>
+        </div>
+        <div class="table-custom" v-if="isFileSelected">
+            <DataTable :value="sheet">
+                <Column
+                    v-for="col of transformedColumns"
+                    :key="col.field"
+                    :field="col.field"
+                    :header="col.field"
+                >
+                </Column>
+            </DataTable>
+        </div>
 
     <!-- Upload Inventory Templates CDN  -->
     <!-- <FileUpload 
@@ -81,11 +99,12 @@
     name="fileUploadTemp" 
     :auto="true" 
     :custom-upload="true"
-     @uploader="cdnProfileUpload" 
-     class="w-full md:w-14rem"
-     /> -->
-  </div>
+    @uploader="cdnProfileUpload" 
+    class="w-full md:w-14rem"
+    /> -->
+    </div>
 </template>
+
 <script setup>
 import { ref, onBeforeMount, computed } from "vue";
 import Dropdown from "primevue/dropdown";
@@ -98,6 +117,8 @@ import Column from "primevue/column";
 import axios from "axios";
 import MQLCdn from "@/plugins/mqlCdn.js";
 import { login } from "../../store/modules/login"
+import router from "../../router";
+
 
 const loginStore = login();
 const inventoryCategories = ref();
@@ -182,7 +203,9 @@ function onChange(event) {
       } else {
         console.log("The arrays do not match.");
         alert("Invalid Template");
-        window.location.reload();
+        router.push({path:'/inventoryMasterCard'})
+        // window.location.reload();
+        
       }
     };
     reader.readAsBinaryString(file.value);
@@ -205,7 +228,8 @@ function handleUpload() {
       // Handle successful upload response
       console.log(response.data);
       alert(response.data);
-      window.location.reload();
+      router.push({path:'/inventoryMasterCard'})
+      // window.location.reload();
     })
     .catch((error) => {
       // Handle upload error

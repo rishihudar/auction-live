@@ -5,6 +5,8 @@
 .btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;
     svg {@apply w-auto h-4;}
 
+    &:focus {box-shadow: none; outline: none;}
+
     &.btn-sm {@apply h-[var(--fm-height-sm)] text-sm;}
 
     &-long {@apply px-10;}
@@ -23,6 +25,11 @@
 .btn-danger {@apply text-white bg-rose-500;
     svg {@apply fill-white;}
     &:hover, &:focus {@apply bg-rose-600;}
+}
+
+.btn-grey {@apply text-white bg-slate-400; box-shadow: none;
+    svg {@apply fill-white;}
+    &:hover, &:focus {@apply bg-slate-500; box-shadow: none;}
 }
 
 .btn-outline {@apply border bg-transparent;

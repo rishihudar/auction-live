@@ -7,7 +7,8 @@
             </div>
         </div>
         <div class="card-role-holder">
-            <div class="card-role" v-for="(role, index) in loginStore.roles" :key="index" @click="navigateToDashboard(role)">
+            <div class="card-role" v-for="(role, index) in loginStore.roles" :key="index"
+                @click="navigateToDashboard(role)">
                 <div class="cr-content">
                     <div class="cr-icon">
                         <fa-paper-plane></fa-paper-plane>
@@ -16,7 +17,7 @@
                         {{ role.roleName }}
                     </div>
                     <div class="cr-text">
-                        This is where the description of the role is added and it should not be more than three lines.
+                        {{ role.roleDescription }}
                     </div>
                     <div class="cr-action">
                         <Button>

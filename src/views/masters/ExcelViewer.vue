@@ -3,91 +3,96 @@
   <div>
     <template v-if="flag===0"> -->
     <template>
-      <div class="card">
-          <Toast />
-           <!-- <FileUpload
-                name="excelFile"
-                url="http://localhost:8000/api/upload"
-                label="Choose Excel File"
-                accept=".xlsx,"
-                mode="basic"
-                :auto="true"
-                :custom-upload="true"
-                @uploader="onChange"
-              > -->
-          <!-- <FileUpload 
-              name="userDataSheet" 
-              @upload="onAdvancedUpload($event)" 
-              :multiple="true" 
-              accept=".xls,.csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" 
-              :maxFileSize="1000000">
-              <template #empty>
-                  <p>Drag and drop files to here to upload.</p>
-              </template>
-              
-          </FileUpload> -->
-
-
-          <!-- <FileUpload 
-            v-model:files="userDataSheet" 
-            @uploader="onAdvancedUpload" 
-            multiple 
-            accept=".xls,.csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" 
-            :max-file-size="1000000">
-            <template v-slot:empty>
-              <p>Drag and drop files here to upload.</p>
-            </template>
-          </FileUpload> -->
-          <FileUpload
-            v-model="userDataSheet"
-            accept=".xlsx, .csv,"
-            :multiple="false"
-            :max-file-size="200000" 
-            :custom-upload="true" 
-            @uploader="onAdvancedUpload"
-             
-          />
-      </div>
-
-      <Toast />
-      <div v-if="excelData.length != 0 && loading == true">
-        <DataTable :value="excelData"
-        resizableColumns
-        columnResizeMode="fit"
-        showGridlines
-        tableStyle="min-width: 50rem"
-        >
-        <!-- :loading="loading" -->
-          <Column
-            v-for="field in fields"
-            :key="field"
-            :field="field"
-            :header="field"
-          />
-        </DataTable>
-      </div>
-
-
-      <div class="card flex justify-content-center">
-        <Button label="Check Unadded Data" @click="visible = true" />
-          <Dialog v-model:visible="visible" modal header="Edit Profile" >
-              <template #header>
-                  <div class="inline-flex align-items-center justify-content-center gap-2">
+        <div>
+            <div class="page-header">
+                <div class="ph-text">
+                    <h2 class="title">Excel Upload</h2>
+                </div>
+            </div>
+            <div class="card">
+                <Toast />
+                <!-- <FileUpload
+                        name="excelFile"
+                        url="http://localhost:8000/api/upload"
+                        label="Choose Excel File"
+                        accept=".xlsx,"
+                        mode="basic"
+                        :auto="true"
+                        :custom-upload="true"
+                        @uploader="onChange"
+                    > -->
+                <!-- <FileUpload 
+                    name="userDataSheet" 
+                    @upload="onAdvancedUpload($event)" 
+                    :multiple="true" 
+                    accept=".xls,.csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" 
+                    :maxFileSize="1000000">
+                    <template #empty>
+                        <p>Drag and drop files to here to upload.</p>
+                    </template>
                     
-                      <span class="font-bold white-space-nowrap">Note</span>
-                  </div>
-              </template>
-              <span class="p-text-secondary block mb-5">The Following Users are already Available</span>
-              <div class="card">
-                  <DataTable :value="products" tableStyle="min-width: 50rem">
-                      <Column field="username" header="Username"></Column>
-                  </DataTable>
-              </div>
-              <span class="p-text-secondary block mb-5">Please check manually, and insert the record with Different Username</span>
-              <template #footer>
-                  <Button label="Ok" text severity="secondary" @click="visible = false, $router.push({ name: 'UserManagement' })" autofocus />              </template>
-          </Dialog>
-      </div> 
+                </FileUpload> -->
+
+                <!-- <FileUpload 
+                    v-model:files="userDataSheet" 
+                    @uploader="onAdvancedUpload" 
+                    multiple 
+                    accept=".xls,.csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" 
+                    :max-file-size="1000000">
+                    <template v-slot:empty>
+                    <p>Drag and drop files here to upload.</p>
+                    </template>
+                </FileUpload> -->
+                <div class="fm-group">
+                    <label class="fm-label">Upload Excel File</label>
+                    <FileUpload
+                        v-model="userDataSheet"
+                        accept=".xlsx, .csv,"
+                        :multiple="false"
+                        :max-file-size="200000" 
+                        :custom-upload="true" 
+                        @uploader="onAdvancedUpload"
+                    />
+                </div>
+            </div>
+
+            <Toast />
+
+            <div class="block-header">
+                <div class="sh-text">
+                    <h3 class="title">Uploaded Excel List</h3>
+                </div>
+            </div>
+            <div class="table-custom mb-3" v-if="excelData.length != 0 && loading == true">
+                <DataTable :value="excelData"
+                    resizableColumns
+                    columnResizeMode="fit"
+                    showGridlines
+                >
+                    <!-- :loading="loading" -->
+                    <Column
+                        v-for="field in fields"
+                        :key="field"
+                        :field="field"
+                        :header="field"
+                    />
+                </DataTable>
+            </div>
+            <Button label="Check Unadded Data" @click="visible = true" />
+
+            <Dialog v-model:visible="visible" modal header="Note">
+                <div class="mb-3">The Following Users are already Available</div>
+                <div class="table-custom">
+                    <DataTable :value="products">
+                        <Column field="username" header="Username"></Column>
+                    </DataTable>
+                </div>
+                <div class="mt-2">Please check manually, and insert the record with Different Username</div>
+                <template #footer>
+                    <Button label="Ok" @click="visible = false, $router.push({ name: 'UserManagement' })" autofocus />
+                </template>
+            </Dialog>
+        </div>
     </template>
 
 
@@ -431,7 +436,7 @@
 </template> -->
 
 
-  <script setup>
+<script setup>
 import { ref, onMounted } from 'vue';
 //import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
@@ -657,10 +662,9 @@ const onAdvancedUpload = async (event) => {
 
 
 
-<style scoped>
+<!-- <style scoped>
   /* Add your styles if needed */
   .custom-file-upload {
     @apply flex items-center h-[var(--fm-height)] gap-3;
   }
-</style>
-  
+</style> -->

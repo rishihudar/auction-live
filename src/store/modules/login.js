@@ -25,6 +25,7 @@ export const login = defineStore("login", {
     loginId: (state) => state.loginDetails.loginId,
     entityId: (state) => state.loginDetails.entityId,
     organizationId: (state) => state.loginDetails.organizationId,
+   // userName:(state)=>state.loginDetails.userName,
   },
   actions: {
     MUTATE_AUTH_REQUEST() {

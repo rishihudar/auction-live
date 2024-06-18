@@ -1,7 +1,7 @@
 <template>
     <div class="bs-buttons">
         <Button @click="visible = true, viewPublishDetails()" class="btn-sm">
-            Extend Participation Date{{ props.auctionId }}{{ props.auctionCode }}
+            Extend Participation Date
         </Button>
 
         <Toast />

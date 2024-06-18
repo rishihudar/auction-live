@@ -1,43 +1,66 @@
 <template>
-  <Toast />
-  <div class="card">
-    <DataTable :value="products" showGridlines tableStyle="min-width: 50rem">
-      <div class="fm-inner">
-        <label class="fm-label">Search Auction:</label>
-        <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchScheduledAuctionsBidder" />
-        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-      </div>
-      <Column field="srNo" header="SrNo."></Column>
-      <Column field="vsAuctionCode" header=" Auction Code"></Column>
-      <Column field="vsAuctionDescription" header="Auction Description"></Column>
-      <Column field="auctionCategoryName" header="Auction Category"></Column>
-      <Column field="dEventProcessingFees" header="Auction Fees"></Column>
-      <Column field="dtStartDate" header="Auction StartDate/Time"></Column>
-      <Column field="dtEndDate" header="Auction EndDate/Time"></Column>
-      <Column field="details" header="Action">
-        <template #body="data">
-          <Button @click="joinAuction(data.data)">Join</Button>
-        </template>
-      </Column>
-    </DataTable>
-    <Paginator :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
-      template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
-
-      <Dialog v-model:visible="visible" modal :header="`Enter Auction ${auction?.vsAuctionCode} Password`">
-
-        <div class="flex align-items-center gap-3 mb-5">
-          <label for="password">PassCode</label>
-          <InputText type=password v-model="auctionPassword" />
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Current Auctions</h2>
+            </div>
         </div>
-        <small class="text-red-600">
-          {{ v$?.auctionPassword?.$errors[0]?.$message }}
-        </small>
-        <div class="flex justify-content-end gap-2">
-          <Button label="Cancel" severity="secondary" @click="cancel()"></Button>
-          <Button label="Submit" @click="submitAuctionPassword()"></Button>
+        <Toast />
+        <div class="table-custom">
+            <Paginator
+                class="pagination-up"
+                :rows="perPage"
+                :rowsPerPageOptions="[10, 20, 30]"
+                :totalRecords="totalRows"
+                template="RowsPerPageDropdown"
+                @page="handlePageChange"
+            >
+                <template #start>
+                    <div class="fm-inner">
+                        <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchScheduledAuctionsBidder" />
+                        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                    </div>
+                </template>
+            </Paginator>
+            <DataTable :value="products" showGridlines>
+                <Column field="srNo" header="SrNo."></Column>
+                <Column field="vsAuctionCode" header=" Auction Code"></Column>
+                <Column field="vsAuctionDescription" header="Auction Description"></Column>
+                <Column field="auctionCategoryName" header="Auction Category"></Column>
+                <Column field="dEventProcessingFees" header="Auction Fees"></Column>
+                <Column field="dtStartDate" header="Auction StartDate/Time"></Column>
+                <Column field="dtEndDate" header="Auction EndDate/Time"></Column>
+                <Column field="details" header="Action">
+                    <template #body="data">
+                        <Button class="btn-sm" @click="joinAuction(data.data)">Join</Button>
+                    </template>
+                </Column>
+            </DataTable>
+            <Paginator
+                class="pagination-down"
+                :rows="perPage"
+                :rowsPerPageOptions="[10, 20, 30]"
+                :totalRecords="totalRows"
+                template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                @page="handlePageChange"
+            />
         </div>
-      </Dialog>
+        <Dialog v-model:visible="visible" modal :header="`Enter Auction ${auction?.vsAuctionCode} Password`" :style="{ width: '40rem' }">
+            <div class="fm-group">
+                <label class="fm-label" for="password">PassCode</label>
+                <div class="fm-inner">
+                    <InputText type=password v-model="auctionPassword" />
+                </div>
+                <div class="fm-error">
+                    {{ v$?.auctionPassword?.$errors[0]?.$message }}
+                </div>
+            </div>
+            <div class="modal-action fm-action justify-center">
+                <Button label="Submit" @click="submitAuctionPassword()"></Button>
+                <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
+            </div>
+        </Dialog>
     </div>
 </template>
 
