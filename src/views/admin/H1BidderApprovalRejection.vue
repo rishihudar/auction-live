@@ -174,8 +174,8 @@ function h1AuctionDetails() {
                 }));
                 console.log("resultList is ", resultList.value)
 
-                if (res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays > 0) {
-                    noOfDays.value = res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays
+                if (res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0) {
+                    noOfDays.value = res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours
                     console.log("indentDays is ", noOfDays.value)
                     disabled.value = true
                 } else {
