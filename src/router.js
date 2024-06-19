@@ -15,6 +15,10 @@ function loadAuctionView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
 }
+function loadAuctionCancellationView(view) {
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/CancelledAuction/${view}.vue`);
+}
 function loadAuctionPublishView(view) {
   return () =>
     import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPublishing/${view}.vue`);
@@ -706,6 +710,12 @@ const router = createRouter({
       name: "Step4",
       component: loadAuctionView("Step4"),
       meta: { title: "Step4",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
+      path: "/CancelledAuction",
+      name: "CancelledAuction",
+      component: loadAuctionCancellationView("CancelledAuction"),
+      meta: { title: "CancelledAuction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER', 'ROLE_SUPERADMIN']},
     },
     {
       path: "/auction-publishing-details",
