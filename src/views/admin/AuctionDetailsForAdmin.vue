@@ -153,6 +153,9 @@
                 </Dialog>
                     </button>
                 </div> -->
+                <Button v-if="!upcomingAuctionFlag" severity="danger" @click="visible7 = true">
+                        <fa-trash-can></fa-trash-can> Cancel Auction
+                    </Button>
                 
                 <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
             </div>
@@ -165,6 +168,39 @@
                         :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId"
                         :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
                         v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
+                </div>
+            </div>
+            <div class="bs-item col-span-6 2xl:col-span-4">
+                <div class="bs-buttons">
+                    <Button v-if="upcomingAuctionFlag" severity="danger" @click="visible7 = true">
+                        <fa-trash-can></fa-trash-can> Cancel Auction
+                    </Button>
+
+                    <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
+                        <div class="box-section">
+                            <div class="bs-item-holder">
+                                <div class="bs-item col-span-12 text-center" >
+                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionId }} </h6> 
+                                   <h6> Are you sure? <strong>(EMD Paid: {{ emdPaid }})</strong> </h6>
+                                </div>
+                                <div class="bs-item col-span-12 text-center">
+                                    <h6><strong>Cancellation Reason</strong></h6>
+                                    <InputText id="reason" v-model="reason" class="text-center"
+                                placeholder="Please enter Auction Cancellation Reason"  />
+                                </div>
+                                <div class="bs-item col-span-6 text-center">
+                                    <Button  severity="danger" @click="">
+                                        <fa-trash-can></fa-trash-can> Cancel Auction
+                                    </Button>
+                                </div>
+                                <div class="bs-item col-span-6 text-center">
+                                    <Button  severity="secondary" @click="visible7 = false">
+                                        Close
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Dialog>
                 </div>
             </div>
         </div>
@@ -183,13 +219,17 @@ import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
 import moment from "moment";
 import { useToast } from "primevue/usetoast";
+import faTrashCan from '../../../assets/icons/trash-can.svg';
 
 const toast = useToast();
 const agree = ref(false);
 const visible6 = ref(false);
+const visible7 = ref(false);
 const visible = ref(false);
 const auctionDetails = ref({});
 const loginStore = login();
+
+const emdPaid = ref(8)
 
 const props = defineProps({
   itemList: Array,
@@ -373,3 +413,11 @@ onMounted(() => {
     /* Add border to separate fields */
 }
 </style> -->
+<style scoped>
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensures vertical centering */
+}
+</style>
