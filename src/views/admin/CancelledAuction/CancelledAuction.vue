@@ -137,7 +137,7 @@ function fetchCancelledAuctions() {
 
     new MQL()
         .useManagementServer()
-        .setActivity("o.[FetchAuctionsForUpcomingAuctionsCard]")
+        .setActivity("o.[FetchCancelledAuctionDetails]")
         .setData({
             organizationId: login().loginDetails.organizationId,
             entityId: login().loginDetails.entityId,
@@ -149,8 +149,8 @@ function fetchCancelledAuctions() {
         })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchAuctionsForUpcomingAuctionsCard", true)
-            if (rs.isValid("FetchAuctionsForUpcomingAuctionsCard")) {
+            let res = rs.getActivity("FetchCancelledAuctionDetails", true)
+            if (rs.isValid("FetchCancelledAuctionDetails")) {
                 auctionData.value = res.result.auctionDetails;
                 totalRows.value = res.result.rowCount.totalRows;
                 console.log("auctionDetails.value.length", auctionData.value.length);
@@ -159,7 +159,7 @@ function fetchCancelledAuctions() {
                     console.log("SrNo-", currentPage.value * perPage.value + i + 1);
                 }
             } else {
-                rs.showErrorToast("FetchAuctionsForUpcomingAuctionsCard")
+                rs.showErrorToast("FetchCancelledAuctionDetails")
             }
         })
 

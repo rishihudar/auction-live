@@ -6,13 +6,13 @@
                     </div>
                 </template>
                 <Column field="auctionId" header="AuctionId"> </Column>
-                <Column field="name" header="Bidder Name"> </Column>
+                <Column field="fullName" header="Bidder Name"> </Column>
                 <Column field="email" header="Bidder EmailId"> </Column>
                 <Column field="mobileNo" header="Bidder Mobile Number"> </Column>
                 <Column field="status" header="Refund Status"> </Column>
                 <Column header="Action">   
                     <template #body="slotProps">
-                        <Button severity="secondary" @click="visible = true">
+                        <Button severity="secondary" @click="fetchBidderTransactionDetails(slotProps.data.userId)">
                              Details
                         </Button> 
                     </template>                  
@@ -25,55 +25,55 @@
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">Bidder Name: </label>
-                        {{ auctionBidderDetails[0].name }}
+                        {{ bidderDetails.fullName }}
                     </div>
                 </div>
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">Bidder Email: </label>
-                        {{ auctionBidderDetails[0].email }}
+                        {{ bidderDetails.email }}
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">Auction Id: </label>
-                        {{ auctionBidderDetails[0].auctionId }}
+                        {{ bidderDetails.auctionId }}
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">Auction EMD: </label>
-                        {{ auctionBidderDetails[0].auctionEMD }}
+                        {{ bidderDetails.auctionEMD }}
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">EMD Paid For: </label>
-                        {{ auctionBidderDetails[0].processingFeesCount }}
+                        {{ bidderDetails.processingFeesCount }}
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
-                        <label class="fm-label" for="step1">Total EMD Amount Paid: ( {{auctionBidderDetails[0].auctionEMD }} * {{ auctionBidderDetails[0].processingFeesCount }} )</label>
-                       <span>  {{ auctionBidderDetails[0].totalEMDPaid }} </span>
+                        <label class="fm-label" for="step1">Total EMD Amount Paid: ( {{bidderDetails.auctionEMD }} * {{ bidderDetails.processingFeesCount }} )</label>
+                       <span>  {{ bidderDetails.totalEMDPaid }} </span>
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
                         <label class="fm-label" for="step1">No. of Properties Allocated: </label>
-                        {{ auctionBidderDetails[0].propertyAllocated }}
+                        {{ bidderDetails.propertyAllocated }}
                     </div>
                 </div>
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
-                        <label class="fm-label" for="step1">Refund Amount:( {{ auctionBidderDetails[0].totalEMDPaid }} - {{ auctionBidderDetails[0].auctionEMD }} * {{ auctionBidderDetails[0].propertyAllocated }}) </label>
-                       
+                        <label class="fm-label" for="step1">Refund Amount:( {{ bidderDetails.totalEMDPaid }} - {{ bidderDetails.auctionEMD }} * {{ bidderDetails.propertyAllocated }}) </label>
+                       {{ bidderDetails.refundAmount }}
                     </div>
                 </div>
                 
@@ -103,7 +103,7 @@ const props = defineProps({
   auctionId: Number
 });
 const auctionBidderDetails = ref([{
-    name: 'paresh zanjare',
+    fullName: 'paresh zanjare',
     email: 'paresh@gmail.com',
     mobileNo: '8484840948',
     status: 'paid',
@@ -111,8 +111,24 @@ const auctionBidderDetails = ref([{
     auctionEMD: '40000',
     processingFeesCount: '2',
     propertyAllocated: '1',
-    totalEMDPaid: '80000'
+    totalEMDPaid: '80000',
+    refundAmount: '40000',
+    userId:''
 }])
+
+const bidderDetails = ref({
+    fullName: 'paresh zanjare',
+    email: 'paresh@gmail.com',
+    // mobileNo: '8484840948',
+    // status: 'paid',
+    auctionId: '123',
+    auctionEMD: '40000',
+    processingFeesCount: '2',
+    totalEMDPaid: '80000',
+    propertyAllocated: '1',
+    refundAmount: '40000',
+    userId:''
+})
 
 const auctionId = ref()
 const visible = ref(false);
@@ -123,17 +139,42 @@ function fetchAuctionBidderDetails(){
 
     new MQL()
         .useManagementServer()
-        .setActivity("o.[FetchAuctionBidderDetails]")
+        .setActivity("o.[FetchCancelledAuctionBidderDetails]")
         .setData({
-
+            auctionId: props.auctionId
         })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchAuctionBidderDetails", true)
-            if (rs.isValid("FetchAuctionBidderDetails")) {
+            let res = rs.getActivity("FetchCancelledAuctionBidderDetails", true)
+            if (rs.isValid("FetchCancelledAuctionBidderDetails")) {
                 auctionBidderDetails.value = res.result
             } else {
-                rs.showErrorToast("FetchAuctionBidderDetails")
+                rs.showErrorToast("FetchCancelledAuctionBidderDetails")
+            }
+        })
+}
+
+function fetchBidderTransactionDetails(userId){
+    console.log("Printing userId from fetchBidderTransactionDetails: ", userId)
+    console.log("printing from fetchBidderTransactionDetails: ", auctionId.value)
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchCancelledAuctionBidderTransactionDetails]")
+        .setData({
+            userId: userId,
+            auctionId: auctionId.value
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchCancelledAuctionBidderTransactionDetails", true)
+            if (rs.isValid("FetchCancelledAuctionBidderTransactionDetails")) {
+                bidderDetails.value = res.result
+                if(bidderDetails.value != null){
+                visible.value = true
+                }
+                console.log("Printing from FetchCancelledAuctionBidderTransactionDetails: ", bidderDetails.value)
+            } else {
+                rs.showErrorToast("FetchCancelledAuctionBidderTransactionDetails")
             }
         })
 }
