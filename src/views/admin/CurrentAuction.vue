@@ -29,7 +29,7 @@
             <!-- <Button severity="danger" @click="">
                           <fa-trash-can></fa-trash-can> Cancel Auction {{ data }}
                       </Button>  -->
-            <Button class="btn-sm" severity="danger"
+            <Button :disabled="data.data.isDisable == 0" class="btn-sm" severity="danger"
               @click="openCancelAuctionModal(data.data)"><fa-trash-can></fa-trash-can> Cancel Auction</Button>
 
           </template>
@@ -103,12 +103,15 @@ import { useToast } from 'primevue/usetoast';
 import Toast from "primevue/toast";
 import { useAuctionStore } from "../../store/Auction.js";
 import faTrashCan from '../../../assets/icons/trash-can.svg';
+// import moment from 'moment'; // Import Moment.js
 
 
 
 const toast = useToast()
 const auctionStore = useAuctionStore()
 const totalEMDPaid = ref('')
+// const cancellationCustomParam = ref('')
+// const cancelAuctionBeforeTime = ref('')
 const loginStore = login();
 const route = useRoute();
 const router = useRouter();
@@ -163,7 +166,10 @@ const v$ = useVuelidate(rules, { auctionPassword,  reason});
 onMounted(() => {
   // ProductService.getProductsMini().then((data) => (products.value = data));
   entityId.value = route.params.id
-  fetchScheduledAuctionsBidder()
+   setInterval(() => {
+    fetchScheduledAuctionsBidder()
+     }, 1000);
+  // fetchCustomParam()
 });
 function handlePageChange(event) {
   currentPage.value = event.page;
@@ -234,9 +240,36 @@ async function cancelAuction(){
     }
 }
 
+// function fetchCustomParam(){
+//   new MQL()
+//         .useManagementServer()
+//         .setActivity("o.[FetchCacellationCustomParam]")
+//         .setData({
+//         })
+//         .fetch()
+//         .then(rs => {
+//             let res = rs.getActivity("FetchCacellationCustomParam", true)
+//             if (rs.isValid("FetchCacellationCustomParam")) {
+//               cancellationCustomParam.value = res.result.cancellationCustomParam
+//               console.log("auction startTime:- ", products.value.dtStartDate)
+//                 if(totalEMDPaid.value == null){
+//                   cancellationCustomParam.value = 0
+//                   console.log("printing from nullFetchCacellationCustomParam", cancellationCustomParam.value)
+//                 }
+//                 console.log("Printing from FetchCacellationCustomParam(cancellationCustomParam): ", cancellationCustomParam.value)
+              
+//                 cancelAuctionBeforeTime.value = 
+//                 console.log("Printing from FetchCacellationCustomParam(cancelAuctionBeforeTime): ", cancelAuctionBeforeTime.value)
+//             } else {
+//                 rs.showErrorToast("FetchCacellationCustomParam")
+//             }
+//         })
+// }
+
 function fetchScheduledAuctionsBidder() {
   new MQL()
     .useManagementServer()
+    .enablePageLoader(false)
     .setActivity("r.[FetchScheduledAuctionsBidder]")
     .setData({
       entityId: loginStore.entityId,
