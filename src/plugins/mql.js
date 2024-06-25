@@ -116,6 +116,11 @@ class MQL {
       return this
     }
 
+    this.useNotificationServer =() => {
+      mqlInstance.defaults.baseURL = window.app.getNotificationURL()
+      return this
+    }
+
 
     this.formatActivity = function (activityStr) {
       let activityArray = []
