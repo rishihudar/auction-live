@@ -1,173 +1,127 @@
 <template>
-    <div id="forgot-password" class="box-login-holder">
-        <div class="card-login">
-            <div class="box-top-holder">
-                <div class="box-top box-top-left">
-                    <router-link to="/">Back to Login</router-link>
-                </div>
-            </div>
-            <div class="cl-header">
-                <div class="cl-header-media">
-                    <img
-                        src="../../assets/images/logo_dulb.webp"
-                        alt="DULB logo"
-                        width="956"
-                        height="193"
-                    />
-                </div>
-                <h1 class="title">Forgot Password</h1>
-            </div>
-            <form class="form-login form-grid" v-if="show_verify">
-                <div class="col-span-full">
-                    <div class="fm-group">
-                        <label class="fm-label" for="emailId">Username</label>
-                        <Toast />
-                        <InputGroup>
-                            <div class="fm-inner">
-                                <InputText v-model="emailId" placeholder="Enter your Username"  :disabled="emailchecked"/>
-                            </div>
-                            <Button
-                                label="Verify Username"
-                                @click="isEmailExist"
-                                :disabled="!emailId ||emailchecked"
-                            />
-                        </InputGroup>
-                        <!-- <div v-if="$v.emailId.$error" class="fm-error">
+  <div id="forgot-password" class="box-login-holder">
+    <div class="card-login">
+      <div class="box-top-holder">
+        <div class="box-top box-top-left">
+          <router-link to="/">Back to Login</router-link>
+        </div>
+      </div>
+      <div class="cl-header">
+        <div class="cl-header-media">
+          <img src="../../assets/images/logo_dulb.webp" alt="DULB logo" width="956" height="193" />
+        </div>
+        <h1 class="title">Forgot Password</h1>
+      </div>
+      <form class="form-login form-grid" v-if="show_verify">
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="emailId">Username</label>
+            <Toast />
+            <InputGroup>
+              <div class="fm-inner">
+                <InputText v-model="emailId" placeholder="Enter your Username" :disabled="emailchecked" />
+              </div>
+              <Button label="Verify Username" @click="isEmailExist" :disabled="!emailId || emailchecked" />
+            </InputGroup>
+            <!-- <div v-if="$v.emailId.$error" class="fm-error">
                                 {{ $v.emailId.$errors[0].$message }}
                             </div> 
                             <div v-if="OTPVerified" :style="{ color: 'green', fontSize: 'small' }">
                                 Email Verified 
                             </div>
                         </div> -->
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <div class="fm-group">
-                        <label class="fm-label" for="mobileNumber"
-                            >Enter Mobile Number</label
-                        >
-                        <div class="fm-input-group-holder">
-                            <InputGroup>
-                                <div class="fm-inner">
-                                    <InputText
-                                        v-model="mobileNumber"
-                                        placeholder="xxx-xxx-xxxx"
-                                        :disabled="isSmsOTPSent || !emailVerification || !emailchecked"
-                                    />
-                                    <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
-                                </div>
-                                <Button
-                                    label="Verify Mobile Number"
-                                    severity="secondary"
-                                    :disabled="!emailVerification || isSmsOTPSent"
-                                    @click="verifyMobile"
-                                />
-                            </InputGroup>
-                            <Button
-                                label="Send OTP"
-                                severity="secondary"
-                                @click="sendOTPMobile"
-                                :disabled="isSmsOTPSent || !checkMobileNumber"
-                            />
-                        </div>
-                        <div v-if="$v.mobileNumber.$error" class="fm-error">
-                            {{ $v.mobileNumber.$errors[0].$message }}
-                        </div>
-                        <div
-                            v-if="OTPSmsVerified"
-                            :style="{ color: 'green', fontSize: 'small' }"
-                        >
-                            Mobile Number verified
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <div class="fm-group" v-if="mobileOtpEnable">
-                        <label class="fm-label" for="verifyMobileNumber"
-                            >Enter OTP received on Mobile</label
-                        >
-                        <InputGroup>
-                            <div class="fm-inner">
-                                <InputText
-                                    v-model="verifyMobileNumber"
-                                    placeholder="xxx-xxx"
-                                    :class="{ 'p-invalid': $v.verifyMobileNumber.$error }"
-                                    :disabled="isSmsOTPVerified"
-                                />
-                                <fa-mobile-button
-                                    class="fm-icon fm-prefix"
-                                ></fa-mobile-button>
-                            </div>
-                            <Button
-                                label="Verify OTP"
-                                severity="secondary"
-                                @click="verifyOTPMobile(), (resetButton = true)"
-                                :disabled="isSmsOTPVerified"
-                            />
-                        </InputGroup>
-                        <div id="username-help" class="fm-info">OTP is valid for 5 mins</div>
-                        <div v-if="$v.verifyMobileNumber.$error" class="fm-error">
-                            {{ $v.verifyMobileNumber.$errors[0].$message }}
-                        </div>
-                    </div>
-                </div>
-                <div class="fm-action">
-                    <Button
-                        type="button"
-                        @click="changePassword"
-                        :disabled="!OTPSmsVerified"
-                    >
-                        Change Password</Button
-                    >
-                </div>
-            </form>
-            <form class="form-login form-grid" v-else>
-                <div class="col-span-full">
-                    <div class="fm-group">
-                        <label class="fm-label" for="password">Reset Password</label>
-                        <div class="fm-inner">
-                            <Password v-model="password" toggleMask />
-                            <fa-lock class="fm-icon fm-prefix"></fa-lock>
-                        </div>
-                        <div v-if="$v.password.$error" class="fm-error">
-                            {{ $v.password.$errors[0].$message }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <div class="fm-group">
-                        <label class="fm-label" for="confirmPassword"
-                            >Confirm Reset Password</label
-                        >
-                        <div class="fm-inner">
-                            <Password v-model="confirmPassword" toggleMask />
-                            <fa-lock class="fm-icon fm-prefix"></fa-lock>
-                        </div>
-                        <div v-if="$v.confirmPassword.$error" class="fm-error">
-                            {{ $v.confirmPassword.$errors[0].$message }}
-                        </div>
-                        <div v-if="password != confirmPassword" class="fm-error">
-                            Password does not match
-                        </div>
-                    </div>
-                </div>
-                <div class="fm-action">
-                    <Button
-                        type="button"
-                        @click="resetPassword"
-                        :disabled="
-                        !isSmsOTPSent ||
-                        password !== confirmPassword ||
-                        !confirmPassword
-                        "
-                    >
-                        Reset Password</Button
-                    >
-                </div>
-            </form>
-            <Footer name="box"></Footer>
+          </div>
         </div>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="mobileNumber">Enter Mobile Number</label>
+            <div class="fm-input-group-holder">
+              <InputGroup>
+                <div class="fm-inner">
+                  <InputText v-model="mobileNumber" placeholder="xxx-xxx-xxxx"
+                    :disabled="isSmsOTPSent || !emailVerification || !emailchecked" />
+                  <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
+                </div>
+                <Button label="Verify Mobile Number" severity="secondary" :disabled="!emailVerification || isSmsOTPSent"
+                  @click="verifyMobile" />
+              </InputGroup>
+              <Button label="Send OTP" severity="secondary" @click="sendOTPMobile"
+                :disabled="isSmsOTPSent || !checkMobileNumber" />
+            </div>
+            <div v-if="$v.mobileNumber.$error" class="fm-error">
+              {{ $v.mobileNumber.$errors[0].$message }}
+            </div>
+            <div v-if="OTPSmsVerified" :style="{ color: 'green', fontSize: 'small' }">
+              Mobile Number verified
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="fm-group" v-if="mobileOtpEnable">
+            <label class="fm-label" for="verifyMobileNumber">Enter OTP received on Mobile</label>
+            <InputGroup>
+              <div class="fm-inner">
+                <InputText v-model="verifyMobileNumber" placeholder="xxx-xxx"
+                  :class="{ 'p-invalid': $v.verifyMobileNumber.$error }" :disabled="isSmsOTPVerified" />
+                <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
+              </div>
+              <Button label="Verify OTP" severity="secondary" @click="verifyOTPMobile(), (resetButton = true)"
+                :disabled="isSmsOTPVerified" />
+            </InputGroup>
+            <div id="username-help" class="fm-info">OTP is valid for 5 mins</div>
+            <div v-if="$v.verifyMobileNumber.$error" class="fm-error">
+              {{ $v.verifyMobileNumber.$errors[0].$message }}
+            </div>
+          </div>
+        </div>
+        <div class="fm-action">
+          <Button type="button" @click="changePassword" :disabled="!OTPSmsVerified">
+            Change Password</Button>
+        </div>
+      </form>
+      <form class="form-login form-grid" v-else>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="password">Reset Password</label>
+            <div class="fm-inner">
+              <Password v-model="password" :feedback="false" toggleMask />
+              <fa-lock class="fm-icon fm-prefix"></fa-lock>
+            </div>
+            <div v-if="$v.password.$error" class="fm-error">
+              {{ $v.password.$errors[0].$message }}
+            </div>
+            <div v-if="!$v.password.passwordValidation.$response" class="fm-error">
+              Alphanumeric with at least one uppercase and one lower case letter and at least one special
+              character. Length: min 8 max 12.
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="confirmPassword">Confirm Reset Password</label>
+            <div class="fm-inner">
+              <Password v-model="confirmPassword" :feedback="false" toggleMask />
+              <fa-lock class="fm-icon fm-prefix"></fa-lock>
+            </div>
+            <div v-if="$v.confirmPassword.$error" class="fm-error">
+              {{ $v.confirmPassword.$errors[0].$message }}
+            </div>
+            <div v-if="password != confirmPassword" class="fm-error">
+              Password does not match
+            </div>
+          </div>
+        </div>
+        <div class="fm-action">
+          <Button type="button" @click="resetPassword" :disabled="!isSmsOTPSent ||
+        password !== confirmPassword ||
+        !confirmPassword
+        ">
+            Reset Password</Button>
+        </div>
+      </form>
+      <Footer name="box"></Footer>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -211,7 +165,7 @@ const confirmPassword = ref(null);
 const emailVerification = ref();
 const resetButton = ref(false);
 const checkMobileNumber = ref(false);
-const emailchecked=ref(false)
+const emailchecked = ref(false)
 let countMobileNumberUser = ref("");
 
 let rulesIndividual = computed(() => ({
@@ -226,6 +180,10 @@ let rulesIndividual = computed(() => ({
   },
   password: {
     required,
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12)
   },
   confirmPassword: {
     required,
@@ -243,6 +201,10 @@ let rulesAll = computed(() => ({
   },
   password: {
     required,
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12)
   },
   confirmPassword: {
     required,
@@ -263,7 +225,11 @@ let rulesCompany = computed(() => ({
     email,
   },
   password: {
-    required,
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12),
+    required
   },
   confirmPassword: {
     required,
@@ -276,6 +242,7 @@ const $v = useVuelidate(rules, {
   emailId,
   verifyMobileNumber,
   confirmPassword,
+  password
 });
 
 
@@ -472,7 +439,7 @@ function isEmailExist() {
           detail: "Username Verified !!!",
           life: 5000,
         });
-        emailchecked.value=true
+        emailchecked.value = true
       } else {
         toast.add({
           severity: "error",
@@ -480,7 +447,7 @@ function isEmailExist() {
           detail: "Username does'nt exist,please kindly check your Username!!!",
           life: 7000,
         });
-        emailchecked.value=false
+        emailchecked.value = false
       }
       if (rs.isValid("ForgetPasswordService")) {
       } else {
@@ -504,7 +471,7 @@ function verifyMobile() {
       if (rs.isValid("VerifyMobileNumber")) {
         console.log("resVerifyMobile", res.result.mobileVerify);
         if (res.result.mobileVerify == 0) {
-          
+
           toast.add({
             severity: "error",
             summary: "ERROR",
@@ -513,7 +480,7 @@ function verifyMobile() {
             life: 7000,
           });
         } else {
-          checkMobileNumber.value=true
+          checkMobileNumber.value = true
           toast.add({
             severity: "success",
             summary: "Success",
@@ -606,7 +573,7 @@ function resetPassword() {
       detail: "Password reset has been successful !",
       life: 3000,
     });
-    router.push({path:'/'})
+    router.push({ path: '/' })
   } else {
     toast.add({
       severity: "error",

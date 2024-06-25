@@ -2,7 +2,8 @@
     <div>
         <div class="fm-group">
             <label class="fm-label" for="horizontal-buttons">Number of Days</label>
-            <InputNumber v-model="noOfDays" placeholder="Enter number greater than one" showButtons :step="1" :disabled="disabled">
+            <InputNumber v-model="noOfDays" placeholder="Enter number greater than one" showButtons :step="1"
+                :disabled="disabled">
                 <template #incrementbuttonicon>+</template>
                 <template #decrementbuttonicon>-</template>
             </InputNumber>
@@ -58,17 +59,22 @@
                 <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
                 <Column field="highestQuotedValue" header="HIGHEST QUOTED VALUE (₹)"></Column>
                 <Column field="firstPayment" header="1st payment TO BE PAID (₹)"></Column>
-                <Column header="ELIGIBLE ?">   
-                    <template #body="rowData ">
+                <Column header="ELIGIBLE ?">
+                    <!-- <template #body="rowData ">
                         <input type="checkbox" :checked="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :disabled="disabled">
+                    </template> -->
+                    <template #body="rowData">
+
+                        <Checkbox v-model="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :binary="true"  :disabled="disabled" />
                     </template>
+
                 </Column>
                 <Column header="INTENT_LETTER">
                     <template #body="slotProps">
                         <span>Intent letter</span>
                     </template>
-                    </Column>
-                    <Column header="ALLOTMENT LETTER">
+                </Column>
+                <Column header="ALLOTMENT LETTER">
                     <template #body="slotProps">
                         <span>intent letter</span>
                     </template>
@@ -80,7 +86,9 @@
             <Button label="Submit" @click="submitForm" :disabled="disabled" />
         </div>
         <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
-            <strong>Note:</strong> <span>First payment is calculated as = (Highest quoted value * First Payment Percentage) - EMD amount</span>
+            <strong>Note:</strong> <span>First payment is calculated as = (Highest quoted value * First Payment
+                Percentage) -
+                EMD amount</span>
         </div>
     </div>
 </template>
@@ -90,7 +98,7 @@
 
 import Checkbox from 'primevue/checkbox';
 
-import { computed, ref, onMounted,watch } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import {
     required,
@@ -117,9 +125,9 @@ const props = defineProps({
 
 let auctionId = ref(props.auctionId)
 const loginStore = login();
-const {organizationId, entityId, loginId } = storeToRefs(loginStore);
-let tick=ref()
-let resultList=ref()
+const { organizationId, entityId, loginId } = storeToRefs(loginStore);
+let tick = ref()
+let resultList = ref()
 // let firstPaymentPercentage = ref()
 const selectedRows = ref([]);
 
@@ -139,75 +147,73 @@ let rules = computed(() => ({
 const $v = useVuelidate(rules, { noOfDays });
 
 
-let disabled=ref(false)
+let disabled = ref(false)
 // let indentDays=ref()
 function h1AuctionDetails() {
 
     // console.log("loadEntityAndOrganization" , entityId.value, organizationId.value)
-    
-			new MQL()
-            .useManagementServer()
-			.setActivity("r.[FetchH1BiddersAuctionDetails]")
-			.setData({"auctionId":auctionId.value,"entityId":entityId.value})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("FetchH1BiddersAuctionDetails",true)
-			if (rs.isValid("FetchH1BiddersAuctionDetails")) {
+
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[FetchH1BiddersAuctionDetails]")
+        .setData({ "auctionId": auctionId.value, "entityId": entityId.value })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchH1BiddersAuctionDetails", true)
+            if (rs.isValid("FetchH1BiddersAuctionDetails")) {
                 // resultList.value=res.result
                 resultList.value = res.result.fetchH1BidderAuctionDetails.map(item => ({
-  ...item,
-  accepted: item.accepted === 1 ? 1 : 0
-}));
-                console.log("resultList is ",resultList.value)
+                    ...item,
+                    accepted: item.accepted === 1 ? true : false
+                }));
+                console.log("resultList is ", resultList.value)
 
-                if(res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays > 0) {
-                    noOfDays.value=res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays
-                console.log("indentDays is ",noOfDays.value)
-                    disabled.value=true
+                if (res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays > 0) {
+                    noOfDays.value = res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentDays
+                    console.log("indentDays is ", noOfDays.value)
+                    disabled.value = true
                 } else {
-                    disabled.value=false
+                    disabled.value = false
                 }
 
-			} else
-			 { 
-			rs.showErrorToast("FetchH1BiddersAuctionDetails")
-			}
-			})
-			
-    
+            } else {
+                rs.showErrorToast("FetchH1BiddersAuctionDetails")
+            }
+        })
+
+
 }
 
 function updateAccepted(rowData) {
     // console.log(rowData)
     // console.log(resultList.value[rowData.index].accepted)
-  rowData.accepted = !rowData.accepted; 
-  resultList.value[rowData.index].accepted = rowData.accepted
+    rowData.accepted = !rowData.accepted;
+    resultList.value[rowData.index].accepted = rowData.accepted
 }
 
 function submitForm() {
-    console.log("Auction id hai ",auctionId.value)
+    console.log("Auction id hai ", auctionId.value)
     const validation = $v.value.$validate();
 
-    if(!$v.value.$error) {
+    if (!$v.value.$error) {
 
-        console.log("result list ",resultList.value)
+        console.log("result list ", resultList.value)
 
-			new MQL()
+        new MQL()
             .useManagementServer()
-			.setActivity("r.[UpdateH1BidderDetails]")
-			.setData({"auctionId":auctionId.value,"h1ApprovedBidders":resultList.value,"noOfDays":noOfDays.value})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("UpdateH1BidderDetails",true)
-			if (rs.isValid("UpdateH1BidderDetails")) {
-                disabled.value=true
-                toaster.success("Successfully Updated");
-			} else
-			 { 
-			rs.showErrorToast("UpdateH1BidderDetails")
-			}
-			})
-			
+            .setActivity("r.[UpdateH1BidderDetails]")
+            .setData({ "auctionId": auctionId.value, "h1ApprovedBidders": resultList.value, "noOfDays": noOfDays.value })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("UpdateH1BidderDetails", true)
+                if (rs.isValid("UpdateH1BidderDetails")) {
+                    disabled.value = true
+                    toaster.success("Successfully Updated");
+                } else {
+                    rs.showErrorToast("UpdateH1BidderDetails")
+                }
+            })
+
 
     } else {
 
@@ -221,7 +227,6 @@ function submitForm() {
 onMounted(() => {
     h1AuctionDetails();
     // fetchH1AuctionDetails(); 
-} )
+})
 
 </script>
-
