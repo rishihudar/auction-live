@@ -397,14 +397,37 @@ async function cancelAuction(){
                 //     totalEMDPaid.value = 0
                 //     console.log("printing from CancelAuction", totalEMDPaid.value)
                 // }
+                auctionCancellationNotification(props.auctionCode)
                  visible7.value = false
-                 reloadPage()
+                //  reloadPage()
+                FetchAuctionDetailsByAuctionIdAdmin()
                 // console.log("Printing from CancelAuction: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("CancelAuction")
             }
         })
     }
+}
+
+function auctionCancellationNotification(auctionCode){
+  new MQL()
+    .useNotificationServer()
+    .enablePageLoader(false)
+    .setActivity("r.[FetchBiddersDetailsForAuctionCancellationNotification]")
+    .setData({
+      auctionId: auctionCode,
+      roleId: 1,
+      statusId: 31
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
+      if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
+       console.log("Auction Cancel Notification send")
+      } else {
+        rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
+      }
+    });
 }
 
 function reloadPage() {
