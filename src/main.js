@@ -112,7 +112,7 @@ vm.use(Toaster, {
 // var cdnBaseURL = '/cdn-server'
 // var bidderURL = '/bidder-server'
 // var managementURL = '/management-server'
-
+// var notificationURL = '/notification-server'
 
 
 // PROD
@@ -121,6 +121,7 @@ var loginURL = '/application/login-server'
 var cdnBaseURL = '/cdn-server'
 var bidderURL = '/application/bidder-server'
 var managementURL = '/application/management-server'
+var notificationURL = '/application/notification-server'
 
 vm.use(mqlOptions, {
   coreURL: coreURL,
@@ -128,6 +129,7 @@ vm.use(mqlOptions, {
   cdnBaseURL: cdnBaseURL,
   bidderURL: bidderURL,
   managementURL : managementURL,
+  notificationURL: notificationURL,
   cdnConfig: [],
 })
 

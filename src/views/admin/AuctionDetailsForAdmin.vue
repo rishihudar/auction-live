@@ -165,7 +165,8 @@
                 </p>
                 <div class="bs-buttons" v-if="dataFetched">
                     <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
-                        :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId"
+                        :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
+                        :auctionCode ="auctionDetails.auctionCode"
                         :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
                         v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
                 </div>
