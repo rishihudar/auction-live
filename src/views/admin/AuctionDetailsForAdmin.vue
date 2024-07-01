@@ -153,6 +153,9 @@
                 </Dialog>
                     </button>
                 </div> -->
+                <Button v-if="!upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
+                        <fa-trash-can></fa-trash-can> Cancel Auction
+                    </Button>
                 
                 <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
             </div>
@@ -168,12 +171,48 @@
                         v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
                 </div>
             </div>
+            <div class="bs-item col-span-6 2xl:col-span-4">
+                <div class="bs-buttons">
+                    <Button v-if="upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
+                        <fa-trash-can></fa-trash-can> Cancel Auction
+                    </Button>
+
+                    <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
+                        <div class="box-section">
+                            <div class="bs-item-holder">
+                                <div class="bs-item col-span-12 text-center" >
+                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionId }} </h6> 
+                                   <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
+                                </div>
+                                <div class="bs-item col-span-12 text-center">
+                                    <h6><strong>Cancellation Reason</strong></h6>
+                                    <InputText id="reason" v-model="reason" class="text-center"
+                                placeholder="Please enter Auction Cancellation Reason"  />
+                                <div v-if="$v.reason.$error" class="fm-error">
+                                    {{ $v.reason.$errors[0].$message }}
+                                </div>
+                                </div>
+                                <div class="bs-item col-span-6 text-center">
+                                    <Button  severity="danger" @click="cancelAuction">
+                                        <fa-trash-can></fa-trash-can> Cancel Auction
+                                    </Button>
+                                </div>
+                                <div class="bs-item col-span-6 text-center">
+                                    <Button  severity="secondary" @click="visible7 = false">
+                                        Close
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Dialog>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import MQL from "@/plugins/mql.js";
 import Dialog from 'primevue/dialog';
 import { fetchAuctionStatus } from "../../plugins/helpers";
@@ -184,13 +223,20 @@ import { login } from "../../store/modules/login.js";
 import MQLCdn from '@/plugins/mqlCdn.js';
 import moment from "moment";
 import { useToast } from "primevue/usetoast";
+import faTrashCan from '../../../assets/icons/trash-can.svg';
+import { useVuelidate } from '@vuelidate/core';
+import { helpers, integer, required } from '@vuelidate/validators'
+
 
 const toast = useToast();
 const agree = ref(false);
 const visible6 = ref(false);
+const visible7 = ref(false);
 const visible = ref(false);
 const auctionDetails = ref({});
 const loginStore = login();
+const reason = ref('')
+const totalEMDPaid = ref('')
 
 const props = defineProps({
   itemList: Array,
@@ -205,6 +251,11 @@ const props = defineProps({
   upcomingAuctionFlag:Boolean
 });
 
+const emit = defineEmits({
+   //to call fetchUpcomingAuctions
+    call: null
+})
+
 const selectedStartDate = ref();
 const selectedEndDate = ref();
 
@@ -214,6 +265,7 @@ const endMinDate = ref();
 endMinDate.value = moment().add(2, "minutes").toDate();
 const dbEndDate = ref();
 const dbStartDate = ref();
+const userRole = ref(loginStore.currentRole.roleCode);
 
 let dataFetched = ref(false);
 async function FetchAuctionDetailsByAuctionIdAdmin() {
@@ -302,6 +354,95 @@ function fetchAllStepsAuctionPreview() {
       }
     });
 }
+
+function fetchEMDCount(){
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchEMDCount]")
+        .setData({
+            // userId: userId,
+            auctionId: props.auctionId
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchEMDCount", true)
+            if (rs.isValid("FetchEMDCount")) {
+              totalEMDPaid.value = res.result.totalEMDPaid
+              
+                if(totalEMDPaid.value == null){
+                    totalEMDPaid.value = 0
+                    console.log("printing from nullEMDCount", totalEMDPaid.value)
+                }
+                visible7.value = true
+                console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+            } else {
+                rs.showErrorToast("FetchEMDCount")
+            }
+        })
+}
+
+async function cancelAuction(){
+    const result = await $v.value.$validate();
+   console.log("#############", result)
+    if (reason.value!="") {
+        new MQL()
+        .useManagementServer()
+        .setActivity("o.[CancelAuction]")
+        .setData({
+            // userId: userId,
+            auctionId: props.auctionId,
+            reason: reason.value
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("CancelAuction", true)
+            if (rs.isValid("CancelAuction")) {
+            //   totalEMDPaid.value = res.result.totalEMDPaid
+            console.log("Auction cancelled for auction ID: ", props.auctionId , "****", reason.value)
+                // if(totalEMDPaid.value == null){
+                //     totalEMDPaid.value = 0
+                //     console.log("printing from CancelAuction", totalEMDPaid.value)
+                // }
+                console.log("###############AUctionCOde: ", props.auctionCode)
+                auctionCancellationNotification(props.auctionCode)
+                 visible7.value = false
+                 
+                // FetchAuctionDetailsByAuctionIdAdmin()
+                emit('call');
+                // console.log("Printing from CancelAuction: ", totalEMDPaid.value)
+            } else {
+                rs.showErrorToast("CancelAuction")
+            }
+        })
+    }
+}
+
+function auctionCancellationNotification(auctionCode){
+  new MQL()
+    .useNotificationServer()
+    .enablePageLoader(false)
+    .setActivity("r.[FetchBiddersDetailsForAuctionCancellationNotification]")
+    .setData({
+      auctionId: auctionCode,
+      roleId: 1,
+      statusId: 31
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
+      if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
+       console.log("Auction Cancel Notification send")
+    //    reloadPage()
+      } else {
+        rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
+      }
+    });
+    
+}
+
+function reloadPage() {
+        window.location.reload();
+        }
 // function UpdateExtendParticipationEndDate() {
 //   if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
 //     console.log(
@@ -348,6 +489,18 @@ function fetchAllStepsAuctionPreview() {
 			
   
 // }
+
+const rules = computed(() => ({
+    
+        reason: { required: helpers.withMessage('Please Provide Auction Cancelleation Reason', required) }
+    
+}))
+
+const $v = useVuelidate(rules, {
+    reason
+});
+
+
 onMounted(() => {
     FetchAuctionDetailsByAuctionIdAdmin()
 });
@@ -374,3 +527,11 @@ onMounted(() => {
     /* Add border to separate fields */
 }
 </style> -->
+<style scoped>
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensures vertical centering */
+}
+</style>
