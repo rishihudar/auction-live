@@ -232,8 +232,8 @@ async function cancelAuction(){
               //   }
               auctionCancellationNotification(aucdata.value.vsAuctionCode)
                  visible7.value = false
-                 // reloadPage()
-                 fetchScheduledAuctionsBidder()
+                
+                //  fetchScheduledAuctionsBidder()
               //   console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("CancelAuction")
@@ -257,10 +257,12 @@ function auctionCancellationNotification(auctionCode){
       let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
       if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
        console.log("Auction Cancel Notification send")
+       fetchScheduledAuctionsBidder()
       } else {
         rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
       }
     });
+   
 }
 
 // function fetchCustomParam(){

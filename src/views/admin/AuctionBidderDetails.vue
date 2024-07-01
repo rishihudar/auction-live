@@ -2,7 +2,7 @@
     <DataTable v-model:expandedRows="expandedRows" :value="auctionBidderDetails" showGridlines>
         <template #empty>
                     <div class="box-watermark">
-                        No Auctions Found
+                        No Bidder Found For Auction: {{auctionCode}}
                     </div>
                 </template>
                 <Column field="auctionId" header="AuctionId"> </Column>
@@ -100,7 +100,8 @@ import MQL from "@/plugins/mql.js";
 
 
 const props = defineProps({
-  auctionId: Number
+  auctionId: Number,
+  auctionCode: String
 });
 const auctionBidderDetails = ref([{
     fullName: 'paresh zanjare',

@@ -251,6 +251,11 @@ const props = defineProps({
   upcomingAuctionFlag:Boolean
 });
 
+const emit = defineEmits({
+   //to call fetchUpcomingAuctions
+    call: null
+})
+
 const selectedStartDate = ref();
 const selectedEndDate = ref();
 
@@ -398,10 +403,12 @@ async function cancelAuction(){
                 //     totalEMDPaid.value = 0
                 //     console.log("printing from CancelAuction", totalEMDPaid.value)
                 // }
+                console.log("###############AUctionCOde: ", props.auctionCode)
                 auctionCancellationNotification(props.auctionCode)
                  visible7.value = false
-                //  reloadPage()
-                FetchAuctionDetailsByAuctionIdAdmin()
+                 
+                // FetchAuctionDetailsByAuctionIdAdmin()
+                emit('call');
                 // console.log("Printing from CancelAuction: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("CancelAuction")
@@ -425,10 +432,12 @@ function auctionCancellationNotification(auctionCode){
       let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
       if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
        console.log("Auction Cancel Notification send")
+    //    reloadPage()
       } else {
         rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
       }
     });
+    
 }
 
 function reloadPage() {

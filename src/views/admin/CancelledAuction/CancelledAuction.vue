@@ -60,7 +60,7 @@
                     </template>         -->
                 </Column>
                 <template #expansion="slot">
-                    <AuctionBidderDetails :auctionId="slot.data.auctionId"
+                    <AuctionBidderDetails :auctionId="slot.data.auctionId"  :auctionCode="slot.data.auctionCode"
                         :upcomingAuctionFlag="upcomingAuctionFlag" />
                 </template>
             </DataTable>

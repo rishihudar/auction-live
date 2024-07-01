@@ -44,8 +44,8 @@
                     </template>
                 </Column>
                 <template #expansion="slot">
-                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId"
-                        :upcomingAuctionFlag="upcomingAuctionFlag" />
+                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode"
+                        :upcomingAuctionFlag="upcomingAuctionFlag" @call="fetchUpcomingAuctions()"/>
                 </template>
             </DataTable>
             <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[5, 10, 20]"
