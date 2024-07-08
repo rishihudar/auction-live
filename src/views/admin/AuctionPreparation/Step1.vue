@@ -2,7 +2,7 @@
     <div class="wizard-content">
         <div class="wc-item">
             <div class="wc-header">
-                <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Details</div>
+                <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Auction Details</div>
                 <div class="wc-title" v-else>Auction Code: {{auctionCodeToShow}}</div>
             </div>
 

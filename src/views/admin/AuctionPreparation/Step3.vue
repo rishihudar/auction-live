@@ -168,9 +168,7 @@
                 <div class="fm-row col-span-full" v-if="selectedModifierValueChange.modifierValueChangeId === '2'">
                     <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After
-                                No. Of
-                                Extensions</label>
+                            <label class="fm-label" for="Modifier Value After No. Of Extensions">No of extensions after Modifier value is Modified</label>
                             <div class="fm-inner">
                                 <InputNumber v-model="modifierValueExtentionCount" inputId="minmax-buttons"
                                     mode="decimal" showButtons :min="0" :max="100" />
@@ -182,7 +180,7 @@
                     </div>
                     <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
-                            <label class="fm-label" for="Modifier Value After No. Of Extensions">Modifier Value After
+                            <label class="fm-label" for="No of extensions after Modifier value is Modified">Modifier Value After
                                 Extension</label>
                             <div class="fm-inner">
                                 <InputNumber v-model="modifierValueAfterExtention" inputId="minmax-buttons"
