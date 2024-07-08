@@ -190,7 +190,11 @@ function FetchDataForAuctionCode(){
             console.log("FetchDataForAuctionCode",res.result);
             entityShortName.value = res.result.entityShortName.entityShortName;
             console.log("entityShortName",entityShortName.value);
+            if(res.result.highestAuctionNumber != null){
             auctionNumber.value = res.result.highestAuctionNumber.auctionNumber + 1;
+            }else{
+                auctionNumber.value = 1
+            }
             console.log("auctionNumber",auctionNumber.value);
             auctionCode.value = `${entityShortName.value}-${auctionNumber.value}`;
             console.log("auctionCode",auctionCode.value);
