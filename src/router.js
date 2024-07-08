@@ -85,12 +85,12 @@ const router = createRouter({
       component: loadDashboardView("AdminComponent"),
       meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
-    {
-      path: "/auction-approval",
-      name: "ROLE_ADMIN",
-      component: loadDashboardView("AdminComponent"),
-      meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    },
+    // {
+    //   path: "/auction-approval",
+    //   name: "ROLE_ADMIN",
+    //   component: loadDashboardView("AdminComponent"),
+    //   meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    // },
     // {
     //   path: "/AuctionMakerDashboard",
     //   name: "ROLE_MAKER",
