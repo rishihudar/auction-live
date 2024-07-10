@@ -5,7 +5,7 @@
                         No Bidder Found For Auction: {{auctionCode}}
                     </div>
                 </template>
-                <Column field="auctionId" header="AuctionId"> </Column>
+                <Column field="auctionCode" header="Auction Code"> </Column>
                 <Column field="fullName" header="Bidder Name"> </Column>
                 <Column field="email" header="Bidder EmailId"> </Column>
                 <Column field="mobileNo" header="Bidder Mobile Number"> </Column>
@@ -103,20 +103,21 @@ const props = defineProps({
   auctionId: Number,
   auctionCode: String
 });
-const auctionBidderDetails = ref([{
-    fullName: 'paresh zanjare',
-    email: 'paresh@gmail.com',
-    mobileNo: '8484840948',
-    status: 'paid',
-    auctionId: '123',
-    auctionEMD: '40000',
-    processingFeesCount: '2',
-    propertyAllocated: '1',
-    totalEMDPaid: '80000',
-    refundAmount: '40000',
-    userId:''
-}])
-
+// const auctionBidderDetails = ref([{
+//     fullName: 'paresh zanjare',
+//     email: 'paresh@gmail.com',
+//     mobileNo: '8484840948',
+//     status: 'paid',
+//     auctionId: '123',
+//     auctionCode: 'MCF-1',
+//     auctionEMD: '40000',
+//     processingFeesCount: '2',
+//     propertyAllocated: '1',
+//     totalEMDPaid: '80000',
+//     refundAmount: '40000',
+//     userId:''
+// }])
+const auctionBidderDetails = ref([])
 const bidderDetails = ref({
     fullName: 'paresh zanjare',
     email: 'paresh@gmail.com',
@@ -149,6 +150,12 @@ function fetchAuctionBidderDetails(){
             let res = rs.getActivity("FetchCancelledAuctionBidderDetails", true)
             if (rs.isValid("FetchCancelledAuctionBidderDetails")) {
                 auctionBidderDetails.value = res.result
+               
+                // for (let index = 0; index < auctionBidderDetails.length; index++) {
+                //     auctionBidderDetails[index].value.auctionCode = props.auctionCode
+                    
+                // }
+                console.log("***************", auctionBidderDetails)
             } else {
                 rs.showErrorToast("FetchCancelledAuctionBidderDetails")
             }
@@ -170,6 +177,7 @@ function fetchBidderTransactionDetails(userId){
             let res = rs.getActivity("FetchCancelledAuctionBidderTransactionDetails", true)
             if (rs.isValid("FetchCancelledAuctionBidderTransactionDetails")) {
                 bidderDetails.value = res.result
+
                 if(bidderDetails.value != null){
                 visible.value = true
                 }
