@@ -168,7 +168,9 @@
                         :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
                         :auctionCode ="auctionDetails.auctionCode"
                         :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
-                        v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
+                        v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode"
+                        :totalEmdPaid="auctionDetails.emdPaid"
+                        :propertiesAvailable="auctionDetails.itemCount"/>
                 </div>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
