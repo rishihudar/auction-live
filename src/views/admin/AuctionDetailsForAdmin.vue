@@ -176,12 +176,12 @@
                     <Button v-if="upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
                         <fa-trash-can></fa-trash-can> Cancel Auction
                     </Button>
-
+                    <Toast />
                     <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
                         <div class="box-section">
                             <div class="bs-item-holder">
                                 <div class="bs-item col-span-12 text-center" >
-                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionId }} </h6> 
+                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionCode }} </h6> 
                                    <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
                                 </div>
                                 <div class="bs-item col-span-12 text-center">
@@ -404,6 +404,7 @@ async function cancelAuction(){
                 //     console.log("printing from CancelAuction", totalEMDPaid.value)
                 // }
                 console.log("###############AUctionCOde: ", props.auctionCode)
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
                 auctionCancellationNotification(props.auctionCode)
                  visible7.value = false
                  
