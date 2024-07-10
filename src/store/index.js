@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export const main = defineStore('main', {
-  state: () => ({ isPageBlocked: false, sidebarCollapsed: false }),
+  state: () => ({ isPageBlocked: false, sidebarCollapsed: true }),
   getters: {
     Boolean: state => state.isPageBlocked
   },
