@@ -407,8 +407,8 @@
                                 <Dropdown v-model="userDetails.departmentId" option-value="departmentId" :options="departmentMaster" optionLabel="departmentName" placeholder="Select Branch/Department"/>
                             </div>
                             <div id="branch-help" class="fm-info">Enter your branch/department</div>
-                            <div v-if="$v.userDetails.departmentName.$error" class="fm-error">
-                            {{ $v.userDetails.departmentName.$errors[0].$message }}
+                            <div v-if="$v.userDetails.departmentId.$error" class="fm-error">
+                            {{ $v.userDetails.departmentId.$errors[0].$message }}
                         </div>
                         </div>
                     </div>
@@ -420,8 +420,8 @@
                                 <Dropdown v-model="userDetails.designationId" option-value="designationId" :options="designationMaster" optionLabel="designationName" placeholder="Select Designation"/>
                             </div>
                             <div id="designation-help" class="fm-info">Enter your designation</div>
-                            <div v-if="$v.userDetails.designationName.$error" class="fm-error">
-                            {{ $v.userDetails.designationName.$errors[0].$message }}
+                            <div v-if="$v.userDetails.designationId.$error" class="fm-error">
+                            {{ $v.userDetails.designationId.$errors[0].$message }}
                         </div>
                         </div>
                     </div>
@@ -433,8 +433,8 @@
                                 <Dropdown v-model="userDetails.cadreId" option-value="cadreId" :options="cadreMaster" optionLabel="cadreName" placeholder="Select Cadre" />
                             </div>
                             <div id="cadre-help" class="fm-info">Enter your cadre</div>
-                            <div v-if="$v.userDetails.cadreName.$error" class="fm-error">
-                            {{ $v.userDetails.cadreName.$errors[0].$message }}
+                            <div v-if="$v.userDetails.cadreId.$error" class="fm-error">
+                            {{ $v.userDetails.cadreId.$errors[0].$message }}
                         </div>
                         </div>
                     </div>
@@ -580,21 +580,21 @@ const InsertUserData = async () => {
     console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
-			.setActivity("o.[UpdateUserData]")
+			.setActivity("o.[InsertUserData]")
 			.setData({"cadreId":userDetails.value.cadreId,"departmentId":userDetails.value.departmentId,
             "designationId":userDetails.value.designationId,"districtName":userDetails.value.districtName,
             "email":userDetails.value.email,"entityId":userDetails.value.entityId,"fullName": userDetails.value.fullName,
             "loginEmail": userDetails.value.loginEmail,"mobile": userDetails.value.mobile, "password":userDetails.value.password,
-            "modifiedBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId,"userId":userDetails.value.userId})
+            "createdBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId,"userId":userDetails.value.userId})
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("UpdateUserData",true)
-			if (rs.isValid("UpdateUserData")) {
+			let res = rs.getActivity("InsertUserData",true)
+			if (rs.isValid("InsertUserData")) {
                 changeFlag(0)
                 reloadPage()
 			} else
 			 { 
-			rs.showErrorToast("UpdateUserData")
+			rs.showErrorToast("InsertUserData")
 			}
 			})
         } else {
