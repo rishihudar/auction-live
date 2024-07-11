@@ -2,7 +2,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h2 class="title">Upcoming Auction Details</h2>
+                <h2 class="title">Cancelled Auctions Refund</h2>
             </div>
         </div>
         <div class="table-custom">
@@ -11,7 +11,7 @@
                 <template #start>
                     <div class="fm-inner">
                         <InputText v-model="filter" placeholder="Search By Auction Code..."
-                            @input="fetchUpcomingAuctions" />
+                            @input="fetchCancelledAuctions" />
                         <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
                     </div>
                 </template>
@@ -24,28 +24,44 @@
                 </template>
                 <Column field="entityName" header="Entity Name"> </Column>
                 <Column field="auctionCode" header="Auction Code"> </Column>
-                <Column header="Auction Category - Auction Description">
+                <!-- <Column header="Auction Category - Auction Description"> -->
+                <Column header="Auction Description">
                     <template #body="slotProps">
                         <div>
-                            {{ slotProps.data.auctionCategoryName }}-
+                            <!-- {{ slotProps.data.auctionCategoryName }} -->
                             {{ slotProps.data.auctionDescription }}<br>
-
                         </div>
                     </template>
                 </Column>
-                <Column field="auctionRegStartDate" header="Processing and EMD Fee Pay Start Date/Time">
-                </Column>
-                <Column field="auctionRegEndDate" header="Processing and EMD Fee Pay End Date/Time">
-                </Column>
-                <Column expander header="Action" style="width: 5rem">
-                    <template #rowtogglericon="">
-                        <fa-webhook></fa-webhook>
-                        Details
+                <Column header="Auction Category">
+                    <template #body="slotProps">
+                        <div>
+                            {{ slotProps.data.auctionCategoryName }}
+                            
+                            <!-- -{{ slotProps.data.auctionDescription }}<br> -->
+                        </div>
                     </template>
                 </Column>
+                <!-- <Column field="auctionRegStartDate" header="Processing and EMD Fee Pay Start Date/Time">
+                </Column>
+                <Column field="auctionRegEndDate" header="Processing and EMD Fee Pay End Date/Time">
+                </Column> -->
+                <Column header="Action">   
+                    <template #body="slotProps">
+                        <Button severity="secondary" @click="startRefund(slotProps.data.auctionId)">
+                            Start Refund
+                        </Button> 
+                    </template>                  
+                </Column>
+                
+                <Column expander header="Details" style="width: 5rem">
+                    <!-- <template #rowtogglericon="">
+                        <fa-webhook></fa-webhook> Details
+                    </template>         -->
+                </Column>
                 <template #expansion="slot">
-                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode"
-                        :upcomingAuctionFlag="upcomingAuctionFlag" @call="fetchUpcomingAuctions()"/>
+                    <AuctionBidderDetails :auctionId="slot.data.auctionId"  :auctionCode="slot.data.auctionCode"
+                        :upcomingAuctionFlag="upcomingAuctionFlag" />
                 </template>
             </DataTable>
             <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[5, 10, 20]"
@@ -58,21 +74,22 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
-import { login } from "../../store/modules/login";
+import { login } from "../../../store/modules/login.js";
 import Column from "primevue/column";
-import AuctionDetailsForAdmin from "../admin/AuctionDetailsForAdmin.vue";
+import AuctionBidderDetails from "../../admin/AuctionBidderDetails.vue";
 import MQL from "@/plugins/mql.js";
 import Paginator from "primevue/paginator";
+import Button from 'primevue/button';
 
-import faWebhook from "../../../assets/icons/webhook.svg";
-
+import faWebhook from "../../../../assets/icons/webhook.svg";
+import faTrashCan from '../../../../assets/icons/trash-can.svg';
 const loginStore = login();
 
 
 const auctionData = ref([]);
 const expandedRows = ref([]);
 
-
+const auction = ref([])
 
 const upcomingAuctionFlag = ref(false)
 const perPage = ref(10);
@@ -84,8 +101,9 @@ function handlePageChange(event) {
     currentPage.value = event.page;
     perPage.value = event.rows;
     console.log("event.page", event.page);
-    fetchUpcomingAuctions();
+    fetchCancelledAuctions();
 }
+
 
 // function fetchAuctionWithApprovedStatus() {
 //     // Automatically generated
@@ -115,24 +133,24 @@ function handlePageChange(event) {
 //             }
 //         });
 // }
-function fetchUpcomingAuctions() {
+function fetchCancelledAuctions() {
 
     new MQL()
         .useManagementServer()
-        .setActivity("o.[FetchAuctionsForUpcomingAuctionsCard]")
+        .setActivity("o.[FetchCancelledAuctionDetails]")
         .setData({
             organizationId: login().loginDetails.organizationId,
             entityId: login().loginDetails.entityId,
             userId: login().loginDetails.loginId,
-            statusCode: "AUCTION_PUBLISHED",
+            statusCode: "AUCTION_CANCELLED",
             filter: "%" + filter.value.trim() + "%",
             skip: String(currentPage.value * perPage.value),
             limit: String(perPage.value),
         })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchAuctionsForUpcomingAuctionsCard", true)
-            if (rs.isValid("FetchAuctionsForUpcomingAuctionsCard")) {
+            let res = rs.getActivity("FetchCancelledAuctionDetails", true)
+            if (rs.isValid("FetchCancelledAuctionDetails")) {
                 auctionData.value = res.result.auctionDetails;
                 totalRows.value = res.result.rowCount.totalRows;
                 console.log("auctionDetails.value.length", auctionData.value.length);
@@ -141,7 +159,7 @@ function fetchUpcomingAuctions() {
                     console.log("SrNo-", currentPage.value * perPage.value + i + 1);
                 }
             } else {
-                rs.showErrorToast("FetchAuctionsForUpcomingAuctionsCard")
+                rs.showErrorToast("FetchCancelledAuctionDetails")
             }
         })
 
@@ -150,6 +168,6 @@ function fetchUpcomingAuctions() {
 onMounted(() => {
     //upcomingAuctionFlag.value=true
     //console.log("upcomingAuctionFlag",upcomingAuctionFlag.value)
-    fetchUpcomingAuctions();
+    fetchCancelledAuctions();
 });
 </script>

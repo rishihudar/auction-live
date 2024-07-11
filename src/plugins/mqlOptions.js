@@ -5,6 +5,7 @@ export default {
     let loginURL = options.loginURL
     let bidderURL = options.bidderURL
     let managementURL = options.managementURL
+    let notificationURL = options.notificationURL
     let cdnBaseURL = options.cdnBaseURL
     let version = options.version
     let region = options.region
@@ -36,6 +37,10 @@ export default {
     
     Vue.getManagementURL = () => {
       return managementURL
+    }
+
+    Vue.getNotificationURL = () => {
+      return notificationURL
     }
 
     Vue.getCDNBaseURL = () => {

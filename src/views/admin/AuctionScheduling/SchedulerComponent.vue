@@ -55,7 +55,9 @@
                 ></Column>
                 <Column expander style="width: 5rem" field="" header="Action"></Column>
                 <template #expansion="slot">
-                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" :upcomingAuctionFlag="upcomingAuctionFlag">
+                    <AuctionDetailsForAdmin :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" :upcomingAuctionFlag="upcomingAuctionFlag"
+                    @call="fetchPublishedAuctionsAdmin()"
+                    >
                     </AuctionDetailsForAdmin>
                 </template>
             </DataTable>

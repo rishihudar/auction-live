@@ -1,71 +1,99 @@
 <template>
-    <div>
-        <div class="page-header">
-            <div class="ph-text">
-                <h2 class="title">Current Auctions</h2>
-            </div>
-        </div>
-        <Toast />
-        <div class="table-custom">
-            <Paginator
-                class="pagination-up"
-                :rows="perPage"
-                :rowsPerPageOptions="[10, 20, 30]"
-                :totalRecords="totalRows"
-                template="RowsPerPageDropdown"
-                @page="handlePageChange"
-            >
-                <template #start>
-                    <div class="fm-inner">
-                        <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchScheduledAuctionsBidder" />
-                        <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
-                    </div>
-                </template>
-            </Paginator>
-            <DataTable :value="products" showGridlines>
-                <Column field="srNo" header="SrNo."></Column>
-                <Column field="vsAuctionCode" header=" Auction Code"></Column>
-                <Column field="vsAuctionDescription" header="Auction Description"></Column>
-                <Column field="auctionCategoryName" header="Auction Category"></Column>
-                <Column field="dEventProcessingFees" header="Auction Fees"></Column>
-                <Column field="dtStartDate" header="Auction StartDate/Time"></Column>
-                <Column field="dtEndDate" header="Auction EndDate/Time"></Column>
-                <Column field="details" header="Action">
-                    <template #body="data">
-                        <Button class="btn-sm" @click="joinAuction(data.data)">Join</Button>
-                    </template>
-                </Column>
-            </DataTable>
-            <Paginator
-                class="pagination-down"
-                :rows="perPage"
-                :rowsPerPageOptions="[10, 20, 30]"
-                :totalRecords="totalRows"
-                template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                @page="handlePageChange"
-            />
-        </div>
-        <Dialog v-model:visible="visible" modal :header="`Enter Auction ${auction?.vsAuctionCode} Password`" :style="{ width: '40rem' }">
-            <div class="fm-group">
-                <label class="fm-label" for="password">PassCode</label>
-                <div class="fm-inner">
-                    <InputText type=password v-model="auctionPassword" />
-                </div>
-                <div class="fm-error">
-                    {{ v$?.auctionPassword?.$errors[0]?.$message }}
-                </div>
-            </div>
-            <div class="modal-action fm-action justify-center">
-                <Button label="Submit" @click="submitAuctionPassword()"></Button>
-                <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
-            </div>
-        </Dialog>
+  <div>
+    <div class="page-header">
+      <div class="ph-text">
+        <h2 class="title">Current Auctions</h2>
+      </div>
     </div>
+    <Toast />
+    <div class="table-custom">
+      <Paginator class="pagination-up" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
+        template="RowsPerPageDropdown" @page="handlePageChange">
+        <template #start>
+          <div class="fm-inner">
+            <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchScheduledAuctionsBidder" />
+            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+          </div>
+        </template>
+      </Paginator>
+      <DataTable :value="products" showGridlines>
+        <Column field="srNo" header="SrNo."></Column>
+        <Column field="vsAuctionCode" header=" Auction Code"></Column>
+        <Column field="vsAuctionDescription" header="Auction Description"></Column>
+        <Column field="auctionCategoryName" header="Auction Category"></Column>
+        <Column field="dEventProcessingFees" header="Auction Fees"></Column>
+        <Column field="dtStartDate" header="Auction StartDate/Time"></Column>
+        <Column field="dtEndDate" header="Auction EndDate/Time"></Column>
+        <Column v-if="userRole == 'ROLE_APPROVER'"   field="details" header="Action">
+          <template #body="data">
+            <!-- <Button severity="danger" @click="">
+                          <fa-trash-can></fa-trash-can> Cancel Auction {{ data }}
+                      </Button>  -->
+            <Button :disabled="data.data.isDisable == 0" class="btn-sm" severity="danger"
+              @click="openCancelAuctionModal(data.data)"><fa-trash-can></fa-trash-can> Cancel Auction</Button>
+
+          </template>
+        </Column>
+        <Column field="details" header="Action">
+          <template #body="data">
+            <Button class="btn-sm" @click="joinAuction(data.data)">Join</Button>
+          </template>
+        </Column>
+      </DataTable>
+      <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
+    </div>
+    <Dialog v-model:visible="visible" modal :header="`Enter Auction ${auction?.vsAuctionCode} Password`"
+      :style="{ width: '40rem' }">
+      <div class="fm-group">
+        <label class="fm-label" for="password">PassCode</label>
+        <div class="fm-inner">
+          <InputText type=password v-model="auctionPassword" />
+        </div>
+        <div class="fm-error">
+          {{ v$?.auctionPassword?.$errors[0]?.$message }}
+        </div>
+      </div>
+      <div class="modal-action fm-action justify-center">
+        <Button label="Submit" @click="submitAuctionPassword()"></Button>
+        <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
+      </div>
+    </Dialog>
+    <Toast />
+    <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
+      <div class="box-section">
+        <div class="bs-item-holder">
+          <div class="bs-item col-span-12 text-center">
+            <h6> <strong> Cancel Auction:</strong> {{ aucdata.vsAuctionCode }} </h6>
+            <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
+          </div>
+          <div class="bs-item col-span-12 text-center">
+            <h6><strong>Cancellation Reason</strong></h6>
+            <InputText id="reason" v-model="reason" class="text-center"
+              placeholder="Please enter Auction Cancellation Reason" />
+              <div v-if="v$.reason.$error" class="fm-error">
+              {{ v$.reason.$errors[0].$message }}
+          </div>
+          </div>
+          <div class="bs-item col-span-6 text-center">
+            <Button severity="danger" @click="cancelAuction">
+              <fa-trash-can></fa-trash-can> Cancel Auction
+            </Button>
+          </div>
+          <div class="bs-item col-span-6 text-center">
+            <Button severity="secondary" @click="visible7 = false">
+              Close
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Dialog>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import MQL from "../../plugins/mql";
 import { login } from "../../store/modules/login.js";
 import { useRoute, useRouter } from "vue-router";
@@ -75,15 +103,22 @@ import Dialog from 'primevue/dialog'
 import { useToast } from 'primevue/usetoast';
 import Toast from "primevue/toast";
 import { useAuctionStore } from "../../store/Auction.js";
+import faTrashCan from '../../../assets/icons/trash-can.svg';
+// import moment from 'moment'; // Import Moment.js
+
+
 
 const toast = useToast()
 const auctionStore = useAuctionStore()
-
+const totalEMDPaid = ref('')
+// const cancellationCustomParam = ref('')
+// const cancelAuctionBeforeTime = ref('')
 const loginStore = login();
 const route = useRoute();
 const router = useRouter();
 const entityId = ref(null)
 const visible = ref(false)
+const visible7 = ref(false);
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
@@ -91,21 +126,51 @@ const filter = ref("");
 const auction = ref(null)
 const auctionPassword = ref("")
 const products = ref([{}])
+const aucdata = ref({
+  AuctionUsersStatusId: 34,
+  AuctionUsersStatusName: "These status should be used to add users during scheduling for the auc",
+  EventEmdFeeMode : "Online",
+  EventProcessingFeeMode : "Online",
+  auctionCategoryName : "Residential",
+  auctionStatus : "Auction Scheduled",
+  dEventEmdProcessingFees : 100,
+  dEventProcessingFees : 2000,
+  dtEndDate : "2024-06-20 16:48:38",
+  dtStartDate : "2024-06-20 16:43:38",
+  iPropertiesEligibleFor : null,
+  pklAuctionId : 1135,
+  pklAuctionUserId : 3129,
+  pklStatusId : 18,
+  srNo : 1,
+  vsAuctionCode : "MCF-1090",
+  vsAuctionDescription : "TEST H1 SMS",
+  vsAuctionMethodName : "Round-Wise",
+  vsAuctionProcessName : "Forward",
+  vsAuctionType : "Open",
+  vsBidPlacementName : "Bid Factor",
+  vsEMDAppliedForName : "Auction and Item Wise"
+})
+const reason = ref('')
+const userRole = ref(loginStore.currentRole.roleCode);
 
 const rules = {
   auctionPassword: {
     required: helpers.withMessage('Password is required', required),
     minLength: helpers.withMessage('Password must be at least 8 characters long', minLength(8)),
   },
+  reason: { required: helpers.withMessage('Please Provide Auction Cancelleation Reason', required) }
 };
 
-const v$ = useVuelidate(rules, { auctionPassword });
+const v$ = useVuelidate(rules, { auctionPassword,  reason});
 
 
 onMounted(() => {
   // ProductService.getProductsMini().then((data) => (products.value = data));
   entityId.value = route.params.id
-  fetchScheduledAuctionsBidder()
+   setInterval(() => {
+    fetchScheduledAuctionsBidder()
+     }, 1000);
+  // fetchCustomParam()
 });
 function handlePageChange(event) {
   currentPage.value = event.page;
@@ -113,9 +178,125 @@ function handlePageChange(event) {
   console.log("event.page", event.page);
   fetchConcludedAuctionsBidder();
 }
+function openCancelAuctionModal(data_) {
+  console.log("printing from openCancelAuctionModal: ", data_)
+  aucdata.value = data_
+
+  new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchEMDCount]")
+        .setData({
+            // userId: userId,
+            auctionId: aucdata.value.pklAuctionId
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchEMDCount", true)
+            if (rs.isValid("FetchEMDCount")) {
+              totalEMDPaid.value = res.result.totalEMDPaid
+             
+                if(totalEMDPaid.value == null){
+                  totalEMDPaid.value = 0
+                  console.log("printing from nullEMDCount", totalEMDPaid.value)
+                }
+                visible7.value = true
+                console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+            } else {
+                rs.showErrorToast("FetchEMDCount")
+            }
+        })
+  
+}
+
+async function cancelAuction(){
+    const result = await v$.value.$validate();
+    console.log("#############", result)
+    if (reason.value!="") {
+        console.log("Auction cancelled")
+        new MQL()
+        .useManagementServer()
+        .setActivity("o.[CancelAuction]")
+        .setData({
+            // userId: userId,
+            auctionId: aucdata.value.pklAuctionId,
+            reason: reason.value
+        })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("CancelAuction", true)
+            if (rs.isValid("CancelAuction")) {
+              // totalEMDPaid.value = res.result.totalEMDPaid
+              console.log("Auction cancelled for auction ID: ", aucdata.value.pklAuctionId , "****", reason.value)
+              //   if(totalEMDPaid.value == null){
+              //       totalEMDPaid.value = 0
+              //       console.log("printing from nullEMDCount", totalEMDPaid.value)
+              //   }
+              toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
+              auctionCancellationNotification(aucdata.value.vsAuctionCode)
+                 visible7.value = false
+                
+                //  fetchScheduledAuctionsBidder()
+              //   console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+            } else {
+                rs.showErrorToast("CancelAuction")
+            }
+        })                
+    }
+}
+
+function auctionCancellationNotification(auctionCode){
+  new MQL()
+    .useNotificationServer()
+    .enablePageLoader(false)
+    .setActivity("r.[FetchBiddersDetailsForAuctionCancellationNotification]")
+    .setData({
+      auctionId: auctionCode,
+      roleId: 1,
+      statusId: 31
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
+      if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
+       console.log("Auction Cancel Notification send")
+       fetchScheduledAuctionsBidder()
+      } else {
+        rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
+      }
+    });
+   
+}
+
+// function fetchCustomParam(){
+//   new MQL()
+//         .useManagementServer()
+//         .setActivity("o.[FetchCacellationCustomParam]")
+//         .setData({
+//         })
+//         .fetch()
+//         .then(rs => {
+//             let res = rs.getActivity("FetchCacellationCustomParam", true)
+//             if (rs.isValid("FetchCacellationCustomParam")) {
+//               cancellationCustomParam.value = res.result.cancellationCustomParam
+//               console.log("auction startTime:- ", products.value.dtStartDate)
+//                 if(totalEMDPaid.value == null){
+//                   cancellationCustomParam.value = 0
+//                   console.log("printing from nullFetchCacellationCustomParam", cancellationCustomParam.value)
+//                 }
+//                 console.log("Printing from FetchCacellationCustomParam(cancellationCustomParam): ", cancellationCustomParam.value)
+              
+//                 cancelAuctionBeforeTime.value = 
+//                 console.log("Printing from FetchCacellationCustomParam(cancelAuctionBeforeTime): ", cancelAuctionBeforeTime.value)
+//             } else {
+//                 rs.showErrorToast("FetchCacellationCustomParam")
+//             }
+//         })
+// }
+
 function fetchScheduledAuctionsBidder() {
   new MQL()
     .useManagementServer()
+    .enablePageLoader(false)
     .setActivity("r.[FetchScheduledAuctionsBidder]")
     .setData({
       entityId: loginStore.entityId,
@@ -174,7 +355,7 @@ const submitAuctionPassword = async () => {
   console.log(passwordValid);
   if (passwordValid) {
     window.open('/auction/#/admin/AdminAuctionBidding', '_blank')
-    router.push({path:'/UserDashboard'})
+    router.push({ path: '/UserDashboard' })
   }
 };
 
@@ -194,7 +375,7 @@ function checkPasscode() {
             resolve(false)
           } else {
             toast.add({ severity: 'success', summary: 'Correct Password', detail: 'Welcome to Auction Live', life: 3000 })
-            auctionStore.setAuction({ ...auction.value, "auctionPassword": auctionPassword.value, "inventoryHirarchy": res.result.inventoryHirarchy.itemHierarchy, "inventoryCategoryName": res.result.inventoryHirarchy.inventoryCategoryName})
+            auctionStore.setAuction({ ...auction.value, "auctionPassword": auctionPassword.value, "inventoryHirarchy": res.result.inventoryHirarchy.itemHierarchy, "inventoryCategoryName": res.result.inventoryHirarchy.inventoryCategoryName })
             console.log(auctionStore.$state);
             resolve(true)
           }
@@ -205,6 +386,11 @@ function checkPasscode() {
       })
   })
 }
+
+function reloadPage() {
+        window.location.reload();
+        }
+
 
 // function getInventoryHirarchy() {
 //   new MQL()
@@ -222,3 +408,13 @@ function checkPasscode() {
 //     });
 // }
 </script>
+
+<style scoped>
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* Ensures vertical centering */
+}
+</style>
