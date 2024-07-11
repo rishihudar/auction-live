@@ -86,6 +86,8 @@ const props = defineProps({
   disabled: Boolean,
   statusCode: String,
   auctionCode:String,
+  totalEmdPaid: Number,
+  propertiesAvailable: Number
 });
 
 const loginStore = login()
@@ -157,7 +159,10 @@ async function schedule() {
       users: users.value,
       userId: loginStore.loginId,
       bidderStatusId: bidderStatusId.result.statusId,
-      userStatusId: userStatusId.result.statusId
+      userStatusId: userStatusId.result.statusId,
+      totalEmdPaid: props.totalEmdPaid,
+      propertiesAvailable: props.propertiesAvailable,
+      entityId: props.entityId
     })
     .fetch()
     .then(async (rs) => {
