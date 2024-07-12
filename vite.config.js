@@ -111,7 +111,14 @@ export default defineConfig({
         secure:false,
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/upload-server/,"")
-      }
+      },
+      "/notification-server": {
+        target: "https://cs.mkcl.org/2hAwmxyTGxs6k0bMgWdECSJUoit",
+        ws: true,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/notification-server/, ""),
+      },
       
     },
   },
