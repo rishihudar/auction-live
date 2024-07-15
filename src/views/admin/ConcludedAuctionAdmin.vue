@@ -48,7 +48,6 @@
         <Column expander field="" header="Action"></Column>
 
         <template #expansion="slot">
-          {{auctionId}}
           <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId" />
 
           <H1BidderApprovalRejection :auctionId="slot.data.auctionId" />
