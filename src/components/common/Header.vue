@@ -1,8 +1,8 @@
 <template>
     <header id="header">
-        <router-link to="/" class="navbar-brand">
+        <div class="navbar-brand">
             <img src="../../../assets/images/logo_dulb.webp" alt="DULB logo">
-        </router-link>
+        </div>
         <div class="header-right">
             <button class="btn btn-sidebar-toggle" v-if="$route.meta.isSideBarVisible != false" @click="mainStore.toggleSidebar()">
                 <fa-bars></fa-bars>
