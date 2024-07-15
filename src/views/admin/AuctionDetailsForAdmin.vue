@@ -160,11 +160,11 @@
                 <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
-                <p v-if="(auctionDetails.emdPaid < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
+                <p v-if="(auctionDetails.participants < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
                     Minimum {{ auctionDetails.roundRule }} participants are required to schedule the auction.
                 </p>
                 <div class="bs-buttons" v-if="dataFetched">
-                    <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
+                    <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.participants < auctionDetails.roundRule"
                         :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
                         :auctionCode ="auctionDetails.auctionCode"
                         :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"

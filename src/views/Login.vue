@@ -45,9 +45,9 @@
                 <div class="fm-action">
                     <Button label="Login" @click="authenticate" />
                 </div>
-                <div class="fm-action-link">
+                <!-- <div class="fm-action-link">
                     <router-link to="/registration">New User? Register here</router-link>
-                </div>
+                </div> -->
             </form>
             <Footer name="box"></Footer>
         </div>
