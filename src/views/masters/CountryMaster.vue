@@ -105,6 +105,7 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
+            <!-- **********Add Data************** -->
             <div class="card">
                 <div class="card-header">
                     <div class="ch-title">Add Entry</div>
@@ -163,19 +164,13 @@
             </div>
         </template>
         <template v-else-if="flag === 2">
-            <div class="card">
-                <div class="card-header">
-                    <div class="ch-title">Edit Entry</div>
-                </div>
-                <div class="form-grid">
-                    <div class="col-span-4">
-                        <div class="fm-group">
-                            <label class="fm-label" for="countryName">Country Name</label>
-                            <div class="fm-inner">
-                                <InputText id="countryName" v-model="countryData.countryName" />
-                            </div>
-                            <div class="fm-info">Enter Country name E.g India</div>
-                        </div>
+        <div class="flex flex-column gap-2 box-login mx-auto p-8 max-w-2xl rounded-xl bg-white shadow">
+            <div class="fm-row">
+                <div class="w-1/2">
+                    <div class="fm-group">
+                        <label for="countryName">Country Name</label>
+                        <InputText id="countryName" v-model="countryData.countryName" />
+                        <small id="username-help">Enter Country name E.g India</small>
                     </div>
                     <div class="col-span-4">
                         <div class="fm-group">
@@ -218,6 +213,7 @@
                         <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
+            </div>
             </div>
         </template>
     </div>

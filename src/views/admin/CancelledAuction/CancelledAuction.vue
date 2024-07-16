@@ -33,6 +33,14 @@
                         </div>
                     </template>
                 </Column>
+                <Column header="Auction Cancellation Reason">
+                    <template #body="slotProps">
+                        <div>
+                            <!-- {{ slotProps.data.auctionCategoryName }} -->
+                            {{ slotProps.data.auctionCancellationReason }}<br>
+                        </div>
+                    </template>
+                </Column>
                 <Column header="Auction Category">
                     <template #body="slotProps">
                         <div>
