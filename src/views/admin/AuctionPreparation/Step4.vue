@@ -95,7 +95,7 @@
                 <Button
                   v-if="auctionCheck"
                   severity="danger"
-                  @click="(auctionCheck = false), (AucUrl = null)"
+                  @click="(auctionCheck = false), (AucUrl = null),documentsArray.pop()"
                 >
                   <fa-trash-can></fa-trash-can> Remove Document
                 </Button>
@@ -141,7 +141,7 @@
                 <Button
                     v-if="noticeCheck"
                     severity="danger"
-                    @click="(noticeCheck = false), (NoticeUrl = null)"
+                    @click="(noticeCheck = false), (NoticeUrl = null), documentsArray.pop()"
                 >
                     <fa-trash-can></fa-trash-can> Remove Document
                 </Button>
@@ -364,6 +364,7 @@ const onAdvancedUpload = async (event, id) => {
             res.uploadedFileURL().filePath,
           documentTypeId: id,
         });
+        console.log("documentsArray@@",documentsArray.value)
         docTypeId.value = id;
         console.log("id-", docTypeId.value);
         if (id == 8) {
