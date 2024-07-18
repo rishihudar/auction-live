@@ -60,11 +60,12 @@
         <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
       </div>
     </Dialog>
+    <Toast />
     <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
       <div class="box-section">
         <div class="bs-item-holder">
           <div class="bs-item col-span-12 text-center">
-            <h6> <strong> Cancel Auction:</strong> {{ aucdata.pklAuctionId }} </h6>
+            <h6> <strong> Cancel Auction:</strong> {{ aucdata.vsAuctionCode }} </h6>
             <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
           </div>
           <div class="bs-item col-span-12 text-center">
@@ -230,6 +231,7 @@ async function cancelAuction(){
               //       totalEMDPaid.value = 0
               //       console.log("printing from nullEMDCount", totalEMDPaid.value)
               //   }
+              toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
               auctionCancellationNotification(aucdata.value.vsAuctionCode)
                  visible7.value = false
                 

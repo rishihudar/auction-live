@@ -160,15 +160,17 @@
                 <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
-                <p v-if="(auctionDetails.emdPaid < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
+                <p v-if="(auctionDetails.participants < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
                     Minimum {{ auctionDetails.roundRule }} participants are required to schedule the auction.
                 </p>
                 <div class="bs-buttons" v-if="dataFetched">
-                    <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.emdPaid < auctionDetails.roundRule"
+                    <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.participants < auctionDetails.roundRule"
                         :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
                         :auctionCode ="auctionDetails.auctionCode"
                         :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
-                        v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode" />
+                        v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode"
+                        :totalEmdPaid="auctionDetails.emdPaid"
+                        :propertiesAvailable="auctionDetails.itemCount"/>
                 </div>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
@@ -176,12 +178,12 @@
                     <Button v-if="upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
                         <fa-trash-can></fa-trash-can> Cancel Auction
                     </Button>
-
+                    <Toast />
                     <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
                         <div class="box-section">
                             <div class="bs-item-holder">
                                 <div class="bs-item col-span-12 text-center" >
-                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionId }} </h6> 
+                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionCode }} </h6> 
                                    <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
                                 </div>
                                 <div class="bs-item col-span-12 text-center">
@@ -404,6 +406,7 @@ async function cancelAuction(){
                 //     console.log("printing from CancelAuction", totalEMDPaid.value)
                 // }
                 console.log("###############AUctionCOde: ", props.auctionCode)
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
                 auctionCancellationNotification(props.auctionCode)
                  visible7.value = false
                  

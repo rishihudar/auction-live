@@ -11,7 +11,7 @@
         template="RowsPerPageDropdown" @page="handlePageChange">
         <template #start>
           <div class="fm-inner">
-            <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchConcludedAuctionsBidder" />
+            <InputText v-model="filter" placeholder="Search By Auction Code..." @input="fetchConcludedAuctionsUser" />
             <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
           </div>
         </template>
@@ -172,24 +172,23 @@ const filters = ref({
 });
 onMounted(() => {
   entityId.value = route.params.id;
-  fetchConcludedAuctionsBidder();
+  fetchConcludedAuctionsUser();
 });
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
   console.log("event.page", event.page);
-  fetchConcludedAuctionsBidder();
+  fetchConcludedAuctionsUser();
 }
 
-function fetchConcludedAuctionsBidder() {
+function fetchConcludedAuctionsUser() {
   console.log("Selected Entity Id", login().loginDetails);
   new MQL()
-    .useManagementServer()
-    .setActivity("r.[FetchConcludedAuctionsBidder]")
+  .useManagementServer()
+    .setActivity("r.[FetchConcludedAuctionsUser]")
     .setData({
       entityId: login().loginDetails.entityId,
       organizationId: login().loginDetails.organizationId,
-      userId: login().loginDetails.loginId,
       statusCode: "AUCTION_CONCLUDED",
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),
@@ -197,19 +196,20 @@ function fetchConcludedAuctionsBidder() {
     })
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("FetchConcludedAuctionsBidder", true);
-      if (rs.isValid("FetchConcludedAuctionsBidder")) {
+      let res = rs.getActivity("FetchConcludedAuctionsUser", true);
+      if (rs.isValid("FetchConcludedAuctionsUser")) {
         products.value = res.result.concludedAuctions;
         console.log(res.result, "concluded result**********");
+        console.log(res.result.concludedAuctions,"concluded auction@@@@@@@")
         totalRows.value = res.result.rowCount.totalRows;
+        console.log("totalRows@@@@",totalRows)
         console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
           console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
-
       } else {
-        rs.showErrorToast("FetchConcludedAuctionsBidder");
+        rs.showErrorToast("FetchConcludedAuctionsUser");
       }
     });
 }

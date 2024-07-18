@@ -2,7 +2,7 @@
     <div class="wizard-content">
         <div class="wc-item">
             <div class="wc-header">
-                <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Details</div>
+                <div class="wc-title" v-if="getLastInsertedAuctionId==null">Step 1 Auction Details</div>
                 <div class="wc-title" v-else>Auction Code: {{auctionCodeToShow}}</div>
             </div>
 
@@ -190,7 +190,11 @@ function FetchDataForAuctionCode(){
             console.log("FetchDataForAuctionCode",res.result);
             entityShortName.value = res.result.entityShortName.entityShortName;
             console.log("entityShortName",entityShortName.value);
+            if(res.result.highestAuctionNumber != null){
             auctionNumber.value = res.result.highestAuctionNumber.auctionNumber + 1;
+            }else{
+                auctionNumber.value = 1
+            }
             console.log("auctionNumber",auctionNumber.value);
             auctionCode.value = `${entityShortName.value}-${auctionNumber.value}`;
             console.log("auctionCode",auctionCode.value);
