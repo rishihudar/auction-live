@@ -49,6 +49,7 @@
                         v-model="userDataSheet"
                         accept=".xlsx, .csv,"
                         :multiple="false"
+                       
                         :max-file-size="200000" 
                         :custom-upload="true" 
                         @uploader="onAdvancedUpload"
@@ -60,7 +61,7 @@
 
             <div class="block-header">
                 <div class="sh-text">
-                    <h3 class="title">Uploaded Excel List</h3>
+                    <h3 class="title" v-if="excelData.length != 0 && loading == true">Uploaded Excel List</h3>
                 </div>
             </div>
             <div class="table-custom mb-3" v-if="excelData.length != 0 && loading == true">
@@ -78,11 +79,11 @@
                     />
                 </DataTable>
             </div>
-            <Button label="Check Unadded Data" @click="visible = true" />
+            <Button label="Check Unadded Data" @click="visible = true"  v-if="excelData.length != 0 && loading == true"/>
 
             <Dialog v-model:visible="visible" modal header="Note">
                 <div class="mb-3">The Following Users are already Available</div>
-                <div class="table-custom">
+                <div class="table-custom" v-if="excelData.length != 0 && loading == true">
                     <DataTable :value="products">
                         <Column field="username" header="Username"></Column>
                     </DataTable>
@@ -457,6 +458,9 @@ const fields = ['Username', 'Full Name', 'District', 'Entity Name', 'Organizatio
 const toast = useToast();
 // const flag = ref(0)
 const loading = ref(false);
+const responseText = ref([])
+const trimmedResponseText = ref([])
+const data = ref([])
 // const userData = ref([]); // Your data array
 
 // const userDetails = ref({
@@ -566,6 +570,9 @@ function reloadPage() {
 // }
 
 const onAdvancedUpload = async (event) => {
+  products.value = null
+  userDataSheet.value = [] 
+  loading.value = false
   try {
     const formData = new FormData();
     userDataSheet.value.push(...event.files);
@@ -595,12 +602,13 @@ const onAdvancedUpload = async (event) => {
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
         const headerRow = jsonData[0];
-
+        console.log("**********jsonData", jsonData[0])
         const formattedData = jsonData.slice(1).map((row) => {
           const rowData = {};
           headerRow.forEach((column, index) => {
             rowData[column] = row[index];
           });
+          console.log("**********rowData", rowData)
           return rowData;
         });
 
@@ -611,31 +619,54 @@ const onAdvancedUpload = async (event) => {
 
       reader.readAsArrayBuffer(file);
       // loading.value = false; // Move loading to here
+      console.log("**********file", file)
+      
     }
   } catch (error) {
     console.error('Error processing files:', error);
   }
 
-
+  console.log("**********userDataSheet", userDataSheet)
     // Append each selected file to the FormData object
     userDataSheet.value.forEach(file => {
       formData.append('userDataSheet', file);
     });
-
+    console.log("**********formDatabefore", formData)
+    JSON.stringify(formData)
+    console.log("**********formDataafter", formData)
     // Send the FormData object to the backend
-    const response = await fetch('/upload-server/api/upload', {
+    var response = await fetch('/upload-server/api/upload', {
       method: 'POST',
       body: formData
     });
 
     if (response.ok) {
+      // let responseText = []
+      // let trimmedResponseText = []
+      // let data = []
+
+      responseText.value = []
+      trimmedResponseText.value = []
+      data.value = []
       console.log('Files uploaded successfully', response);
       // Handle the response and set the products variable
       loading.value = true; // Move loading to here
-      const data = await response.json();
+      console.log("1")
+      // console.log("$$$$$$$$$$$$$$$",await response.json())
+      // const data = await response.json();
+      // console.log("^^^^^^^^^^^^", response.text())
+       responseText.value = await response.text();
+      console.log("responseText", responseText.value)
+       trimmedResponseText.value = responseText.value.trim();
+      console.log("trimmedResponseText", trimmedResponseText.value)
+       data.value = JSON.parse(trimmedResponseText.value);
+      console.log("2")
       products.value = data;
+      console.log("3")
+      console.log("Printing response msg********", data)
       console.log("Pringing the response ", products.value)
       toast.add({ severity: 'success', summary: 'Success', detail: 'File Data Uploaded', life: 3000 });
+      response = null
       //products.value = response.result
       //changeFlag(2)
     } else {
@@ -649,6 +680,7 @@ const onAdvancedUpload = async (event) => {
       console.log('Request aborted by the user');
     } else {
       // Handle other types of errors
+      console.log("************Printing the error: ", error.name)
       toast.add({ severity: 'error', summary: 'Drafted', detail: 'File data/Template is invalid, please check the File' , life: 3000 });
       console.error('Error uploading files:', error);
     }
