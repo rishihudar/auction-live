@@ -258,7 +258,7 @@ function fetchInventoryMasterDetails() {
 }
 
 
-function fetchingSoftDeletedItems() {
+function fetchingSoftDeletedItems() {//seting softDeletedItemsDb for downloaing excel sheet
   // Automatically generated
   new MQL()
     .useManagementServer()
@@ -270,10 +270,10 @@ function fetchingSoftDeletedItems() {
       let res = rs.getActivity("FetchSoftDeletedItems", true);
       if (rs.isValid("FetchSoftDeletedItems")) {
         softDeletedItemsDb.value = res.result.Softdeleteitems;
-        console.log(
-          "softDeletedItemsDb:Soft Deleted items are:",
-          softDeletedItemsDb.value
-        );
+        // console.log(
+        //   "softDeletedItemsDb:Soft Deleted items are:",
+        //   softDeletedItemsDb.value
+        // );
       } else {
         rs.showErrorToast("FetchSoftDeletedItems");
       }
@@ -282,7 +282,7 @@ function fetchingSoftDeletedItems() {
 
 
 
-function AllItemsbyInventoryLevelId(hierarchy, InventoryLevelId, EntityId) {
+function AllItemsbyInventoryLevelId(hierarchy, InventoryLevelId, EntityId) { //cs function for fetching all items details 
   console.log(
     "Function AllItemsbyInventoryLevelId started for ID",
     InventoryLevelId
@@ -300,7 +300,7 @@ function AllItemsbyInventoryLevelId(hierarchy, InventoryLevelId, EntityId) {
       .then((rs) => {
         let res = rs.getActivity("FetchAllItemsbyInventoryLevelId", true);
         if (rs.isValid("FetchAllItemsbyInventoryLevelId")) {
-          console.log("Result from DB:", res);
+          // console.log("Result from DB:", res);
           allProperties.value = res.result.items;
           unsoldProperties.value = res.result.UnsoldItems;
           unsoldProperties.value.forEach(item => {
@@ -325,47 +325,47 @@ function AllItemsbyInventoryLevelId(hierarchy, InventoryLevelId, EntityId) {
 async function handleAction(rowData, Header) {
   try {
     majorModal.value = true;
-    dialogHeader.value = Header;
+    dialogHeader.value = Header; //for setting modal header
     let hierarchy = ref();
-    console.log(
-      "Button clicked for::fklInventoryLevelId",
-      rowData.fklInventoryLevelId
-    ); //for passing fklinventry to show all item for particular category
+    // console.log(
+    //   "Button clicked for::fklInventoryLevelId",
+    //   rowData.fklInventoryLevelId
+    // ); //for passing fklinventry to show all item for particular category
 
-    console.log("dialogHeader:", dialogHeader.value);
+    // console.log("dialogHeader:", dialogHeader.value);
     InventoryLevelId.value = rowData.fklInventoryLevelId;
     EntityId.value = rowData.fklEntityId;
-    console.log("EntityId", EntityId.value);
-    console.log("inventoryMasterDetails", inventoryMasterDetails.value);
-    console.log("rowData", rowData);
-    console.log("rowData.District", rowData.District);
-    console.log("rowData.Mc", rowData.MC);
-    console.log("rowData.Location", rowData.Location);
-    console.log("rowData.Area", rowData.Area);
+    // console.log("EntityId", EntityId.value);
+    // console.log("inventoryMasterDetails", inventoryMasterDetails.value);
+    // console.log("rowData", rowData);
+    // console.log("rowData.District", rowData.District);
+    // console.log("rowData.Mc", rowData.MC);
+    // console.log("rowData.Location", rowData.Location);
+    // console.log("rowData.Area", rowData.Area);
     this.dialogContent = `Details for ${rowData[`${dialogHeader.value}`]} ${
-      dialogHeader.value
+      dialogHeader.value   //header to be set accorning user clicks 
     } in ${rowData["District"]}.`;
     this.visible = true;
     hierarchy = `%${rowData.District}<>${rowData.MC}<>${rowData.Location}<>${rowData.Area}%`;
     console.log("hirarchy", hierarchy);
-    let res = await AllItemsbyInventoryLevelId(
+    let res = await AllItemsbyInventoryLevelId( //calling cs for fetching details of items 
       hierarchy,
       InventoryLevelId.value,
       EntityId.value
     );
-    DataNames_to_delete.value = [];
-    data_to_delete.value = [];
-    console.log("await res");
+    DataNames_to_delete.value = [];  //empty array if already value present in it 
+    data_to_delete.value = []; //empty array if already value present in it
+    // console.log("await res");
     console.log("Items from db", allProperties.value);
-    if (dialogHeader.value == "Remaining Properties") {
-      console.log("Dealing with Unsold Properties");
+    if (dialogHeader.value == "Remaining Properties") { // checking header
+      // console.log("Dealing with Unsold Properties");
       console.log("UnSold Properties:", unsoldProperties.value);
-    } else if (dialogHeader.value == "Sold Properties") {
-      console.log("Dealing with Sold Properties");
+    } else if (dialogHeader.value == "Sold Properties") { // checking header
+      // console.log("Dealing with Sold Properties");
       //call CS for sold Properties
       console.log("Sold Properties:", soldProperties.value);
     } else {
-      console.log("Dealing with Total Properties");
+      // console.log("Dealing with Total Properties");
       //call CS for Total Properties
       console.log("Total PRoperties:", allProperties.value);
     }
@@ -374,23 +374,23 @@ async function handleAction(rowData, Header) {
   }
 }
 
-async function handleSoftDelete() {
+async function handleSoftDelete() {  
   showPrompt.value = false;
   majorModal.value = false;
   console.log("All ids to be deleted", data_to_delete);
   //call MQL here
-  let res = await forLoopforSoftDelete(data_to_delete.value);
+  let res = await forLoopforSoftDelete(data_to_delete.value);  //calling here CS 
   console.log("Awaited Res:", res);
   
-  if (res.result == "SUCCESS") {
+  if (res.result == "SUCCESS") { // means soft delete items succesful
     fetchingSoftDeletedItems()
-    showSuccess();
+    showSuccess(); //showing success toast
 
-    fetchInventoryMasterDetails();
+    fetchInventoryMasterDetails(); //fetching latest details
   }
 }
 
-function forLoopforSoftDelete(ids) {
+function forLoopforSoftDelete(ids) {  // calling CS loop for 1. insert items details in table and after updating inventorysoldid=2
   return new Promise((resolve, reject) => {
     new MQL()
       .useManagementServer()
@@ -415,7 +415,7 @@ function forLoopforSoftDelete(ids) {
   });
 }
 
-function handleEmptyId() {
+function handleEmptyId() { // if array empty then shows warning after cliking delete button 
   if (
     data_to_delete.value.length == 0 &&
     DataNames_to_delete.value.length == 0
@@ -426,7 +426,7 @@ function handleEmptyId() {
   }
 }
 
-function CheckItemPresentInCurrent(id){
+function CheckItemPresentInCurrent(id){  // calling core service to check items present in current/upcoming auctions return 0 if not present otherwise 1
   return new Promise((resolve, reject) => {
   
   // Automatically generated
@@ -453,7 +453,7 @@ function CheckItemPresentInCurrent(id){
 
 
 
-async function AuctionCodesbyID(id){
+async function AuctionCodesbyID(id){ // calling core service for fetching auctions codes
   return new Promise((resolve, reject) => {
 					// Automatically generated
           new MQL()
@@ -475,7 +475,7 @@ async function AuctionCodesbyID(id){
     });
 			
 }
-const showWarn = () => {
+const showWarn = () => { //added toast if user click without selecting single item to be deleted
   toast.add({
     severity: "warn",
     summary: "Warning",
@@ -484,7 +484,7 @@ const showWarn = () => {
   });
 };
 
-const showWarnforItemPresentInCurrentAuction = (Name,str) => {
+const showWarnforItemPresentInCurrentAuction = (Name,str) => {  // added toast for //warning if items are associated with current/upcoming auctions with Auctions code 
   toast.add({
     severity: "error",
     summary: "Warning",
@@ -493,21 +493,21 @@ const showWarnforItemPresentInCurrentAuction = (Name,str) => {
     position :"top-center"
   });
 };
-async function handleAddtoArray(id, Name) {
+async function handleAddtoArray(id, Name) { //to add one by one id to array 
 
- await  CheckItemPresentInCurrent(id)
+ await  CheckItemPresentInCurrent(id) //checking item is associated with current/upcoming auctions if yes then return 1 ,if no then return 0
  
  
-  if( itemInCurrentAuction.value==0 ) {
-    const index = data_to_delete.value.findIndex((item) => item.id === id);
+  if( itemInCurrentAuction.value==0 ) { // meaning item is not  associated with current/upcoming auctions
+    const index = data_to_delete.value.findIndex((item) => item.id === id); //cheking if itemid present already in array
       if (index === -1 ){
       // If the id is not found in data_to_delete, add it and set accepted to false
       console.log("Item Does not present in curent auction/upcomin auction")
-      console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
-      console.log("for id:",id)
+      // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
+      // console.log("for id:",id)
       console.log("Soft Delete started of id:", id);
       data_to_delete.value.push({ id });
-      DataNames_to_delete.value.push({ Name });
+      DataNames_to_delete.value.push({ Name }); //added items for soft deleting to array
       accepted.value = false; // Set accepted to false for the current row
       console.log("All id after added to array:", data_to_delete.value);
       }else {
@@ -524,7 +524,7 @@ async function handleAddtoArray(id, Name) {
         (item) => item.Name === Name
       );
       if (nameIndex !== -1) {
-        DataNames_to_delete.value.splice(nameIndex, 1);
+        DataNames_to_delete.value.splice(nameIndex, 1); //removed items name from Array if user unticked checkbox
       }
       console.log("All id after removed to array:", data_to_delete.value);
       console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
@@ -538,29 +538,29 @@ async function handleAddtoArray(id, Name) {
     // Set accepted to true for the current row
   }else{
 
-    console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
-      console.log("for id:",id)
+    // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
+    // console.log("for id:",id)
     console.log("Item present in curent auction/upcomin auction .Hence Cannot be delete")
-    await AuctionCodesbyID(id)
-    let auctioncodeString =AuctionCodes.value.AuctionCodes.map(item => item.vsAuctionCode).join(', ');
-    console.log("AuctionCode strin:",auctioncodeString)
+    await AuctionCodesbyID(id) //fetching auctions codes from db if items are associated with current/upcoming auctions
+    let auctioncodeString =AuctionCodes.value.AuctionCodes.map(item => item.vsAuctionCode).join(', '); //joining all acutions code by comma separted
+    // console.log("AuctionCode strin:",auctioncodeString)
     const item = unsoldProperties.value.find(item => item.pklInventoryId == id);
     console.log("After set item",item)
     if (item) {
-      item.checkboxchecked = false;
-      console.log("After set checkboxchecked:false",item)
+      item.checkboxchecked = false; // set to false for disable checkbox so that user further cannot select items twice if it is already associated with current/upcoming auctions
+      // console.log("After set checkboxchecked:false",item)
     }
     //if by mistake item present in deleted_array then it should be removed
     const index = data_to_delete.value.findIndex((item) => item.id === id);
     if (index != -1){
       //it is present so remove
       data_to_delete.value.splice(index, 1);
-      console.log("All id after remove to array:", data_to_delete.value);
+      // console.log("All id after remove to array:", data_to_delete.value);
 
     }
     console.log("All ids for soft delete :", data_to_delete.value);
-    accepted.value = true; 
-    showWarnforItemPresentInCurrentAuction(Name,auctioncodeString)
+    accepted.value = true; //for toggling of checkbox
+    showWarnforItemPresentInCurrentAuction(Name,auctioncodeString) //warning if items are associated with current/upcoming auctions with Auctions code 
 
   }
   
@@ -574,10 +574,10 @@ async function handleAddtoArray(id, Name) {
 onMounted(() => {
   checkRole();
   fetchInventoryMasterDetails();
-  fetchingSoftDeletedItems();
+  fetchingSoftDeletedItems(); //fetching soft deleted items from db for downloading excelsheet
 });
 
-const showSuccess = () => {
+const showSuccess = () => {  // added toast if items deleted succesfully
   toast.add({
     severity: "success",
     summary: "Success",
