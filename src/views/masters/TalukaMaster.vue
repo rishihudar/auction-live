@@ -65,6 +65,7 @@
             </div>
         </template>
         <template v-else-if="flag === 1">
+            <!-- *************Add Data**************** -->
             <div class="card">
                 <div class="card-header">
                     <div class="ch-title">Add Entry</div>
@@ -97,6 +98,7 @@
             </div>
         </template>
         <template v-else-if="flag === 2">
+            <!-- *************Edit Data************ -->
             <div class="card">
                 <div class="card-header">
                     <div class="ch-title">Add Entry</div>
