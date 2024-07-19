@@ -185,12 +185,13 @@ function h1AuctionDetails() {
 }
 
 function updateAccepted(rowData, selectedValue) {
-  console.log("rowData is",rowData.data.approvalStatusResult)
+  let label = rowData.data.approvalStatusResult == 1 ? "Accept" : "Reject"
+  console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
   // Find the index of the item in resultList to ensure reactivity
   const index = resultList.findIndex((item) => item.id === rowData.id);
   if (index !== -1) {
     // Update the reactive property
-    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:rowData.data.ApprovalStatus, accepted: selectedValue };
+    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue };
     console.log(
       "rowData.accepted#################",
       resultList[index].accepted,
