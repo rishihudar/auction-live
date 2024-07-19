@@ -24,6 +24,7 @@ export default defineConfig({
   },
   plugins: [vue(), vitePluginCompression(), svgLoader()],
   build: {
+    assetsInlineLimit: 0,
     minify: "terser",
     terserOptions: {
       ecma: undefined,
