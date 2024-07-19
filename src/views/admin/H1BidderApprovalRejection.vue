@@ -1,238 +1,252 @@
 <template>
-    <div>
-        <div class="fm-group">
-            <label class="fm-label" for="horizontal-buttons">Number of Hours</label>
-            <InputNumber v-model="noOfDays" placeholder="Enter number greater than 98" showButtons :step="1" 
-                :disabled="disabled">
-                <template #incrementbuttonicon>+</template>
-                <template #decrementbuttonicon>-</template>
-            </InputNumber>
-            <!-- <div v-if="$v.noOfDays.$error" class="fm-error">
-                {{ $v.noOfDays.$errors[0].$message }}
-            </div> -->
-            <div v-if="$v.noOfDays.$error" class="fm-error">
-                {{ $v.noOfDays.$errors[0].$message }}
-            </div>
-        </div>
-
-        <!-- <div>
-              <InputText
-                v-model="firstPaymentPercentage"
-                placeholder="Enter First Payment Percentage"
-                :class="{ 'p-invalid': $v.firstPaymentPercentage.$error }"
-              />
-            </div>
-            <div v-if="$v.firstPaymentPercentage.$error" class="fm-error">
-              {{ $v.firstPaymentPercentage.$errors[0].$message }}
-            </div> -->
-
-        <div class="table-custom">
-            <!-- <table>
-                <thead>
-                    <tr>
-                        <th>ROUND NUMBER</th>
-                        <th>ALLOCATED PROPERTY</th>
-                        <th>HIGHEST QUOTED VALUE (₹)</th>
-                        <th>1st payment TO BE PAID (₹)</th>
-                        <th>ELIGIBLE ?</th>
-                        <th>INTENT_LETTER</th>
-                        <th>ALLOTMENT LETTER</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <template v-for="(item, index) in resultList" :key="index">
-                        <tr>
-                            <td>{{ item.roundNumber }}</td>
-                            <td>{{ item.allocatedProperty }}</td>
-                            <td>{{ item.highestQuotedValue }}</td>
-                            <td>25% or 15%</td>
-                            <td>
-                                    <RadioButton inputId="accept" value="Accept" />
-                                    <label for="accept">Accept</label>
-                            </td>
-                            <td>Intent letter</td>
-                            <td>intent letter</td>
-                        </tr>
-                    </template>
-                </tbody>
-            </table> -->
-            <!-- {{ resultList }}  -->
-            <DataTable :value="resultList" dataKey="id" :disabled="disabled">
-                <Column field="roundNumber" header="ROUND NUMBER"></Column>
-                <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
-                <Column field="highestQuotedValue" header="HIGHEST QUOTED VALUE (₹)"></Column>
-                <Column field="firstPayment" header="1st payment TO BE PAID (₹)"></Column>
-                <Column header="ELIGIBLE ?">
-                    <!-- <template #body="rowData ">
-                        <input type="checkbox" :checked="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)" :disabled="disabled">
-                    </template> -->
-                    <template #body="rowData">
-
-                        <Checkbox v-model="rowData.data.accepted" id="myCheck" @click="updateAccepted(rowData)"
-                            :binary="true" :disabled="disabled" />
-                    </template>
-
-                </Column>
-                <Column header="INTENT_LETTER">
-                    <template #body="slotProps">
-                        <span>Intent letter</span>
-                    </template>
-                </Column>
-                <Column header="ALLOTMENT LETTER">
-                    <template #body="slotProps">
-                        <span>intent letter</span>
-                    </template>
-                </Column>
-            </DataTable>
-        </div>
-
-        <div class="table-exp-action centered">
-            <Button label="Submit" @click="submitForm" :disabled="disabled" />
-        </div>
-        <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
-            <strong>Note:</strong> <span>First payment is calculated as = (Highest quoted value * First Payment
-                Percentage) -
-                EMD amount</span>
-        </div>
+  <div>
+    <div class="fm-group">
+      <label class="fm-label" for="horizontal-buttons">Number of Hours</label>
+      <InputNumber
+        v-model="noOfDays"
+        placeholder="Enter number greater than 98"
+        showButtons
+        :step="1"
+        :disabled="disabled"
+      >
+        <template #incrementbuttonicon>+</template>
+        <template #decrementbuttonicon>-</template>
+      </InputNumber>
+      <div v-if="$v.noOfDays.$error" class="fm-error">
+        {{ $v.noOfDays.$errors[0].$message }}
+      </div>
     </div>
+
+    <div class="table-custom">
+      <DataTable :value="resultList" dataKey="id" :disabled="disabled">
+        <Column field="roundNumber" header="ROUND NUMBER"></Column>
+        <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
+        <Column
+          field="highestQuotedValue"
+          header="HIGHEST QUOTED VALUE (₹)"
+        ></Column>
+        <Column
+          field="firstPayment"
+          header="1st payment TO BE PAID (₹)"
+        ></Column>
+        <Column header="ELIGIBLE ?">
+          <template #body="rowData" v-if="!disabled">
+            <Dropdown
+              v-model="rowData.data.approvalStatusResult"
+              :options="dropdownOptions"
+              placeholder="kindly select"
+              optionLabel="label"
+              optionValue="value"
+              @change="(e) => updateAccepted(rowData, e.value,e)"
+              :disabled="disabled"
+            />
+          </template>
+          <!-- <template #body="rowData" v-if="!disabled">
+            <Dropdown
+              v-model="rowData.data.approvalStatusResult"
+              :options="dropdownOptions"
+              placeholder="kindly select"
+              optionLabel="label"
+              optionValue="value"
+              @change="e => updateAccepted(rowData, e.value)"
+              :disabled="disabled"
+              
+            />
+          </template> -->
+
+          <template #body="rowData" v-else>
+            {{ rowData.data.ApprovalStatus }}
+          </template>
+        </Column>
+        <Column header="INTENT_LETTER">
+          <template #body="slotProps">
+            <span>Intent letter</span>
+          </template>
+        </Column>
+        <Column header="ALLOTMENT LETTER">
+          <template #body="slotProps">
+            <span>Intent letter</span>
+          </template>
+        </Column>
+      </DataTable>
+    </div>
+
+    <div class="table-exp-action centered">
+      <Button label="Submit" @click="submitForm" :disabled="disabled" />
+    </div>
+    <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
+      <strong>Note:</strong>
+      <span>
+        First payment is calculated as = (Highest quoted value * First Payment
+        Percentage) - EMD amount
+      </span>
+    </div>
+  </div>
 </template>
 
 <script setup>
-
-
-import Checkbox from 'primevue/checkbox';
-
-import { computed, ref, onMounted, watch } from "vue";
+import Checkbox from "primevue/checkbox";
+import { computed, ref, onMounted, reactive } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import {
-    required,
-    minLength,
-    numeric,
-    minValue
-} from "@vuelidate/validators";
+import { required, minLength, numeric, minValue } from "@vuelidate/validators";
 import MQL from "@/plugins/mql.js";
-import InputNumber from 'primevue/inputnumber';
-import Button from 'primevue/button';
-import RadioButton from 'primevue/radiobutton';
-import { storeToRefs } from 'pinia';
-import { login } from "../../store/modules/login"
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';   // optional
-import Row from 'primevue/row';                   // optional
-import { stringifyQuery } from 'vue-router';
+import InputNumber from "primevue/inputnumber";
+import Button from "primevue/button";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import { storeToRefs } from "pinia";
+import { login } from "../../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
+import Dropdown from "primevue/dropdown";
 
-const toaster = createToaster({ position: "top-right", duration: 3000 })
+const toaster = createToaster({ position: "top-right", duration: 3000 });
 const props = defineProps({
-    auctionId: Number
+  auctionId: Number,
 });
 
-let auctionId = ref(props.auctionId)
+let auctionId = ref(props.auctionId);
 const loginStore = login();
 const { organizationId, entityId, loginId } = storeToRefs(loginStore);
-let tick = ref()
-let resultList = ref()
-// let firstPaymentPercentage = ref()
+let tick = ref();
+const resultList = reactive([]);
 const selectedRows = ref([]);
-
-let noOfDays = ref(98)
+let accepted = ref();
+let noOfDays = ref(98);
 let rules = computed(() => ({
-
-    noOfDays: {
-        required,
-        numeric,
-        minLength: minLength(1),
-        minValue: minValue(98, 'The minimum value for "Number of Hours" is 98')
-    }
-
-}
-
-))
+  noOfDays: {
+    required,
+    numeric,
+    minLength: minLength(1),
+    minValue: minValue(98, 'The minimum value for "Number of Hours" is 98'),
+  },
+}));
 
 const $v = useVuelidate(rules, { noOfDays });
 
+let disabled = ref(false);
+const approvalStatusResult = ref({ id: 0, approvalStatus: "" });
+const dropdownOptions = ref([]);
 
-let disabled = ref(false)
-// let indentDays=ref()
-function h1AuctionDetails() {
-
-    // console.log("loadEntityAndOrganization" , entityId.value, organizationId.value)
-
-    new MQL()
-        .useManagementServer()
-        .setActivity("r.[FetchH1BiddersAuctionDetails]")
-        .setData({ "auctionId": auctionId.value, "entityId": entityId.value })
-        .fetch()
-        .then(rs => {
-            let res = rs.getActivity("FetchH1BiddersAuctionDetails", true)
-            if (rs.isValid("FetchH1BiddersAuctionDetails")) {
-                // resultList.value=res.result
-                resultList.value = res.result.fetchH1BidderAuctionDetails.map(item => ({
-                    ...item,
-                    accepted: item.accepted === 1 ? true : false
-                }));
-                console.log("resultList is ", resultList.value)
-
-                if (res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0) {
-                    noOfDays.value = res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours
-                    console.log("indentDays is ", noOfDays.value)
-                    disabled.value = true
-                } else {
-                    disabled.value = false
-                }
-
-            } else {
-                rs.showErrorToast("FetchH1BiddersAuctionDetails")
-            }
-        })
-
-
+function fetchH1ApprovalStatus() {
+  new MQL()
+    .useManagementServer()
+    .setActivity("r.[FetchH1ApprovalStatus]")
+    .setData({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchH1ApprovalStatus", true);
+      if (rs.isValid("FetchH1ApprovalStatus")) {
+        approvalStatusResult.value = res.result;
+        dropdownOptions.value = approvalStatusResult.value.map((item) => ({
+          label: item.approvalStatus,
+          value: item.id,
+        }));
+        console.log("approvalStatusResult", approvalStatusResult.value);
+      } else {
+        rs.showErrorToast("FetchH1ApprovalStatus");
+      }
+    });
 }
 
-function updateAccepted(rowData) {
-    // console.log(rowData)
-    // console.log(resultList.value[rowData.index].accepted)
-    rowData.accepted = !rowData.accepted;
-    resultList.value[rowData.index].accepted = rowData.accepted
+function h1AuctionDetails() {
+  new MQL()
+    .useManagementServer()
+    .setActivity("r.[FetchH1BiddersAuctionDetails]")
+    .setData({ auctionId: auctionId.value, entityId: entityId.value })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchH1BiddersAuctionDetails", true);
+      if (rs.isValid("FetchH1BiddersAuctionDetails")) {
+        res.result.fetchH1BidderAuctionDetails;
+        console.log("ResultList!!!!!",res.result.fetchH1BidderAuctionDetails)
+        res.result.fetchH1BidderAuctionDetails.forEach((item) => {
+          resultList.push({
+            ...item,
+           // accepted: item.accepted === 1 ? 1 : 2,
+          });
+          
+        });
+        console.log("resultList is **** ", resultList);
+
+        if (
+          res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0
+        ) {
+          noOfDays.value =
+            res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours;
+          console.log("indentDays is ", noOfDays.value);
+          disabled.value = true;
+        } else {
+          disabled.value = false;
+        }
+      } else {
+        rs.showErrorToast("FetchH1BiddersAuctionDetails");
+      }
+    });
+}
+
+function updateAccepted(rowData, selectedValue) {
+  let label = rowData.data.approvalStatusResult == 1 ? "Accept" : "Reject"
+  console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
+  // Find the index of the item in resultList to ensure reactivity
+  const index = resultList.findIndex((item) => item.id === rowData.id);
+  if (index !== -1) {
+    // Update the reactive property
+    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue };
+    console.log(
+      "rowData.accepted#################",
+      resultList[index].accepted,
+      "result list ",
+      resultList
+    );
+  }
 }
 
 function submitForm() {
-    console.log("Auction id hai ", auctionId.value)
-    const validation = $v.value.$validate();
+  console.log("Auction id ", auctionId.value);
+  const validation = $v.value.$validate();
+  if (!$v.value.$error) {
+    // Check if all dropdowns are selected
+    const allDropdownsSelected = resultList.every(
+      (item) => item.approvalStatusResult
+    );
 
-    if (!$v.value.$error) {
-
-        console.log("result list ", resultList.value)
-
-        new MQL()
-            .useManagementServer()
-            .setActivity("r.[UpdateH1BidderDetails]")
-            .setData({ "auctionId": auctionId.value, "h1ApprovedBidders": resultList.value, "noOfDays": noOfDays.value })
-            .fetch()
-            .then(rs => {
-                let res = rs.getActivity("UpdateH1BidderDetails", true)
-                if (rs.isValid("UpdateH1BidderDetails")) {
-                    disabled.value = true
-                    toaster.success("Successfully Updated");
-                } else {
-                    rs.showErrorToast("UpdateH1BidderDetails")
-                }
-            })
-
-
-    } else {
-
-        toaster.error("Invalid Number of Hours");
-
+    if (!allDropdownsSelected) {
+      toaster.error(
+        "Please select an option for all dropdowns before submitting."
+      );
+      return;
     }
 
+    console.log("result list ", resultList);
+
+    // if (!$v.value.$error) {
+    //   console.log("result list ", resultList);
+
+    new MQL()
+      .useManagementServer()
+      .setActivity("r.[UpdateH1BidderDetails]")
+      .setData({
+        auctionId: auctionId.value,
+        h1ApprovedBidders: resultList,
+        noOfDays: noOfDays.value,
+      })
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("UpdateH1BidderDetails", true);
+        if (rs.isValid("UpdateH1BidderDetails")) {
+          disabled.value = true;
+          toaster.success("Successfully Updated");
+        } else {
+          rs.showErrorToast("UpdateH1BidderDetails");
+        }
+      });
+  } else {
+    toaster.error("Invalid Number of Hours");
+  }
 }
 
-
 onMounted(() => {
-    h1AuctionDetails();
-    // fetchH1AuctionDetails(); 
-})
-
+  h1AuctionDetails();
+  fetchH1ApprovalStatus();
+});
 </script>
