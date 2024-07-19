@@ -39,7 +39,7 @@
       </DataTable>
 
 
-      <Dialog  v-if="majorModal" v-model:visible="visible" modal header="Edit Profile" :style="{ width: '25rem' }">
+      <Dialog  v-if="majorModal" v-model:visible="visible" modal header="Information" :style="{ width: '25rem' }">
         <p class="m-0">
           {{ dialogContent }}
         </p>
@@ -342,10 +342,10 @@ async function handleAction(rowData, Header) {
     // console.log("rowData.Mc", rowData.MC);
     // console.log("rowData.Location", rowData.Location);
     // console.log("rowData.Area", rowData.Area);
-    this.dialogContent = `Details for ${rowData[`${dialogHeader.value}`]} ${
+    dialogContent.value = `Details for ${rowData[`${dialogHeader.value}`]} ${
       dialogHeader.value   //header to be set accorning user clicks 
     } in ${rowData["District"]}.`;
-    this.visible = true;
+    visible.value = true;
     hierarchy = `%${rowData.District}<>${rowData.MC}<>${rowData.Location}<>${rowData.Area}%`;
     console.log("hirarchy", hierarchy);
     let res = await AllItemsbyInventoryLevelId( //calling cs for fetching details of items 
