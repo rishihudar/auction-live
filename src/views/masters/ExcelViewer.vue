@@ -45,12 +45,14 @@
                 </FileUpload> -->
                 <div class="fm-group">
                     <label class="fm-label">Upload Excel File</label>
+                    <!-- accept=".xlsx, .csv," 
+                         :max-file-size="200000" 
+                    -->
                     <FileUpload
                         v-model="userDataSheet"
-                        accept=".xlsx, .csv,"
+                        :accept="docType"
                         :multiple="false"
-                       
-                        :max-file-size="200000" 
+                        :max-file-size="docSize * multiplyingFactor" 
                         :custom-upload="true" 
                         @uploader="onAdvancedUpload"
                     />
@@ -444,11 +446,12 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import FileUpload from 'primevue/fileupload';
 import { useToast } from "primevue/usetoast";
-//import MQL from '@/plugins/mql.js';
+import MQL from '@/plugins/mql.js';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import * as XLSX from "xlsx";
 import Dropdown from 'primevue/dropdown';
+import MQLCdn from '@/plugins/mqlCdn.js';
 
 const userDataSheet = ref([]);
 const products = ref([]); // Your products array
@@ -461,6 +464,37 @@ const loading = ref(false);
 const responseText = ref([])
 const trimmedResponseText = ref([])
 const data = ref([])
+const myFile = ref("");
+const fileName = ref("");
+const fullPath = ref("");
+const filePath = ref("");
+const docTypeId = ref(0);
+const docSize = ref();
+const docName = ref();
+const docType = ref();
+var multiplyingFactor = ref(0)
+const docValidation = ref([]);
+
+
+function fetchMultiplyingFactor(){
+			// Automatically generated
+            new MQL()
+            .useManagementServer()
+			.setActivity("o.[FetchCustomParam]")
+			.setData({"customParam":"MULTIPLYING_FACTOR"})
+			
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchCustomParam",true)
+			if (rs.isValid("FetchCustomParam")) {
+        multiplyingFactor.value = res.result.customParam
+                console.log ("#########", multiplyingFactor.value)
+			} else
+			 { 
+			rs.showErrorToast("FetchCustomParam")
+			}
+			})
+}	
 // const userData = ref([]); // Your data array
 
 // const userDetails = ref({
@@ -529,6 +563,8 @@ function reloadPage() {
 // }
 
   onMounted(async () => {
+    fetchDocumentsValidationDetails();
+    fetchMultiplyingFactor();
 //   try {
 //     // const response = await fetch('http://localhost:8000/ExcelViewer');
 //     // const data = await response.json();
@@ -570,12 +606,15 @@ function reloadPage() {
 // }
 
 const onAdvancedUpload = async (event) => {
+  let timeStamp = Date.now();
   products.value = null
   userDataSheet.value = [] 
   loading.value = false
   try {
     const formData = new FormData();
     userDataSheet.value.push(...event.files);
+    myFile.value = event.files[0].name;
+    console.log("myFile", myFile.value)
     // Check if there are any selected files
     if (userDataSheet.value.length === 0) {
       console.error('No files selected', userDataSheet);
@@ -620,16 +659,20 @@ const onAdvancedUpload = async (event) => {
       reader.readAsArrayBuffer(file);
       // loading.value = false; // Move loading to here
       console.log("**********file", file)
+
       
     }
   } catch (error) {
     console.error('Error processing files:', error);
   }
 
-  console.log("**********userDataSheet", userDataSheet)
+  console.log("**********userDataSheet", userDataSheet.value[0])
     // Append each selected file to the FormData object
     userDataSheet.value.forEach(file => {
       formData.append('userDataSheet', file);
+      formData.append('file', file);
+      console.log("@@@@@@@", file)
+      console.log("######", formData)
     });
     console.log("**********formDatabefore", formData)
     JSON.stringify(formData)
@@ -665,6 +708,41 @@ const onAdvancedUpload = async (event) => {
       console.log("3")
       console.log("Printing response msg********", data)
       console.log("Pringing the response ", products.value)
+      //new mqlCDN add-------------------------------------------------------------------------------
+      // .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument")
+    new MQLCdn()
+        // .useManagementServer()
+        .enablePageLoader(true)// FIXED: change this to directory path
+        //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+        .setDirectoryPath("/UploadedDocuments/UserData") // (optional field) if you want to save  file to specific directory path
+        .setFormData(formData) // (required) sets file data
+        .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
+        // FIXED: pass buckeyKey instead of name
+        .setBucketKey("2jShKtD7AYRkXfHBNkGjTGCIy6c") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2jShIbFBT6McJiVCRzQVo52WOqq") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2jShIbFBT6McJiVCRzQVo52WOqq") // (required) valid purposeId need to set in which file will be uploaded.
+        //clientID:2ZncVDPZRGYZwwteYYbB3aw4fr7
+        .uploadFile("uploadtBtn")
+        .then((res) => {
+            // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+            if (res.isValid()) {
+                fileName.value = timeStamp + "_" + myFile.value;
+                filePath.value = res.uploadedFileURL().filePath;
+                // fullPath.value = Vue.getCDNBaseURL();
+                console.log("fileName", fileName.value);
+                console.log("filePath", filePath.value);
+                console.log("fullPath", fullPath.value);
+                InsertDocumentData();
+                // uploadedFile.value = true;
+                // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
+                //toaster.success("file uploaded.");
+                toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+                // cropVisible.value=false
+            } else {
+                res.showErrorToast();
+            }
+        });
+        // ---------------------------------------------------------------------
       toast.add({ severity: 'success', summary: 'Success', detail: 'File Data Uploaded', life: 3000 });
       response = null
       //products.value = response.result
@@ -687,8 +765,54 @@ const onAdvancedUpload = async (event) => {
   }
 }
 
+function fetchDocumentsValidationDetails() {
+    // Automatically generated
+    new MQL()
+        .useCoreServer()
+        .setActivity("o.[fetchDocumentsValidationDetails]")
+
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("fetchDocumentsValidationDetails", true)
+            docValidation.value = res.result.validation
+            docValidation.value.forEach(item => {
+                if (item.typeName == "USER_IMPORT_TEMPLATE") {
+                    docName.value = item.typeName;
+                    docSize.value = item.fileSize;
+                    docType.value = item.fileType;
+                    docTypeId.value = item.typeId;
+                    console.log("docName.value", docName.value);
+                }
+            });
+        })
+}
 
 
+function InsertDocumentData(){  
+  console.log("111111111docTypeId", docTypeId.value)
+  console.log("22222222222fileName", fileName.value)
+  console.log("3333333333filePath", filePath.value)
+		// Automatically generated
+			new MQL()
+      .useCoreServer()
+			.setActivity("o.[InsertDocumentData]")
+			.setData({
+        "documentTypeId" : docTypeId.value,
+        "documentFileName" : fileName.value,
+        "documentFilePath" : filePath.value
+      })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertDocumentData",true)
+			if (rs.isValid("InsertDocumentData")) {
+                console.log("!!!!!!!!!!!!!!!!!",res.result)
+			} else
+			 { 
+			rs.showErrorToast("InsertDocumentData")
+			}
+			})
+			
+}
 
 </script>
 
