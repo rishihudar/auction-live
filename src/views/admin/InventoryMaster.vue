@@ -245,15 +245,10 @@ function onChange(event) {
         alert("Data Already Exists in Inventory and"+ response.data +" Data Inserted!");
       }else if(response.data>0){
         alert("Data Successfully Inserted and "+response.data +"Data Inserted!");
-         cdnProfileUpload(myFile.value) // returning promise
-       
+          cdnProfileUpload(myFile.value) // returning promise   
       }else{
         alert("Server Down! Data Insertion Failed!");
       }
-      
-
-      // router.push({path:'/inventoryMasterCard'})
-      // window.location.reload();
     })
     .catch((error) => {
       // Handle upload error
@@ -319,6 +314,8 @@ function InsertUploadedFileInDB(Filename,Filepath1,Filepath2,Userid){
        
         toaster.success("file uploaded.");
         console.log("RESULT:" , res.result)
+        router.push({path:'/inventoryMasterCard'})
+       // window.location.reload();
       
 			} else
 			 { 
