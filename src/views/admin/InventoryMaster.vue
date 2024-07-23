@@ -60,8 +60,11 @@
                         <FileUpload
                             name="excelFile"
                             label="Choose Excel File"
-                            accept=".xlsx,"
+      
                             v-model="isFileSelected"
+                            :accept="docType"
+                        :multiple="false"
+                        :max-file-size="docSize * multiplyingFactor"
                             mode="basic"
                             :auto="true"
                             :custom-upload="true"
@@ -118,14 +121,22 @@ import axios from "axios";
 import MQLCdn from "@/plugins/mqlCdn.js";
 import { login } from "../../store/modules/login"
 import router from "../../router";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 })
+let docValidation = ref([])
+let docName = ref()
+let docTypeId = ref()
+let docType = ref()
+let docSize = ref()
 
-
+let multiplyingFactor = ref()
 const loginStore = login();
 const inventoryCategories = ref();
 const selectedCategory = ref();
 const isFileSelected = ref(false);
 const organizationId = ref(login().loginDetails.organizationId);
 const entityId = ref(login().loginDetails.entityId);
+const userID = ref(login().loginDetails.loginId);
 
 function fetchInventonryCategories() {
   new MQL()
@@ -203,7 +214,8 @@ function onChange(event) {
       } else {
         console.log("The arrays do not match.");
         alert("Invalid Template");
-        router.push({path:'/inventoryMasterCard'})
+        isFileSelected.value=false;
+        // router.push({path:'/inventoryMasterCard'})
         // window.location.reload();
         
       }
@@ -212,7 +224,7 @@ function onChange(event) {
   }
 }
 
-function handleUpload() {
+ async function handleUpload() {
   const formData = new FormData();
   formData.append("myFile", myFile.value); // Assuming you only allow one file to be uploaded
   formData.append("categoryId", selectedCategory.value);
@@ -227,8 +239,20 @@ function handleUpload() {
     .then((response) => {
       // Handle successful upload response
       console.log(response.data);
-      alert(response.data);
-      router.push({path:'/inventoryMasterCard'})
+      // Handle successful upload response
+      console.log("Count of rows inserted into db:",response.data);
+      if(response.data==0){
+        alert("Data Already Exists in Inventory and"+ response.data +" Data Inserted!");
+      }else if(response.data>0){
+        alert("Data Successfully Inserted and "+response.data +"Data Inserted!");
+         cdnProfileUpload(myFile.value) // returning promise
+       
+      }else{
+        alert("Server Down! Data Insertion Failed!");
+      }
+      
+
+      // router.push({path:'/inventoryMasterCard'})
       // window.location.reload();
     })
     .catch((error) => {
@@ -238,32 +262,74 @@ function handleUpload() {
 }
 
 const fileUploadTemp = ref();
-function cdnProfileUpload(event) {
+const filePath3 = ref();
+async function cdnProfileUpload(filetoupload) {
+  
   let formData = new FormData();
   // console.log(event.files[0])
-  formData.append("file", event.files[0]); // append your file as 'file' in formdata.
+  formData.append("file", filetoupload); // append your file as 'file' in formdata.
   new MQLCdn()
     .enablePageLoader(true)
     // FIXED: change this to directory path
-    .setDirectoryPath("/InventoryTemplates") // (optional field) if you want to save  file to specific directory path
+    .setDirectoryPath("/UploadedDocuments/Inventory/"+selectedEntity.value) // (optional field) if you want to save  file to specific directory path
     .setFormData(formData) // (required) sets file data
-    .setFileName("InventoryTemp_Booth_VacantLand_Industrial") // (optional field) if you want to set name to file that is being uploaded
+    .setFileName("ExcelItemUpload") // (optional field) if you want to set name to file that is being uploaded
     // FIXED: pass buckeyKey instead of name
-    .setBucketKey("22Jbn9juCuMfJ4fNA1Sp8AAVERE") // (required) valid bucket key need to set in which file will be uploaded.
-    .setPurposeId("1TxY9TS4uzp8Ivyo0eKPpo1g2Og") // (required) valid purposeId need to set in which file will be uploaded.
-    .setClientId("1TxY9TS4uzp8Ivyo0eKPpo1g2Og") // (required) valid purposeId need to set in which file will be uploaded.
+    .setBucketKey("2jShKtD7AYRkXfHBNkGjTGCIy6c") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2jShIbFBT6McJiVCRzQVo52WOqq") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2jShIbFBT6McJiVCRzQVo52WOqq") // (required) valid purposeId need to set in which file will be uploaded.
     .uploadFile("uploadtBtn")
     .then((res) => {
       // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
       if (res.isValid()) {
         // returns uploaded file url..
-        // console.log("Uploaded File URL", res.uploadedFileURL())
-        toaster.success("file uploaded.");
+        console.log("Uploaded File URL", res.uploadedFileURL())
+       let path = res.uploadedFileURL()
+       let pathcdn =  path.cdnServer;
+       let actual =path.filePath;
+        filePath3.value = `${pathcdn}/${actual}`;
+
+
+       console.log("path",filePath3.value)
+       console.log("filename",filetoupload.name)
+       console.log("userid",userID.value)
+        InsertUploadedFileInDB(filetoupload.name,filePath3.value,filePath3.value,userID.value)
+       
+       
+        
       } else {
         res.showErrorToast();
       }
     });
+ 
 }
+
+function InsertUploadedFileInDB(Filename,Filepath1,Filepath2,Userid){
+  
+					// Automatically generated
+          new MQL()
+          .useCoreServer()
+			.setActivity("o.[InsertUploadFileData]")
+			.setData({"fileName":Filename,"filePath1":Filepath1,"filePath2":Filepath2,"userId":Userid,"userID" : Userid})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertUploadFileData",true)
+			if (rs.isValid("InsertUploadFileData")) {
+        
+       
+        toaster.success("file uploaded.");
+        console.log("RESULT:" , res.result)
+      
+			} else
+			 { 
+			rs.showErrorToast("InsertUploadFileData")
+      
+			}
+			})
+			
+}
+
+
 
 const columnTempNames = ref();
 function fetchInventoryTempColumns() {
@@ -304,6 +370,52 @@ function fetchEntitiesList(){
 			}
 			})
 			
+}
+
+
+
+
+function fetchDocumentsValidationDetails() {
+    // Automatically generated
+    new MQL()
+        .useCoreServer()
+        .setActivity("o.[fetchDocumentsValidationDetails]")
+
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("fetchDocumentsValidationDetails", true)
+            docValidation.value = res.result.validation
+            docValidation.value.forEach(item => {
+                if (item.typeName == "INVENTORY_UPLOAD_TEMPLATE") { //MATCH WITH DB DOCUMENT TYPE NAME
+                    docName.value = item.typeName;
+                    docSize.value = item.fileSize;
+                    docType.value = item.fileType;
+                    docTypeId.value = item.typeId;
+                    console.log("docName.value", docName.value);
+                }
+            });
+        })
+}
+
+
+function fetchMultiplyingFactor(){
+      // Automatically generated
+            new MQL()
+            .useManagementServer()
+      .setActivity("o.[FetchCustomParam]")
+      .setData({"customParam":"MULTIPLYING_FACTOR"})
+      
+      .fetch()
+       .then(rs => {
+      let res = rs.getActivity("FetchCustomParam",true)
+      if (rs.isValid("FetchCustomParam")) {
+        multiplyingFactor.value = res.result.customParam
+                console.log ("#########", multiplyingFactor.value)
+      } else
+       { 
+      rs.showErrorToast("FetchCustomParam")
+      }
+      })
 }
 
 </script>
