@@ -65,7 +65,8 @@ vm.component('Button', Button);
 vm.component('Card', Card);
 vm.component('Toast', Toast);
 vm.use(ToastService); // Add this line to enable toast service
-vm.use(primeVue, { unstyled: true, pt: Alive })
+//vm.use(primeVue, { unstyled: true, pt: Alive })
+vm.use(primeVue, { unstyled: true, pt: Alive, csp: {nonce: 'HFCJLC2XRSGhjikYuBKVcw=='} })
 vm.use(Breadcrumb)
 vm.component('Breadcrumb', Breadcrumb)
 vm.component('ConfirmDialog', ConfirmDialog);
