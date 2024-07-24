@@ -1,24 +1,10 @@
 import axios from 'axios'
 import Response from '@/plugins/response.js'
-import Swal from 'sweetalert2'
 import {main} from "../store/index"
 
 function dialogConfirm({ title, text, errMsg }) {
   return new Promise((resolve, reject) => {
-    Swal.fire({
-      title: title,
-      text: text,
-      confirmButtonText: 'Yes',
-      showCancelButton: true,
-      cancelButtonText: 'Cancel'
-    }).then((obj) => {
-      if (obj.isConfirmed) {
-        resolve()
-      } else {
-        console.log("in reject", new Error(errMsg));
-        reject(new Error(errMsg))
-      }
-    })
+    resolve()
   })
 }
 
