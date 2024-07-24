@@ -170,6 +170,7 @@ async function schedule() {
       if (rs.isValid("ScheduleAuction")) {
         if (res && res.result == "SUCCESS") {
           display.value = false;
+          NotifyScheduledAuctionBidders()
           NotifyAuctionScheduledAndPasscodes()
           //alert("Auction Scheduled Successfully");
           // toaster.success("Auction Scheduled Successfully");
@@ -209,6 +210,25 @@ function NotifyAuctionScheduledAndPasscodes(){
 			} else
 			 { 
 			rs.showErrorToast("FetchAuctionParticipatedBidders")
+			}
+			})
+			
+}
+
+function NotifyScheduledAuctionBidders(){
+			new MQL()
+      .useNotificationServer()
+			.setActivity("r.[NotifyScheduledAuctionBidders]")
+			.setData({"auctionId":props.auctionCode,"roleId":1,"statusId":31})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("NotifyScheduledAuctionBidders",true)
+			if (rs.isValid("NotifyScheduledAuctionBidders")) {
+        // NotifyAuctionScheduledAndPasscodes()
+        
+			} else
+			 { 
+			rs.showErrorToast("NotifyScheduledAuctionBidders")
 			}
 			})
 			

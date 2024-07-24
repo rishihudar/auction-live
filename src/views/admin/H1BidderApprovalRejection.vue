@@ -236,6 +236,7 @@ function submitForm() {
         if (rs.isValid("UpdateH1BidderDetails")) {
           disabled.value = true;
           toaster.success("Successfully Updated");
+          sendEmailH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
         }
@@ -243,6 +244,24 @@ function submitForm() {
   } else {
     toaster.error("Invalid Number of Hours");
   }
+}
+
+function sendEmailH1Bidders() {
+
+          new MQL()
+			.setActivity("r.[NotifyH1ApprovedBidders]")
+			.setData({"resultList":resultList})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("NotifyH1ApprovedBidders",true)
+			if (rs.isValid("NotifyH1ApprovedBidders")) {
+			} else
+			 { 
+			rs.showErrorToast("NotifyH1ApprovedBidders")
+			}
+			})
+			
+
 }
 
 onMounted(() => {
