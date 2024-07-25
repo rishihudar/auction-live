@@ -172,6 +172,13 @@ const router = createRouter({
     },
   
     {
+      path: "/UserRegistration",
+      name: "UserRegistration",
+      component: loadAdminView("UserRegistration"),
+      meta: { title: "UserRegistration",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+  
+    {
       path: "/PublisherDashboard",
       name: "PublisherDashboard",
       component: loadDashboardView("PublisherComponent"),
