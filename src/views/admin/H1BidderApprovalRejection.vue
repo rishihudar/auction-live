@@ -249,6 +249,7 @@ function submitForm() {
 function sendEmailH1Bidders() {
 
           new MQL()
+          .useNotificationServer()
 			.setActivity("r.[NotifyH1ApprovedBidders]")
 			.setData({"resultList":resultList})
 			.fetch()
