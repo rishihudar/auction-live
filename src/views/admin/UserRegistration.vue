@@ -92,7 +92,9 @@
                 <div class="fm-group">
                     <label class="fm-label" for="role">Role</label>
                     <div class="fm-inner">
-                        <Dropdown v-model="userDetails.roleId" option-value="roleId" :options="roleMaster" optionLabel="roleName" placeholder="Select Role" />
+                        <!-- <Dropdown v-model="userDetails.roleId" option-value="roleId" :options="roleMaster" optionLabel="roleName" placeholder="Select Role" /> -->
+                        <MultiSelect v-model="selectedRoles" :options="roleMaster" optionLabel="label"
+                        placeholder="Select Roles" class="w-full md:w-20rem"/>
                     </div>
                     <div id="fullName-help" class="fm-info">Select your Role</div>
                     <div v-if="$v.userDetails.roleId.$error" class="fm-error">
@@ -152,10 +154,19 @@
                 </div>
                 </div>
             </div>
-            <div class="fm-action">
-                <Button @click="InsertUserData" label="Submit"></Button>
-                <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
-            </div>
+            <!-- <div class="fm-action"> -->
+                <div class="col-span-6">
+                    <div class="fm-group">
+                        <Button @click="InsertUserData" label="Submit"></Button>
+                    </div>
+                </div>
+                <div class="col-span-6">
+                    <div class="fm-group">
+                        <Button @click="reloadPage()" severity="danger" label="Cancel"></Button>
+                    </div>
+                </div>
+                <!-- <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button> -->
+            <!-- </div> -->
         </div>
     </div>
 </template>
@@ -168,7 +179,9 @@ import MQL from '@/plugins/mql.js';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 import { login } from "../../store/modules/login";
-import { helpers, required } from '@vuelidate/validators'
+import { helpers, required } from '@vuelidate/validators';
+import MultiSelect from 'primevue/multiselect';
+
 const userDetails = ref( {
         userId: '',
         cadreId: '',
@@ -191,10 +204,10 @@ const userDetails = ref( {
         organizationId: '',
         organizationName:''
     });
-
+const userId = ref('');
 const loginStore = login()
 const { loginId } = storeToRefs(loginStore)
-
+const selectedRoles = ref([]);
 const districtMaster = ref([]);
 const entityMaster = ref([]);
 const roleMaster = ref([]);
@@ -212,7 +225,20 @@ function orgnizationIdAndEntityId(){
     console.log("organizationId: ", userDetails.value.organizationId, "entityId: ", userDetails.value.entityId)
     userDetails.value.organizationId = loginStore.loginDetails.organizationId
     userDetails.value.entityId = loginStore.loginDetails.entityId
+    userDetails.value.roleId = selectedRoles.value[0].value
     console.log("organizationId: ", userDetails.value.organizationId, "entityId: ", userDetails.value.entityId)
+}
+
+function sendData(userId) {
+  var data = [];
+  selectedRoles.value.map((el) => {
+      data.push({
+        roleId: el.value,
+        userId: userId,
+        createdBy: loginId.value
+      });
+    });
+    return data
 }
 
 function FetchOrganizationId(){  
@@ -234,6 +260,9 @@ function FetchOrganizationId(){
 			
 }
 
+function reloadPage() {
+    window.location.reload();
+}
 
 
 function FetchCadreData(){
@@ -294,16 +323,22 @@ function FetchAllDepartment(){
 function FetchRoleData(){		
 			new MQL()
             .useCoreServer()
-			.setActivity("o.[FetchRoleData]")
-			.setData()
+			.setActivity("o.[FetchRole]")
+			.setData({"userType":"User"})
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("FetchRoleData",true)
-			if (rs.isValid("FetchRoleData")) {
-                roleMaster.value = res.result
+			let res = rs.getActivity("FetchRole",true)
+			if (rs.isValid("FetchRole")) {
+                // roleMaster.value = res.result
+                roleMaster.value = res.result.map((el)=>{
+                  return{
+                    label:el.roleName,
+                    value:el.roleId
+                  }
+                })
 			} else
 			 { 
-			rs.showErrorToast("FetchRoleData")
+			rs.showErrorToast("FetchRole")
 			}
 			})
 			
@@ -348,7 +383,9 @@ function FetchDistrictName() {
 }
 
 const InsertUserData = async () => {
+    console.log("########userDetails: ", userDetails.value)
     orgnizationIdAndEntityId()
+    console.log("########selectedRoleId: ", selectedRoles.value)
     const result = await $v.value.$validate();
 
     if (result) {
@@ -356,21 +393,25 @@ const InsertUserData = async () => {
     console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
-			.setActivity("o.[InsertUserData]")
+			.setActivity("o.[InsertUser]")
 			.setData({"cadreId":userDetails.value.cadreId,"departmentId":userDetails.value.departmentId,
             "designationId":userDetails.value.designationId,"districtName":userDetails.value.districtName,
             "email":userDetails.value.email,"entityId":userDetails.value.entityId,"fullName": userDetails.value.fullName,
             "loginEmail": userDetails.value.loginEmail,"mobile": userDetails.value.mobile, "password":userDetails.value.password,
-            "createdBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId,"userId":userDetails.value.userId})
+            "createdBy":loginId.value,"organizationId":userDetails.value.organizationId,"roleId":userDetails.value.roleId, "userId":userDetails.value.userId})
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("InsertUserData",true)
-			if (rs.isValid("InsertUserData")) {
-                changeFlag(0)
-                reloadPage()
+			let res = rs.getActivity("InsertUser",true)
+			if (rs.isValid("InsertUser")) {
+                console.log("User Inserted for auctionId: ", res.result.objectId)
+                userId.value = res.result.objectId
+                var data=sendData(userId.value)
+                console.log("########data: ", data)
+                UserRoleMapping(data)
+                console.log("User role mapping completed")
 			} else
 			 { 
-			rs.showErrorToast("InsertUserData")
+			rs.showErrorToast("InsertUser")
 			}
 			})
         } else {
@@ -380,6 +421,23 @@ const InsertUserData = async () => {
 			
 }
 
+function UserRoleMapping(data){
+    console.log("########data: ", data)
+    new MQL()
+    .useCoreServer()
+    .setActivity("o.[UserRoleMapping]")
+    .setData({"data":data})
+    .fetch()
+    .then(rs => {
+        let res = rs.getActivity("UserRoleMapping",true)
+        if (rs.isValid("UserRoleMapping")) {
+            console.log("UserRoleMapping", res.result)
+        } else
+         { 
+        rs.showErrorToast("UserRoleMapping")
+        }
+    })
+}
 
 const rules = computed(() => ({
     userDetails: {

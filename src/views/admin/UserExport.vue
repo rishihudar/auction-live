@@ -50,7 +50,7 @@
             >
                 <template #start>
                     <div class="fm-inner">
-                        <InputText v-model="filter" placeholder="Search By anything" />
+                        <InputText v-model="filter" placeholder="Search By Username" />
                         <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
                     </div>
                 </template>
@@ -68,23 +68,23 @@
                 <template #loading>Loading users data. Please wait.</template>
 
                 <!-- Additional columns -->
+                <Column field="username" header="Username">
+                    <template #body="{ data }">{{ data.username }}</template>
+                </Column>
                 <Column field="fullName" header="Full Name">
                     <template #body="{ data }">{{ data.fullName }}</template>
                 </Column>
-                <Column field="districtName" header="District Name">
-                    <template #body="{ data }">{{ data.district }}</template>
-                </Column>
-                <Column field="password" header="password">
+                <!-- <Column field="password" header="password">
                     <template #body="{ data }">{{ data.password }}</template>
-                </Column>
+                </Column> -->
                 <Column field="mobile" header="Mobile">
                     <template #body="{ data }">{{ data.mobileNumber }}</template>
                 </Column>
                 <Column field="email" header="Email">
                     <template #body="{ data }">{{ data.emailId }}</template>
                 </Column>
-                <Column field="username" header="Username">
-                    <template #body="{ data }">{{ data.username }}</template>
+                <Column field="districtName" header="District Name">
+                    <template #body="{ data }">{{ data.district }}</template>
                 </Column>
                 <Column field="entityName" header="Entity Name">
                     <template #body="{ data }">{{ data.entityName }}</template>
@@ -135,7 +135,7 @@ import Column from 'primevue/column';
 import { FilterMatchMode } from 'primevue/api';
 
 const expandedRows = ref([]);
-const perPage = ref(10);
+const perPage = ref(5);
 const totalRows = ref();
 const currentPage = ref(0);
 const filter = ref("");
@@ -144,7 +144,7 @@ let json_data = ref([]);
 let product = ref([]);
 const processingReportFields = {  
     'Username':'username',
-    'Password': 'password',
+    // 'Password': 'password',
     'Full Name': 'fullName',
     'District': 'district',
     'Entity Name': 'entityName',
