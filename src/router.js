@@ -761,6 +761,16 @@ const router = createRouter({
       component: loadAdminView("CurrentAuction"),
       meta: { title: "Current Auction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
     },
+    {
+      path: "/base64nonce",
+      name: "base64nonce",
+      component: loadAdminView("base64nonce"),
+      meta: {
+        title: "base64nonce",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+      },
+    },
 
   ],
 });
