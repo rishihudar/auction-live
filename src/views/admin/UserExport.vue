@@ -36,6 +36,8 @@
                 <JsonExcel :data="product" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="UserDetailReport.xlsx">
                     Excel Report
                 </JsonExcel>
+                <Button @click="navigateToAddUser">Add User</Button>
+
             </div>
     </div> 
     <div class="page-content">
@@ -132,8 +134,11 @@ import JsonExcel from "vue-json-excel3";
 import { login } from "../../store/modules/login";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { FilterMatchMode } from 'primevue/api';
+import Button from 'primevue/button';
+import { useRouter } from "vue-router";
 
+
+const router = useRouter();
 const expandedRows = ref([]);
 const perPage = ref(5);
 const totalRows = ref();
@@ -209,6 +214,10 @@ function UserExport() {
                 rs.showErrorToast("FetchUserData")
             }
         })
+}
+
+function navigateToAddUser() {
+    router.push({ name: "UserRegistration" });
 }
 
 onMounted(() => {

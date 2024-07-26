@@ -3,6 +3,7 @@
         <div class="card-header">
             <div class="ch-title">Add</div>
         </div>
+        <Toast/>
         <div class="form-grid">
             <div class="col-span-6">
                 <div class="fm-group">
@@ -162,7 +163,7 @@
                 </div>
                 <div class="col-span-6">
                     <div class="fm-group">
-                        <Button @click="reloadPage()" severity="danger" label="Cancel"></Button>
+                        <Button @click="navigateToAddUser" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
                 <!-- <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button> -->
@@ -181,6 +182,10 @@ import Dropdown from 'primevue/dropdown';
 import { login } from "../../store/modules/login";
 import { helpers, required } from '@vuelidate/validators';
 import MultiSelect from 'primevue/multiselect';
+import { useRouter } from "vue-router";
+import { useToast } from "primevue/usetoast";
+
+const router = useRouter();
 
 const userDetails = ref( {
         userId: '',
@@ -218,6 +223,7 @@ const organizationMaster = ref([]);
 const flag = ref(0)
 const loading = ref(true);
 const userData = ref([]);
+const toast = useToast();
 
 
 
@@ -239,6 +245,10 @@ function sendData(userId) {
       });
     });
     return data
+}
+
+function navigateToAddUser() {
+    router.push({ name: "UserExport" });
 }
 
 function FetchOrganizationId(){  
@@ -432,6 +442,7 @@ function UserRoleMapping(data){
         let res = rs.getActivity("UserRoleMapping",true)
         if (rs.isValid("UserRoleMapping")) {
             console.log("UserRoleMapping", res.result)
+            toast.add({ severity: 'success', summary: 'Success', detail: 'User Added Successfully', life: 3000 });
         } else
          { 
         rs.showErrorToast("UserRoleMapping")
