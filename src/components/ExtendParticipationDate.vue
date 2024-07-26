@@ -212,6 +212,7 @@ function extendParticipationEndDate() {
       let res = rs.getActivity("UpdateExtendParticipationEndDate", true);
       if (rs.isValid("UpdateExtendParticipationEndDate")) {
         NotifyBiddersParticipationEndDateExtension();
+        NotifyAuctionExtensionBidders();
       } else {
         rs.showErrorToast("UpdateExtendParticipationEndDate");
       }
@@ -238,6 +239,30 @@ function NotifyBiddersParticipationEndDateExtension() {
     .then((rs) => {
       let res = rs.getActivity("FetchAllBiddersContactDetails", true);
       if (rs.isValid("FetchAllBiddersContactDetails")) {
+      } else {
+        rs.showErrorToast("FetchAllBiddersContactDetails");
+      }
+    });
+}
+
+function NotifyAuctionExtensionBidders() {
+//   console.log(
+//     "endDate",
+//     moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss")
+//   );
+  new MQL()
+    .useNotificationServer()
+    .setActivity("r.[NotifyAuctionExtensionBidders]")
+    .setData({
+      auctionId: props.auctionCode,
+      roleId: 1,
+      statusId: 1,
+      //orgName:login().loginDetails.organizationName
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("NotifyAuctionExtensionBidders", true);
+      if (rs.isValid("NotifyAuctionExtensionBidders")) {
       } else {
         rs.showErrorToast("FetchAllBiddersContactDetails");
       }
