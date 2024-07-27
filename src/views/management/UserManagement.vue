@@ -300,7 +300,7 @@
                         <div class="fm-group">
                             <label class="fm-label" for="password">Password</label>
                             <div class="fm-inner">
-                                <InputText id="password" v-model="userDetails.password" type="password" />
+                                <InputText id="password" v-model="userDetails.password" type="password" readonly/>
                             </div>
                             <div id="password-help" class="fm-info">Enter your password</div>
                             <div v-if="$v.userDetails.password.$error" class="fm-error">
