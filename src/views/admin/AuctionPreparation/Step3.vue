@@ -145,7 +145,7 @@
                         <label class="fm-label" for="Modifier Value">Modifier Value</label>
                         <div class="fm-inner">
                             <InputNumber v-model="modifierValue" inputId="minmax-buttons" mode="decimal" showButtons
-                                :min="0" />
+                                :min="1" />
                         </div>
                         <div v-if="$v.modifierValue.$error" class="fm-error">
                             {{ $v.modifierValue.$errors[0].$message }}
@@ -278,6 +278,7 @@ const { auctionId, config, multiplyingFactor } = defineProps({
     }
 })
 
+const categoryId = ref('');
 const confirm = useConfirm();
 const toast = useToast();
 const visible = ref(false);
@@ -353,7 +354,7 @@ const inventoryAreaDetails = ref({
     inventoryHierarchy: '',
 });
 
-const inventoryCategoryId = getPropertyCategoryId.value;
+const inventoryCategoryId = ref('');
 const parentInventoryId = 0
 
 const emit = defineEmits({
@@ -374,7 +375,9 @@ const handleClick = (input) => {
 };
 
 
-function FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
+function fetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId) {
+    console.log("!!!!!!!!!!!inventoryCategoryId", inventoryCategoryId);
+    console.log("!!!!!!!!!parentInventoryId", parentInventoryId);
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
@@ -395,7 +398,7 @@ const fetchMCNameFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -412,7 +415,7 @@ const fetchLocationFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -429,7 +432,7 @@ const fetchAreaFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -460,7 +463,25 @@ function FetchAllModifierValueChange() {
         });
 }
 
-
+ const fetchInventoryCategoryId = async () =>{
+    new MQL()
+    .useManagementServer()
+    .setActivity('o.[FetchInventoryCategoryId]')
+    .setData({auctionId: auctionId})
+    .fetch()
+    .then((rs) => {
+        let res = rs.getActivity('FetchInventoryCategoryId', true);
+        if (rs.isValid('FetchInventoryCategoryId')) {
+            console.log(res.result);
+            categoryId.value = res.result.propertyCategoryId;
+            inventoryCategoryId.value = categoryId.value;
+            console.log("##########printing categoryId ", categoryId.value)
+            fetchPropertiesFromInventoryMaster(inventoryCategoryId.value, parentInventoryId);
+        } else {
+            rs.showErrorToast('FetchInventoryCategoryId');
+        }
+    });
+}
 
 
 const onAdvancedUpload = async (event) => {
@@ -616,7 +637,7 @@ const AddStep3AuctionData = async () => {
                 documentFilePath: filePath.value,
                 documentPath: "/" + filePath.value,
                 documentFileName: fileName.value,
-                inventoryCategoryId: getPropertyCategoryId.value,
+                inventoryCategoryId: categoryId.value,
                 modifiedByUserId: loginId.value,
                 modifiedByRoleId: role.value.roleId,
                 statusId: statusId.value,
@@ -921,9 +942,11 @@ function fetchAvailablePropertyCount(id) {
 }
 
 onMounted(() => {
-    FetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
+    fetchInventoryCategoryId();
+    // fetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventoryId);
     FetchAllModifierValueChange();
     fetchDocumentsValidationDetails();
+
     //FetchInventoryMCNamefromInventoryMaster();
     FetchAuctionStatus('AUCTION_ITEM_PENDING');
     addItem();

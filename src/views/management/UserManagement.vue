@@ -300,7 +300,7 @@
                         <div class="fm-group">
                             <label class="fm-label" for="password">Password</label>
                             <div class="fm-inner">
-                                <InputText id="password" v-model="userDetails.password" type="password" />
+                                <InputText id="password" v-model="userDetails.password" type="password" readonly/>
                             </div>
                             <div id="password-help" class="fm-info">Enter your password</div>
                             <div v-if="$v.userDetails.password.$error" class="fm-error">
@@ -575,6 +575,14 @@ function FetchOrganizationId(){
 const InsertUserData = async () => {
     const result = await $v.value.$validate();
 
+    //This is added to set entityId and organizationId to 0 for role SUPER_ADMIN
+    // if(userDetails.value.roleId == 2){
+    //     console.log("EntityIdBefore: ", userDetails.value.entityId , "OrganizationIdBefore: ", userDetails.value.organizationId) 
+    //     userDetails.value.entityId = 0
+    //     userDetails.value.organizationId = 0
+    //     console.log("EntityIdAfter: ", userDetails.value.entityId , "OrganizationIdAfter: ", userDetails.value.organizationId)
+    // }
+
     if (result) {
 	// Automatically generated
     console.log ("login id################: ", loginId.value, userDetails.value)
@@ -702,6 +710,7 @@ function FetchRoleData(){
 			let res = rs.getActivity("FetchRoleData",true)
 			if (rs.isValid("FetchRoleData")) {
                 roleMaster.value = res.result
+                console.log("!!!!!!!!!!RoleMaster: ", roleMaster.value)
 			} else
 			 { 
 			rs.showErrorToast("FetchRoleData")
