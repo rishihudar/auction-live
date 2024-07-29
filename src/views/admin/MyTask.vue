@@ -91,10 +91,10 @@ const currentPage = ref(0);
 const filter = ref("");
 
 function handlePageChange(event) {
-  console.log("event", event);
+  //console.log("event", event);
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  //console.log("event.page", event.page);
   fetchAuctionDetailsForMyTask();
 }
 
@@ -129,14 +129,14 @@ function fetchAuctionDetailsForMyTask() {
     .then(function (rs) {
       let res = rs.getActivity("FetchAuctionDetailsForMyTask", true);
       if (rs.isValid("FetchAuctionDetailsForMyTask")) {
-        console.log("Fetched auction details:", res.result.auctionDetails);
-        //console.log("page.value", page);
+        //console.log("Fetched auction details:", res.result.auctionDetails);
+        ////console.log("page.value", page);
         auctionDetails.value = res.result.auctionDetails;
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length", auctionDetails.value.length);
+        //console.log("auctionDetails.value.length", auctionDetails.value.length);
         for (var i = 0; i < auctionDetails.value.length; i++) {
           auctionDetails.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchAuctionDetailsForMyTask");

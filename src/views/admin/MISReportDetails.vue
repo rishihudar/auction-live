@@ -43,14 +43,14 @@ const userRole = ref();
 const cardsArray = ref([]);
 
 function FetchUserRole() {
-  console.log("Role-", loginStore.currentRole.roleId);
+  //console.log("Role-", loginStore.currentRole.roleId);
   userRole.value = loginStore.currentRole.roleId;
 }
 
 function navigateToAbout(card) {
-  console.log("Card Clicked");
-  console.log("card-", card.card);
-  console.log("card url-", card.url);
+  //console.log("Card Clicked");
+  //console.log("card-", card.card);
+  //console.log("card url-", card.url);
   router.push({path:card.url});
 }
 
@@ -64,7 +64,7 @@ function fetchChildCards(){
 			let res = rs.getActivity("FetchChildCardDetails",true)
 			if (rs.isValid("FetchChildCardDetails")) {
         cardsArray.value = res.result.childCards;
-        console.log("cards", cardsArray.value);
+        //console.log("cards", cardsArray.value);
 			} else
 			 { 
 			rs.showErrorToast("FetchChildCardDetails")

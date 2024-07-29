@@ -177,12 +177,12 @@ onMounted(() => {
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  //console.log("event.page", event.page);
   fetchConcludedAuctionsUser();
 }
 
 function fetchConcludedAuctionsUser() {
-  console.log("Selected Entity Id", login().loginDetails);
+  //console.log("Selected Entity Id", login().loginDetails);
   new MQL()
   .useManagementServer()
     .setActivity("r.[FetchConcludedAuctionsUser]")
@@ -199,14 +199,14 @@ function fetchConcludedAuctionsUser() {
       let res = rs.getActivity("FetchConcludedAuctionsUser", true);
       if (rs.isValid("FetchConcludedAuctionsUser")) {
         products.value = res.result.concludedAuctions;
-        console.log(res.result, "concluded result**********");
-        console.log(res.result.concludedAuctions,"concluded auction@@@@@@@")
+        //console.log(res.result, "concluded result**********");
+        //console.log(res.result.concludedAuctions,"concluded auction@@@@@@@")
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("totalRows@@@@",totalRows)
-        console.log("auctionDetails.value.length", products.value.length);
+        //console.log("totalRows@@@@",totalRows)
+        //console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchConcludedAuctionsUser");
@@ -217,7 +217,7 @@ function fetchConcludedAuctionsUser() {
 // Function to generate PDF
 async function fetchAuctionDetailsReport(auctionId) {
   try {
-    console.log("Selected Entity Id", login().loginDetails);
+    //console.log("Selected Entity Id", login().loginDetails);
     const rs = await new MQL()
       .useManagementServer()
       .setActivity("r.[FetchAuctionDetailReportByAuctionId]")
@@ -228,10 +228,10 @@ async function fetchAuctionDetailsReport(auctionId) {
 
     const res = rs.getActivity("FetchAuctionDetailReportByAuctionId", true);
     if (rs.isValid("FetchAuctionDetailReportByAuctionId")) {
-      console.log(res.result, "auctionDetailsReport result**********");
+      //console.log(res.result, "auctionDetailsReport result**********");
       auctionDetailsReport.value = res.result.fetchAuctionDetailReportByAuctionId; // Update the ref value
       auctionDetailsReport1.value = res.result.fetchEntityNameAndAuctionCode;
-      console.log("%%%%%%%", auctionDetailsReport1)
+      //console.log("%%%%%%%", auctionDetailsReport1)
 
       for (var i = 0; i < auctionDetailsReport.value.length; i++) {
         auctionDetailsReport.value[i].srNo = i + 1;
@@ -249,7 +249,7 @@ async function fetchAuctionDetailsReport(auctionId) {
 
 async function fetchAuctionReportForH1(auctionId) {
   try {
-    console.log("Selected Entity Id", login().loginDetails);
+    //console.log("Selected Entity Id", login().loginDetails);
     const rs = await new MQL()
       .useManagementServer()
       .setActivity("r.[FetchAuctionReportForH1]")
@@ -260,7 +260,7 @@ async function fetchAuctionReportForH1(auctionId) {
 
     const res = rs.getActivity("FetchAuctionReportForH1", true);
     if (rs.isValid("FetchAuctionReportForH1")) {
-      console.log(res.result, "auctionH1Report result!@!@!@!@!@");
+      //console.log(res.result, "auctionH1Report result!@!@!@!@!@");
 
       // auctionH1Report.value = res.result.fetchAuctionReportForH1; // Update the ref value
       auctionH1Report.value = res.result.fetchRoundWiseH1Report; // Update the ref value
@@ -268,7 +268,7 @@ async function fetchAuctionReportForH1(auctionId) {
       for (var i = 0; i < auctionH1Report.value.length; i++) {
         auctionH1Report.value[i].srNo = i + 1;
       }
-      // console.log("$$$$$")
+      // //console.log("$$$$$")
       return res.result; // Return the result
     } else {
       rs.showErrorToast("FetchAuctionReportForH1");
@@ -352,13 +352,13 @@ async function generatePdfH1(auctionId) {
 }
 
 async function showModal(auctionId) {
-  console.log("#####", auctionId);
+  //console.log("#####", auctionId);
   await fetchAuctionDetailsReport(auctionId);
   displayModal.value = true;
 }
 
 async function showModalForH1(auctionId) {
-  console.log("#####", auctionId);
+  //console.log("#####", auctionId);
   await fetchAuctionReportForH1(auctionId);
   displayModal1.value = true;
 }

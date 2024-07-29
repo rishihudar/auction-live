@@ -134,7 +134,7 @@ function viewPublishDetails() {
   //   auctionId.value = auctionId;
   //   auctionCode.value = auctionCode
   fetchAllStepsAuctionPreview(), (visible.value = true);
-  console.log("auctionId", props.auctionId, "auctionCode", auctionCode);
+  //console.log("auctionId", props.auctionId, "auctionCode", auctionCode);
 }
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
@@ -147,12 +147,12 @@ function fetchAllStepsAuctionPreview() {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
       dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
       dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log(
-        "dbStartDate.value",
-        dbStartDate.value,
-        "dbEndDate.value",
-        dbEndDate.value
-      );
+      // console.log(
+      //   "dbStartDate.value",
+      //   dbStartDate.value,
+      //   "dbEndDate.value",
+      //   dbEndDate.value
+      // );
       selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
@@ -168,13 +168,13 @@ function UpdateExtendParticipationEndDate() {
       "minute"
     )
   ) {
-    console.log(
-      "log-",
-      moment(selectedEndDate.value).isSameOrBefore(
-        moment(selectedStartDate.value),
-        "minute"
-      )
-    );
+    // console.log(
+    //   "log-",
+    //   moment(selectedEndDate.value).isSameOrBefore(
+    //     moment(selectedStartDate.value),
+    //     "minute"
+    //   )
+    // );
     alert(`Start Date should not be equal or after End Date !`);
   } else {
     extendParticipationEndDate();
@@ -190,11 +190,11 @@ function UpdateExtendParticipationEndDate() {
   }
 }
 function extendParticipationEndDate() {
-  console.log(
-    "endDate-",
-    moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss")
-  );
-  console.log("auctionId-", props.auctionId);
+  // console.log(
+  //   "endDate-",
+  //   moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss")
+  // );
+  // console.log("auctionId-", props.auctionId);
 
   new MQL()
     .useManagementServer()

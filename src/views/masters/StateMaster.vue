@@ -240,7 +240,7 @@ const filters = ref({
 function changeFlag(newValue) {
     flag.value = newValue
     ref(flag)
-    console.log("getting from change function", flag)
+    //console.log("getting from change function", flag)
 }
 
 function FetchStateName() {
@@ -252,7 +252,7 @@ function FetchStateName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllState', true);
             if (rs.isValid('FetchAllState')) {
-                console.log(res.result);
+                //console.log(res.result);
                 //states.value = res.result;
                 states.value = res.result.map(state => ({
                     ...state,
@@ -273,7 +273,7 @@ function FetchCountryName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllCountries', true);
             if (rs.isValid('FetchAllCountries')) {
-                console.log(res.result);
+                //console.log(res.result);
                 countries.value = res.result;
 
             } else {
@@ -284,7 +284,7 @@ function FetchCountryName() {
 }
 function insertState(stateData) {
     if (stateData.stateName == "") {
-        console.log("Please provide all Details")
+        //console.log("Please provide all Details")
 
     } else {
 
@@ -297,8 +297,8 @@ function insertState(stateData) {
             .then((rs) => {
                 let res = rs.getActivity('InsertState', true);
                 if (rs.isValid('InsertState')) {
-                    console.log(res.result);
-                    console.log("stateData from Insert", stateData);
+                    //console.log(res.result);
+                    //console.log("stateData from Insert", stateData);
                 } else {
                     rs.showErrorToast('InsertState');
                 }
@@ -315,8 +315,8 @@ function updateState(stateData) {
         .then((rs) => {
             let res = rs.getActivity('UpdateStateById', true);
             if (rs.isValid('UpdateStateById')) {
-                console.log(res.result);
-                console.log("stateData update", stateData);
+                //console.log(res.result);
+                //console.log("stateData update", stateData);
                 // Optionally, you can reload the page or update the state list after insertion
 
             } else {
@@ -327,7 +327,7 @@ function updateState(stateData) {
 }
 function reloadPage() {
     window.location.reload();
-    console.log("we are reloading page")
+    //console.log("we are reloading page")
 }
 function editState(state) {
     // Set stateData to the values of the selected state
@@ -335,7 +335,7 @@ function editState(state) {
     stateData.value = { ...stateData.value, isUnionTerritories: stateData.value.isUnionTerritories == 'Yes' ? true : false };
 
 
-    console.log("from edit function", stateData)
+    //console.log("from edit function", stateData)
     // Update the flag to indicate edit mode
     changeFlag(2);
 }
@@ -348,7 +348,7 @@ function deleteState(data) {
         .then((rs) => {
             let res = rs.getActivity('DeleteStateById', true);
             if (rs.isValid('DeleteStateById')) {
-                console.log(res.result);
+                //console.log(res.result);
             } else {
                 rs.showErrorToast('DeleteStateById');
             }

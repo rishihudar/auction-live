@@ -237,13 +237,13 @@ function NotifyScheduledAuctionBidders(){
 onMounted(() => {
     // Fetch the users  to be shown in dropdown
   FetchUsers();
-  console.log("Auc Code",props.auctionCode);
-  console.log(props.itemList);
-  console.log(props.auctionId);
-  console.log("EntityID", props.entityId);
-  console.log(props.startDate);
-  console.log("@@@@@@@@@@@@@@@", props.endDate);
-  console.log("#############", props.users);
+  //console.log("Auc Code",props.auctionCode);
+  //console.log(props.itemList);
+  //console.log(props.auctionId);
+  //console.log("EntityID", props.entityId);
+  //console.log(props.startDate);
+  //console.log("@@@@@@@@@@@@@@@", props.endDate);
+  //console.log("#############", props.users);
 });
 
 function reloadPage() {

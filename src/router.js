@@ -233,7 +233,7 @@ const router = createRouter({
       meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false,isHeaderVisible: true, requiresAuth: false  },
       beforeEnter: (to,from) => {
         const loginStore = login()
-      console.log(to.meta.roles,loginStore.roles);
+      //console.log(to.meta.roles,loginStore.roles);
       if (loginStore.roles.findIndex((r) => r.roleCode == 'ROLE_BIDDER') > -1) {
         toaster.error('Access Denied')
         return false
@@ -796,7 +796,7 @@ router.beforeEach((to, from, next) => {
         next({ path: '/' })
     } else {
       const loginStore = login()
-      console.log(to.meta.roles,loginStore.role?.roleCode);
+      //console.log(to.meta.roles,loginStore.role?.roleCode);
       let allowed = to.meta.roles?.findIndex((r) => r == loginStore.role?.roleCode) > -1
       if (!allowed) {
         toaster.error('Access Denied')

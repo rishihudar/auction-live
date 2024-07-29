@@ -61,7 +61,7 @@ const AuctionStore = useAuctionPreparation()
 // const {  } = storeToRefs(AuctionStore)
 
 function setAuctionId(id) {
-    console.log(id)
+    //console.log(id)
     AuctionStore.setLastInsertedAuctionId(id)
 }
 

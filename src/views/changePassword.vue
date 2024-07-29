@@ -127,7 +127,7 @@ function ChangePasswordWithHashing() {
         .fetch()
         .then((rs) => {
             let res = rs.getActivity("ChangePasswordWithHashing", true);
-            console.log("res", res.result);
+            //console.log("res", res.result);
             if (rs.isValid("ChangePasswordWithHashing")) {
             } else {
                 rs.showErrorToast("ChangePasswordWithHashing");
@@ -135,9 +135,9 @@ function ChangePasswordWithHashing() {
         });
 }
 function resetPassword() {
-    console.log("Email:", loginStore.loginDetails.username);
-    console.log("password:", password.value);
-    console.log("confirmPassword:", confirmPassword.value);
+    //console.log("Email:", loginStore.loginDetails.username);
+    //console.log("password:", password.value);
+    //console.log("confirmPassword:", confirmPassword.value);
     ChangePasswordWithHashing();
     toast.add({
         severity: "success",

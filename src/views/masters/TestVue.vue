@@ -45,11 +45,11 @@ const $v = useVuelidate(rules,{
   username
 });
 
-console.log("printing..............", $v);
+//console.log("printing..............", $v);
 function submitForm() {
   if (!$v.value.username.$invalid) {
     // Perform form submission logic here
-    console.log('Form submitted successfully');
+    //console.log('Form submitted successfully');
   }else {
 
 toaster.error("Invalid Details")
@@ -109,7 +109,7 @@ const rules = computed(() => {
 });
 
 const $v = useVuelidate(rules, forData);
-console.log("printing..............", $v);
+//console.log("printing..............", $v);
 
 
 const submitForm = async () => {
@@ -200,7 +200,7 @@ const darkMode = ref(false);
 function submitForm() {
   if (!$v.$invalid) {
     // Perform form submission logic here
-    console.log('Form submitted successfully');
+    //console.log('Form submitted successfully');
   }
 }
 

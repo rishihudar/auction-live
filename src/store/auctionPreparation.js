@@ -18,15 +18,15 @@ export const useAuctionPreparation = defineStore("auctionPreparation", {
     actions: {
         setLastInsertedAuctionId(id) {
           this.lastInsertedAuctionId = id;
-          console.log("lastInsertedAuctionId from auctionPreparation Store: ", this.lastInsertedAuctionId);
+          //console.log("lastInsertedAuctionId from auctionPreparation Store: ", this.lastInsertedAuctionId);
         },
         setPropertyCategoryId(id) {
           this.propertyCategoryId = id;
-          console.log("propertyCategoryId from auctionPreparation Store: ", this.propertyCategoryId);
+          //console.log("propertyCategoryId from auctionPreparation Store: ", this.propertyCategoryId);
         },
         setIsClicked(value) {
           this.isClicked = value;
-          console.log("isClicked from auctionPreparation Store: ", this.isClicked);
+          //console.log("isClicked from auctionPreparation Store: ", this.isClicked);
         },
       },
 });

@@ -146,9 +146,9 @@ function fetchInventonryCategories() {
     .then((rs) => {
       let res = rs.getActivity("FetchInventoryCategories", true);
       if (rs.isValid("FetchInventoryCategories")) {
-        // console.log("fetchInventonryCategories result", res.result);
+        // //console.log("fetchInventonryCategories result", res.result);
         inventoryCategories.value = res.result;
-        // console.log("Inventory Categories", inventoryCategories.value);
+        // //console.log("Inventory Categories", inventoryCategories.value);
       } else {
         rs.showErrorToast("FetchInventoryCategories");
       }
@@ -160,7 +160,7 @@ onBeforeMount(() => {
 });
 
 function showSelectedMC(){
-console.log('selected ',selectedEntity.value)
+//console.log('selected ',selectedEntity.value)
 }
 
 const sheet = ref();
@@ -172,7 +172,7 @@ const myFile = ref();
 function onChange(event) {
   isFileSelected.value = true;
   myFile.value = event.files[0];
-  console.log(event.files[0]);
+  //console.log(event.files[0]);
   sheet.value = null;
   // errortemp = false
   file.value = event.files ? myFile.value : null;
@@ -182,15 +182,15 @@ function onChange(event) {
       /* Parse data */
       const bstr = e.target.result;
       const wb = XLSX.read(bstr, { type: "binary" });
-      console.log(wb, "NewWorkBook");
+      //console.log(wb, "NewWorkBook");
       /* Get first worksheet */
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       /* Convert array of arrays */
       const workSheetDataArray = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      console.log("WorksheetData in Array Format", workSheetDataArray);
+      //console.log("WorksheetData in Array Format", workSheetDataArray);
       const workSheetDataJson = XLSX.utils.sheet_to_json(ws, { header: 0 });
-      // console.log('WorksheeetData in Json Key:Value Format', workSheetDataJson)
+      // //console.log('WorksheeetData in Json Key:Value Format', workSheetDataJson)
       sheet.value = workSheetDataJson;
       columns.value = workSheetDataArray[0];
 
@@ -203,16 +203,16 @@ function onChange(event) {
       var arraysMatch = columns.value.every((item) =>
         columnTempNames.value.includes(item)
       );
-      console.log("columns.value",columns.value)
-      console.log("ColumnTempNames.value",columnTempNames.value)
+      //console.log("columns.value",columns.value)
+      //console.log("ColumnTempNames.value",columnTempNames.value)
       if (arraysMatch) {
-        console.log("The arrays match.");
+        //console.log("The arrays match.");
         transformedColumns.value = columns.value.map((cNames) => {
           return { field: cNames };
-          //console.log('transformedColumns',transformedColumns.value)
+          ////console.log('transformedColumns',transformedColumns.value)
         });
       } else {
-        console.log("The arrays do not match.");
+        //console.log("The arrays do not match.");
         alert("Invalid Template");
         isFileSelected.value=false;
         // router.push({path:'/inventoryMasterCard'})
@@ -238,9 +238,9 @@ function onChange(event) {
     })
     .then((response) => {
       // Handle successful upload response
-      console.log(response.data);
+      //console.log(response.data);
       // Handle successful upload response
-      console.log("Count of rows inserted into db:",response.data);
+      //console.log("Count of rows inserted into db:",response.data);
       if(response.data==0){
         alert("Data Already Exists in Inventory and"+ response.data +" Data Inserted!");
       }else if(response.data>0){
@@ -261,7 +261,7 @@ const filePath3 = ref();
 async function cdnProfileUpload(filetoupload) {
   
   let formData = new FormData();
-  // console.log(event.files[0])
+  // //console.log(event.files[0])
   formData.append("file", filetoupload); // append your file as 'file' in formdata.
   new MQLCdn()
     .enablePageLoader(true)
@@ -278,16 +278,16 @@ async function cdnProfileUpload(filetoupload) {
       // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
       if (res.isValid()) {
         // returns uploaded file url..
-        console.log("Uploaded File URL", res.uploadedFileURL())
+        //console.log("Uploaded File URL", res.uploadedFileURL())
        let path = res.uploadedFileURL()
        let pathcdn =  path.cdnServer;
        let actual =path.filePath;
         filePath3.value = `${pathcdn}/${actual}`;
 
 
-       console.log("path",filePath3.value)
-       console.log("filename",filetoupload.name)
-       console.log("userid",userID.value)
+       //console.log("path",filePath3.value)
+       //console.log("filename",filetoupload.name)
+       //console.log("userid",userID.value)
         InsertUploadedFileInDB(filetoupload.name,filePath3.value,filePath3.value,userID.value)
        
        
@@ -313,7 +313,7 @@ function InsertUploadedFileInDB(Filename,Filepath1,Filepath2,Userid){
         
        
         toaster.success("file uploaded.");
-        console.log("RESULT:" , res.result)
+        //console.log("RESULT:" , res.result)
         router.push({path:'/inventoryMasterCard'})
        // window.location.reload();
       
@@ -338,7 +338,7 @@ function fetchInventoryTempColumns() {
     .then((rs) => {
       let res = rs.getActivity("FetchInventoryTemplateColumns", true);
       if (rs.isValid("FetchInventoryTemplateColumns")) {
-        console.log("FetchInventoryTemplateColumns", res.result);
+        //console.log("FetchInventoryTemplateColumns", res.result);
         columnTempNames.value = res.result[0].columnNames;
       } else {
         rs.showErrorToast("FetchInventoryTemplateColumns");
@@ -350,7 +350,7 @@ function fetchInventoryTempColumns() {
 const mcNames = ref();
 const selectedEntity = ref();
 function fetchEntitiesList(){
-   console.log('orgId',organizationId.value)
+   //console.log('orgId',organizationId.value)
 			new MQL()
       .useCoreServer()
 			.setActivity("o.[FetchEntitiesForInventoryMaster]")
@@ -359,7 +359,7 @@ function fetchEntitiesList(){
 			 .then(rs => {
 			let res = rs.getActivity("FetchEntitiesForInventoryMaster",true)
 			if (rs.isValid("FetchEntitiesForInventoryMaster")) {
-        console.log('Entities List',res.result)
+        //console.log('Entities List',res.result)
         mcNames.value = res.result
 			} else
 			 { 
@@ -388,7 +388,7 @@ function fetchDocumentsValidationDetails() {
                     docSize.value = item.fileSize;
                     docType.value = item.fileType;
                     docTypeId.value = item.typeId;
-                    console.log("docName.value", docName.value);
+                    //console.log("docName.value", docName.value);
                 }
             });
         })

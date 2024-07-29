@@ -203,7 +203,7 @@ const visible = ref(false);
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  //console.log("event.page", event.page);
   AuctionList();
 }
 async function AuctionList() {
@@ -230,7 +230,7 @@ async function AuctionList() {
         totalRows.value = res.result.rowCount.totalRows;
         for (var i = 0; i < customers.value.length; i++) {
           customers.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchAuctionsWithDraftedStatus");
@@ -251,11 +251,11 @@ async function AuctionList() {
 
 //            let res = rs.getActivity("FetchAuctionDetailsByAuctionId", true)
 //            if (rs.isValid("FetchAuctionDetailsByAuctionId")) {
-//                console.log(res)
+//                //console.log(res)
 //                res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
 //                res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
 //                const auctionDetail = res.result.fetchAuctionDetails;
-//                console.log(auctionDetail,"auctionDetails")
+//                //console.log(auctionDetail,"auctionDetails")
 
 //                // Map documents to an object with documentTypeName as key and documentPath as value
 //                const documentsMap = {};
@@ -267,7 +267,7 @@ async function AuctionList() {
 //                auctionDetail.documentsMap = documentsMap;
 
 //                auctionDetails.value.push(auctionDetail);
-//                console.log(auctionDetails.value, "auctionDetails.value");
+//                //console.log(auctionDetails.value, "auctionDetails.value");
 
 //                // You can access document paths using auctionDetail.documentsMap in the template
 //            } else {

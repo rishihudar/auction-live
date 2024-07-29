@@ -151,27 +151,27 @@ const upcomingFlag = ref(0)
 const selectedOption = ref(null);
 
 function selectRole(selectedRole) {
-    console.log("Rolecode", selectedRole.roleName);
-    console.log("roleId", selectedRole.roleId);
+    //console.log("Rolecode", selectedRole.roleName);
+    //console.log("roleId", selectedRole.roleId);
     selectedRoleId.value = selectedRole.roleId;
 
 }
 function selectCard(selectedCard) {
-    console.log("Rolecode", selectedCard.cardName);
-    console.log("cardId", selectedCard.cardId);
+    //console.log("Rolecode", selectedCard.cardName);
+    //console.log("cardId", selectedCard.cardId);
     selectedCardId.value = selectedCard.cardId;
 }
 function selectBidderType(selectedBidder) {
-    console.log("Type", selectedBidder.name);
+    //console.log("Type", selectedBidder.name);
     //onsole.log("cardId", selectedBidder.bidderId);
     selectedUserType.value = selectedBidder.name;
 }
 
 function selectParentCard(selectedParentCard) {
-    console.log("Type", selectedParentCard.cardName);
+    //console.log("Type", selectedParentCard.cardName);
     //onsole.log("cardId", selectedBidder.bidderId);
     selectedParentId.value = selectedParentCard.cardId;
-    console.log("CardId",selectedParentCard.cardId);
+    //console.log("CardId",selectedParentCard.cardId);
 }
 
 function fetchRoles() {
@@ -186,13 +186,13 @@ function fetchRoles() {
         .then(rs => {
             let res = rs.getActivity("FetchRolesForDashboardUI", true)
             if (rs.isValid("FetchRolesForDashboardUI")) {
-                console.log("result", res.result.roles);
+                //console.log("result", res.result.roles);
                 roles.value = res.result.roles;
                 cards.value = res.result.cards;
                 parentCards.value = res.result.parentCards;
 
                 //bidderType.value = res.result.bidderType;
-                console.log("bidderType", bidderType.value);
+                //console.log("bidderType", bidderType.value);
             } else {
                 rs.showErrorToast("FetchRolesForDashboardUI")
             }
@@ -202,10 +202,10 @@ function fetchRoles() {
 function addCard(value) {
     if(isParent.value==0){
         isParent.value=0
-        console.log("inside if ",isParent.value);
+        //console.log("inside if ",isParent.value);
     }else{
         isParent.value=selectedParentId.value
-        console.log("inside else ",isParent.value);
+        //console.log("inside else ",isParent.value);
     }
     new MQL()
         .useManagementServer()
@@ -225,8 +225,8 @@ function addCard(value) {
         .then(rs => {
             let res = rs.getActivity("InsertDashboardCard", true)
             if (rs.isValid("InsertDashboardCard")) {
-                console.log(cardName.value);
-                console.log(path.value);
+                //console.log(cardName.value);
+                //console.log(path.value);
                 fetchRoles();
                 isAdding.value = true;
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Data added successfully', life: 3000 });

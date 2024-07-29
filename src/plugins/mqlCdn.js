@@ -97,7 +97,7 @@ class MQLCdn {
               resolve(new Response(obj))
             })
             .catch(error => {
-              console.log('fail error', error.message)
+              //console.log('fail error', error.message)
               let obj = {}
               obj.data = {}
               if (docId !== null && document.getElementById(docId) !== null) {
@@ -179,7 +179,7 @@ class MQLCdn {
               resolve(new Response(obj))
             })
             .catch(error => {
-              console.log('fail error', error.message)
+              //console.log('fail error', error.message)
               let obj = {}
               obj.data = {}
               if (docId !== null && document.getElementById(docId) !== null) {
@@ -239,7 +239,7 @@ class MQLCdn {
         })
       }).catch(error => {
         // Handling development related errors
-        console.log(error)
+        //console.log(error)
         if (isDevelopment) {
           alert(error)
         }
@@ -272,7 +272,7 @@ class MQLCdn {
         })
       }).catch(error => {
         // Handling development related errors
-        console.log(error)
+        //console.log(error)
         if (isDevelopment) {
           alert(error)
         }
@@ -365,7 +365,7 @@ class MQLCdn {
             a.click()
           })
           .catch(error => {
-            console.log('fail error', error.message)
+            //console.log('fail error', error.message)
             let obj = {}
             obj.data = {}
             if (this.showPageLoader) {
@@ -379,7 +379,7 @@ class MQLCdn {
           })
       }).catch(error => {
         // Handling development related errors
-        console.log(error)
+        //console.log(error)
         if (isDevelopment) {
           alert(error)
         }

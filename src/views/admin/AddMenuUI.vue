@@ -96,26 +96,26 @@ const menuNameAdded = ref(true);
 const upcomingFlag = ref(null)
 
 function selectMenu(selectedMenu) {
-    console.log("selectedMenu", selectedMenu.menuName);
-    console.log("MenuId", selectedMenu.menuId);
+    //console.log("selectedMenu", selectedMenu.menuName);
+    //console.log("MenuId", selectedMenu.menuId);
     selectedMenuId.value = selectedMenu.menuId;
 }
 // function selectRole(selectedRole) {
 //     for (let i = 0; i < selectedRole.length; i++) {
 //         const element = selectedRole[i];
-//         console.log("element",element);
-//         console.log("Rolecode", selectedRole[i].roleName);
-//         console.log("roleId", selectedRole[i].roleId);
+//         //console.log("element",element);
+//         //console.log("Rolecode", selectedRole[i].roleName);
+//         //console.log("roleId", selectedRole[i].roleId);
         
 //     }
-//     console.log("selectedMenu.menuId",selectedMenu.menuId);
+//     //console.log("selectedMenu.menuId",selectedMenu.menuId);
 //     //selectedRoleId.value = selectedRole.roleId;
 //     selectedRole.push({menuId:selectedMenuId.value})
 //     selectBidderType()
 
 // }
 function selectBidderType(selectedBidder) {
-    console.log("Type", selectedBidder.name);
+    //console.log("Type", selectedBidder.name);
     //onsole.log("cardId", selectedBidder.bidderId);
     selectedUserType.value = selectedBidder.name;
 }
@@ -154,11 +154,11 @@ function fetchRoles() {
 }
 
 function addCard(value) {
-    // console.log("Menu name", menuName.value);
-    // console.log("User Type", selectedUserType.value);
-    // console.log("Path", path.value);
-    // console.log(" selectedMenuId.value", selectedMenuId.value);
-    // console.log(" selectedRoleId.value", selectedRoleId.value);
+    // //console.log("Menu name", menuName.value);
+    // //console.log("User Type", selectedUserType.value);
+    // //console.log("Path", path.value);
+    // //console.log(" selectedMenuId.value", selectedMenuId.value);
+    // //console.log(" selectedRoleId.value", selectedRoleId.value);
     // fetchRoles()
     var data=sendData()
     console.log("########data: ", data)

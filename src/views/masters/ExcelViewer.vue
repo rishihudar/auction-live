@@ -536,8 +536,8 @@ function reloadPage() {
 //       userDetails.value = {...rowData}
 //       // Switch to the edit mode
 
-//       console.log("Printing rowData: ", rowData)
-//       console.log("Printing userDetails: ", userDetails)
+//       //console.log("Printing rowData: ", rowData)
+//       //console.log("Printing userDetails: ", userDetails)
 //       changeFlag(4);
 //     }
 
@@ -554,7 +554,7 @@ function reloadPage() {
 //       let res = rs.getActivity('FetchAllUsers', true);
 //       if (rs.isValid('FetchAllUsers')) {
 //         userData.value = res.result;
-//         console.log("from the function", userData)
+//         //console.log("from the function", userData)
 //       } else {
 //         // rs.showErrorToast('FetchAllCountries');
 //       }
@@ -569,7 +569,7 @@ function reloadPage() {
 //     // const response = await fetch('http://localhost:8000/ExcelViewer');
 //     // const data = await response.json();
 //     // excelData.value = data;
-//     // console.log("printing excelData: ", excelData)
+//     // //console.log("printing excelData: ", excelData)
 //     // if (excelData.value.length > 0) {
 //     //   fields.value = Object.keys(excelData.value[0]);
 //     // }
@@ -594,7 +594,7 @@ function reloadPage() {
 //     });
 
 //     if (response.ok) {
-//       console.log('Files uploaded successfully');
+//       //console.log('Files uploaded successfully');
 //       // You can perform additional actions upon successful upload
 //     } else {
 //       console.error('Failed to upload files');
@@ -614,7 +614,7 @@ const onAdvancedUpload = async (event) => {
     const formData = new FormData();
     userDataSheet.value.push(...event.files);
     myFile.value = event.files[0].name;
-    console.log("myFile", myFile.value)
+    //console.log("myFile", myFile.value)
     // Check if there are any selected files
     if (userDataSheet.value.length === 0) {
       console.error('No files selected', userDataSheet);
@@ -641,24 +641,24 @@ const onAdvancedUpload = async (event) => {
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
         const headerRow = jsonData[0];
-        console.log("**********jsonData", jsonData[0])
+        //console.log("**********jsonData", jsonData[0])
         const formattedData = jsonData.slice(1).map((row) => {
           const rowData = {};
           headerRow.forEach((column, index) => {
             rowData[column] = row[index];
           });
-          console.log("**********rowData", rowData)
+          //console.log("**********rowData", rowData)
           return rowData;
         });
 
         newExcelDataArray.push(...formattedData);
         excelData.value = [...newExcelDataArray]; // Ensure reactivity by creating a new array
-        console.log("Printing excelData: ", excelData)
+        //console.log("Printing excelData: ", excelData)
       };
 
       reader.readAsArrayBuffer(file);
       // loading.value = false; // Move loading to here
-      console.log("**********file", file)
+      //console.log("**********file", file)
 
       
     }
@@ -666,17 +666,17 @@ const onAdvancedUpload = async (event) => {
     console.error('Error processing files:', error);
   }
 
-  console.log("**********userDataSheet", userDataSheet.value[0])
+  //console.log("**********userDataSheet", userDataSheet.value[0])
     // Append each selected file to the FormData object
     userDataSheet.value.forEach(file => {
       formData.append('userDataSheet', file);
       formData.append('file', file);
-      console.log("@@@@@@@", file)
-      console.log("######", formData)
+      //console.log("@@@@@@@", file)
+      //console.log("######", formData)
     });
-    console.log("**********formDatabefore", formData)
+    //console.log("**********formDatabefore", formData)
     JSON.stringify(formData)
-    console.log("**********formDataafter", formData)
+    //console.log("**********formDataafter", formData)
     // Send the FormData object to the backend
     var response = await fetch('/upload-server/api/upload', {
       method: 'POST',
@@ -691,23 +691,23 @@ const onAdvancedUpload = async (event) => {
       responseText.value = []
       trimmedResponseText.value = []
       data.value = []
-      console.log('Files uploaded successfully', response);
+      //console.log('Files uploaded successfully', response);
       // Handle the response and set the products variable
       loading.value = true; // Move loading to here
-      console.log("1")
-      // console.log("$$$$$$$$$$$$$$$",await response.json())
+      //console.log("1")
+      // //console.log("$$$$$$$$$$$$$$$",await response.json())
       // const data = await response.json();
-      // console.log("^^^^^^^^^^^^", response.text())
+      // //console.log("^^^^^^^^^^^^", response.text())
        responseText.value = await response.text();
-      console.log("responseText", responseText.value)
+      //console.log("responseText", responseText.value)
        trimmedResponseText.value = responseText.value.trim();
-      console.log("trimmedResponseText", trimmedResponseText.value)
+      //console.log("trimmedResponseText", trimmedResponseText.value)
        data.value = JSON.parse(trimmedResponseText.value);
-      console.log("2")
+      //console.log("2")
       products.value = data;
-      console.log("3")
-      console.log("Printing response msg********", data)
-      console.log("Pringing the response ", products.value)
+      //console.log("3")
+      //console.log("Printing response msg********", data)
+      //console.log("Pringing the response ", products.value)
       //new mqlCDN add-------------------------------------------------------------------------------
       // .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument")
     new MQLCdn()
@@ -729,9 +729,9 @@ const onAdvancedUpload = async (event) => {
                 fileName.value = timeStamp + "_" + myFile.value;
                 filePath.value = res.uploadedFileURL().filePath;
                 // fullPath.value = Vue.getCDNBaseURL();
-                console.log("fileName", fileName.value);
-                console.log("filePath", filePath.value);
-                console.log("fullPath", fullPath.value);
+                //console.log("fileName", fileName.value);
+                //console.log("filePath", filePath.value);
+                //console.log("fullPath", fullPath.value);
                 InsertDocumentData();
                 // uploadedFile.value = true;
                 // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
@@ -755,10 +755,10 @@ const onAdvancedUpload = async (event) => {
   } catch (error) {
     if (error.name === 'AbortError') {
       // Handle user-aborted request
-      console.log('Request aborted by the user');
+      //console.log('Request aborted by the user');
     } else {
       // Handle other types of errors
-      console.log("************Printing the error: ", error.name)
+      //console.log("************Printing the error: ", error.name)
       toast.add({ severity: 'error', summary: 'Drafted', detail: 'File data/Template is invalid, please check the File' , life: 3000 });
       console.error('Error uploading files:', error);
     }
@@ -781,7 +781,7 @@ function fetchDocumentsValidationDetails() {
                     docSize.value = item.fileSize;
                     docType.value = item.fileType;
                     docTypeId.value = item.typeId;
-                    console.log("docName.value", docName.value);
+                    //console.log("docName.value", docName.value);
                 }
             });
         })
@@ -789,9 +789,9 @@ function fetchDocumentsValidationDetails() {
 
 
 function InsertDocumentData(){  
-  console.log("111111111docTypeId", docTypeId.value)
-  console.log("22222222222fileName", fileName.value)
-  console.log("3333333333filePath", filePath.value)
+  //console.log("111111111docTypeId", docTypeId.value)
+  //console.log("22222222222fileName", fileName.value)
+  //console.log("3333333333filePath", filePath.value)
 		// Automatically generated
 			new MQL()
       .useCoreServer()
@@ -805,7 +805,7 @@ function InsertDocumentData(){
 			 .then(rs => {
 			let res = rs.getActivity("InsertDocumentData",true)
 			if (rs.isValid("InsertDocumentData")) {
-                console.log("!!!!!!!!!!!!!!!!!",res.result)
+                //console.log("!!!!!!!!!!!!!!!!!",res.result)
 			} else
 			 { 
 			rs.showErrorToast("InsertDocumentData")

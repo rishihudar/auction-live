@@ -300,7 +300,7 @@
                         <div class="fm-group">
                             <label class="fm-label" for="password">Password</label>
                             <div class="fm-inner">
-                                <InputText id="password" v-model="userDetails.password" type="password" />
+                                <InputText id="password" v-model="userDetails.password" type="password" readonly/>
                             </div>
                             <div id="password-help" class="fm-info">Enter your password</div>
                             <div v-if="$v.userDetails.password.$error" class="fm-error">
@@ -543,8 +543,8 @@ function handleEditClick(rowData) {
       userDetails.value = {...rowData}
       // Switch to the edit mode
 
-      console.log("Printing rowData: ", rowData)
-      console.log("Printing userDetails: ", userDetails)
+      //console.log("Printing rowData: ", rowData)
+      //console.log("Printing userDetails: ", userDetails)
       changeFlag(4);
     }
 
@@ -575,9 +575,17 @@ function FetchOrganizationId(){
 const InsertUserData = async () => {
     const result = await $v.value.$validate();
 
+    //This is added to set entityId and organizationId to 0 for role SUPER_ADMIN
+    // if(userDetails.value.roleId == 2){
+    //     console.log("EntityIdBefore: ", userDetails.value.entityId , "OrganizationIdBefore: ", userDetails.value.organizationId) 
+    //     userDetails.value.entityId = 0
+    //     userDetails.value.organizationId = 0
+    //     console.log("EntityIdAfter: ", userDetails.value.entityId , "OrganizationIdAfter: ", userDetails.value.organizationId)
+    // }
+
     if (result) {
 	// Automatically generated
-    console.log ("login id################: ", loginId.value, userDetails.value)
+    // console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
 			.setActivity("o.[InsertUserData]")
@@ -609,7 +617,7 @@ const updateUserData = async () => {
 
     if (result) {
 	// Automatically generated
-    console.log ("login id################: ", loginId.value, userDetails.value)
+    // console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
 			.setActivity("o.[UpdateUserData]")
@@ -702,6 +710,7 @@ function FetchRoleData(){
 			let res = rs.getActivity("FetchRoleData",true)
 			if (rs.isValid("FetchRoleData")) {
                 roleMaster.value = res.result
+                // console.log("!!!!!!!!!!RoleMaster: ", roleMaster.value)
 			} else
 			 { 
 			rs.showErrorToast("FetchRoleData")
@@ -719,7 +728,7 @@ function FetchEntityData() {
 			 .then(rs => {
 			let res = rs.getActivity("FetchEntityData",true)
 			if (rs.isValid("FetchEntityData")) {
-                console.log (res.result)
+                // console.log (res.result)
                 entityMaster.value = res.result
 			} else
 			 { 
@@ -738,7 +747,7 @@ function FetchDistrictName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllDistrict', true);
             if (rs.isValid('FetchAllDistrict')) {
-                console.log(res.result);
+                //console.log(res.result);
                 districtMaster.value = res.result;
 
             } else {
@@ -757,7 +766,7 @@ function fetchAllUsers(){
       let res = rs.getActivity('FetchAllUsers', true);
       if (rs.isValid('FetchAllUsers')) {
         userData.value = res.result;
-        console.log("from the function", userData)
+        //console.log("from the function", userData)
       } else {
         // rs.showErrorToast('FetchAllCountries');
       }
@@ -819,7 +828,7 @@ onMounted(async () => {
     // const response = await fetch('http://localhost:8000/ExcelViewer');
     // const data = await response.json();
     // excelData.value = data;
-    // console.log("printing excelData: ", excelData)
+    // //console.log("printing excelData: ", excelData)
     // if (excelData.value.length > 0) {
     //   fields.value = Object.keys(excelData.value[0]);
     // }

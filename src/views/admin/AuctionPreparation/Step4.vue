@@ -297,29 +297,29 @@ function formattedStartDateCalc() {
   formattedStartDate.value = moment(serverDate.value)
     .add(60, "seconds")
     .format("YYYY/MM/DD HH:mm:ss");
-  console.log("formattedStartDate.value", formattedStartDate.value);
+  //console.log("formattedStartDate.value", formattedStartDate.value);
 }
 function formattedEndDateCalc() {
   formattedEndDate.value = moment(serverDate.value)
     .add(120, "seconds")
     .format("YYYY/MM/DD HH:mm:ss");
-  console.log("formattedEndDate.value", formattedEndDate.value);
+  //console.log("formattedEndDate.value", formattedEndDate.value);
 }
 function checkDates(){
   if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, "minute")) {
-    console.log("Inside rules vali date check");
+    //console.log("Inside rules vali date check");
     return false; // Dates are not valid
   }
   return true; // Dates are valid
 };
 const onAdvancedUpload = async (event, id) => {
   // try {
-  console.log(event, "event");
+  //console.log(event, "event");
   let timeStamp = Date.now();
-  console.log(timeStamp, "timeStamp");
-  console.log("event", event.files[0]);
+  //console.log(timeStamp, "timeStamp");
+  //console.log("event", event.files[0]);
   myFile.value = event.files[0].name;
-  console.log("myFile", myFile.value);
+  //console.log("myFile", myFile.value);
   const formData = new FormData();
   formData.append("file", event.files[0]);
   //new mqlCDN add-------------------------------------------------------------------------------
@@ -342,16 +342,16 @@ const onAdvancedUpload = async (event, id) => {
         fileName.value = timeStamp + "_" + myFile.value;
         filePath.value = res.uploadedFileURL().filePath;
         fullPath.value = Vue.getCDNBaseURL();
-        console.log("fileName", fileName.value);
-        console.log("filePath", filePath.value);
-        console.log("fullPath", fullPath.value);
+        //console.log("fileName", fileName.value);
+        //console.log("filePath", filePath.value);
+        //console.log("fullPath", fullPath.value);
         if (id == 8) {
           AucUrl.value = filePath.value;
-          console.log("AucUrl", AucUrl.value);
+          //console.log("AucUrl", AucUrl.value);
           auctionCheck.value = true;
         } else {
           NoticeUrl.value = filePath.value;
-          console.log("NoticeUrl", NoticeUrl.value);
+          //console.log("NoticeUrl", NoticeUrl.value);
           noticeCheck.value = true;
         }
 
@@ -364,9 +364,9 @@ const onAdvancedUpload = async (event, id) => {
             res.uploadedFileURL().filePath,
           documentTypeId: id,
         });
-        console.log("documentsArray@@",documentsArray.value)
+        //console.log("documentsArray@@",documentsArray.value)
         docTypeId.value = id;
-        console.log("id-", docTypeId.value);
+        //console.log("id-", docTypeId.value);
         if (id == 8) {
           docName.value = true;
         } else {
@@ -376,7 +376,7 @@ const onAdvancedUpload = async (event, id) => {
         //toaster.success("file uploaded.");
         // uploadedFiles.value.push(uploadedFile);
 
-        //console.log("uploadedFiles", uploadedFiles.value);
+        ////console.log("uploadedFiles", uploadedFiles.value);
         toast.add({
           severity: "success",
           summary: "Success",
@@ -407,15 +407,15 @@ function fetchDocumentsValidationDetails() {
           docSize.value = item.fileSize;
           docType.value = item.fileType;
           AuctionDocTypeId.value = item.typeId;
-          console.log("docName.value", docName.value);
-          console.log("AuctionDocTypeId.value", AuctionDocTypeId.value);
+          //console.log("docName.value", docName.value);
+          //console.log("AuctionDocTypeId.value", AuctionDocTypeId.value);
         } else if (item.typeName == "NOTICE_DOCUMENT") {
           NoticeDocName.value = item.typeName;
           NoticeDocSize.value = item.fileSize;
           NoticeDocType.value = item.fileType;
           NoticeDocTypeId.value = item.typeId;
-          console.log("docName.value", NoticeDocName.value);
-          console.log("NoticeDocTypeId.value", NoticeDocTypeId.value);
+          //console.log("docName.value", NoticeDocName.value);
+          //console.log("NoticeDocTypeId.value", NoticeDocTypeId.value);
         }
       });
       if (rs.isValid("fetchDocumentsValidationDetails")) {
@@ -434,7 +434,7 @@ function fetchAllStepsAuctionPreview() {
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
-      //console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+      ////console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
       if (
         res.result.fetchStep4AuctionPreview.length == 0 ||
         res.result.fetchStep4AuctionPreview[0].startDate == null ||
@@ -442,7 +442,7 @@ function fetchAllStepsAuctionPreview() {
       ) {
         selectedStartDate.value = formattedStartDate.value;
         selectedEndDate.value = formattedEndDate.value;
-        console.log("formattedStartDate.value", formattedStartDate.value);
+        //console.log("formattedStartDate.value", formattedStartDate.value);
       } else {
         dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
         dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
@@ -492,7 +492,7 @@ async function processingFeeEmdPaymentStartEndDate() {
       .then((rs) => {
         let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
         if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
-          console.log("res.result", res.result);
+          //console.log("res.result", res.result);
           resolve();
         } else {
           rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
@@ -544,7 +544,7 @@ async function insertInWorkflow() {
     //toaster.error("Oops! Please contact Support");
   }
   return new Promise((resolve, reject) => {
-    console.log(AUCTION_COMPLETED_ID);
+    //console.log(AUCTION_COMPLETED_ID);
 
     var data = {
       assignedLoginId: null,
@@ -577,7 +577,7 @@ async function insertInWorkflow() {
 
 async function onSave() {
   let result = await $v.value.$validate(); 
-  console.log("here", result);
+  //console.log("here", result);
   if (!result) {
     return;
   }
@@ -588,8 +588,8 @@ async function onSave() {
       "minute"
     )
   ) {
-    console.log("Inside checkDates");
-    console.log("inside onsave --------------------------->");
+    //console.log("Inside checkDates");
+    //console.log("inside onsave --------------------------->");
     toast.add({
       severity: "error",
       summary: "Error",
@@ -629,7 +629,7 @@ function getServerDate() {
     .then((rs) => {
       let res = rs.getActivity("getServerDate", true);
       serverDate.value = res.result.serverDate.currentDate;
-      console.log("serverDate-", serverDate.value);
+      //console.log("serverDate-", serverDate.value);
       if (rs.isValid("getServerDate")) {
       } else {
         rs.showErrorToast("getServerDate");

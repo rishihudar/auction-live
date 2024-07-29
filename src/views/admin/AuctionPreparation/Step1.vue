@@ -150,7 +150,7 @@ function FetchAuctionTypes() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllAuctionTypes', true);
             if (rs.isValid('FetchAllAuctionTypes')) {
-                console.log("Auction Type Data", res.result);
+                //console.log("Auction Type Data", res.result);
                 aucType.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllAuctionTypes');
@@ -168,7 +168,7 @@ function FetchAuctionMethods() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllAuctionMethods', true);
             if (rs.isValid('FetchAllAuctionMethods')) {
-                console.log("Auction Method Data", res.result);
+                //console.log("Auction Method Data", res.result);
                 aucMethod.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllAuctionMethods');
@@ -187,17 +187,17 @@ function FetchDataForAuctionCode(){
 			 .then(rs => {
 			let res = rs.getActivity("FetchDataForAuctionCode",true)
 			if (rs.isValid("FetchDataForAuctionCode")) {
-            console.log("FetchDataForAuctionCode",res.result);
+            //console.log("FetchDataForAuctionCode",res.result);
             entityShortName.value = res.result.entityShortName.entityShortName;
-            console.log("entityShortName",entityShortName.value);
+            //console.log("entityShortName",entityShortName.value);
             if(res.result.highestAuctionNumber != null){
             auctionNumber.value = res.result.highestAuctionNumber.auctionNumber + 1;
             }else{
                 auctionNumber.value = 1
             }
-            console.log("auctionNumber",auctionNumber.value);
+            //console.log("auctionNumber",auctionNumber.value);
             auctionCode.value = `${entityShortName.value}-${auctionNumber.value}`;
-            console.log("auctionCode",auctionCode.value);
+            //console.log("auctionCode",auctionCode.value);
             
 			} else
 			 { 
@@ -218,13 +218,13 @@ async function FetchAuctionStatus() {
     //     .then((rs) => {
     //         let res = rs.getActivity('fetchStatusFromStatusMaster', true);
     //         if (rs.isValid('fetchStatusFromStatusMaster')) {
-    //             console.log("Auction Status Data", res.result);
+    //             //console.log("Auction Status Data", res.result);
     //             statusData.value = res.result;
     //             statusData.value.forEach(item => {
     //                 statusId.value = item.statusId;
     //                 displayName.value = item.displayName;
     //             });
-    //             console.log("Auction Status Data", statusData.value);
+    //             //console.log("Auction Status Data", statusData.value);
     //         } else {
     //             rs.showErrorToast('fetchStatusFromStatusMaster');
     //         }
@@ -266,7 +266,7 @@ function updateAuction() {
                 // lastInsertedId.value = res.result.objectId; 
                 // emit('submit');
                 emit('nextTab');
-                console.log("UpdateStep1Details", res.result);
+                //console.log("UpdateStep1Details", res.result);
             } else {
                 rs.showErrorToast("UpdateStep1Details");
             }
@@ -274,7 +274,7 @@ function updateAuction() {
 }
 
 function insertAuction() {
-    console.log("OrganizationId, entityId, loginId", organizationId.value, entityId.value, loginId.value);    
+    //console.log("OrganizationId, entityId, loginId", organizationId.value, entityId.value, loginId.value);    
     new MQL()
         .useManagementServer()
         .setActivity('o.[InsertAuctionTypeAndAuctionMethod]')
@@ -293,9 +293,9 @@ function insertAuction() {
         .then((rs) => {
             let res = rs.getActivity('InsertAuctionTypeAndAuctionMethod', true);
             if (rs.isValid('InsertAuctionTypeAndAuctionMethod')) {
-                console.log("LastInsertedId from response", res.result);
+                //console.log("LastInsertedId from response", res.result);
                 lastInsertedId.value = res.result.auctionId;
-                console.log("LastInsertedId from lastInsertedId variable", lastInsertedId.value);
+                //console.log("LastInsertedId from lastInsertedId variable", lastInsertedId.value);
                 emit('submit', lastInsertedId.value);
                 emit('nextTab')
             } else {
@@ -314,7 +314,7 @@ function FetchAllStepsAuctionPreview() {
         .then(rs => {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
             if (rs.isValid("FetchAllStepsAuctionPreview")) {
-                console.log("FetchAllStepsAuctionPreview", res.result);
+                //console.log("FetchAllStepsAuctionPreview", res.result);
                 auctionMethodData.value.auctionMethodName = res.result.fetchStep1AuctionPreview.auctionMethodName;
                 auctionMethodData.value.auctionMethodId = `${res.result.fetchStep1AuctionPreview.auctionMethodId}`;
                 auctionTypeData.value.auctionType = res.result.fetchStep1AuctionPreview.auctionType;
