@@ -32,8 +32,8 @@
                 <h2 class="title">User Detail Report</h2>
             </div>
         
-            <div class="ph-action">
-                <JsonExcel :data="product" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="UserDetailReport.xlsx">
+            <div class="ph-action">    
+                <JsonExcel :data="product" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" :name="fileName" >
                     Excel Report
                 </JsonExcel>
                 <Button @click="navigateToAddUser">Add User</Button>
@@ -137,7 +137,7 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import { useRouter } from "vue-router";
 
-
+const fileName = ref("");
 const router = useRouter();
 const expandedRows = ref([]);
 const perPage = ref(5);
@@ -186,6 +186,8 @@ function UserExportedData() {
                                 json_data.value = res.result.userData;
                                 totalRows.value = res.result.rowCount.totalRows;
                                 console.log("json_data************",json_data.value);
+                                console.log("json_data_entityName************",json_data.value[0].entityName);
+                                FileName(json_data.value[0].entityName);
                                 console.log(totalRows.value);
                                 for (var i = 0; i < json_data.value.length; i++) {
                                 json_data.value[i].srNo = currentPage.value * perPage.value + i + 1;
@@ -195,6 +197,15 @@ function UserExportedData() {
                                 rs.showErrorToast("UserDetailsReport")
                         }
                 })
+}
+
+function FileName(entityName) {
+    // Replace all spaces with underscores
+    let modifiedString = entityName.replace(/ /g, '_');
+    console.log("entityName",modifiedString);
+    // fileName.value = entityName + "_Users_" + new Date().toISOString().slice(0, 10);
+    fileName.value = modifiedString + "_Users_" + new Date().toLocaleDateString('en-GB').split('/').join('') +".xlsx";
+    console.log("FileName******", fileName.value);
 }
 
 function UserExport() {
