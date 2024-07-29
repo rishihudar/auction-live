@@ -31,7 +31,7 @@ export default {
       this.$i18n.locale = lang;
       this.$i18n.fallbackLocale = lang;
       loadLanguageAsync(lang);
-      console.log(lang);
+      //console.log(lang);
     },
   },
 };

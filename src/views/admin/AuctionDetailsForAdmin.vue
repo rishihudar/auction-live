@@ -283,7 +283,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
         .then(rs => {
             let res = rs.getActivity("FetchAuctionDetailsByAuctionIdAdmin", true)
             if (rs.isValid("FetchAuctionDetailsByAuctionIdAdmin")) {
-                console.log(res)
+                //console.log(res)
                 res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
                 res.result.fetchAuctionDetails.participants = res.result.counts.TotalParticipants;
@@ -293,7 +293,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
 
                 res.result.fetchAuctionDetails.users = res.result.users.map(el => el.userId);
                 const auctionDetailObj = res.result.fetchAuctionDetails;
-                console.log(auctionDetailObj, "auctionDetails")
+                //console.log(auctionDetailObj, "auctionDetails")
 
                 // Map documents to an object with documentTypeName as key and documentPath as value
                 const documentsMap = {};
@@ -313,7 +313,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
         })
 }
 function DownloadDocument(url) {
-    console.log(url, "url")
+    //console.log(url, "url")
     if (url !== "") {
         new MQLCdn()
             .setCDNPath(url)
@@ -329,12 +329,12 @@ function DownloadDocument(url) {
     }
 };
 // function viewPublishDetails() {
-//   //console.log("rowAuctionId", row);
+//   ////console.log("rowAuctionId", row);
 // //   auctionId.value = auctionId;
 // //   auctionCode.value = auctionCode
 //   fetchAllStepsAuctionPreview(),
 //     visible.value = true
-//     console.log("auctionId",auctionId,"auctionCode",auctionCode);
+//     //console.log("auctionId",auctionId,"auctionCode",auctionCode);
 // }
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
@@ -347,7 +347,7 @@ function fetchAllStepsAuctionPreview() {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
       dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
       dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+      //console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
       selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
@@ -373,10 +373,10 @@ function fetchEMDCount(){
               
                 if(totalEMDPaid.value == null){
                     totalEMDPaid.value = 0
-                    console.log("printing from nullEMDCount", totalEMDPaid.value)
+                    //console.log("printing from nullEMDCount", totalEMDPaid.value)
                 }
                 visible7.value = true
-                console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+                //console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("FetchEMDCount")
             }
@@ -385,7 +385,7 @@ function fetchEMDCount(){
 
 async function cancelAuction(){
     const result = await $v.value.$validate();
-   console.log("#############", result)
+   //console.log("#############", result)
     if (reason.value!="") {
         new MQL()
         .useManagementServer()
@@ -400,19 +400,19 @@ async function cancelAuction(){
             let res = rs.getActivity("CancelAuction", true)
             if (rs.isValid("CancelAuction")) {
             //   totalEMDPaid.value = res.result.totalEMDPaid
-            console.log("Auction cancelled for auction ID: ", props.auctionId , "****", reason.value)
+            //console.log("Auction cancelled for auction ID: ", props.auctionId , "****", reason.value)
                 // if(totalEMDPaid.value == null){
                 //     totalEMDPaid.value = 0
-                //     console.log("printing from CancelAuction", totalEMDPaid.value)
+                //     //console.log("printing from CancelAuction", totalEMDPaid.value)
                 // }
-                console.log("###############AUctionCOde: ", props.auctionCode)
+                //console.log("###############AUctionCOde: ", props.auctionCode)
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
                 auctionCancellationNotification(props.auctionCode)
                  visible7.value = false
                  
                 // FetchAuctionDetailsByAuctionIdAdmin()
                 emit('call');
-                // console.log("Printing from CancelAuction: ", totalEMDPaid.value)
+                // //console.log("Printing from CancelAuction: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("CancelAuction")
             }
@@ -434,7 +434,7 @@ function auctionCancellationNotification(auctionCode){
     .then((rs) => {
       let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
       if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
-       console.log("Auction Cancel Notification send")
+       //console.log("Auction Cancel Notification send")
     //    reloadPage()
       } else {
         rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
@@ -448,7 +448,7 @@ function reloadPage() {
         }
 // function UpdateExtendParticipationEndDate() {
 //   if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
-//     console.log(
+//     //console.log(
 //       "log-",
 //       moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
 //     );
@@ -467,8 +467,8 @@ function reloadPage() {
 //   }
 // }
 // function extendParticipationEndDate() {
-//   console.log("endDate-", moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"));
-//   console.log("auctionId-",auctionId);
+//   //console.log("endDate-", moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss"));
+//   //console.log("auctionId-",auctionId);
   
 				
 //           new MQL()

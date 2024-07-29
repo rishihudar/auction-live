@@ -306,7 +306,7 @@ function leaveAuction() {
 }
 
 function checkH1(incomingBid) {
-    // console.log(incomingBid.bidderId, loginStore.loginId);
+    // //console.log(incomingBid.bidderId, loginStore.loginId);
     if (incomingBid.bidderId == loginStore.loginId) {
         isHighestBidder.value = true
         // isItemSelectionBtnDisable.value = false
@@ -404,12 +404,12 @@ function websocketConn() {
 
     // adding error listener
     wsConnection.value.addEventListener('error', function (e) {
-        console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+        //console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
     })
 
     // adding close listener
     wsConnection.value.addEventListener('close', function (e) {
-        console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+        //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
     })
 }
 
@@ -449,7 +449,7 @@ function totalBid() {
 
 async function bidPlaced() {
     bidFlag.value = false
-    // console.log(bidValue.value);
+    // //console.log(bidValue.value);
     let totalvalue = parseInt(bidValue.value) + parseInt(auctionDetails.value[0].currentHigh)
     count.value = 1
     // bidHistory.value.push(totalvalue)
@@ -665,7 +665,7 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
             .then(rs => {
                 let res = rs.getActivity("GetPreviousRoundHBid", true)
                 if (rs.isValid("GetPreviousRoundHBid")) {
-                    console.log(res.result);
+                    //console.log(res.result);
                     resolve(res.result)
                 } else {
                     rs.showErrorToast("GetPreviousRoundHBid")
@@ -684,10 +684,10 @@ async function updateAuctionTimeLeft() {
     remaningTime.value = roundHasStarted.value ? moment(auctionDetails.value[0].roundEndTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A')) : moment(auctionDetails.value[0].roundStartTime).diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A'));
 
     itemSelectionTimeLeft.value = moment(auctionDetails.value[0].roundEndTime).add(itemDetails.value.itemSelectionTime, 'm').diff(moment(latestTime.value, 'DD/MM/YYYY hh:mm:ss A'))
-    // console.log("TL", itemSelectionTimeLeft);
+    // //console.log("TL", itemSelectionTimeLeft);
 
     time.value = `${moment.duration(itemSelectionTimeLeft.value).hours()}:${moment.duration(itemSelectionTimeLeft.value).minutes()}:${moment.duration(itemSelectionTimeLeft.value).seconds()}`
-    // console.log("Time", time);
+    // //console.log("Time", time);
 
     // auction start or next round start
     if (!roundHasStarted.value && !roundHasEnded.value) {

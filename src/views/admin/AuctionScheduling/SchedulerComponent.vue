@@ -103,11 +103,11 @@ let auctionId = ref();
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  //console.log("event.page", event.page);
   fetchPublishedAuctionsAdmin();
 }
 function fetchPublishedAuctionsAdmin() {
-  console.log("Selected Entity Id", login().loginDetails);
+  //console.log("Selected Entity Id", login().loginDetails);
   new MQL()
     .useManagementServer()
     .setActivity("r.[FetchPublishedAuctionsAdmin]")
@@ -126,13 +126,13 @@ function fetchPublishedAuctionsAdmin() {
       let res = rs.getActivity("FetchPublishedAuctionsAdmin", true);
       if (rs.isValid("FetchPublishedAuctionsAdmin")) {
         products.value = res.result.publishedAuctions;
-        console.log("Published Auctions Scheduler", res.result);
+        //console.log("Published Auctions Scheduler", res.result);
         auctionId.value = res.result.auctionId;
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length", products.value.length);
+        //console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchPublishedAuctionsAdmin");

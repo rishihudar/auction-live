@@ -83,7 +83,7 @@ const filter = ref('');
 function handlePageChange(event) {
     currentPage.value = event.page;
     perPage.value = event.rows;
-    console.log("event.page", event.page);
+    //console.log("event.page", event.page);
     fetchUpcomingAuctions();
 }
 
@@ -105,10 +105,10 @@ function handlePageChange(event) {
 //             if (rs.isValid("FetchAuctionsWithApprovedStatus")) {
 //                 auctionData.value = res.result.auctionData;
 //                 totalRows.value = res.result.rowCount.totalRows;
-//                 console.log("auctionDetails.value.length", auctionData.value.length);
+//                 //console.log("auctionDetails.value.length", auctionData.value.length);
 //                 for (var i = 0; i < auctionData.value.length; i++) {
 //                     auctionData.value[i].srNo = currentPage.value * perPage.value + i + 1;
-//                     console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+//                     //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
 //                 }
 //             } else {
 //                 rs.showErrorToast("FetchAuctionsWithApprovedStatus");
@@ -135,10 +135,10 @@ function fetchUpcomingAuctions() {
             if (rs.isValid("FetchAuctionsForUpcomingAuctionsCard")) {
                 auctionData.value = res.result.auctionDetails;
                 totalRows.value = res.result.rowCount.totalRows;
-                console.log("auctionDetails.value.length", auctionData.value.length);
+                //console.log("auctionDetails.value.length", auctionData.value.length);
                 for (var i = 0; i < auctionData.value.length; i++) {
                     auctionData.value[i].srNo = currentPage.value * perPage.value + i + 1;
-                    console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+                    //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
                 }
             } else {
                 rs.showErrorToast("FetchAuctionsForUpcomingAuctionsCard")
@@ -149,7 +149,7 @@ function fetchUpcomingAuctions() {
 
 onMounted(() => {
     //upcomingAuctionFlag.value=true
-    //console.log("upcomingAuctionFlag",upcomingAuctionFlag.value)
+    ////console.log("upcomingAuctionFlag",upcomingAuctionFlag.value)
     fetchUpcomingAuctions();
 });
 </script>

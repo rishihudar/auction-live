@@ -462,13 +462,13 @@ function FetchAuctionSummaryByAuctionId() {
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionSummaryByAuctionId", true)
-            console.log(res, "res")
+            //console.log(res, "res")
             if (rs.isValid("FetchAuctionSummaryByAuctionId")) {
                 auctionSummary.value = res.result
-                console.log(auctionSummary.value, "auctionSummary")
+                //console.log(auctionSummary.value, "auctionSummary")
 
                 let updatedAuctionSummary = auctionSummary.value[0]
-                console.log(auctionSummary.value.length, "auctionSummary.value.length")
+                //console.log(auctionSummary.value.length, "auctionSummary.value.length")
                 for (let i = 1; i < auctionSummary.value.length; i++) {
                     let index = i;
                     let refKey = `ref${index}`;
@@ -478,20 +478,20 @@ function FetchAuctionSummaryByAuctionId() {
                     };
 
                 }
-                console.log(updatedAuctionSummary, "updatedAuctionSummary")
+                //console.log(updatedAuctionSummary, "updatedAuctionSummary")
 
                 auctionSummary.value.forEach((item) => {
                     if (item.documentTypeName == "AUCTION_ITEM_DOCUMENT") {
                         auctionItemDocumentPath.value = item.documentPath
-                        console.log(auctionItemDocumentPath.value, "auctionItemDocumentPath")
+                        //console.log(auctionItemDocumentPath.value, "auctionItemDocumentPath")
                     }
                     if (item.documentTypeName == "AUCTION_DOCUMENT") {
                         auctionDocumentPath.value = item.documentPath
-                        console.log(auctionDocumentPath.value, "auctionDocumentPath")
+                        //console.log(auctionDocumentPath.value, "auctionDocumentPath")
                     }
                     if (item.documentTypeName == "NOTICE_DOCUMENT") {
                         auctionNoticeDocumentPath.value = item.documentPath
-                        console.log(auctionNoticeDocumentPath.value, "auctionNoticeDocumentPath")
+                        //console.log(auctionNoticeDocumentPath.value, "auctionNoticeDocumentPath")
                     }
                 });
             } else {
@@ -500,7 +500,7 @@ function FetchAuctionSummaryByAuctionId() {
         })
 }
 function DownloadDocument(url) {
-    console.log(url, "url")
+    //console.log(url, "url")
     if (url !== "") {
         new MQLCdn()
             .setCDNPath(url)

@@ -118,16 +118,16 @@ function authenticate() {
 
             })
             .catch((err) => {
-                console.log(err);
+                //console.log(err);
                 if (err.error == 'BIDDER_LOGIN') {
-                    console.log(window);
+                    //console.log(window);
                     visible.value = true
                     link.value = window.origin + '/applicant'
                 }
                 toaster.error;
             });
     } else {
-        console.log("InValid Details");
+        //console.log("InValid Details");
         toaster.error("Invalid Details")
     }
 }
@@ -142,8 +142,8 @@ function FetchPasswordCount() {
                 let res = rs.getActivity("FetchPasswordCount", true)
                 if (rs.isValid("FetchPasswordCount")) {
                     // count.value=res.result.passwordCount;
-                    console.log("count.value", count.value)
-                    console.log("count", res.result.passwordCount)
+                    //console.log("count.value", count.value)
+                    //console.log("count", res.result.passwordCount)
                     resolve(res.result.passwordCount)
                 } else {
                     rs.showErrorToast("FetchPasswordCount")

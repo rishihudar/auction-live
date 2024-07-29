@@ -107,7 +107,7 @@ export default {
                 var elHeight = el.nextSibling.nextSibling.scrollHeight;
 
                 if ( state == 'open' ) {
-                    // console.log(elHeight);
+                    // //console.log(elHeight);
                     el.classList.add('collapsing');
                     elContent.style.height = elHeight + 'px';
 
@@ -116,14 +116,14 @@ export default {
                         el.classList.remove('collapsing');
                     }, { once: true });
                 } else if ( state == 'close' ) {
-                    // console.log('close');
+                    // //console.log('close');
                     el.classList.add('collapsing');
                     elContent.style.height = elHeight + 'px';
                     el.nextSibling.nextSibling.scrollHeight;
                     elContent.style.height = '0';
                     elContent.addEventListener('transitionend', function() {
                         el.classList.remove('collapsing');
-                        // console.log(el.name + 'collapsed');
+                        // //console.log(el.name + 'collapsed');
                     }, { once: true });
                 }
             }

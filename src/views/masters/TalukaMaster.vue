@@ -166,7 +166,7 @@ const filters = ref({
 function changeFlag(newValue) {
     flag.value = newValue
     ref(flag)
-    console.log("getting from change function", flag)
+    //console.log("getting from change function", flag)
 }
 
 function FetchDistrictName() {
@@ -177,7 +177,7 @@ function FetchDistrictName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllDistrict', true);
             if (rs.isValid('FetchAllDistrict')) {
-                console.log(res.result);
+                //console.log(res.result);
                 districts.value = res.result;
 
             } else {
@@ -194,7 +194,7 @@ function FetchTalukaName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllTaluka', true);
             if (rs.isValid('FetchAllTaluka')) {
-                console.log(res.result);
+                //console.log(res.result);
                 taluka.value = res.result;
 
             } else {
@@ -205,7 +205,7 @@ function FetchTalukaName() {
 }
 function insertTaluka(talukaData) {
     if (talukaData.talukaName == "") {
-        console.log("Please provide all Details")
+        //console.log("Please provide all Details")
 
     } else {
         new MQL()
@@ -215,8 +215,8 @@ function insertTaluka(talukaData) {
             .then((rs) => {
                 let res = rs.getActivity('InsertTaluka', true);
                 if (rs.isValid('InsertTaluka')) {
-                    console.log(res.result);
-                    console.log("talukaData from Insert", talukaData);
+                    //console.log(res.result);
+                    //console.log("talukaData from Insert", talukaData);
                     // Optionally, you can reload the page or update the state list after insertion
                     // FetchTalukaName()
                 } else {
@@ -234,8 +234,8 @@ function updateTaluka(talukaData) {
         .then((rs) => {
             let res = rs.getActivity('UpdateTalukaById', true);
             if (rs.isValid('UpdateTalukaById')) {
-                console.log(res.result);
-                console.log("stateData update", talukaData);
+                //console.log(res.result);
+                //console.log("stateData update", talukaData);
 
             } else {
                 rs.showErrorToast('UpdateTalukaById');
@@ -245,12 +245,12 @@ function updateTaluka(talukaData) {
 }
 function reloadPage() {
     window.location.reload();
-    console.log("we are reloading page")
+    //console.log("we are reloading page")
 }
 function editTaluka(taluka) {
     // Set talukaData to the values of the selected taluka
     talukaData.value = { ...taluka };
-    console.log("from edit function", talukaData)
+    //console.log("from edit function", talukaData)
     // Update the flag to indicate edit mode
     changeFlag(2);
 }
@@ -262,7 +262,7 @@ function deleteTaluka(data) {
         .then((rs) => {
             let res = rs.getActivity('DeleteTalukaById', true);
             if (rs.isValid('DeleteTalukaById')) {
-                console.log(res.result);
+                //console.log(res.result);
             } else {
                 rs.showErrorToast('DeleteTalukaById');
             }

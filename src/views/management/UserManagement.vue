@@ -543,8 +543,8 @@ function handleEditClick(rowData) {
       userDetails.value = {...rowData}
       // Switch to the edit mode
 
-      console.log("Printing rowData: ", rowData)
-      console.log("Printing userDetails: ", userDetails)
+      //console.log("Printing rowData: ", rowData)
+      //console.log("Printing userDetails: ", userDetails)
       changeFlag(4);
     }
 
@@ -738,7 +738,7 @@ function FetchDistrictName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllDistrict', true);
             if (rs.isValid('FetchAllDistrict')) {
-                console.log(res.result);
+                //console.log(res.result);
                 districtMaster.value = res.result;
 
             } else {
@@ -757,7 +757,7 @@ function fetchAllUsers(){
       let res = rs.getActivity('FetchAllUsers', true);
       if (rs.isValid('FetchAllUsers')) {
         userData.value = res.result;
-        console.log("from the function", userData)
+        //console.log("from the function", userData)
       } else {
         // rs.showErrorToast('FetchAllCountries');
       }
@@ -819,7 +819,7 @@ onMounted(async () => {
     // const response = await fetch('http://localhost:8000/ExcelViewer');
     // const data = await response.json();
     // excelData.value = data;
-    // console.log("printing excelData: ", excelData)
+    // //console.log("printing excelData: ", excelData)
     // if (excelData.value.length > 0) {
     //   fields.value = Object.keys(excelData.value[0]);
     // }
