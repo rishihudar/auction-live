@@ -472,10 +472,10 @@ function FetchAllModifierValueChange() {
     .then((rs) => {
         let res = rs.getActivity('FetchInventoryCategoryId', true);
         if (rs.isValid('FetchInventoryCategoryId')) {
-            console.log(res.result);
+            // console.log(res.result);
             categoryId.value = res.result.propertyCategoryId;
             inventoryCategoryId.value = categoryId.value;
-            console.log("##########printing categoryId ", categoryId.value)
+            // console.log("##########printing categoryId ", categoryId.value)
             fetchPropertiesFromInventoryMaster(inventoryCategoryId.value, parentInventoryId);
         } else {
             rs.showErrorToast('FetchInventoryCategoryId');

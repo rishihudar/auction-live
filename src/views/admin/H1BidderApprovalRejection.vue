@@ -141,7 +141,7 @@ function fetchH1ApprovalStatus() {
           label: item.approvalStatus,
           value: item.id,
         }));
-        console.log("approvalStatusResult", approvalStatusResult.value);
+        // console.log("approvalStatusResult", approvalStatusResult.value);
       } else {
         rs.showErrorToast("FetchH1ApprovalStatus");
       }
@@ -158,7 +158,7 @@ function h1AuctionDetails() {
       let res = rs.getActivity("FetchH1BiddersAuctionDetails", true);
       if (rs.isValid("FetchH1BiddersAuctionDetails")) {
         res.result.fetchH1BidderAuctionDetails;
-        console.log("ResultList!!!!!",res.result.fetchH1BidderAuctionDetails)
+        // console.log("ResultList!!!!!",res.result.fetchH1BidderAuctionDetails)
         res.result.fetchH1BidderAuctionDetails.forEach((item) => {
           resultList.push({
             ...item,
@@ -166,14 +166,14 @@ function h1AuctionDetails() {
           });
           
         });
-        console.log("resultList is **** ", resultList);
+        // console.log("resultList is **** ", resultList);
 
         if (
           res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0
         ) {
           noOfDays.value =
             res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours;
-          console.log("indentDays is ", noOfDays.value);
+          // console.log("indentDays is ", noOfDays.value);
           disabled.value = true;
         } else {
           disabled.value = false;
@@ -186,23 +186,23 @@ function h1AuctionDetails() {
 
 function updateAccepted(rowData, selectedValue) {
   let label = rowData.data.approvalStatusResult == 1 ? "Accept" : "Reject"
-  console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
+  // console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
   // Find the index of the item in resultList to ensure reactivity
   const index = resultList.findIndex((item) => item.id === rowData.id);
   if (index !== -1) {
     // Update the reactive property
     resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue };
-    console.log(
-      "rowData.accepted#################",
-      resultList[index].accepted,
-      "result list ",
-      resultList
-    );
+    // console.log(
+    //   "rowData.accepted#################",
+    //   resultList[index].accepted,
+    //   "result list ",
+    //   resultList
+    // );
   }
 }
 
 function submitForm() {
-  console.log("Auction id ", auctionId.value);
+  // console.log("Auction id ", auctionId.value);
   const validation = $v.value.$validate();
   if (!$v.value.$error) {
     // Check if all dropdowns are selected
@@ -217,7 +217,7 @@ function submitForm() {
       return;
     }
 
-    console.log("result list ", resultList);
+    // console.log("result list ", resultList);
 
     // if (!$v.value.$error) {
     //   console.log("result list ", resultList);

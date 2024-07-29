@@ -585,7 +585,7 @@ const InsertUserData = async () => {
 
     if (result) {
 	// Automatically generated
-    console.log ("login id################: ", loginId.value, userDetails.value)
+    // console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
 			.setActivity("o.[InsertUserData]")
@@ -617,7 +617,7 @@ const updateUserData = async () => {
 
     if (result) {
 	// Automatically generated
-    console.log ("login id################: ", loginId.value, userDetails.value)
+    // console.log ("login id################: ", loginId.value, userDetails.value)
 			new MQL()
             .useCoreServer()
 			.setActivity("o.[UpdateUserData]")
@@ -710,7 +710,7 @@ function FetchRoleData(){
 			let res = rs.getActivity("FetchRoleData",true)
 			if (rs.isValid("FetchRoleData")) {
                 roleMaster.value = res.result
-                console.log("!!!!!!!!!!RoleMaster: ", roleMaster.value)
+                // console.log("!!!!!!!!!!RoleMaster: ", roleMaster.value)
 			} else
 			 { 
 			rs.showErrorToast("FetchRoleData")
@@ -728,7 +728,7 @@ function FetchEntityData() {
 			 .then(rs => {
 			let res = rs.getActivity("FetchEntityData",true)
 			if (rs.isValid("FetchEntityData")) {
-                console.log (res.result)
+                // console.log (res.result)
                 entityMaster.value = res.result
 			} else
 			 { 

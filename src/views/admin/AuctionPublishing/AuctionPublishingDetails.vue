@@ -232,7 +232,7 @@ const filter = ref('');
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  // console.log("event.page", event.page);
   fetchAuctionWithApprovedStatus();
 }
 
@@ -254,10 +254,10 @@ function fetchAuctionWithApprovedStatus() {
       if (rs.isValid("FetchAuctionsWithApprovedStatus")) {
         auctionData.value = res.result.auctionData;
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length", auctionData.value.length);
+        // console.log("auctionDetails.value.length", auctionData.value.length);
         for (var i = 0; i < auctionData.value.length; i++) {
           auctionData.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          // console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchAuctionsWithApprovedStatus");
@@ -275,7 +275,7 @@ function fetchAllStepsAuctionPreview() {
       let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
       dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
       dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-      console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+      // console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
       selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
@@ -304,7 +304,7 @@ function processingFeeEmdPaymentStartEndDate() {
     .then((rs) => {
       let res = rs.getActivity("step4UpdateDatesAndUploadDocuments", true);
       if (rs.isValid("step4UpdateDatesAndUploadDocuments")) {
-        console.log("res.result", res.result);
+        // console.log("res.result", res.result);
       } else {
         rs.showErrorToast("step4UpdateDatesAndUploadDocuments");
       }
@@ -312,7 +312,7 @@ function processingFeeEmdPaymentStartEndDate() {
 }
 
 function viewPublishDetails(row) {
-  console.log("rowAuctionId", row);
+  // console.log("rowAuctionId", row);
   auctionId.value = row.auctionId;
   auctionCode.value = row.auctionCode
   fetchAllStepsAuctionPreview(),
@@ -321,10 +321,10 @@ function viewPublishDetails(row) {
 
 function publishAuction() {
   if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
-    console.log(
-      "log-",
-      moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
-    );
+    // console.log(
+    //   "log-",
+    //   moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
+    // );
     alert(`Start Date should not be equal or after End Date !`);
   } else {
     processingFeeEmdPaymentStartEndDate();
