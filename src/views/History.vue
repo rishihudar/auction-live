@@ -40,7 +40,7 @@ function FetchWorkflowStepDetailsHistory() {
         .then(rs => {
             let res = rs.getActivity("FetchWorkflowStepDetailsHistory", true)
             if (rs.isValid("FetchWorkflowStepDetailsHistory")) {
-                console.log(res)
+                //console.log(res)
                 history.value = res.result;
             } else {
                 rs.showErrorToast("FetchWorkflowStepDetailsHistory")

@@ -251,10 +251,10 @@ function changePassword() {
 }
 
 async function sendOTPMobile() {
-  // console.log("$v.value.mobileNumber.$validate() is ",$v.value.mobileNumber.$invalid)
+  // //console.log("$v.value.mobileNumber.$validate() is ",$v.value.mobileNumber.$invalid)
 
   await isMobileNumberExist();
-  console.log("countMobileNumberUser is ", countMobileNumberUser.value);
+  //console.log("countMobileNumberUser is ", countMobileNumberUser.value);
   if (countMobileNumberUser.value === 1) {
     toast.add({
       severity: "success",
@@ -275,15 +275,15 @@ async function sendOTPMobile() {
         .then((rs) => {
           let res = rs.getActivity("SendOTPSMS", true);
           if (rs.isValid("SendOTPSMS")) {
-            console.log("Received OTP ", res.result);
+            //console.log("Received OTP ", res.result);
 
             isSmsOTPSent.value = true;
             isSmsOTPVerified.value = false;
 
             setTimeout(() => {
-              // console.log("HI")
+              // //console.log("HI")
               if (OTPSmsVerified.value == true) {
-                console.log("OTPSmsVerified t");
+                //console.log("OTPSmsVerified t");
 
                 isSmsOTPVerified.value = true;
                 isSmsOTPSent.value = true;
@@ -316,7 +316,7 @@ function verifyOTPMobile() {
     .then((rs) => {
       let res = rs.getActivity("ValidateOTPSMS", true);
       if (rs.isValid("ValidateOTPSMS")) {
-        console.log("OTP status is ", res.result["otpValidationResult"]);
+        //console.log("OTP status is ", res.result["otpValidationResult"]);
 
         if (res.result["otpValidationResult"] == "OTPFOUND") {
           toast.add({
@@ -343,7 +343,7 @@ function verifyOTPMobile() {
 }
 // async function sendOTPEmail() {
 //   await isEmailExist();
-//   console.log("countEmailUsers is ", countEmailUsers.value);
+//   //console.log("countEmailUsers is ", countEmailUsers.value);
 //   if (countEmailUsers.value > 0) {
 //     toaster.error("Email already exist");
 //     return;
@@ -369,7 +369,7 @@ function verifyOTPMobile() {
 //         let res = rs.getActivity("SendOTPEmail", true);
 //         // if (rs.isValid("SendOTPEmail") && res.result == "SUCCESS") {
 //         if (rs.isValid("SendOTPEmail")) {
-//           console.log("Sending OTP to email", res.result);
+//           //console.log("Sending OTP to email", res.result);
 
 //           isEmailOTPSent.value = true;
 //           isEmailOTPVerified.value = false;
@@ -405,7 +405,7 @@ function verifyOTPEmail() {
     .then((rs) => {
       let res = rs.getActivity("ValidateOTPEmail", true);
       if (rs.isValid("ValidateOTPEmail")) {
-        console.log(res.result["OTPValidStatus"]);
+        //console.log(res.result["OTPValidStatus"]);
 
         if (res.result["OTPValidStatus"] == "OTPFOUND") {
           toaster.success("Email OTP verified");
@@ -430,7 +430,7 @@ function isEmailExist() {
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("ForgetPasswordService", true);
-      console.log("res", res.result.email_count);
+      //console.log("res", res.result.email_count);
       emailVerification.value = res.result.email_count;
       if (emailVerification.value == 1) {
         toast.add({
@@ -469,7 +469,7 @@ function verifyMobile() {
     .then((rs) => {
       let res = rs.getActivity("VerifyMobileNumber", true);
       if (rs.isValid("VerifyMobileNumber")) {
-        console.log("resVerifyMobile", res.result.mobileVerify);
+        //console.log("resVerifyMobile", res.result.mobileVerify);
         if (res.result.mobileVerify == 0) {
 
           toast.add({
@@ -503,7 +503,7 @@ function mobileOtpRequired() {
     .then((rs) => {
       let res = rs.getActivity("FetchCustomValueByKey", true);
       if (rs.isValid("FetchCustomValueByKey")) {
-        console.log("value is ", res.result.vsCustomParamValue);
+        //console.log("value is ", res.result.vsCustomParamValue);
 
         if (res.result.vsCustomParamValue == "YES") {
           mobileOtpEnable.value = true;
@@ -526,7 +526,7 @@ function isMobileNumberExist() {
       .then((rs) => {
         let res = rs.getActivity("VerifyMobileUserDetails", true);
         if (rs.isValid("VerifyMobileUserDetails")) {
-          console.log("res.result.countUsers", res.result.countUsers);
+          //console.log("res.result.countUsers", res.result.countUsers);
           countMobileNumberUser.value = res.result.countUsers;
 
           resolve();
@@ -551,7 +551,7 @@ function resetPasswordWithHashing() {
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("ResetPasswordWithHashing", true);
-      console.log("res", res.result);
+      //console.log("res", res.result);
       if (rs.isValid("ResetPasswordWithHashing")) {
       } else {
         rs.showErrorToast("ResetPasswordWithHashing");
@@ -559,13 +559,13 @@ function resetPasswordWithHashing() {
     });
 }
 function resetPassword() {
-  console.log("resetButton.value=true", resetButton.value);
+  //console.log("resetButton.value=true", resetButton.value);
   if (resetButton.value) {
-    //console.log(emailId.value !== null && mobileNumber.value !== null);
-    console.log("Email:", emailId.value);
-    console.log("Mobile:", mobileNumber.value);
-    console.log("password:", password.value);
-    console.log("confirmPassword:", confirmPassword.value);
+    ////console.log(emailId.value !== null && mobileNumber.value !== null);
+    //console.log("Email:", emailId.value);
+    //console.log("Mobile:", mobileNumber.value);
+    //console.log("password:", password.value);
+    //console.log("confirmPassword:", confirmPassword.value);
     resetPasswordWithHashing();
     toast.add({
       severity: "success",

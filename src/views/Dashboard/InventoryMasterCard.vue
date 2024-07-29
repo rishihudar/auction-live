@@ -502,19 +502,19 @@ async function handleAddtoArray(id, Name) { //to add one by one id to array
     const index = data_to_delete.value.findIndex((item) => item.id === id); //cheking if itemid present already in array
       if (index === -1 ){
       // If the id is not found in data_to_delete, add it and set accepted to false
-      console.log("Item Does not present in curent auction/upcomin auction")
+      // console.log("Item Does not present in curent auction/upcomin auction")
       // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
       // console.log("for id:",id)
-      console.log("Soft Delete started of id:", id);
+      // console.log("Soft Delete started of id:", id);
       data_to_delete.value.push({ id });
       DataNames_to_delete.value.push({ Name }); //added items for soft deleting to array
       accepted.value = false; // Set accepted to false for the current row
-      console.log("All id after added to array:", data_to_delete.value);
+      // console.log("All id after added to array:", data_to_delete.value);
       }else {
     
     
         
-      console.log("Soft Delete removed of id:", id);
+      // console.log("Soft Delete removed of id:", id);
       // If the id is found, remove it from data_to_delete and set accepted to true
       data_to_delete.value.splice(index, 1);
        
@@ -526,9 +526,9 @@ async function handleAddtoArray(id, Name) { //to add one by one id to array
       if (nameIndex !== -1) {
         DataNames_to_delete.value.splice(nameIndex, 1); //removed items name from Array if user unticked checkbox
       }
-      console.log("All id after removed to array:", data_to_delete.value);
-      console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
-      console.log("for id:",id)
+      // console.log("All id after removed to array:", data_to_delete.value);
+      // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
+      // console.log("for id:",id)
   }
     
    
@@ -540,7 +540,7 @@ async function handleAddtoArray(id, Name) { //to add one by one id to array
 
     // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
     // console.log("for id:",id)
-    console.log("Item present in curent auction/upcomin auction .Hence Cannot be delete")
+    // console.log("Item present in curent auction/upcomin auction .Hence Cannot be delete")
     await AuctionCodesbyID(id) //fetching auctions codes from db if items are associated with current/upcoming auctions
     let auctioncodeString =AuctionCodes.value.AuctionCodes.map(item => item.vsAuctionCode).join(', '); //joining all acutions code by comma separted
     // console.log("AuctionCode strin:",auctioncodeString)

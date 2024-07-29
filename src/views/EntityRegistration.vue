@@ -437,9 +437,9 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
 
 async function checkEntityShortName(newValue) {
     const isShortNameAvailable = await CountEntityShortName(newValue);
-    console.log("shortName", isShortNameAvailable)
+    //console.log("shortName", isShortNameAvailable)
     if (!isShortNameAvailable) {
-        console.log("!isShortNameAvailable", isShortNameAvailable)
+        //console.log("!isShortNameAvailable", isShortNameAvailable)
         // Display error message indicating that entity short name already exists
         toast.add({ severity: 'error', summary: 'Entity Short Name Error', detail: 'Entity short name already exists.', life: 3000 });
     }
@@ -456,8 +456,8 @@ async function CountEntityShortName() {
 
         if (response.isValid("CountEntityShortName")) {
             count.value = res.result.countEntity; // Extract the count from the response object
-            console.log("Entity short name count:", count.value);
-            console.log("count", count)
+            //console.log("Entity short name count:", count.value);
+            //console.log("count", count)
             return count.value == 0; // Ensure to compare with 0
         } else {
             response.showErrorToast("CountEntityShortName");
@@ -523,7 +523,7 @@ const filters = ref({
 function changeFlag(newValue) {
     flag.value = newValue
     ref(flag)
-    console.log("getting from change function", flag)
+    //console.log("getting from change function", flag)
 }
 
 function FetchEntities() {
@@ -535,7 +535,7 @@ function FetchEntities() {
         .then((rs) => {
             let res = rs.getActivity('FetchEntityDetails', true);
             if (rs.isValid('FetchEntityDetails')) {
-                console.log(res.result);
+                //console.log(res.result);
                 entities.value = res.result.map(entity => ({
                     ...entity,
                     isParent: entity.isParent == 1 ? 'Yes' : 'No'
@@ -558,10 +558,10 @@ function FetchOrganizations() {
         .then(rs => {
             let res = rs.getActivity("FetchOrganizationDetails", true)
             if (rs.isValid("FetchOrganizationDetails")) {
-                console.log("result@@@@", res.result)
+                //console.log("result@@@@", res.result)
                 organization.value = res.result
                 organizationId.value = res.result[0].organizationId;
-                console.log("organizationId", organizationId.value)
+                //console.log("organizationId", organizationId.value)
 
             } else {
                 rs.showErrorToast("FetchOrganizationDetails")
@@ -570,7 +570,7 @@ function FetchOrganizations() {
 
 }
 function FetchEntityTypeByOrganization(organizationId) {
-    console.log("OrganizationData", organizationId.value)
+    //console.log("OrganizationData", organizationId.value)
     new MQL()
         .useCoreServer()
         .setActivity('o.[FetchEntityTypeByOrganizationId]')
@@ -579,7 +579,7 @@ function FetchEntityTypeByOrganization(organizationId) {
         .then((rs) => {
             let res = rs.getActivity('FetchEntityTypeByOrganizationId', true);
             if (rs.isValid('FetchEntityTypeByOrganizationId')) {
-                console.log(res.result);
+                //console.log(res.result);
                 entitytype.value = res.result;
 
             } else {
@@ -598,7 +598,7 @@ function FetchDistrictName() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllDistrict', true);
             if (rs.isValid('FetchAllDistrict')) {
-                console.log(res.result);
+                //console.log(res.result);
                 districts.value = res.result;
 
             } else {
@@ -612,7 +612,7 @@ const fetchEntityTypesByOrganization = () => {
 };
 
 function insertEntity(entityData) {
-    console.log("############", entityData.value)
+    //console.log("############", entityData.value)
     new MQL()
         .useCoreServer()
         .setActivity('o.[InsertEntity]')
@@ -621,8 +621,8 @@ function insertEntity(entityData) {
         .then((rs) => {
             let res = rs.getActivity('InsertEntity', true);
             if (rs.isValid('InsertEntity')) {
-                console.log(res.result);
-                console.log("entityData from Insert", entityData);
+                //console.log(res.result);
+                //console.log("entityData from Insert", entityData);
 
             } else {
                 rs.showErrorToast('InsertState');
@@ -642,7 +642,7 @@ const updateEntity = async (entityData) => {
         .then((rs) => {
             let res = rs.getActivity('UpdateEntityById', true);
             if (rs.isValid('UpdateEntityById')) {
-                console.log(res.result);
+                //console.log(res.result);
             } else {
                 rs.showErrorToast('UpdateEntityById');
             }
@@ -652,12 +652,12 @@ const updateEntity = async (entityData) => {
 }
 function reloadPage() {
     window.location.reload();
-    console.log("we are reloading page")
+    //console.log("we are reloading page")
 }
 
 
 function editEntity(entity) {
-    console.log("Before edit: ", entity);
+    //console.log("Before edit: ", entity);
 
     // Set entityData to the values of the selected state
     entityData.value = {
@@ -670,7 +670,7 @@ function editEntity(entity) {
 
 
 
-    console.log("After edit: ", entityData);
+    //console.log("After edit: ", entityData);
 
     // Update the flag to indicate edit mode
     changeFlag(2);
@@ -698,7 +698,7 @@ const confirmEdit = async (entityData) => {
     } else {
         //alert("error, form not submitted")
         // toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
-        console.log("eror in validation")
+        //console.log("eror in validation")
 
         toast.add({ severity: 'error', summary: 'Validation Error', detail: 'Please fill all required fields.', life: 3000 });
         return;
@@ -753,7 +753,7 @@ function deleteEntity(data) {
         .then((rs) => {
             let res = rs.getActivity('DeleteEntityById', true);
             if (rs.isValid('DeleteEntityById')) {
-                console.log(res.result);
+                //console.log(res.result);
             } else {
                 rs.showErrorToast('DeleteEntity');
             }

@@ -49,8 +49,8 @@ class Response {
     }
     this.getActivity = function (strActivity, isReactive = false) {
       // TODO: if calling auto set the local cache property
-// console.log('strActivity', strActivity);
-// console.log('strRaw', this.raw);
+// //console.log('strActivity', strActivity);
+// //console.log('strRaw', this.raw);
       if (strActivity.split('_').length > 1) {
         //     alert('query')
         return isReactive

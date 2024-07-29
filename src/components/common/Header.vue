@@ -113,7 +113,7 @@ function toggle(event) {
 }
 
 function loadEntityAndOrganization() {	
-    console.log("loadEntityAndOrganization" , entityId.value, organizationId.value)
+    //console.log("loadEntityAndOrganization" , entityId.value, organizationId.value)
 			new MQL()
             .useManagementServer()
 			.setActivity("o.[FetchEntityAndOrganization]")
@@ -127,7 +127,7 @@ function loadEntityAndOrganization() {
 			if (rs.isValid("FetchEntityAndOrganization")) {
                 entityData.value = res.result.entityData
                 organizationData.value = res.result.organizationData
-                console.log("entityData, ornanizationData", entityData.value, organizationData.value) 
+                //console.log("entityData, ornanizationData", entityData.value, organizationData.value) 
 			} else
 			 { 
 			rs.showErrorToast("FetchEntityAndOrganization")

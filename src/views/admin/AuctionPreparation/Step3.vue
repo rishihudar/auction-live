@@ -370,7 +370,7 @@ function nextCallback() {
 const handleClick = (input) => {
     // Your button click logic here
 
-    console.log("is clicked: ", getIsClicked.value)
+    //console.log("is clicked: ", getIsClicked.value)
     store.setIsClicked(input);
 };
 
@@ -386,9 +386,9 @@ function fetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventory
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
             if (rs.isValid('FetchPropertiesFromInventoryMaster')) {
-                console.log(res.result);
+                //console.log(res.result);
                 districtDetail.value = res.result;
-                console.log("printing districtDetail ", districtDetail.value)
+                //console.log("printing districtDetail ", districtDetail.value)
             } else {
                 rs.showErrorToast('FetchPropertiesFromInventoryMaster');
             }
@@ -403,9 +403,9 @@ const fetchMCNameFromInventoryMaster = (parentId) => {
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
             if (rs.isValid('FetchPropertiesFromInventoryMaster')) {
-                console.log(res.result);
+                //console.log(res.result);
                 mcDetail.value = res.result;
-                console.log("MC Data", mcDetail)
+                //console.log("MC Data", mcDetail)
             } else {
                 rs.showErrorToast('FetchPropertiesFromInventoryMaster');
             }
@@ -420,9 +420,9 @@ const fetchLocationFromInventoryMaster = (parentId) => {
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
             if (rs.isValid('FetchPropertiesFromInventoryMaster')) {
-                console.log(res.result);
+                //console.log(res.result);
                 locationDetail.value = res.result;
-                console.log("MC Data", mcDetail)
+                //console.log("MC Data", mcDetail)
             } else {
                 rs.showErrorToast('FetchPropertiesFromInventoryMaster');
             }
@@ -437,10 +437,10 @@ const fetchAreaFromInventoryMaster = (parentId) => {
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
             if (rs.isValid('FetchPropertiesFromInventoryMaster')) {
-                console.log(res.result);
+                //console.log(res.result);
                 areaDetail.value = res.result;
                 itemAreaCount.value = res.result.length;
-                console.log("MC Data", mcDetail)
+                //console.log("MC Data", mcDetail)
             } else {
                 rs.showErrorToast('FetchPropertiesFromInventoryMaster');
             }
@@ -455,7 +455,7 @@ function FetchAllModifierValueChange() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllModifierValueChange', true);
             if (rs.isValid('FetchAllModifierValueChange')) {
-                console.log(res.result);
+                //console.log(res.result);
                 modifiervaluechanges.value = res.result;
             } else {
                 rs.showErrorToast('FetchAllModifierValueChange');
@@ -472,10 +472,10 @@ function FetchAllModifierValueChange() {
     .then((rs) => {
         let res = rs.getActivity('FetchInventoryCategoryId', true);
         if (rs.isValid('FetchInventoryCategoryId')) {
-            console.log(res.result);
+            // console.log(res.result);
             categoryId.value = res.result.propertyCategoryId;
             inventoryCategoryId.value = categoryId.value;
-            console.log("##########printing categoryId ", categoryId.value)
+            // console.log("##########printing categoryId ", categoryId.value)
             fetchPropertiesFromInventoryMaster(inventoryCategoryId.value, parentInventoryId);
         } else {
             rs.showErrorToast('FetchInventoryCategoryId');
@@ -487,10 +487,10 @@ function FetchAllModifierValueChange() {
 const onAdvancedUpload = async (event) => {
     // try {
     let timeStamp = Date.now();
-    console.log(timeStamp, "timeStamp")
-    console.log("event", event.files[0])
+    //console.log(timeStamp, "timeStamp")
+    //console.log("event", event.files[0])
     myFile.value = event.files[0].name;
-    console.log("myFile", myFile.value)
+    //console.log("myFile", myFile.value)
     const formData = new FormData();
     formData.append('file', event.files[0]);
     //uploadedFile.value = true;
@@ -514,9 +514,9 @@ const onAdvancedUpload = async (event) => {
                 fileName.value = timeStamp + "_" + myFile.value;
                 filePath.value = res.uploadedFileURL().filePath;
                 // fullPath.value = Vue.getCDNBaseURL();
-                console.log("fileName", fileName.value);
-                console.log("filePath", filePath.value);
-                console.log("fullPath", fullPath.value);
+                //console.log("fileName", fileName.value);
+                //console.log("filePath", filePath.value);
+                //console.log("fullPath", fullPath.value);
                 uploadedFile.value = true;
                 // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
                 //toaster.success("file uploaded.");
@@ -532,7 +532,7 @@ const onAdvancedUpload = async (event) => {
     // // Check if there are any selected files
     // if (userDataSheet.value.length === 0) {
 
-    // console.log('No files selected', userDataSheet);
+    // //console.log('No files selected', userDataSheet);
     //   console.error('No files selected', userDataSheet);
     //   return;
     // }
@@ -565,18 +565,18 @@ const onAdvancedUpload = async (event) => {
 
 
 const AddStep3AuctionData = async () => {
-    // console.log("auctionId", getLastInsertedAuctionId.value); 
-    // console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
-    // console.log("modifierValue", modifierValue.value);
-    // console.log("modifierValueChangeId", selectedModifierValueChange.value.modifierValueChangeId);
-    // console.log("numberOfExtension", modifierValueExtentionCount.value);
-    // console.log("modifierValueAfterExtension", modifierValueAfterExtention.value);
-    // console.log("documentTypeId", docTypeId.value);
-    // console.log("documentFilePath",filePath.value);
-    // console.log("documentPath", fullPath.value + "/" + fileName.value);
-    // console.log("documentFileName",fileName.value);
-    // console.log("inventoryCategoryId", getPropertyCategoryId.value);
-    // console.log("statusId", statusId.value);
+    // //console.log("auctionId", getLastInsertedAuctionId.value); 
+    // //console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
+    // //console.log("modifierValue", modifierValue.value);
+    // //console.log("modifierValueChangeId", selectedModifierValueChange.value.modifierValueChangeId);
+    // //console.log("numberOfExtension", modifierValueExtentionCount.value);
+    // //console.log("modifierValueAfterExtension", modifierValueAfterExtention.value);
+    // //console.log("documentTypeId", docTypeId.value);
+    // //console.log("documentFilePath",filePath.value);
+    // //console.log("documentPath", fullPath.value + "/" + fileName.value);
+    // //console.log("documentFileName",fileName.value);
+    // //console.log("inventoryCategoryId", getPropertyCategoryId.value);
+    // //console.log("statusId", statusId.value);
 
     // new MQL()
     // .useCoreServer()
@@ -600,9 +600,9 @@ const AddStep3AuctionData = async () => {
     //     .fetch()
     //     .then((rs) => {
     //         let res = rs.getActivity('InsertStep3AuctionData', true);
-    //         console.log("Response of Step 3 Data insert : ",rs);
+    //         //console.log("Response of Step 3 Data insert : ",rs);
     //         if (rs.isValid('InsertStep3AuctionData')) {
-    //             console.log("Response of Step 3 Data insert : ",res.result);
+    //             //console.log("Response of Step 3 Data insert : ",res.result);
     //             addItem();
     //             handleClick(true);
     //              visible.value = false
@@ -620,7 +620,7 @@ const AddStep3AuctionData = async () => {
         // alert("Form data is valid, form submitted");
         toast.add({ severity: 'success', summary: 'Success', detail: 'Form data is valid, form submitted', life: 3000 });
 
-        console.log("################EntityId: ", entityId.value)
+        //console.log("################EntityId: ", entityId.value)
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -646,14 +646,14 @@ const AddStep3AuctionData = async () => {
             })
             .fetch()
             .then(rs => {
-                console.log(rs)
+                //console.log(rs)
                 let res = rs.getActivity("InsertStep3AuctionData", true)
-                console.log(res)
+                //console.log(res)
                 if (rs.isValid("InsertStep3AuctionData")) {
                     addItem();
                     // handleClick(true);
                     visible.value = false
-                    console.log("Response of Step 3 Data insert : ", res.result)
+                    //console.log("Response of Step 3 Data insert : ", res.result)
                 } else {
                     rs.showErrorToast("InsertStep3AuctionData")
                 }
@@ -684,7 +684,7 @@ function fetchDocumentsValidationDetails() {
                     docSize.value = item.fileSize;
                     docType.value = item.fileType;
                     docTypeId.value = item.typeId;
-                    console.log("docName.value", docName.value);
+                    //console.log("docName.value", docName.value);
                 }
             });
         })
@@ -702,13 +702,13 @@ async function FetchAuctionStatus(code) {
     //         .then((rs) => {
     //             let res = rs.getActivity('fetchStatusFromStatusMaster', true);
     //             if (rs.isValid('fetchStatusFromStatusMaster')) {
-    //                 console.log("Auction Status Data", res.result);
+    //                 //console.log("Auction Status Data", res.result);
     //                 statusData.value = res.result;
     //                 statusData.value.forEach(item => {
     //                     statusId.value = item.statusId;
     //                     displayName.value = item.displayName;
     //                 });
-    //                 console.log("Auction Status Data", statusData.value);
+    //                 //console.log("Auction Status Data", statusData.value);
     //                 resolve(true)
     //             } else {
     //                 rs.showErrorToast('fetchStatusFromStatusMaster');
@@ -755,11 +755,11 @@ function addItem() {
                 addedItem.value = res.result.fetchStep3AuctionPreview;
                 auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
                 // Ensure your data is correctly populated
-                console.log("***************", addedItem.value);
+                //console.log("***************", addedItem.value);
 
                 // }
-                console.log("Response of Step 3 Data insert : ", res.result);
-                console.log("addedItem", addedItem.value);
+                //console.log("Response of Step 3 Data insert : ", res.result);
+                //console.log("addedItem", addedItem.value);
             } else {
                 rs.showErrorToast("FetchAllStepsAuctionPreview")
             }
@@ -805,14 +805,14 @@ function RemoveItemFromDB() {
                     docPath.value = item.documentPath;
                     docFileTypeId.value = item.documentTypeId;
                 });
-                console.log("documentDetails", documentDetails.value);
-                console.log("docFileName", docFileName.value);
-                console.log("docFilePath", docFilePath.value);
-                console.log("docPath", docPath.value);
-                console.log("docFileTypeId", docFileTypeId.value);
+                //console.log("documentDetails", documentDetails.value);
+                //console.log("docFileName", docFileName.value);
+                //console.log("docFilePath", docFilePath.value);
+                //console.log("docPath", docPath.value);
+                //console.log("docFileTypeId", docFileTypeId.value);
 
                 await FetchAuctionStatus('AUCTION_ITEM_DELETED');
-                console.log("statusId", statusId.value);
+                //console.log("statusId", statusId.value);
                 // Automatically generated
                 new MQL()
                     .useManagementServer()
@@ -933,7 +933,7 @@ function fetchAvailablePropertyCount(id) {
             let res = rs.getActivity("FetchAvailablePropertyCount", true)
             if (rs.isValid("FetchAvailablePropertyCount")) {
                 propertyCount.value = res.result.unsoldPropertyCount.propertyCount
-                console.log("count", res.result.unsoldPropertyCount.propertyCount);
+                //console.log("count", res.result.unsoldPropertyCount.propertyCount);
             } else {
                 rs.showErrorToast("FetchAvailablePropertyCount")
             }

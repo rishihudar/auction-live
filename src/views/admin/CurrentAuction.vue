@@ -175,11 +175,11 @@ onMounted(() => {
 function handlePageChange(event) {
   currentPage.value = event.page;
   perPage.value = event.rows;
-  console.log("event.page", event.page);
+  //console.log("event.page", event.page);
   fetchConcludedAuctionsBidder();
 }
 function openCancelAuctionModal(data_) {
-  console.log("printing from openCancelAuctionModal: ", data_)
+  //console.log("printing from openCancelAuctionModal: ", data_)
   aucdata.value = data_
 
   new MQL()
@@ -197,10 +197,10 @@ function openCancelAuctionModal(data_) {
              
                 if(totalEMDPaid.value == null){
                   totalEMDPaid.value = 0
-                  console.log("printing from nullEMDCount", totalEMDPaid.value)
+                  //console.log("printing from nullEMDCount", totalEMDPaid.value)
                 }
                 visible7.value = true
-                console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+                //console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("FetchEMDCount")
             }
@@ -210,9 +210,9 @@ function openCancelAuctionModal(data_) {
 
 async function cancelAuction(){
     const result = await v$.value.$validate();
-    console.log("#############", result)
+    //console.log("#############", result)
     if (reason.value!="") {
-        console.log("Auction cancelled")
+        //console.log("Auction cancelled")
         new MQL()
         .useManagementServer()
         .setActivity("o.[CancelAuction]")
@@ -226,17 +226,17 @@ async function cancelAuction(){
             let res = rs.getActivity("CancelAuction", true)
             if (rs.isValid("CancelAuction")) {
               // totalEMDPaid.value = res.result.totalEMDPaid
-              console.log("Auction cancelled for auction ID: ", aucdata.value.pklAuctionId , "****", reason.value)
+              //console.log("Auction cancelled for auction ID: ", aucdata.value.pklAuctionId , "****", reason.value)
               //   if(totalEMDPaid.value == null){
               //       totalEMDPaid.value = 0
-              //       console.log("printing from nullEMDCount", totalEMDPaid.value)
+              //       //console.log("printing from nullEMDCount", totalEMDPaid.value)
               //   }
               toast.add({ severity: 'success', summary: 'Success', detail: 'Auction Cancelled', life: 3000 });
               auctionCancellationNotification(aucdata.value.vsAuctionCode)
                  visible7.value = false
                 
                 //  fetchScheduledAuctionsBidder()
-              //   console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
+              //   //console.log("Printing from FetchEMDCount: ", totalEMDPaid.value)
             } else {
                 rs.showErrorToast("CancelAuction")
             }
@@ -258,7 +258,7 @@ function auctionCancellationNotification(auctionCode){
     .then((rs) => {
       let res = rs.getActivity("FetchBiddersDetailsForAuctionCancellationNotification", true);
       if (rs.isValid("FetchBiddersDetailsForAuctionCancellationNotification")) {
-       console.log("Auction Cancel Notification send")
+       //console.log("Auction Cancel Notification send")
        fetchScheduledAuctionsBidder()
       } else {
         rs.showErrorToast("FetchBiddersDetailsForAuctionCancellationNotification");
@@ -278,15 +278,15 @@ function auctionCancellationNotification(auctionCode){
 //             let res = rs.getActivity("FetchCacellationCustomParam", true)
 //             if (rs.isValid("FetchCacellationCustomParam")) {
 //               cancellationCustomParam.value = res.result.cancellationCustomParam
-//               console.log("auction startTime:- ", products.value.dtStartDate)
+//               //console.log("auction startTime:- ", products.value.dtStartDate)
 //                 if(totalEMDPaid.value == null){
 //                   cancellationCustomParam.value = 0
-//                   console.log("printing from nullFetchCacellationCustomParam", cancellationCustomParam.value)
+//                   //console.log("printing from nullFetchCacellationCustomParam", cancellationCustomParam.value)
 //                 }
-//                 console.log("Printing from FetchCacellationCustomParam(cancellationCustomParam): ", cancellationCustomParam.value)
+//                 //console.log("Printing from FetchCacellationCustomParam(cancellationCustomParam): ", cancellationCustomParam.value)
               
 //                 cancelAuctionBeforeTime.value = 
-//                 console.log("Printing from FetchCacellationCustomParam(cancelAuctionBeforeTime): ", cancelAuctionBeforeTime.value)
+//                 //console.log("Printing from FetchCacellationCustomParam(cancelAuctionBeforeTime): ", cancelAuctionBeforeTime.value)
 //             } else {
 //                 rs.showErrorToast("FetchCacellationCustomParam")
 //             }
@@ -310,13 +310,13 @@ function fetchScheduledAuctionsBidder() {
     .then((rs) => {
       let res = rs.getActivity("FetchScheduledAuctionsBidder", true);
       if (rs.isValid("FetchScheduledAuctionsBidder")) {
-        console.log(res.result);
+        //console.log(res.result);
         products.value = res.result.scheduledAuctions;
         totalRows.value = res.result.rowCount.totalRows;
-        console.log("auctionDetails.value.length", products.value.length);
+        //console.log("auctionDetails.value.length", products.value.length);
         for (var i = 0; i < products.value.length; i++) {
           products.value[i].srNo = currentPage.value * perPage.value + i + 1;
-          console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+          //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
         }
       } else {
         rs.showErrorToast("FetchScheduledAuctionsBidder");
@@ -325,7 +325,7 @@ function fetchScheduledAuctionsBidder() {
 }
 
 function joinAuction(auction_) {
-  console.log(auction_);
+  //console.log(auction_);
   auction.value = auction_
   visible.value = true
   auctionPassword.value = ''
@@ -340,10 +340,10 @@ function cancel() {
 
 const submitAuctionPassword = async () => {
   // Handle submission of auction password here
-  console.log('Auction password submitted:', auctionPassword.value)
+  //console.log('Auction password submitted:', auctionPassword.value)
   // Close the modal
   const formValid = await v$.value.$validate()
-  console.log(formValid);
+  //console.log(formValid);
   if (!formValid) {
     toast.add({ severity: 'error', summary: 'Form Invalid', detail: 'Please fill the form correctly', life: 3000 })
     return
@@ -352,7 +352,7 @@ const submitAuctionPassword = async () => {
   //router.push("BidderAuctionBidding")
   // TODO: check if the passcode is correct
   const passwordValid = await checkPasscode()
-  console.log(passwordValid);
+  //console.log(passwordValid);
   if (passwordValid) {
     window.open('/auction/#/admin/AdminAuctionBidding', '_blank')
     router.push({ path: '/UserDashboard' })
@@ -376,7 +376,7 @@ function checkPasscode() {
           } else {
             toast.add({ severity: 'success', summary: 'Correct Password', detail: 'Welcome to Auction Live', life: 3000 })
             auctionStore.setAuction({ ...auction.value, "auctionPassword": auctionPassword.value, "inventoryHirarchy": res.result.inventoryHirarchy.itemHierarchy, "inventoryCategoryName": res.result.inventoryHirarchy.inventoryCategoryName })
-            console.log(auctionStore.$state);
+            //console.log(auctionStore.$state);
             resolve(true)
           }
         } else {
@@ -400,7 +400,7 @@ function reloadPage() {
 //     .then((rs) => {
 //       let res = rs.getActivity("CheckAuctionPassword", true);
 //       if (rs.isValid("CheckAuctionPassword")) {
-//         console.log(res.result);
+//         //console.log(res.result);
 //         auctionStore.setAuction({ ...auction.value, "inventoryHirarchy": res.result.inventoryHirarchy })
 //       } else {
 //         rs.showErrorToast("CheckAuctionPassword");

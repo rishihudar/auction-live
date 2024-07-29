@@ -137,7 +137,7 @@ const visible = ref(false);
 
 function fetchAuctionBidderDetails(){
     auctionId.value = props.auctionId
-    console.log("printing from AuctionBidderDetails: ", auctionId.value)
+    //console.log("printing from AuctionBidderDetails: ", auctionId.value)
 
     new MQL()
         .useManagementServer()
@@ -155,7 +155,7 @@ function fetchAuctionBidderDetails(){
                 //     auctionBidderDetails[index].value.auctionCode = props.auctionCode
                     
                 // }
-                console.log("***************", auctionBidderDetails)
+                //console.log("***************", auctionBidderDetails)
             } else {
                 rs.showErrorToast("FetchCancelledAuctionBidderDetails")
             }
@@ -163,8 +163,8 @@ function fetchAuctionBidderDetails(){
 }
 
 function fetchBidderTransactionDetails(userId){
-    console.log("Printing userId from fetchBidderTransactionDetails: ", userId)
-    console.log("printing from fetchBidderTransactionDetails: ", auctionId.value)
+    //console.log("Printing userId from fetchBidderTransactionDetails: ", userId)
+    //console.log("printing from fetchBidderTransactionDetails: ", auctionId.value)
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchCancelledAuctionBidderTransactionDetails]")
@@ -181,7 +181,7 @@ function fetchBidderTransactionDetails(userId){
                 if(bidderDetails.value != null){
                 visible.value = true
                 }
-                console.log("Printing from FetchCancelledAuctionBidderTransactionDetails: ", bidderDetails.value)
+                //console.log("Printing from FetchCancelledAuctionBidderTransactionDetails: ", bidderDetails.value)
             } else {
                 rs.showErrorToast("FetchCancelledAuctionBidderTransactionDetails")
             }

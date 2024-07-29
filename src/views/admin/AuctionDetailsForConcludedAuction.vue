@@ -92,12 +92,12 @@ function FetchAuctionDetailsByAuctionId() {
         .then(rs => {
             let res = rs.getActivity("FetchAuctionDetailsByAuctionId", true)
             if (rs.isValid("FetchAuctionDetailsByAuctionId")) {
-                console.log(res)
+                //console.log(res)
                 res.result.fetchAuctionDetails['auctionDocuments'] = res.result.fetchDocuments
                 res.result.fetchAuctionDetails.item = JSON.parse("[" + res.result.fetchAuctionDetails.item + "]");
                 const auctionDetailObj = res.result.fetchAuctionDetails;
             
-                console.log(auctionDetailObj,"auctionDetails")
+                //console.log(auctionDetailObj,"auctionDetails")
 
                 // Map documents to an object with documentTypeName as key and documentPath as value
                 const documentsMap = {};
@@ -109,15 +109,15 @@ function FetchAuctionDetailsByAuctionId() {
                 auctionDetailObj.documentsMap = documentsMap;
 
                 auctionDetails.value = auctionDetailObj;
-                console.log(auctionDetails.value, "auctionDetails.value********");
-                console.log(auctionDetails.value, "auctionDetails.value********");
+                //console.log(auctionDetails.value, "auctionDetails.value********");
+                //console.log(auctionDetails.value, "auctionDetails.value********");
             } else {
                 rs.showErrorToast("FetchAuctionDetailsByAuctionId")
             }
         })
 }
 function DownloadDocument(url) {
-    console.log(url, "url")
+    //console.log(url, "url")
         if (url !== "") {
           new MQLCdn()
             .setCDNPath(url)

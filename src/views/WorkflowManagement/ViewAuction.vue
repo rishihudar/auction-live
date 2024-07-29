@@ -87,7 +87,7 @@ const showAction = computed(() => (
 
 async function submitWorkflow() {
     const formValid = await $v.value.$validate();
-    console.log(formValid);
+    //console.log(formValid);
     if (!formValid) {
         toaster.error("Please Add Comment")
         return
@@ -137,7 +137,7 @@ function fetchLogin() {
             .fetch()
             .then(rs => {
                 let res = rs.getActivity("FetchRoleAndLoginFormNextStepAndStatus", true)
-                console.log(res)
+                //console.log(res)
                 if (rs.isValid("FetchRoleAndLoginFormNextStepAndStatus")) {
                     logins.value = res.result.nextLogins
                     role.value.roleName = res.result.nextRole.displayName
@@ -160,7 +160,7 @@ function fetchWorkflowStepData() {
             .then(rs => {
                 let res = rs.getActivity("query_2cg9Wj6KVFlFt8DMt6va6a4tjqm", true)
                 if (rs.isValid("query_2cg9Wj6KVFlFt8DMt6va6a4tjqm")) {
-                    console.log(res)
+                    //console.log(res)
                     workflowStepData.value = res[0]
                     workflowStepData.value.data1 = JSON.parse(workflowStepData.value.data1)
                     auctionId.value = workflowStepData.value.auctionId
@@ -181,10 +181,10 @@ function fetchAuctionDetailsForView() {
         .fetch()
         .then(rs => {
             let res = rs.getActivity("FetchAuctionDetailsForView", true)
-            console.log(res, "result")
+            //console.log(res, "result")
             if (rs.isValid("FetchAuctionDetailsForView")) {
                 // auctionDetailsData.value = res.result.fetchAuctionDetails
-                // console.log(auctionDetailsData.value, " auctionDetailsData")
+                // //console.log(auctionDetailsData.value, " auctionDetailsData")
                 label.value = res.result.NextStatus
             } else {
                 rs.showErrorToast("FetchAuctionDetailsForView")

@@ -382,7 +382,7 @@ function FetchInventoryCategories() {
         .then((rs) => {
             let res = rs.getActivity('FetchInventoryCategories', true);
             if (rs.isValid('FetchInventoryCategories')) {
-                console.log(res.result);
+                //console.log(res.result);
                 auctionCategory.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchInventoryCategories');
@@ -399,7 +399,7 @@ function FetchAllAuctionProcess() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllAuctionProcess', true);
             if (rs.isValid('FetchAllAuctionProcess')) {
-                console.log(res.result);
+                //console.log(res.result);
                 auctionProcess.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllAuctionProcess');
@@ -416,12 +416,12 @@ function FetchAllDepartments() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllDepartments', true);
             if (rs.isValid('FetchAllDepartments')) {
-                console.log(res.result);
+                //console.log(res.result);
                 departments.value = res.result;
                 auctionDetails.value.departmentName = res.result[0].departmentName
                 auctionDetails.value.department = res.result[0].departmentId
 
-                console.log("department name: ", auctionDetails.value.departmentName, " department ID: ", auctionDetails.value.department )
+                //console.log("department name: ", auctionDetails.value.departmentName, " department ID: ", auctionDetails.value.department )
             } else {
                 rs.showErrorToast('ErrorFetchAllDepartments');
             }
@@ -437,7 +437,7 @@ function FetchAllBidPlacements() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllBidPlacements', true);
             if (rs.isValid('FetchAllBidPlacements')) {
-                console.log(res.result);
+                //console.log(res.result);
                 bidPlacements.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllBidPlacements');
@@ -454,14 +454,14 @@ function FetchAllPaymentModes() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllPaymentModes', true);
             if (rs.isValid('FetchAllPaymentModes')) {
-                console.log(res.result[0].paymentModeName);
+                //console.log(res.result[0].paymentModeName);
                 auctionDetails.value.eventProcesssingFeeModeName = res.result[0].paymentModeName;
                 auctionDetails.value.eventProcesssingFeeMode = res.result[0].paymentModeId;
                 auctionDetails.value.emdFeePaymentModeName = res.result[0].paymentModeName;
                 auctionDetails.value.emdFeePaymentMode = res.result[0].paymentModeId;
 
-                console.log("auctionDetails.value.eventProcesssingFeeModeName", auctionDetails.value.eventProcesssingFeeModeName, "auctionDetails.value.eventProcesssingFeeMode", auctionDetails.value.eventProcesssingFeeMode )
-                console.log("auctionDetails.value.emdFeePaymentModeName", auctionDetails.value.emdFeePaymentModeName, "auctionDetails.value.emdFeePaymentMode", auctionDetails.value.emdFeePaymentMode)
+                //console.log("auctionDetails.value.eventProcesssingFeeModeName", auctionDetails.value.eventProcesssingFeeModeName, "auctionDetails.value.eventProcesssingFeeMode", auctionDetails.value.eventProcesssingFeeMode )
+                //console.log("auctionDetails.value.emdFeePaymentModeName", auctionDetails.value.emdFeePaymentModeName, "auctionDetails.value.emdFeePaymentMode", auctionDetails.value.emdFeePaymentMode)
             } else {
                 rs.showErrorToast('ErrorFetchAllPaymentModes');
             }
@@ -477,7 +477,7 @@ function FetchAllEMDAppliedFor() {
         .then((rs) => {
             let res = rs.getActivity('FetchAllEMDAppliedFor', true);
             if (rs.isValid('FetchAllEMDAppliedFor')) {
-                console.log(res.result);
+                //console.log(res.result);
                 emdAppliedFor.value = res.result;
             } else {
                 rs.showErrorToast('ErrorFetchAllEMDAppliedFor');
@@ -494,7 +494,7 @@ function FetchEventProcessingFees() {
         .then((rs) => {
             let res = rs.getActivity('FetchEventProcessingFees', true);
             if (rs.isValid('FetchEventProcessingFees')) {
-                console.log(res.result);
+                //console.log(res.result);
                 auctionDetails.value.eventProcessingFeeAmount = res.result.eventProcessingFeeAmount;
             } else {
                 rs.showErrorToast('ErrorFetchEventProcessingFees');
@@ -505,7 +505,7 @@ function FetchEventProcessingFees() {
 
 const InsertAuctionDataStep2 = async () => {
     const result = await $v.value.$validate();
-    console.log("lginId, roleId", loginId.value, role.value.roleId);
+    //console.log("lginId, roleId", loginId.value, role.value.roleId);
     if (result) {
         new MQL()
             .useManagementServer()
@@ -530,16 +530,16 @@ const InsertAuctionDataStep2 = async () => {
             .then((rs) => {
                 let res = rs.getActivity('InsertStep2AuctionData', true);
                 if (rs.isValid('InsertStep2AuctionData')) {
-                    console.log("LastUpdatedId from response", res.result);
+                    //console.log("LastUpdatedId from response", res.result);
                     store.setPropertyCategoryId(auctionDetails.value.auctionCategory);
-                    console.log("propertyCategoryId: ", getPropertyCategoryId.value);
+                    //console.log("propertyCategoryId: ", getPropertyCategoryId.value);
                     emit('nextTab')
                 } else {
                     rs.showErrorToast('InsertStep2AuctionData');
                 }
             });
 
-        console.log(auctionDetails.value);
+        //console.log(auctionDetails.value);
     } else {
         //alert("error, form not submitted")
         toast.add({ severity: 'error', summary: 'Drafted', detail: 'Please fill all fields', life: 3000 });
@@ -595,7 +595,7 @@ function FetchAllStepsAuctionPreview() {
         .then(rs => {
             let res = rs.getActivity("FetchAllStepsAuctionPreview", true)
             if (rs.isValid("FetchAllStepsAuctionPreview")) {
-                console.log("FetchAllStepsAuctionPreview", res.result);
+                //console.log("FetchAllStepsAuctionPreview", res.result);
                 auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
                 if (res.result.fetchStep2AuctionPreview != null) {
                     auctionDetails.value.referenceNo = res.result.fetchStep2AuctionPreview.referenceNumber;

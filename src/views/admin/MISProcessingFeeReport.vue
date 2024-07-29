@@ -35,10 +35,10 @@ import JsonExcel from "vue-json-excel3";
 import Calendar from 'primevue/calendar';
 
 const currentDate1 = new Date();
-console.log("currentdate1#########", currentDate1)
+//console.log("currentdate1#########", currentDate1)
 const currentDate2 = new Date();
 let dates = ref([currentDate1, currentDate2]);
-console.log("dates@@@@@@@@@", dates)
+//console.log("dates@@@@@@@@@", dates)
 
 let json_data = ref([]);
 const processingReportFields = {
