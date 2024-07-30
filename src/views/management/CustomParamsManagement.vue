@@ -30,7 +30,7 @@
       </DataTable>
     </div>
 
-    <!-- <Dialog v-if="addModal" v-model:visible="addvisible" modal header="ADD" :style="{ width: '40rem' }">
+    <Dialog v-if="addModal" v-model:visible="addvisible" modal header="ADD" :style="{ width: '40rem' }">
       <template v-slot:default>
         <div class="tableCustom" >
           <table>
@@ -43,16 +43,18 @@
             </thead>
             <tbody>
               <tr>
-                <td><input v-model="addKey" /></td>
-                <td><input v-model="addVal" /></td>
-                <td><textarea v-model="addDes"></textarea></td>
+                <td><InputText id="addKey" v-model="addKey"  placeholder="enter key "/> </td>
+                <td><InputText id="addVal" v-model="addVal"  placeholder="enter value "/> </td>
+                <td><Textarea v-model="addDes"  placeholder="enter description"  rows="5" cols="30" />   </td>
+
+                
               </tr>
             </tbody>
           </table>
           <Button label="ADD"  @click="handleAddCustomPara(addKey,addVal,addDes)"  severity="secondary" />
         </div>
         </template>
-    </Dialog> -->
+    </Dialog>
 
 
 
@@ -69,9 +71,9 @@
             </thead>
             <tbody>
               <tr>
-                <td><input v-model="customKey" /></td>
-                <td><input v-model="customVal" /></td>
-                <td><textarea v-model="customDes"></textarea></td>
+                <td><InputText id="customKey" v-model="customKey" /> </td>
+                <td><InputText id="customVal" v-model="customVal" /> </td>
+                <td><Textarea v-model="customDes"  rows="5" cols="30" /> </td>
               </tr>
             </tbody>
           </table>
@@ -97,12 +99,12 @@ import { ref, onMounted, computed } from "vue";
 import MQL from "@/plugins/mql.js";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import { storeToRefs } from "pinia";
 import Button from "primevue/button";
-import MultiSelect from "primevue/multiselect";
-import router from "../../router";
 import { useToast } from "primevue/usetoast";
 import { login } from "../../store/modules/login";
+import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
+
 
 const toast = useToast();
 let editingItem =ref(null);
@@ -138,18 +140,56 @@ function handleAction(id,key,value,decription){
     
 }
 
-// function handleAddCustomPara( addkey,addval,adddes){
-//   console.log("Add clicked key",addkey);
-//   console.log("Add clicked val",addval);
-//   console.log("Add clicked des",adddes);
+function handleAddCustomPara( addkey,addval,adddes){
+  console.log("Add clicked key",addkey);
+  console.log("Add clicked val",addval);
+  console.log("Add clicked des",adddes);
+  if(addkey==null || addval==null || adddes==null){
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Please enter all the fields",
+      life: 3000,
+    });
+    return;
+  }
+  addCustomParamsDetails(addkey,addval,adddes);
 
-// }
+
+}
 function handleAdd(){
   console.log("Add clicked");
   addModal.value =true;
   addvisible.value = true;
+  
 
+}
+function addCustomParamsDetails(key,value,des){
 
+					// Automatically generated
+          new MQL()
+          .useManagementServer()
+			.setActivity("r.[AddCustomParams]")
+			.setData({"description":des,"key":key,"userid":userID.value,"value":value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("AddCustomParams",true)
+			if (rs.isValid("AddCustomParams")) {
+        showSuccess("Custom Parameter Added Successfully");
+        fetchCustomParamsDetails();
+        
+        addModal.value =false;
+        addDes.value = null;
+        addKey.value = null;
+        addVal.value = null;
+			} else
+			 { 
+			rs.showErrorToast("AddCustomParams")
+			}
+			})
+			
+    
+         
 }
 function handleDelete(customdbid){
   console.log("Delete clicked id",customdbid);
