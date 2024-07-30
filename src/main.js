@@ -108,21 +108,21 @@ vm.use(Toaster, {
   duration: 3000
 })
 
-var coreURL = '/core-server'
-var loginURL = '/login-server'
-var cdnBaseURL = '/cdn-server'
-var bidderURL = '/bidder-server'
-var managementURL = '/management-server'
-var notificationURL = '/notification-server'
+// var coreURL = '/core-server'
+// var loginURL = '/login-server'
+// var cdnBaseURL = '/cdn-server'
+// var bidderURL = '/bidder-server'
+// var managementURL = '/management-server'
+// var notificationURL = '/notification-server'
 
 
 // PROD
-// var coreURL = '/application/core-server'
-// var loginURL = '/application/login-server'
-// var cdnBaseURL = '/cdn-server'
-// var bidderURL = '/application/bidder-server'
-// var managementURL = '/application/management-server'
-// var notificationURL = '/application/notification-server'
+var coreURL = '/application/core-server'
+var loginURL = '/application/login-server'
+var cdnBaseURL = '/cdn-server'
+var bidderURL = '/application/bidder-server'
+var managementURL = '/application/management-server'
+var notificationURL = '/application/notification-server'
 
 vm.use(mqlOptions, {
   coreURL: coreURL,
