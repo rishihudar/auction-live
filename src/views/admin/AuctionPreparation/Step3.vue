@@ -381,7 +381,7 @@ function fetchPropertiesFromInventoryMaster(inventoryCategoryId, parentInventory
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentInventoryId })
+        .setData({ inventoryCategoryId: inventoryCategoryId, parentInventoryId: parentInventoryId, entityId: entityId.value})
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -398,7 +398,7 @@ const fetchMCNameFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId, entityId: entityId.value })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -415,7 +415,7 @@ const fetchLocationFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId, entityId: entityId.value })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
@@ -432,7 +432,7 @@ const fetchAreaFromInventoryMaster = (parentId) => {
     new MQL()
         .useManagementServer()
         .setActivity('o.[FetchPropertiesFromInventoryMaster]')
-        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId })
+        .setData({ inventoryCategoryId: inventoryCategoryId.value, parentInventoryId: parentId, entityId: entityId.value })
         .fetch()
         .then((rs) => {
             let res = rs.getActivity('FetchPropertiesFromInventoryMaster', true);
