@@ -164,6 +164,19 @@ const router = createRouter({
       component: loadAdminView("MISProcessingFeeReport"),
       meta: { title: "MISProcessingFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
     },
+    {
+      path: "/UserExport",
+      name: "UserExport",
+      component: loadAdminView("UserExport"),
+      meta: { title: "UserExport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+  
+    {
+      path: "/UserRegistration",
+      name: "UserRegistration",
+      component: loadAdminView("UserRegistration"),
+      meta: { title: "UserRegistration",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
   
     {
       path: "/PublisherDashboard",

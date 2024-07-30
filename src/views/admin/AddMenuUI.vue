@@ -75,7 +75,7 @@ import Button from 'primevue/button';
 
 
 const roles = ref([]);
-const selectedRole = ref('');
+const selectedRole = ref([]);
 const selectedMenu = ref([]);
 const bidderType = ref([
     { name: 'USER', code: 'user' },
@@ -121,7 +121,7 @@ function selectBidderType(selectedBidder) {
 }
 function sendData() {
   var data = [];
-    roles.value.map((el) => {
+  selectedRole.value.map((el) => {
       data.push({
         roleId: el.value,
         menuId: selectedMenuId.value
@@ -161,6 +161,8 @@ function addCard(value) {
     // //console.log(" selectedRoleId.value", selectedRoleId.value);
     // fetchRoles()
     var data=sendData()
+    console.log("########data: ", data)
+    console.log("########selectedRoleId: ", selectedRoleId.value)
     new MQL()
     .useManagementServer()
     .setActivity("o.[InsertSidebarMenuDetails]")
