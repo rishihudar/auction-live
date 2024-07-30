@@ -29,7 +29,7 @@
                             <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
                         </div>
                         <div class="fm-action">
-                            <Button label="Add Menu" @click="addCard('W1'), (isAdding = true)"
+                            <Button label="Add Menu" @click="addCard('W1', selectedBidder), (isAdding = true)"
                                 :disabled="isAdding || !menuName || !selectedBidder" />
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="fm-action">
-                        <Button label="Add Role To Menu" @click="addCard('W2')" />
+                        <Button label="Add Role To Menu" @click="addCard('W2', selectedBidder2)" />
                     </div>
                 </div>
             </div>
@@ -202,7 +202,7 @@ function fetchRoles(userType) {
 
 }
 
-function addCard(value) {
+function addCard(value, usertype) {
     // //console.log("Menu name", menuName.value);
     // //console.log("User Type", selectedUserType.value);
     // //console.log("Path", path.value);
@@ -214,7 +214,7 @@ function addCard(value) {
         .useManagementServer()
         .setActivity("o.[InsertSidebarMenuDetails]")
         .setData({
-            userType: selectedUserType.value,
+            userType: usertype.name,
             menuName: menuName.value,
             routingPath: path.value,
             roleId: selectedRoleId.value,
@@ -226,7 +226,7 @@ function addCard(value) {
         .then(rs => {
             let res = rs.getActivity("InsertSidebarMenuDetails", true)
             if (rs.isValid("InsertSidebarMenuDetails")) {
-                fetchRoles(selectedUserType.value)
+                fetchRoles(usertype.name)
                 isAdding.value = false
             } else {
                 rs.showErrorToast("InsertSidebarMenuDetails")
