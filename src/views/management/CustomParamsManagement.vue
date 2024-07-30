@@ -71,7 +71,7 @@
             </thead>
             <tbody>
               <tr>
-                <td><InputText id="customKey" v-model="customKey" /> </td>
+                <td>{{customKey}}</td>
                 <td><InputText id="customVal" v-model="customVal" /> </td>
                 <td><Textarea v-model="customDes"  rows="5" cols="30" /> </td>
               </tr>
