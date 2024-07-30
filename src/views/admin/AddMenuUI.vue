@@ -87,7 +87,7 @@ import Button from 'primevue/button';
 
 
 const roles = ref([]);
-const selectedRole = ref('');
+const selectedRole = ref([]);
 const selectedMenu = ref([]);
 const bidderType = ref([
     { name: 'USER', code: 'user' },
@@ -144,12 +144,12 @@ function selectBidderType2(selectedBidder) {
     fetchRoles(selectedUserType2.value);
 }
 function sendData() {
-    var data = [];
-    roles.value.map((el) => {
-        data.push({
-            roleId: el.value,
-            menuId: selectedMenuId.value
-        });
+  var data = [];
+  selectedRole.value.map((el) => {
+      data.push({
+        roleId: el.value,
+        menuId: selectedMenuId.value
+      });
     });
     return data
 }
