@@ -30,7 +30,29 @@
       </DataTable>
     </div>
 
-    
+    <!-- <Dialog v-if="addModal" v-model:visible="addvisible" modal header="ADD" :style="{ width: '40rem' }">
+      <template v-slot:default>
+        <div class="tableCustom" >
+          <table>
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input v-model="addKey" /></td>
+                <td><input v-model="addVal" /></td>
+                <td><textarea v-model="addDes"></textarea></td>
+              </tr>
+            </tbody>
+          </table>
+          <Button label="ADD"  @click="handleAddCustomPara(addKey,addVal,addDes)"  severity="secondary" />
+        </div>
+        </template>
+    </Dialog> -->
 
 
 
@@ -116,12 +138,12 @@ function handleAction(id,key,value,decription){
     
 }
 
-function handleAddCustomPara( key,val,des){
-  console.log("Add clicked key",key.value);
-  console.log("Add clicked val",val);
-  console.log("Add clicked des",des);
+// function handleAddCustomPara( addkey,addval,adddes){
+//   console.log("Add clicked key",addkey);
+//   console.log("Add clicked val",addval);
+//   console.log("Add clicked des",adddes);
 
-}
+// }
 function handleAdd(){
   console.log("Add clicked");
   addModal.value =true;
