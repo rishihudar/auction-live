@@ -276,6 +276,12 @@ const router = createRouter({
       meta: { title: "UserManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/CustomParamsManagement",
+      name: "CustomParamsManagement",
+      component: loadManagementView("CustomParamsManagement"),
+      meta: { title: "CustomParamsManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_SUPERADMIN']},
+    },
+    {
       path: "/RoleManagement",
       name: "RoleManagement",
       component: loadManagementView("RoleManagement"),
