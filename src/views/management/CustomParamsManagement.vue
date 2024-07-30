@@ -1,5 +1,4 @@
 <template>
-    <h1>hello </h1>
     <div>
     <Button label="Add Custom Parameter"  @click="handleAdd()"   severity="secondary" />
   </div>
