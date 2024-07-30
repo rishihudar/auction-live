@@ -164,6 +164,19 @@ const router = createRouter({
       component: loadAdminView("MISProcessingFeeReport"),
       meta: { title: "MISProcessingFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
     },
+    {
+      path: "/UserExport",
+      name: "UserExport",
+      component: loadAdminView("UserExport"),
+      meta: { title: "UserExport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+  
+    {
+      path: "/UserRegistration",
+      name: "UserRegistration",
+      component: loadAdminView("UserRegistration"),
+      meta: { title: "UserRegistration",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
   
     {
       path: "/PublisherDashboard",
@@ -274,6 +287,12 @@ const router = createRouter({
       name: "UserManagement",
       component: loadManagementView("UserManagement"),
       meta: { title: "UserManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+    },
+    {
+      path: "/CustomParamsManagement",
+      name: "CustomParamsManagement",
+      component: loadManagementView("CustomParamsManagement"),
+      meta: { title: "CustomParamsManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/RoleManagement",
