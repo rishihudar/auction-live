@@ -120,6 +120,7 @@ function fetchAuctionDetailsForMyTask() {
     .setActivity("o.[FetchAuctionDetailsForMyTask]")
     .setData({
       assignedLoginId: loginStore.loginId,
+      entityId: loginStore.entityId,
       assignedRoleId: loginStore.role.roleId,
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),
