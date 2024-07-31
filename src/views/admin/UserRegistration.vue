@@ -421,7 +421,8 @@ const InsertUserData = async () => {
                 console.log("User role mapping completed")
 			} else
 			 { 
-			rs.showErrorToast("InsertUser")
+			// rs.showErrorToast("InsertUser")
+            toast.add({ severity: 'error', summary: 'Drafted', detail: 'Username Aready Present, Please try with different Username', life: 3000 });
 			}
 			})
         } else {
