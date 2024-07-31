@@ -58,7 +58,7 @@
 
 
 
-    <Dialog v-if="majorModal" v-model:visible="visible" modal header="Information" :style="{ width: '40rem' }">
+    <Dialog v-if="majorModal" v-model:visible="visible" modal header="Information" :style="{ width: '50rem' }">
       <template v-slot:default>
         <div class="tableCustom"  v-if="customdbid && customKey">
           <table>
@@ -72,7 +72,7 @@
             <tbody>
               <tr>
                 <td>{{customKey}}</td>
-                <td><InputText id="customVal" v-model="customVal" /> </td>
+                <td><Textarea id="customVal" v-model="customVal" rows="5" cols="30"/> </td>
                 <td><Textarea v-model="customDes"  rows="5" cols="30" /> </td>
               </tr>
             </tbody>
