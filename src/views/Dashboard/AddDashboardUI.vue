@@ -15,9 +15,9 @@
                                 User Type
                             </label>
                             <div class="fm-inner">
-                                <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name"
-                                    :disabled="isAdding" placeholder="Select Bidder Type"
-                                    @change="selectBidderType(selectedBidder), fetchRoles()" />
+                                <Dropdown v-model="selectedBidder" editable :options="bidderType" optionLabel="name" option-value="name"
+                                    placeholder="Select Bidder Type"
+                                    @change="selectBidderType(selectedBidder), fetchRoles(selectedBidder)" />
                             </div>
                         </div>
                         <div class="fm-group required">
@@ -39,14 +39,14 @@
                             </label>
                             <div class="fm-inner">
                                 <Dropdown v-model="selectedParentCard" editable :options="parentCards" optionLabel="cardName"
-                                    :disabled="isAdding" placeholder="Select Bidder Type"
+                                    placeholder="Select Bidder Type"
                                     @change="selectParentCard(selectedParentCard)" />
                             </div>
                         </div>
                         <div class="fm-group required">
                             <label class="fm-label" for="cardname">Card Name</label>
                             <div class="fm-inner">
-                                <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" :disabled="isAdding" />
+                                <InputText id="cardname" v-model="cardName" placeholder="Enter Card Name" />
                             </div>
                         </div>
                         <div class="fm-group required" v-if="isParent==0">
@@ -54,12 +54,12 @@
                             <div class="fm-check-holder">
                                 <div class="fm-radiobox">
                                     <RadioButton v-model="upcomingFlag" inputId="flag" name="yes" value="0"
-                                        :disabled="isAdding" />
+                                         />
                                     <label for="ingredient1">Yes</label>
                                 </div>
                                 <div class="fm-radiobox">
                                     <RadioButton v-model="upcomingFlag" inputId="flag1" name="no" value="1"
-                                        :disabled="isAdding" />
+                                         />
                                     <label for="ingredient1">No</label>
                                 </div>
                             </div>
@@ -67,21 +67,34 @@
                         <div class="fm-group" v-if="upcomingFlag == 1 && isParent==0">
                             <label class="fm-label" for="path">Count Query</label>
                             <div class="fm-inner">
-                                <Textarea id="query" v-model="countQuery" rows="5" cols="30" :disabled="isAdding" />
+                                <Textarea id="query" v-model="countQuery" rows="5" cols="30"  />
                             </div>
                         </div>
                         <div class="fm-group">
                             <label class="fm-label" for="path">Routing Path</label>
                             <div class="fm-inner">
-                                <InputText id="path" v-model="path" placeholder="Enter Routing Path" :disabled="isAdding" />
+                                <InputText id="path" v-model="path" placeholder="Enter Routing Path" />
                             </div>
                         </div>
                     </div>
                     <div class="fm-action">
-                        <Button label="Add Card" @click="addCard('W1')"
-                            :disabled="isAdding || !cardName || !selectedBidder" />
+                        <Button label="Add Card" @click="addCard('W1',selectedBidder)"
+                            :disabled="!cardName || !selectedBidder" />
                     </div>
-                    <div class="col-span-full" v-if="isAdding">
+                </div>
+            </div>
+            <div class="card col-span-6">
+                <div class="col-span-full">
+                    <div class="fm-group required">
+                            <label class="fm-label" for="role">
+                                User Type
+                            </label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedBidder2" editable :options="bidderType" optionLabel="name" option-value="name"
+                                    placeholder="Select Bidder Type"
+                                    @change="selectBidderType(selectedBidder2), fetchRoles(selectedBidder2)" />
+                            </div>
+                        </div>
                         <div class="fm-group required">
                             <label class="fm-label" for="cards">
                                 Cards
@@ -101,10 +114,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fm-action" v-if="isAdding">
-                        <Button label="Add Role To Card" @click="addCard('W2')" />
+                    <div class="fm-action">
+                        <Button label="Add Role To Card" @click="addCard('W2',selectedBidder)" />
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -139,12 +151,12 @@ const selectedCardId = ref();
 const selectedUserType = ref();
 const selectedParentId=ref();
 const selectedBidder = ref();
+const selectedBidder2 = ref();
 const selectedParentCard = ref();
 const countQuery = ref(null);
 const parentCards = ref([]);
 const cardName = ref("");
 const path = ref(null);
-const isAdding = ref(false);
 const upcomingFlag = ref(0)
 
 
@@ -174,13 +186,13 @@ function selectParentCard(selectedParentCard) {
     //console.log("CardId",selectedParentCard.cardId);
 }
 
-function fetchRoles() {
+function fetchRoles(userType) {
 
     new MQL()
         .useManagementServer()
         .setActivity("o.[FetchRolesForDashboardUI]")
         .setData({
-            userType: selectedUserType.value
+            userType: userType
         })
         .fetch()
         .then(rs => {
@@ -199,7 +211,7 @@ function fetchRoles() {
         })
 }
 
-function addCard(value) {
+function addCard(value,userType) {
     if(isParent.value==0){
         isParent.value=0
         //console.log("inside if ",isParent.value);
@@ -216,7 +228,7 @@ function addCard(value) {
             urlPath: path.value,
             roleId: selectedRoleId.value,
             cardId: selectedCardId.value,
-            userType: selectedUserType.value,
+            userType: userType,
             flag: value,
             upcomingFlag: upcomingFlag.value,
             bParent: isParent.value // Include isParent value
@@ -227,8 +239,7 @@ function addCard(value) {
             if (rs.isValid("InsertDashboardCard")) {
                 //console.log(cardName.value);
                 //console.log(path.value);
-                fetchRoles();
-                isAdding.value = true;
+                fetchRoles(userType);
                 toast.add({ severity: 'success', summary: 'Success', detail: 'Data added successfully', life: 3000 });
             } else {
                 rs.showErrorToast("InsertDashboardCard")
@@ -237,8 +248,5 @@ function addCard(value) {
         })
 
 }
-onMounted(() => {
-    fetchRoles()
-})
 
 </script>
