@@ -114,6 +114,7 @@
                 <div class="card-header">
                     <div class="ch-title">Add</div>
                 </div>
+                <Toast/>
                 <div class="form-grid">
                     <div class="col-span-4">
                         <div class="fm-group">
@@ -283,6 +284,7 @@
                 <div class="card-header">
                     <div class="ch-title">Edit</div>
                 </div>
+                <Toast/>
                 <div class="form-grid">
                     <div class="col-span-4">
                         <div class="fm-group">
@@ -456,7 +458,6 @@ import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import FileUpload from 'primevue/fileupload';
-import { useToast } from "primevue/usetoast";
 import MQL from '@/plugins/mql.js';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -465,11 +466,13 @@ import Dropdown from 'primevue/dropdown';
 import { login } from "../../store/modules/login";
 import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
+import { useToast } from "primevue/usetoast";
 import { helpers, required } from '@vuelidate/validators'
 
 const loginStore = login()
 const { loginId } = storeToRefs(loginStore)
 
+const toast = useToast();
 const districtMaster = ref([]);
 const entityMaster = ref([]);
 const roleMaster = ref([]);
@@ -598,11 +601,13 @@ const InsertUserData = async () => {
 			 .then(rs => {
 			let res = rs.getActivity("InsertUserData",true)
 			if (rs.isValid("InsertUserData")) {
+                toast.add({ severity: 'success', summary: 'Success', detail: 'User Added Successfully', life: 3000 });
                 changeFlag(0)
                 reloadPage()
 			} else
 			 { 
-			rs.showErrorToast("InsertUserData")
+			// rs.showErrorToast("InsertUserData")
+            toast.add({ severity: 'error', summary: 'Drafted', detail: 'Username Aready Present, Please try with different Username', life: 3000 });
 			}
 			})
         } else {
@@ -630,11 +635,13 @@ const updateUserData = async () => {
 			 .then(rs => {
 			let res = rs.getActivity("UpdateUserData",true)
 			if (rs.isValid("UpdateUserData")) {
+                toast.add({ severity: 'success', summary: 'Success', detail: 'User Updated Successfully', life: 3000 });
                 changeFlag(0)
                 reloadPage()
 			} else
 			 { 
-			rs.showErrorToast("UpdateUserData")
+			// rs.showErrorToast("UpdateUserData")
+            toast.add({ severity: 'error', summary: 'Drafted', detail: 'User Updation Failed, please try again', life: 3000 });
 			}
 			})
         } else {
