@@ -46,14 +46,15 @@
                     <div class="fm-group">
                         <div class="fm-label-holder">
                             <label for="chooseExcel" class="fm-label">Choose Excel File</label>
+                  
                             <a
                                 v-if="['2', '3', '4', '7'].includes(selectedCategory)"
-                                :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp.xlsx`"
+                                :href="templateURL+'/InventoryTemplates/InventoryTemp.xlsx'"
                                 download
                             >DOWNLOAD TEMPLATE</a>
                             <a
                                 v-if="['1', '5', '6', '8'].includes(selectedCategory)"
-                                :href="`https://testcdncs.mkcl.org/22Jbn9juCuMfJ4fNA1Sp8AAVERE/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx`"
+                                :href="templateURL+'/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx'"
                                 download
                             >DOWNLOAD TEMPLATE</a>
                         </div>
@@ -154,9 +155,30 @@ function fetchInventonryCategories() {
       }
     });
 }
+
+const templateURL = ref();
+function fetchInventonryTemplates(){
+			new MQL()
+        .useCoreServer()
+			.setActivity("o.[FetchInventoryTemplatesURL]")
+			.setData({"assetName":"INVENTORY_TEMPLATE_URL"})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchInventoryTemplatesURL",true)
+			if (rs.isValid("FetchInventoryTemplatesURL")) {
+        templateURL.value = res.result.cdnURL
+        console.log(templateURL.value)
+			} else
+			 { 
+			rs.showErrorToast("FetchInventoryTemplatesURL")
+			}
+			})
+			
+}
 onBeforeMount(() => {
   fetchInventonryCategories();
   fetchEntitiesList();
+  fetchInventonryTemplates();
 });
 
 function showSelectedMC(){
