@@ -79,7 +79,16 @@
                             {{ data.isParent }}
                         </template>
                     </Column>
-
+                    <Column field="userCode" header="WT-Code For H1_10_Percent_Payment" style="min-width: 12rem">
+                        <template #body="{ data }">
+                            {{ data.userCode }}
+                        </template>
+                    </Column>
+                    <Column field="emdPaymentUserCode" header="WT-Code For EMD_Payment" style="min-width: 12rem">
+                        <template #body="{ data }">
+                            {{ data.emdPaymentUserCode }}
+                        </template>
+                    </Column>
                     <Column header="Actions" style="min-width:12rem">
 
                         <template #body="{ data }">
@@ -226,6 +235,28 @@
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
+                        <label for="userCode">WT-Code For H1_10_Percent_Payment<span>*</span></label>
+                        <InputText id="userCode" v-model="entityData.userCode"
+                            placeholder="Enter WT-Code For H1_10_Percent_Payment " />
+                       
+                    </div>
+                    <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+                    </div> -->
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
+                        <label for="emdPaymentUserCode">WT-Code For EMD_Payment<span>*</span></label>
+                        <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode"
+                            placeholder="Enter WT-Code For EMD_Payment " />
+                       
+                    </div>
+                    <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+                    </div> -->
+                </div>
+                <div class="w-1/4">
+                    <div class="fm-group">
                         <label for="entityParent">Entity Parent<span>*</span></label>
                         <div class="card flex justify-content-center">
                             <Checkbox v-model="entityData.isParent" :binary="true" />
@@ -236,6 +267,8 @@
                         {{ $v.entityData.isParent.$errors[0].$message }}
                     </div>
                 </div>
+              
+                
                 <div class="w-1/4">
                     <div class="fm-group">
                         <Toast />
@@ -247,10 +280,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <Button @click="insertEntity(entityData), changeFlag(0), reloadPage()" icon="pi pi-check"
-                    label="Submit"></Button> -->
-            <!-- <Button @click="changeFlag(0), reloadPage()" icon="pi pi-check" label="Cancel"></Button> -->
-
         </template>
 
         <template v-else-if="flag === 2">
@@ -277,9 +306,9 @@
                         <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
                             optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
                     </div>
-                    <div v-if="$v.entityData.entityType.$error" class="fm-error">
+                    <!-- <div v-if="$v.entityData.entityType.$error" class="fm-error">
                         {{ $v.entityData.entityType.$errors[0].$message }}
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="w-1/2">
@@ -345,11 +374,27 @@
             <div class="w-1/2">
                 <label for="emiPayPercent">Entity EMI Payment Percentage<span>*</span></label>
                 <InputText id="emiPayPercent" v-model="entityData.emiPaymentPercentage" />
-                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
+           
             </div>
             <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
                 {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
             </div>
+            <div class="w-1/2">
+                <label for="userCode">WT-Code For H1_10_Percent_Payment<span>*</span></label>
+                <InputText id="userCode" v-model="entityData.userCode" />
+              
+            </div>
+            <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+            </div> -->
+            <div class="w-1/2">
+                <label for="emdPaymentUserCode">WT-Code For EMD_Payment<span>*</span></label>
+                <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode" />
+                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
+            </div>
+            <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+            </div> -->
             <div class="w-1/2">
                 <label for="entityParent">Entity Parent</label>
                 <div class="card flex justify-content-center">
@@ -377,7 +422,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed,onBeforeMount, watch} from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -412,8 +457,9 @@ const entityData = ref({
     emiPaymentPercentage: '',
     isParent: false,
     districtId: '',
-    entitytype: ''
-
+    entitytype: '',
+    userCode: '',
+    emdPaymentUserCode: ''
 
 });
 const isUniqueEntityShortName = helpers.withAsync(async (value) => {
@@ -427,12 +473,21 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
     const res = response.getActivity("CountEntityShortName", true);
 
     if (response.isValid("CountEntityShortName")) {
-        const count = res.result.countEntity; // Extract the count from the response object
-        return count === 0; // Ensure to compare with 0
-    } else {
-        response.showErrorToast("CountEntityShortName");
-        return false;
-    }
+        count.value = res?.result?.EntityId ?? 0; // Use optional chaining and nullish coalescing
+            //console.log("Entity short name count:", count.value);
+            //console.log("count", count)
+        
+        //return count === 0; // Ensure to compare with 0
+        console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
+        if (count.value == 0 || count.value !==  (entityData?.value?.entityId ?? 0)) {
+                return true;
+            } else 
+            {
+                return false;
+            }
+
+      
+    } 
 });
 
 async function checkEntityShortName(newValue) {
@@ -449,16 +504,25 @@ async function CountEntityShortName() {
         const response = await new MQL()
             .useCoreServer()
             .setActivity("o.[CountEntityShortName]")
-            .setData({ entityShortName: entityData.value.entityShortName }) // Pass the entityShortName directly
+            .setData({ entityShortName: entityData.value.entityShortName }) 
             .fetch();
 
         const res = response.getActivity("CountEntityShortName", true);
 
         if (response.isValid("CountEntityShortName")) {
-            count.value = res.result.countEntity; // Extract the count from the response object
-            //console.log("Entity short name count:", count.value);
-            //console.log("count", count)
-            return count.value == 0; // Ensure to compare with 0
+            count.value = res?.result?.EntityId ?? 0;
+            console.log("Entity short name count:", count.value);
+            console.log("entityData", entityData.value.entityId);
+            console.log("entityData.value",entityData.value)
+           //return count.value == 0 ; 
+            if (count.value == 0 || count.value !==  (entityData?.value?.entityId ?? 0)) {
+                return true;
+            } else 
+            {
+                return false;
+            }
+
+        
         } else {
             response.showErrorToast("CountEntityShortName");
             return false;
@@ -507,6 +571,9 @@ const rules = computed(() => ({
     }
 }));
 const $v = useVuelidate(rules, { entityData });
+console.log("rules", rules)
+console.log("$v", $v)
+console.log("entityData", entityData)
 let count = ref([]);
 const organization = ref([]);
 const organizationId = ref([]);
@@ -581,6 +648,7 @@ function FetchEntityTypeByOrganization(organizationId) {
             if (rs.isValid('FetchEntityTypeByOrganizationId')) {
                 //console.log(res.result);
                 entitytype.value = res.result;
+                console.log("entitytype", entitytype.value)
 
             } else {
                 rs.showErrorToast('FetchEntityTypeByOrganizationId');
@@ -633,7 +701,6 @@ function insertEntity(entityData) {
 
 
 const updateEntity = async (entityData) => {
-    // function updateEntity(entityData) {
     new MQL()
         .useCoreServer()
         .setActivity('o.[UpdateEntityById]')
@@ -650,12 +717,6 @@ const updateEntity = async (entityData) => {
         });
 
 }
-function reloadPage() {
-    window.location.reload();
-    //console.log("we are reloading page")
-}
-
-
 function editEntity(entity) {
     //console.log("Before edit: ", entity);
 
@@ -685,10 +746,8 @@ const confirmEdit = async (entityData) => {
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                // entityData.value = { ...entity };
-                // entityData.value = { ...entityData.value, isParent: entityData.value.isParent == 'Yes' ? true : false };
                 updateEntity(entityData),
-                    changeFlag(0), reloadPage()
+                    changeFlag(0)
                 toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
             },
             reject: () => {
@@ -714,7 +773,8 @@ const confirmADD = async () => {
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                insertEntity(entityData)
+                insertEntity(entityData),
+               
                 toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
             },
             reject: () => {
@@ -735,7 +795,7 @@ const confirmDelete = (data) => {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            deleteEntity(data), changeFlag(0), reloadPage()
+            deleteEntity(data), changeFlag(0),
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {
@@ -760,7 +820,7 @@ function deleteEntity(data) {
             loading.value = false;
         });
 }
-
+ 
 onMounted(() => {
     FetchEntities();
     FetchOrganizations();
