@@ -119,7 +119,7 @@
                         <label for="organization">Select Organization<span>*</span></label>
                         <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
                             :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
-                            class="w-full md:w-14rem" @change="fetchEntityTypesByOrganization" />
+                            class="w-full md:w-14rem"  />
                     </div>
                     <div v-if="$v.entityData.organizationId.$error" class="fm-error">
                         {{ $v.entityData.organizationId.$errors[0].$message }}
@@ -478,7 +478,7 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
             //console.log("count", count)
         
         //return count === 0; // Ensure to compare with 0
-        console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
+       // console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
         if (count.value == 0 || count.value ==  (entityData?.value?.entityId ?? 0)) {
                 return true;
             } else 
@@ -511,9 +511,9 @@ async function CountEntityShortName() {
 
         if (response.isValid("CountEntityShortName")) {
             count.value = res?.result?.EntityId ?? 0;
-            console.log("Entity short name count:", count.value);
-            console.log("entityData", entityData.value.entityId);
-            console.log("entityData.value",entityData.value)
+        //    console.log("Entity short name count:", count.value);
+            // console.log("entityData", entityData.value.entityId);
+            // console.log("entityData.value",entityData.value)
            //return count.value == 0 ; 
             if (count.value == 0 || count.value ==  (entityData?.value?.entityId ?? 0)) {
                 return true;
@@ -577,12 +577,12 @@ const rules = computed(() => ({
     }
 }));
 const $v = useVuelidate(rules, { entityData });
-console.log("rules", rules)
-console.log("$v", $v)
-console.log("entityData", entityData)
+// console.log("rules", rules)
+// console.log("$v", $v)
+// console.log("entityData", entityData)
 let count = ref([]);
 const organization = ref([]);
-const organizationId = ref([]);
+const organizationId = ref(null);
 const entitytype = ref([]);
 
 const filters = ref({
@@ -634,7 +634,8 @@ function FetchOrganizations() {
                 //console.log("result@@@@", res.result)
                 organization.value = res.result
                 organizationId.value = res.result[0].organizationId;
-                //console.log("organizationId", organizationId.value)
+                // console.log("organizationId", organizationId.value)
+                FetchEntityTypeByOrganization(organizationId.value);
 
             } else {
                 rs.showErrorToast("FetchOrganizationDetails")
@@ -642,8 +643,8 @@ function FetchOrganizations() {
         })
 
 }
-function FetchEntityTypeByOrganization(organizationId) {
-    //console.log("OrganizationData", organizationId.value)
+function FetchEntityTypeByOrganization(orgId ) {
+    // console.log("OrganizationData", organizationId.value)
     new MQL()
         .useCoreServer()
         .setActivity('o.[FetchEntityTypeByOrganizationId]')
@@ -654,7 +655,7 @@ function FetchEntityTypeByOrganization(organizationId) {
             if (rs.isValid('FetchEntityTypeByOrganizationId')) {
                 //console.log(res.result);
                 entitytype.value = res.result;
-                console.log("entitytype", entitytype.value)
+                // console.log("entitytype", entitytype.value)
 
             } else {
                 rs.showErrorToast('FetchEntityTypeByOrganizationId');
@@ -827,22 +828,14 @@ function deleteEntity(data) {
             loading.value = false;
         });
 }
-async function init() {
-    try {
-        const orgId = await FetchOrganizations(); // Wait for FetchOrganizations to complete
-        FetchEntityTypeByOrganization(orgId); // Then call FetchEntityTypeByOrganization with the fetched organizationId
-        FetchEntities();
-        FetchDistrictName();
-    } catch (error) {
-        console.error(error);
-        // Handle any errors that might occur during the fetching process
-    }
-}
+
 onMounted(() => {
+    
     FetchEntities();
-    FetchOrganizations();
+   
     FetchDistrictName();
-    init()
+    FetchOrganizations();
+   // FetchEntityTypeByOrganization(organizationId.value);
 
 });
 </script>
