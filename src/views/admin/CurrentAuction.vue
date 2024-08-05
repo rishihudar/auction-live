@@ -342,9 +342,9 @@ const submitAuctionPassword = async () => {
   // Handle submission of auction password here
   //console.log('Auction password submitted:', auctionPassword.value)
   // Close the modal
-  const formValid = await v$.value.$validate()
+  v$.value['auctionPassword'].$touch()
   //console.log(formValid);
-  if (!formValid) {
+  if (v$.value['auctionPassword'].$invalid) {
     toast.add({ severity: 'error', summary: 'Form Invalid', detail: 'Please fill the form correctly', life: 3000 })
     return
   }
