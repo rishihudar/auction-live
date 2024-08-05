@@ -240,9 +240,9 @@
                             placeholder="Enter WT-Code For H1_10_Percent_Payment " />
                        
                     </div>
-                    <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-                    </div> -->
+                    <div v-if="$v.entityData.userCode.$error" class="fm-error">
+                {{ $v.entityData.userCode.$errors[0].$message }}
+            </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
@@ -251,9 +251,9 @@
                             placeholder="Enter WT-Code For EMD_Payment " />
                        
                     </div>
-                    <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-                    </div> -->
+                    <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
+                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
+            </div>
                 </div>
                 <div class="w-1/4">
                     <div class="fm-group">
@@ -274,7 +274,7 @@
                         <Toast />
                         <ConfirmDialog></ConfirmDialog>
                         <div class="card flex flex-wrap gap-2 justify-content-center">
-                            <Button @click="confirmADD(entityData)" icon="pi pi-check" label="Submit"></Button>
+                            <Button @click="confirmADD(entityData) " icon="pi pi-check" label="Submit"></Button>
                             <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel" severity="danger"></Button>
                         </div>
                     </div>
@@ -306,9 +306,9 @@
                         <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
                             optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
                     </div>
-                    <!-- <div v-if="$v.entityData.entityType.$error" class="fm-error">
-                        {{ $v.entityData.entityType.$errors[0].$message }}
-                    </div> -->
+                    <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
+                        {{ $v.entityData.entityTypeId.$errors[0].$message }}
+                    </div>
                 </div>
 
                 <div class="w-1/2">
@@ -324,7 +324,7 @@
             </div>
             <div class="w-1/2">
                 <label for="entityShortName">Entity Short Name<span>*</span></label>
-                <InputText id="entityShortName" v-model="entityData.entityShortName" />
+                <InputText id="entityShortName" v-model="entityData.entityShortName" readonly />
                 <!-- <small id="username-help">Enter Entity Short Name E.g MCF</small> -->
             </div>
             <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
@@ -384,17 +384,17 @@
                 <InputText id="userCode" v-model="entityData.userCode" />
               
             </div>
-            <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-            </div> -->
+            <div v-if="$v.entityData.userCode.$error" class="fm-error">
+                {{ $v.entityData.userCode.$errors[0].$message }}
+            </div>
             <div class="w-1/2">
                 <label for="emdPaymentUserCode">WT-Code For EMD_Payment<span>*</span></label>
                 <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode" />
                 <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
             </div>
-            <!-- <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-            </div> -->
+            <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
+                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
+            </div>
             <div class="w-1/2">
                 <label for="entityParent">Entity Parent</label>
                 <div class="card flex justify-content-center">
@@ -479,7 +479,7 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
         
         //return count === 0; // Ensure to compare with 0
         console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
-        if (count.value == 0 || count.value !==  (entityData?.value?.entityId ?? 0)) {
+        if (count.value == 0 || count.value ==  (entityData?.value?.entityId ?? 0)) {
                 return true;
             } else 
             {
@@ -515,7 +515,7 @@ async function CountEntityShortName() {
             console.log("entityData", entityData.value.entityId);
             console.log("entityData.value",entityData.value)
            //return count.value == 0 ; 
-            if (count.value == 0 || count.value !==  (entityData?.value?.entityId ?? 0)) {
+            if (count.value == 0 || count.value ==  (entityData?.value?.entityId ?? 0)) {
                 return true;
             } else 
             {
@@ -567,6 +567,12 @@ const rules = computed(() => ({
         },
         entityName: {
             required: helpers.withMessage('Entity name is required', required)
+        },
+        userCode: {
+            required: helpers.withMessage('User code is required', required)
+        },
+        emdPaymentUserCode: {
+            required: helpers.withMessage('EMD payment user code is required', required)
         }
     }
 }));
@@ -748,7 +754,7 @@ const confirmEdit = async (entityData) => {
             accept: () => {
                 updateEntity(entityData),
                     changeFlag(0)
-                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 }),changeFlag(0);
             },
             reject: () => {
                 toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
@@ -774,11 +780,12 @@ const confirmADD = async () => {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 insertEntity(entityData),
+                    
                
-                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+                toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Entity Added Successfully Added', life: 3000 }),changeFlag(0);
             },
             reject: () => {
-                toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+                toast.add({ severity: 'error', summary: 'Rejected', detail: 'Cancelled', life: 3000 });
             }
         });
     } else {
@@ -820,11 +827,22 @@ function deleteEntity(data) {
             loading.value = false;
         });
 }
- 
+async function init() {
+    try {
+        const orgId = await FetchOrganizations(); // Wait for FetchOrganizations to complete
+        FetchEntityTypeByOrganization(orgId); // Then call FetchEntityTypeByOrganization with the fetched organizationId
+        FetchEntities();
+        FetchDistrictName();
+    } catch (error) {
+        console.error(error);
+        // Handle any errors that might occur during the fetching process
+    }
+}
 onMounted(() => {
     FetchEntities();
     FetchOrganizations();
     FetchDistrictName();
+    init()
 
 });
 </script>
