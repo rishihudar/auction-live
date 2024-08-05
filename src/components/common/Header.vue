@@ -9,7 +9,6 @@
             </button>
             <div v-else></div>
             <div class="navbar-title">
-                <!-- {{ organizationData.organizationName }} -->
                 {{ entityData.entityName }}
             </div>
             <div class="dropdown dropdown-profile">
@@ -125,9 +124,8 @@ function loadEntityAndOrganization() {
 			 .then(rs => {
 			let res = rs.getActivity("FetchEntityAndOrganization",true)
 			if (rs.isValid("FetchEntityAndOrganization")) {
-                entityData.value = res.result.entityData
-                organizationData.value = res.result.organizationData
-                //console.log("entityData, ornanizationData", entityData.value, organizationData.value) 
+                entityData.value = res.result?.entityData
+                organizationData.value = res.result?.organizationData
 			} else
 			 { 
 			rs.showErrorToast("FetchEntityAndOrganization")
