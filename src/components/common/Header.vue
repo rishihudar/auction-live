@@ -9,7 +9,7 @@
             </button>
             <div v-else></div>
             <div class="navbar-title">
-                {{ entityData.entityName }}
+                {{ entityData?.entityName }}
             </div>
             <div class="dropdown dropdown-profile">
                 <Button type="button" severity text class="btn-profile" @click="toggle" aria-haspopup="true"
