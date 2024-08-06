@@ -1,4 +1,6 @@
 <template>
+
+  <div>
     <div>
     <Button label="Add Custom Parameter" id="addCP" @click="handleAdd()"   severity="secondary" />
   </div>
@@ -16,7 +18,7 @@
         <Column field="vsCustomParamValue" header="CustomParameter Value" > 
        </Column>
         <Column field="vsDescription" header="CustomParameter Description" > </Column>
-        <Column field="gg" header="Action"> 
+        <Column field="gg" header="Action " > 
             <template #body="slotProps">
                 <Button label="Action"  @click="handleAction(slotProps.data.pklCustomParamId,slotProps.data.vsCustomParamKey,slotProps.data.vsCustomParamValue,slotProps.data.vsDescription)"  severity="secondary" />
 
@@ -36,7 +38,7 @@
 
     <Dialog v-if="addModal" v-model:visible="addvisible" modal header="ADD" :style="{ width: '40rem' }">
       <template v-slot:default>
-        <div class="tableCustom" >
+        <div class="table-custom" >
           <table>
             <thead>
               <tr>
@@ -64,7 +66,7 @@
 
     <Dialog v-if="majorModal" v-model:visible="visible" modal header="Information" :style="{ width: '50rem' }">
       <template v-slot:default>
-        <div class="tableCustom"  v-if="customdbid && customKey">
+        <div class="table-custom"  v-if="customdbid && customKey">
           <table>
             <thead>
               <tr>
@@ -94,7 +96,7 @@
     
     
     <Toast />
-
+  </div>
 </template>
 
 
@@ -109,6 +111,7 @@ import { login } from "../../store/modules/login";
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Paginator from 'primevue/paginator';
+import faWebhook from "../../../assets/icons/webhook.svg";
 
 
 
@@ -316,28 +319,6 @@ const showSuccess = (msg) => {  // added toast if items deleted succesfully
 </script>
 
 <style scoped>
-.tableCustom table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
 
-.tableCustom th, .tableCustom td {
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
 
-.tableCustom th {
-  background-color: #f9f9f9;
-  font-weight: bold;
-}
-.table-custom {
-  margin: 20px 25px; /* Top and Bottom: 20px, Left and Right: 15px */
-  padding: 10px 10px; /* Top and Bottom: 10px, Left and Right: 5px */
-}
-#addCP{
-  margin: 20px 25px; /* Top and Bottom: 20px, Left and Right: 15px */
-  padding: 10px 15px; 
-}
 </style>
