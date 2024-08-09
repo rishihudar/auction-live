@@ -12,7 +12,7 @@
             <form class="form-login form-grid">
                 <div class="col-span-full">
                     <div class="fm-group">
-
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 
                         <label class="fm-label" for="username">Username</label>
                         <div class="fm-inner">
@@ -36,29 +36,99 @@
                         <div class="fm-inner">
                             <Password id="password" v-model="user.password" :feedback="false" toggleMask
                                 placeholder="Enter Your Password" unstyled />
-                        </div>
+                        </div></div>
                         <div class="fm-error" v-if="submitted && $v.user.password.$error">
                             {{ $v.user.password.$errors[0].$message }}
+                          </div>
+                    </div>
+                        
+                        
+                            <div class="form-grid" v-if="captachrequired">
+                                
+                            <div class="col-span-full md:col-span-7">
+                                <div class="fm-group">
+
+                        <label class="fm-label">{{ $t("Captcha") }}</label>
+                        <div class="fm-inner captcha-wrapper" for="captcha" >
+                          <InputText
+                            v-model="generatedCaptcha"
+                            class="form-control captcha-input"
+                            :placeholder="$t('Captcha')"
+                            @dragover.prevent
+                            @dragenter.prevent
+                            @cut.prevent
+                            @copy.prevent
+                            @paste.prevent
+                            disabled
+                          />
+                          
+                          <div class="fm-inner">
+                            <b-button
+                              variant="success"
+                              type="button"
+                              id="btnrefresh"
+                              value="Refresh"
+                              class="btn-refresh"
+                              @click="generateCaptcha()"
+                            >
+                              <i class="mdi mdi-cached" />
+                              {{ $t("") }}
+                            </b-button>
+                          </div>
                         </div>
+                      </div>
                     </div>
                 </div>
+                <!-- <div class="col-span-full"> -->
+                <div class="col-span-full md:col-span-12" v-if="captachrequired">
+                    <div class="fm-group required">
+                  <label class="fm-label">{{
+                    $t("Enter Captcha")
+                  }}</label>
+                  <div class="fm-inner" for="Entercaptcha">
+                    <i class="mdi mdi-shield-key-outline input-icon" />
+                    <InputText
+                      v-model="user.enteredCaptcha"
+                      name="Captcha Code"
+                      autocomplete="off"
+                      @dragover.prevent
+                      @dragenter.prevent
+                      @cut.prevent
+                      @copy.prevent
+                      @paste.prevent
+                      maxlength="10"
+                      class="form-control enter-captcha-input"
+                      :placeholder="$t('Enter Captcha')"
+                      v-validate="'required|max:10'"
+                    />
+                    <div class="fm-error" v-if="submitted && $v.user.enteredCaptcha.$error">
+                        {{ $v.user.enteredCaptcha.$errors[0].$message }}
+                      </div>
+<!-- <div v-if="generatedCaptcha != user.enteredCaptcha">
+     Please enter correct details.
+</div> -->
+</div>
+                </div>
+                </div>
                 <div class="fm-action">
-                    <Button label="Login" @click="authenticate" />
+                    <Button label="Login" @click="authenticate" :isFormValid/>
                 </div>
                 <!-- <div class="fm-action-link">
                     <router-link to="/registration">New User? Register here</router-link>
                 </div> -->
-            </form>
+            </form> 
             <Footer name="box"></Footer>
-        </div>
+        <!-- </div> -->
         <Dialog v-model:visible="visible">
             Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to
             <strong>bidder portal</strong> or If issues persist, contact our support team. Thank you!
         </Dialog>
     </div>
+</div>
 </template>
 
 <script setup>
+import Captcha from '@/plugins/captcha.js';
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
 import { login } from "../store/modules/login.js";
@@ -68,6 +138,7 @@ import Footer from "@/components/common/Footer.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import MQL from '@/plugins/mql.js';
+import { Input } from 'postcss';
 
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
@@ -75,34 +146,53 @@ const loginStore = login();
 let submitted = ref(false);
 const visible = ref(false)
 const router = useRouter();
-const link = ref(null)
-
+const link = ref(null);
+let generatedCaptcha=ref('')
 
 // <-----Validations---->
 let user = ref({
     username: "",
     password: "",
-    recaptchaVerified: false,
+    enteredCaptcha: "",
+    isCaptchaValid: false,
+   
 });
-
+const captachrequired = ref(); 
 let rules = computed(() => ({
     user: {
         username: { required },
         password: { required },
+        enteredCaptcha: captachrequired.value === "yes" ? { required } : {},
     },
 }));
 const count = ref([]);
 const $v = useVuelidate(rules, { user });
 
+
+const isFormValid = computed(() => {
+  console.log("isFormValid", $v.value.$pending);
+  return $v.value.$pending === false &&
+    !($v.value.user.username.$error || $v.value.user.password.$error) &&
+    user.value.username !== '' &&
+    user.value.password !== '' &&
+    user.value.enteredCaptcha !== ''
+});
 // <----Functions---->
 function authenticate() {
     submitted.value = true;
     const result = $v.value.$validate();
+   // Check if captcha is required and validate the captcha
+  if (captachrequired.value && user.value.enteredCaptcha !== generatedCaptcha.value.replaceAll(" ", "")) {
+    toaster.error("Please enter correct captcha");
+    return;
+  }
+    
     if (!$v.value.user.$error) {
         loginStore
             .userLogin({
                 userName: user.value.username,
                 password: user.value.password,
+                enteredCaptcha:user.value.enteredCaptcha,
                 enabled: 1
             })
             .then(async (res) => {
@@ -118,6 +208,12 @@ function authenticate() {
 
             })
             .catch((err) => {
+                if (err && err.errorCode) {
+        // Handle the error based on errorCode
+        console.log(err.errorCode);
+    } else {
+        console.error("An error occurred, but errorCode is undefined");
+    }
                 //console.log(err);
                 if (err.error == 'BIDDER_LOGIN') {
                     //console.log(window);
@@ -128,9 +224,26 @@ function authenticate() {
             });
     } else {
         //console.log("InValid Details");
-        toaster.error("Invalid Details")
+        toaster.error("Please fill all details");
     }
 }
+
+
+ function generateCaptcha() {
+    user.value.enteredCaptcha = ''; 
+    var captchaResult = Captcha.generateCaptcha();
+    if (captchaResult) {
+        generatedCaptcha.value = captchaResult;
+    } else {
+        Swal.fire({
+            title: 'Something went wrong! Please contact support.-CAPTCHA01',
+            icon: 'error'
+        });
+    }
+
+ }
+
+
 function FetchPasswordCount() {
     return new Promise((resolve, reject) => {
         new MQL()
@@ -152,7 +265,31 @@ function FetchPasswordCount() {
     })
 
 }
+function captchaRequired() {
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[FetchCustomValueByKey]")
+    .setData({ "key": "CAPTCHA_REQUIRED" })
+    // .setHeaders({})
+    .fetch()
+    .then(rs => {
+      let res = rs.getActivity("FetchCustomValueByKey", true)
+      if (rs.isValid("FetchCustomValueByKey")) {
+        if (res.result.vsCustomParamValue.toLowerCase() === "yes") {
+          captachrequired.value = true;
+        } else {
+          captachrequired.value = false;
+        }
+      } else {
+        rs.showErrorToast("FetchCustomValueByKey")
+      }
+    });
+}
+
 onMounted(() => {
+    captchaRequired()
     FetchPasswordCount()
+    generateCaptcha()
 })
 </script>
+
