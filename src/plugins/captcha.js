@@ -27,12 +27,7 @@ const Captcha = {
     return captchaCode;
   },
 
-  // validateCaptcha validates the CAPTCHA code entered
-  validateCaptcha(generatedCaptcha, enteredCaptcha) {
-    console.log('generatedCaptcha', generatedCaptcha);
-    console.log('enteredCaptcha', enteredCaptcha);
-    return generatedCaptcha === enteredCaptcha;
-  }
+ 
 };
 
 export default Captcha;
