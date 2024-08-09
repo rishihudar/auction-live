@@ -1,8 +1,11 @@
 <template>
+
+  <div>
     <div>
-    <Button label="Add Custom Parameter"  @click="handleAdd()"   severity="secondary" />
+    <Button label="Add Custom Parameter" id="addCP" @click="handleAdd()"   severity="secondary" />
   </div>
     <div class="table-custom">
+
       <DataTable :value="customParamsDetails">
         <template #empty>
           <div class="box-watermark">No data found.</div>
@@ -15,7 +18,7 @@
         <Column field="vsCustomParamValue" header="CustomParameter Value" > 
        </Column>
         <Column field="vsDescription" header="CustomParameter Description" > </Column>
-        <Column field="gg" header="Action"> 
+        <Column field="gg" header="Action " > 
             <template #body="slotProps">
                 <Button label="Action"  @click="handleAction(slotProps.data.pklCustomParamId,slotProps.data.vsCustomParamKey,slotProps.data.vsCustomParamValue,slotProps.data.vsDescription)"  severity="secondary" />
 
@@ -26,13 +29,16 @@
 
         
 
-        
       </DataTable>
+
+      <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[5, 10, 20]" :totalRecords="totalRows"
+        template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" @page="handlePageChange" />
     </div>
 
     <Dialog v-if="addModal" v-model:visible="addvisible" modal header="ADD" :style="{ width: '40rem' }">
       <template v-slot:default>
-        <div class="tableCustom" >
+        <div class="table-custom" >
           <table>
             <thead>
               <tr>
@@ -60,7 +66,7 @@
 
     <Dialog v-if="majorModal" v-model:visible="visible" modal header="Information" :style="{ width: '50rem' }">
       <template v-slot:default>
-        <div class="tableCustom"  v-if="customdbid && customKey">
+        <div class="table-custom"  v-if="customdbid && customKey">
           <table>
             <thead>
               <tr>
@@ -87,10 +93,10 @@
         </div>
       </template>
     </Dialog>
-
+    
     
     <Toast />
-
+  </div>
 </template>
 
 
@@ -104,6 +110,9 @@ import { useToast } from "primevue/usetoast";
 import { login } from "../../store/modules/login";
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+import Paginator from 'primevue/paginator';
+import faWebhook from "../../../assets/icons/webhook.svg";
+
 
 
 const toast = useToast();
@@ -119,10 +128,18 @@ let customVal = ref(null);
 let customKey = ref(null);
 let customDes = ref(null);
 let customdbid = ref(null);
-
+const perPage = ref(5);
+const totalRows = ref();
+const currentPage = ref(0);
 const userID = ref(login().loginDetails.loginId);
 
+function handlePageChange(event) {
+  currentPage.value = event.page;
+  perPage.value = event.rows;
+  console.log("event.page", event.page);
+  fetchCustomParamsDetails();
 
+}
 function handleAction(id,key,value,decription){
   majorModal.value =true;
     console.log("Edit clicked id",id);
@@ -235,14 +252,25 @@ function fetchCustomParamsDetails(){
             .useManagementServer()
 
 			.setActivity("r.[FetchCustomParams]")
-			.setData({})
+			.setData({
+        skip: String(currentPage.value * perPage.value),
+        limit: String(perPage.value),
+      })
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchCustomParams",true)
 			if (rs.isValid("FetchCustomParams")) {
+        // totalRows.value=res.result.CustomParameters.length;
+        totalRows.value = res.result.rowCount.totalRows;
+
+        console.log("length:",totalRows.value);
                 console.log("REsponse Custom Params:",res.result.CustomParameters);
                 customParamsDetails.value = res.result.CustomParameters;
                 console.log("REsponse Custom Params in client:",customParamsDetails.value);
+                for (var i = 0; i < customParamsDetails.value.length; i++) {
+                customParamsDetails.value[i].srNo = currentPage.value * perPage.value + i + 1;
+                console.log("SrNo-", currentPage.value * perPage.value + i + 1);
+                }
 			} else
 			 { 
 			rs.showErrorToast("FetchCustomParams")
@@ -291,21 +319,6 @@ const showSuccess = (msg) => {  // added toast if items deleted succesfully
 </script>
 
 <style scoped>
-.tableCustom table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
 
-.tableCustom th, .tableCustom td {
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-.tableCustom th {
-  background-color: #f9f9f9;
-  font-weight: bold;
-}
 
 </style>
