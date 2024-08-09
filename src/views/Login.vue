@@ -265,7 +265,7 @@ function FetchPasswordCount() {
     })
 
 }
-function captchaRequired() {
+function fetchCaptchaCustomParam() {
   new MQL()
     .useCoreServer()
     .setActivity("o.[FetchCustomValueByKey]")
@@ -287,7 +287,7 @@ function captchaRequired() {
 }
 
 onMounted(() => {
-    captchaRequired()
+    fetchCaptchaCustomParam()
     FetchPasswordCount()
     generateCaptcha()
 })
