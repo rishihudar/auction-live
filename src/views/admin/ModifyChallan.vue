@@ -334,6 +334,8 @@ import moment from "moment";
         challanDetails.value.challanNumber = responseDetails.value.challanTransactionId;
         challanDetails.value.challanAmount = responseDetails.value.transactionAmount;
         challanDetails.value.challanExpiryDate = responseDetails.value.challanExpiryDate;
+        minDate.value = new Date(moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
+        // minDate.value = moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
     }
 
     function fetchCustomParam() {
@@ -396,7 +398,6 @@ onMounted(() => {
 
       const intervalId = setInterval(() => {
         challanDetails.value.requestModificationDate = new Date();
-        minDate.value = new Date();
       }, 1000);
 
       fetchCustomParam();
