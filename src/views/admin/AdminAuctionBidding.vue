@@ -25,7 +25,6 @@
                         <div class="bs-item col-span-4">
                             <div class="bs-label">Auction Code:</div>
                             <div class="bs-value">
-                                <!-- {{ auctionStore.auctionObj.pklAuctionId }} -->
                                 {{ auctionStore.auctionObj.vsAuctionCode }}
                             </div>
                         </div>
@@ -146,7 +145,7 @@
                         <li>TotalNoOfBids : <b>{{ bidHistory.length }}</b></li>
                     </ul>
                 </Dialog>
-                <Dialog v-model:visible="visiblePropertyDetails" modal header="Item Details"
+                <Dialog v-model:visible="visiblePropertyDetails" modal header="Property Details"
                     :style="{ width: '50rem' }">
                     <div class="mb-4">
                         <strong>{{ auctionStore.auctionObj.inventoryCategoryName }}:</strong> {{
@@ -215,10 +214,7 @@
 <script setup>
 import { ref, onMounted, computed, onBeforeMount, watch } from 'vue';
 import Dialog from 'primevue/dialog';
-import RadioButton from 'primevue/radiobutton';
-import Dropdown from 'primevue/dropdown'
 import DataTable from 'primevue/datatable';
-import Panel from 'primevue/panel';
 import { createToaster } from "@meforma/vue-toaster"
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from 'primevue/confirmdialog';
@@ -319,7 +315,7 @@ function checkH1(incomingBid) {
 function updateHistory(bidObject) {
     if (bidObject.bidderId) {
         let bidHistoryObj = {
-            roundNumber: bidObject.bidAmount,
+            roundNumber: auctionDetails.value[0].roundNumber,
             quoteAmount: bidObject.bidAmount,
             quoteTime: latestTime.value
         }
