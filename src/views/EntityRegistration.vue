@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Toast />
         <template v-if="flag === 0">
             <div class="card">
                 <DataTable responsiveLayout="scroll" v-model:filters="filters" :value="entities" paginator :rows="10"
@@ -98,16 +99,21 @@
                             <!-- <span class="p-buttonset">
                                 <Button label="Delete" @click="deleteEntity(data),reloadPage()" icon="pi pi-trash" />
                             </span> -->
-                            <ConfirmDialog></ConfirmDialog>
+                        
                             <div class="w-1/2">
                                 <div class="fm-group">
-                                    <Button @click="confirmDelete(data)" type="submit"
-                                        class="p-button p-button-primary">Delete</Button>
+                                   
+                                    <!-- <Button @click="confirmDelete(data)" type="submit"
+                                        class="p-button p-button-primary"></Button> -->
+                                        <!-- <Button label="Delete" @click="confirmDelete(data)" icon="pi pi-trash" /> -->
+
+                                        <Button @click="confirmDelete(data)" label="Delete" severity="danger" outlined></Button>
+
                                 </div>
                             </div>
                         </template>
                     </Column>
-                </DataTable>
+                </DataTable> <ConfirmDialog></ConfirmDialog>
             </div>
         </template>
         <template v-else-if="flag === 1">
@@ -327,9 +333,6 @@
                 <InputText id="entityShortName" v-model="entityData.entityShortName" readonly />
                 <!-- <small id="username-help">Enter Entity Short Name E.g MCF</small> -->
             </div>
-            <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
-                {{ $v.entityData.entityShortName.$errors[0].$message }}
-            </div>
             <div class="w-1/2">
                 <label for="countryName">Entity District Name<span>*</span></label>
                 <!-- Bind the selected country to stateData.fklCountryId -->
@@ -445,7 +448,7 @@ const loading = ref(true);
 var flag = ref(0);
 const districts = ref([]);
 
-const entityData = ref({
+let entityData = ref({
     entityName: '',
     entityShortName: '',
     entityAddress: '',
@@ -474,10 +477,8 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
 
     if (response.isValid("CountEntityShortName")) {
         count.value = res?.result?.EntityId ?? 0; // Use optional chaining and nullish coalescing
-            //console.log("Entity short name count:", count.value);
-            //console.log("count", count)
-        
-        //return count === 0; // Ensure to compare with 0
+ 
+               //return count === 0; // Ensure to compare with 0
        // console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
         if (count.value == 0 || count.value ==  (entityData?.value?.entityId ?? 0)) {
                 return true;
@@ -528,7 +529,7 @@ async function CountEntityShortName() {
             return false;
         }
     } catch (error) {
-        console.error("Error counting entity short name:", error);
+       // console.error("Error counting entity short name:", error);
         return false;
     }
 }
@@ -687,7 +688,6 @@ const fetchEntityTypesByOrganization = () => {
 };
 
 function insertEntity(entityData) {
-    //console.log("############", entityData.value)
     new MQL()
         .useCoreServer()
         .setActivity('o.[InsertEntity]')
@@ -698,6 +698,7 @@ function insertEntity(entityData) {
             if (rs.isValid('InsertEntity')) {
                 //console.log(res.result);
                 //console.log("entityData from Insert", entityData);
+                FetchEntities();
 
             } else {
                 rs.showErrorToast('InsertState');
@@ -717,6 +718,7 @@ const updateEntity = async (entityData) => {
             let res = rs.getActivity('UpdateEntityById', true);
             if (rs.isValid('UpdateEntityById')) {
                 //console.log(res.result);
+                FetchEntities();
             } else {
                 rs.showErrorToast('UpdateEntityById');
             }
@@ -754,8 +756,9 @@ const confirmEdit = async (entityData) => {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 updateEntity(entityData),
-                    changeFlag(0)
-                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 }),changeFlag(0);
+                   
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Entity Edited Successfully', life: 3000 }),changeFlag(0);
+             
             },
             reject: () => {
                 toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
@@ -781,9 +784,7 @@ const confirmADD = async () => {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 insertEntity(entityData),
-                    
-               
-                toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Entity Added Successfully Added', life: 3000 }),changeFlag(0);
+                toast.add({ severity: 'success', summary: 'Confirmed', detail: 'Entity Added Successfully Added', life: 3000 }),changeFlag(0),entityData = {};;
             },
             reject: () => {
                 toast.add({ severity: 'error', summary: 'Rejected', detail: 'Cancelled', life: 3000 });
@@ -803,8 +804,8 @@ const confirmDelete = (data) => {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            deleteEntity(data), changeFlag(0),
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+            deleteEntity(data),
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Entity Deleted Successfully', life: 3000 });
         },
         reject: () => {
             toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
@@ -822,6 +823,7 @@ function deleteEntity(data) {
             let res = rs.getActivity('DeleteEntityById', true);
             if (rs.isValid('DeleteEntityById')) {
                 //console.log(res.result);
+                FetchEntities();
             } else {
                 rs.showErrorToast('DeleteEntity');
             }
