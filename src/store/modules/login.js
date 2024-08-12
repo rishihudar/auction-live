@@ -2,6 +2,8 @@ import router from "../../router";
 import { defineStore } from "pinia";
 import MQL from "@/plugins/mql.js";
 import axios from "axios";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 });
 export const login = defineStore("login", {
   persist: {
     storage: sessionStorage,
@@ -104,11 +106,69 @@ export const login = defineStore("login", {
               this.SET_LOGIN_USER_DETAILS(loginUserDetails);
               resolve(res);
             } else {
-              rs.showErrorToast("UserLogin");
+              // rs.showErrorToast("UserLogin");
+              try {
+                let lockStatus = JSON.parse(res.error).messageIds[0];
+                toaster.error("Account is locked");
+              }
+              catch(err) {
+                rs.showErrorToast("UserLogin")
+                this.invalidAttempts(user)
+              }
               reject(res);
             }
           });
       });
+    },
+    invalidAttempts(user) {
+
+      return new Promise((resolve,reject) => {
+
+			new MQL()
+      .useLoginServer()
+			.setActivity("o.[UpdateInvalidAttemptCount]")
+			.setData(user)
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateInvalidAttemptCount",true)
+			if (rs.isValid("UpdateInvalidAttemptCount")) {
+        resolve(res);
+			} else
+			 { 
+			rs.showErrorToast("UpdateInvalidAttemptCount")
+			}
+			})
+			
+
+      }
+
+      )
+
+    },
+    updateLogoutDate(user) {
+
+      return new Promise((resolve,reject) => {
+
+			new MQL()
+      .useLoginServer()
+			.setActivity("o.[UpdateLoginLogsLogoutDate]")
+			.setData({"userId":user})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateLoginLogsLogoutDate",true)
+			if (rs.isValid("UpdateLoginLogsLogoutDate")) {
+        resolve(res);
+			} else
+			 { 
+			rs.showErrorToast("UpdateLoginLogsLogoutDate")
+			}
+			})
+			
+
+      }
+
+      )
+
     },
 
     LOGOUT_LOG() {
