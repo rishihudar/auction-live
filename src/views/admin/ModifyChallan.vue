@@ -63,6 +63,7 @@
                         showTime
                         dateFormat="yy/mm/dd"
                         hourFormat="24"
+                        :minDate="minDate"
                         :showIcon="true"
                     />
                     <!-- <div id="fullName-help" class="fm-info">Select your Entity</div> -->
@@ -109,6 +110,8 @@ import { useVuelidate } from '@vuelidate/core';
 import { useToast } from "primevue/usetoast";
 import { helpers, required } from '@vuelidate/validators'
 import Calendar from "primevue/calendar";
+import axios from 'axios';
+import moment from "moment";
 
 
     const challanDetails = ref( {
@@ -121,6 +124,7 @@ import Calendar from "primevue/calendar";
     });
 
     const toast = useToast();
+    const minDate = ref();
 
     const responseDetails = ref({
         transactionFor : '',
@@ -148,11 +152,108 @@ import Calendar from "primevue/calendar";
         if (result) {
             console.log('Validation Passed');
             console.log('modifyChallan');
-        } else {
-            console.log('Validation Failed');
-            console.log('modifyChallan Failed');
+            console.log(challanDetails.value, "challanDetails");
+            console.log(moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm"), "challanExpiryDate");
+            console.log(moment(challanDetails.value.requestModificationDate).format("DD-MM-YYYY HH:mm:ss"), "requestModificationDate");
+
+        let requestData = {
+          'txn-id': upsCtrnPrefix.value + challanDetails.value.clientTransactionId,
+          'req-id': challanDetails.value.challanModificationRequestId,
+          'req-dt': moment(challanDetails.value.requestModificationDate).format("DD-MM-YYYY HH:mm:ss"),
+          'challan-txn-id': challanDetails.value.challanNumber,
+          'txn-amount': challanDetails.value.challanAmount,
+          'expiry-dt': moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm"),  
+          'modifychallan-code': 2
+        }
+        // const response = await axios.post(
+        axios.post (
+          '/ups-server/o/modifychallan',
+          requestData
+        ).then((response) => {
+            console.log('Response from server after modification:', response.data)
+            if (response.data === 'Challan Modified Successfully') {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Challan Modified Successfully",
+                life: 3000,
+                });
+            } else if (response.data === 'Challan Rejected') {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Challan Modification Rejected",
+                life: 3000,
+                });
+            } else if (response.data === 'Challan Reject, Already Paid, In case amount has been paid') {
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Challan Reject, Already Paid, In case amount has been paid",
+                life: 3000,
+                });
+            }}).catch((error) => {
+                console.log('Error:', error);
+                toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "Error in modifying challan",
+                life: 3000,
+                });
+            });
+            } else {
+                console.log('Validation Failed');
+                console.log('modifyChallan Failed');
+                toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "please fill all the required fields",
+                life: 3000,
+                });
         }
     }
+        
+    //     console.log('Response from server after modification:', response.data)
+    //     if (response.data === 'Challan Modified Successfully') {
+    //     //   this.modalMessage = 'Challan Modified Successfully'
+    //     //   this.$refs.modifyChallanModal.show()
+    //     //   this.updateChallantransactionStatus()
+    //     toast.add({
+    //         severity: "success",
+    //         summary: "Success",
+    //         detail: "Challan Modified Successfully",
+    //         life: 3000,
+    //         });
+    //     } else if (response.data === 'Challan Rejected') {
+    //     // this.modalMessage = 'Challan Modification Rejected'
+    //     //   this.$refs.modifyChallanModal.show()
+    //     toast.add({
+    //         severity: "error",
+    //         summary: "Error",
+    //         detail: "Challan Modification Rejected",
+    //         life: 3000,
+    //         });
+    //     } else if (response.data === 'Challan Reject, Already Paid, In case amount has been paid') {
+    //     //   this.modalMessage = 'Challan Reject, Already Paid, In case amount has been paid'
+    //     //   this.$refs.modifyChallanModal.show()
+    //     toast.add({
+    //         severity: "error",
+    //         summary: "Error",
+    //         detail: "Challan Reject, Already Paid, In case amount has been paid",
+    //         life: 3000,
+    //         });
+    //     }
+    //     } else {
+    //         console.log('Validation Failed');
+    //         console.log('modifyChallan Failed');
+    //         toast.add({
+    //         severity: "error",
+    //         summary: "Error",
+    //         detail: "please fill all the required fields",
+    //         life: 3000,
+    //         });
+//      }
+//  }
 
     const reloadPage = () => {
         window.location.reload();
@@ -253,6 +354,16 @@ import Calendar from "primevue/calendar";
             }
         });
     }
+    
+    function checkDates(){
+        if (moment(responseDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").isSameOrAfter(moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"))) {
+            //console.log("Inside rules vali date check");
+            console.log("Expiry Date is same: ","responseDetails: ", moment(responseDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"), " challanDetails: ", moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"));
+            return false; // Dates are not valid
+        }
+            console.log("Expiry Date is not same: ","responseDetails: ", moment(responseDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"), " challanDetails: ", moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"));
+            return true; // Dates are valid
+    };
 
     const rules = computed(() => ({
         challanDetails: {
@@ -269,7 +380,7 @@ import Calendar from "primevue/calendar";
             required: helpers.withMessage('Challan Amount  is required', required)
         },
         challanExpiryDate: {
-            required: helpers.withMessage('Challan Expiry Date is required', required)
+            required, validator: helpers.withMessage('Challan Expiry Date should not be same or before of current date', checkDates)
         },
         requestModificationDate: {
             required: helpers.withMessage('Request Modification Date is required', required)
@@ -285,6 +396,7 @@ onMounted(() => {
 
       const intervalId = setInterval(() => {
         challanDetails.value.requestModificationDate = new Date();
+        minDate.value = new Date();
       }, 1000);
 
       fetchCustomParam();
