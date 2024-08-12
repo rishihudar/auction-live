@@ -215,6 +215,12 @@ const router = createRouter({
       meta: { title: "ConcludedAuctionAdmin",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_APPROVER']},
     },
     {
+      path: "/BidderActivityReport",
+      name:"BidderActivityReport",
+      component: loadAdminView("BidderActivityReport"),
+      meta: { title: "BidderActivityReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/h1BiddersApproval",
       name:"H1 Bidder Approval",
       component: loadAdminView("H1BidderApprovalRejection"),

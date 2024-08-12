@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="fm-action">
-                        <Button label="Add Role To Card" @click="addCard('W2',selectedBidder)" />
+                        <Button label="Add Role To Card" @click="addCard('W2',selectedBidder2)" />
                     </div>
             </div>
         </div>
