@@ -9,9 +9,15 @@
                 <div class="fm-group">
                     <label class="fm-label" for="clientTransactionId">Client Transaction ID</label>
                     <div class="fm-inner">
-                        <InputText id="clientTransactionId" v-model="challanDetails.clientTransactionId"  @change="onChange"/>
+                        <!-- <InputText id="clientTransactionId" v-model="challanDetails.clientTransactionId"  @change="onChange"/> -->
+                        <Dropdown 
+                                v-model="challanDetails.clientTransactionId" option-value="clientTransactionId"
+                                variant="filled" :options="clientTransacId" optionLabel="clientTransactionId"
+                                placeholder="Select Client Transaction Id" 
+                                @change="onChange"
+                                />
                     </div>
-                    <div id="clientTransactionId-help" class="fm-info">Enter Client Transaction ID</div>
+                    <!-- <div id="clientTransactionId-help" class="fm-info">Enter Client Transaction ID</div> -->
                     <div v-if="$v.challanDetails.clientTransactionId.$error" class="fm-error">
                     {{ $v.challanDetails.clientTransactionId.$errors[0].$message }}
                 </div>
@@ -103,6 +109,9 @@
 
 
 <script setup>
+
+// Importing required modules and components
+
 import { ref, onMounted, computed } from 'vue';
 import MQL from '@/plugins/mql.js';
 import Button from 'primevue/button';
@@ -112,7 +121,11 @@ import { helpers, required } from '@vuelidate/validators'
 import Calendar from "primevue/calendar";
 import axios from 'axios';
 import moment from "moment";
+import Dropdown from 'primevue/dropdown';
 
+// Data variables declaration
+
+    const clientTransacId = ref([]);
 
     const challanDetails = ref( {
         clientTransactionId: '' ,
@@ -125,6 +138,7 @@ import moment from "moment";
 
     const toast = useToast();
     const minDate = ref();
+    const entityWTCode = ref('');
 
     const responseDetails = ref({
         transactionFor : '',
@@ -147,25 +161,29 @@ import moment from "moment";
 
     const upsCtrnPrefix = ref('');
 
+    // Function to perform modify challan operation
+
+
+    // Function to perform modify challan operation by calling the UPS server API and updating the challan details in database
     const modifyChallan = async () => {
         const result = await $v.value.$validate();
         if (result) {
             console.log('Validation Passed');
             console.log('modifyChallan');
             console.log(challanDetails.value, "challanDetails");
-            console.log(moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm"), "challanExpiryDate");
-            console.log(moment(challanDetails.value.requestModificationDate).format("DD-MM-YYYY HH:mm:ss"), "requestModificationDate");
+            console.log(moment(challanDetails.value.challanExpiryDate, "DD/MM/YYYY HH:mm").format("DD/MM/YYYY HH:mm"), "challanExpiryDate");
+            console.log(moment(challanDetails.value.requestModificationDate).format("DD/MM/YYYY HH:mm:ss"), "requestModificationDate");
 
         let requestData = {
           'txn-id': upsCtrnPrefix.value + challanDetails.value.clientTransactionId,
           'req-id': challanDetails.value.challanModificationRequestId,
-          'req-dt': moment(challanDetails.value.requestModificationDate).format("DD-MM-YYYY HH:mm:ss"),
+          'req-dt': moment(challanDetails.value.requestModificationDate).format("DD/MM/YYYY HH:mm:ss"),
           'challan-txn-id': challanDetails.value.challanNumber,
           'txn-amount': challanDetails.value.challanAmount,
-          'expiry-dt': moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm"),  
-          'modifychallan-code': 2
+          'expiry-dt': moment(challanDetails.value.challanExpiryDate, "DD/MM/YYYY HH:mm").format("DD/MM/YYYY HH:mm"),  
+          'modifychallan-code': 2,
+          'entityWTCode': entityWTCode.value
         }
-        // const response = await axios.post(
         axios.post (
           '/ups-server/o/modifychallan',
           requestData
@@ -178,6 +196,8 @@ import moment from "moment";
                 detail: "Challan Modified Successfully",
                 life: 3000,
                 });
+                updateModificationStatus();
+                updateChallanModificationDetails(response.data, moment(challanDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
             } else if (response.data === 'Challan Rejected') {
             toast.add({
                 severity: "error",
@@ -185,19 +205,35 @@ import moment from "moment";
                 detail: "Challan Modification Rejected",
                 life: 3000,
                 });
+                updateChallanModificationDetails(response.data, moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
             } else if (response.data === 'Challan Reject, Already Paid, In case amount has been paid') {
             toast.add({
                 severity: "error",
                 summary: "Error",
-                detail: "Challan Reject, Already Paid, In case amount has been paid",
+                detail: "Challan Reject, challan amount Already Paid",
                 life: 3000,
                 });
-            }}).catch((error) => {
+                console.log('Challan Reject, Already Paid, In case amount has been paid', response.data, "challanExpiryDate", moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
+                updateChallanModificationDetails(response.data, moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
+            } 
+            else {
+                console.log('Validation Failed');
+                console.log('modifyChallan Failed');
+                toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "something went wrong, please try again later",
+                life: 3000,
+                });
+                console.log('something went wrong, please try again later ', response.data, "challanExpiryDate", moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"), "responseDetails", responseDetails.value);   
+                UpdateChallanModificationDetails(response.data, moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
+            }
+        }).catch((error) => {
                 console.log('Error:', error);
                 toast.add({
                 severity: "error",
                 summary: "Error",
-                detail: "Error in modifying challan",
+                detail: "Error in modifying challan, please try again later", 
                 life: 3000,
                 });
             });
@@ -207,69 +243,34 @@ import moment from "moment";
                 toast.add({
                 severity: "error",
                 summary: "Error",
-                detail: "please fill all the required fields",
+                detail: "please fill all the required fields properly",
                 life: 3000,
                 });
         }
     }
-        
-    //     console.log('Response from server after modification:', response.data)
-    //     if (response.data === 'Challan Modified Successfully') {
-    //     //   this.modalMessage = 'Challan Modified Successfully'
-    //     //   this.$refs.modifyChallanModal.show()
-    //     //   this.updateChallantransactionStatus()
-    //     toast.add({
-    //         severity: "success",
-    //         summary: "Success",
-    //         detail: "Challan Modified Successfully",
-    //         life: 3000,
-    //         });
-    //     } else if (response.data === 'Challan Rejected') {
-    //     // this.modalMessage = 'Challan Modification Rejected'
-    //     //   this.$refs.modifyChallanModal.show()
-    //     toast.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Challan Modification Rejected",
-    //         life: 3000,
-    //         });
-    //     } else if (response.data === 'Challan Reject, Already Paid, In case amount has been paid') {
-    //     //   this.modalMessage = 'Challan Reject, Already Paid, In case amount has been paid'
-    //     //   this.$refs.modifyChallanModal.show()
-    //     toast.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Challan Reject, Already Paid, In case amount has been paid",
-    //         life: 3000,
-    //         });
-    //     }
-    //     } else {
-    //         console.log('Validation Failed');
-    //         console.log('modifyChallan Failed');
-    //         toast.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "please fill all the required fields",
-    //         life: 3000,
-    //         });
-//      }
-//  }
 
+
+    // Function to reload the page on cancel button click event
     const reloadPage = () => {
         window.location.reload();
     }
 
+
+    // Function to handle change event on client transaction id input field and fetch response details from database
     const onChange = (event) => {
         challanDetails.value.challanModificationRequestId = ''
         challanDetails.value.challanNumber = ''
         challanDetails.value.challanAmount = ''
         challanDetails.value.challanExpiryDate = ''
-        console.log('Value changed:', event.target.value);
-        console.log("clientTransactionId:- ", upsCtrnPrefix.value + "_" + event.target.value);
-        fetchResponseDetails(event.target.value);
+        console.log('Value changed:', event.value);
+        console.log("clientTransactionId:- ", upsCtrnPrefix.value + "_" + event.value);
+        fetchResponseDetails(event.value);
+        fetchEntityWTCode(event.value);
         challanDetails.value.challanModificationRequestId = createChallanModificationRequestId();
     };
+    
 
+    // Function to fetch response details from database based on client transaction id
     function fetchResponseDetails(clientTransactionId) {
         new MQL()
         .useManagementServer()
@@ -290,12 +291,37 @@ import moment from "moment";
         });
     }
 
+
+    // Function to fetch entity WT code from database based on client transaction id
+    function fetchEntityWTCode(clientTransactionId) {
+        new MQL()
+        .useManagementServer()
+        .setActivity("r.[FetchEntityWTCode]")
+        .setData({
+            clientTransactionId: clientTransactionId
+        })
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity("FetchEntityWTCode", true);
+            if (rs.isValid("FetchEntityWTCode")) {
+                console.log(res.result.entityWTCode, " -:entityWTCode");
+                entityWTCode.value = res.result.entityWTCode;
+            } else {
+                rs.showErrorToast("FetchEntityWTCode");
+            }
+        });
+    }
+
+
+    // Function to create challan modification request id with timestamp and random number appended to it 
     function  createChallanModificationRequestId (length = 16){
         const timestamp = Date.now().toString(36);
         const randomPart = Math.random().toString(36).substr(2, length - timestamp.length);
         return timestamp + randomPart;
     }
 
+
+    // Function to parse the response from database and populate the responseDetails object with the parsed parameters 
     function parseResponse(response) {
         // Split the response by '|' to get individual parameters
         const paramsArray = response.split('|');
@@ -338,6 +364,7 @@ import moment from "moment";
         // minDate.value = moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
     }
 
+    // Function to fetch custom param from database
     function fetchCustomParam() {
         new MQL()
         .useManagementServer()
@@ -356,7 +383,69 @@ import moment from "moment";
             }
         });
     }
-    
+
+    // Function to update challan modification details in database
+    function updateChallanModificationDetails(responseData, expiryDate) {
+        new MQL()
+        .useManagementServer()
+        .setActivity("r.[UpdateChallanModificationDetails]")
+        .setData({
+            response: responseData,
+            expiryDate: expiryDate,
+            challanModificationRequestId: challanDetails.value.challanModificationRequestId,
+            clientTransactionId: challanDetails.value.clientTransactionId
+        })
+        .fetch()
+        .then((rs) => {
+            if (rs.isValid("UpdateChallanModificationDetails")) {
+                console.log('Challan Modification Details Updated Successfully');
+            } else {
+                rs.showErrorToast("UpdateChallanModificationDetails");
+            }
+        });
+    }
+
+    // Function to update modification status in database
+    function updateModificationStatus() {
+        new MQL()
+        .useManagementServer()
+        .setActivity("r.[UpdateModificationStatus]")
+        .setData({
+            clientTransactionId: challanDetails.value.clientTransactionId
+        })
+        .fetch()
+        .then((rs) => {
+            if (rs.isValid("UpdateModificationStatus")) {
+                console.log('Modification Status Updated Successfully');
+                reloadPage();
+            } else {
+                rs.showErrorToast("UpdateModificationStatus");
+            }
+        });
+    }
+
+    function fetchClientTransactionId() {
+        new MQL()
+        .useManagementServer()
+        .setActivity("r.[FetchClientTransactionId]")
+        .setData({
+            paymentGatewayCodeName: "Challan",
+            statusCode: "TRANSACTION_AWATING"
+        })
+        .fetch()
+        .then((rs) => {
+            let res = rs.getActivity("FetchClientTransactionId", true);
+            if (rs.isValid("FetchClientTransactionId")) {
+                console.log(res.result.clientTransactionId, " -:clientTransactionId");
+                clientTransacId.value = res.result;
+                console.log(clientTransacId.value, "clientTransacId");
+            } else {
+                rs.showErrorToast("FetchClientTransactionId");
+            }
+        });
+    }
+
+    // Function to check the expiry date validation use in vuelidate rules
     function checkDates(){
         if (moment(responseDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm").isSameOrAfter(moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"))) {
             //console.log("Inside rules vali date check");
@@ -366,6 +455,10 @@ import moment from "moment";
             console.log("Expiry Date is not same: ","responseDetails: ", moment(responseDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"), " challanDetails: ", moment(challanDetails.value.challanExpiryDate, "DD-MM-YYYY HH:mm"));
             return true; // Dates are valid
     };
+
+
+
+    // Vuelidate rules for form validation
 
     const rules = computed(() => ({
         challanDetails: {
@@ -393,13 +486,18 @@ import moment from "moment";
 const $v = useVuelidate(rules, { challanDetails });
 
 
+
+
+
+// Lifecycle hook method
+
 onMounted(() => {
     //   challanDetails.value.requestModificationDate =  new Date();
 
       const intervalId = setInterval(() => {
         challanDetails.value.requestModificationDate = new Date();
       }, 1000);
-
+        fetchClientTransactionId();
       fetchCustomParam();
 }) 
 </script>
