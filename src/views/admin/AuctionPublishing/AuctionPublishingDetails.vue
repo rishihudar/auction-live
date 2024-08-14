@@ -87,11 +87,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-span-full"
-                      v-if="moment(selectedEndDate).isSameOrBefore(moment(selectedStartDate), 'minute')">
+                    <div class="col-span-full">
                       <div class="fm-group">
                         <label class="fm-error" for="">
-                          Start Date should not be equal or after End Date !
+                          <span v-if="$v.selectedStartDate.$error" class="text-red-500">
+                  Difference between Start Date and End Date should be greater than {{ minPaymentPeriod }}
+              </span>
                         </label>
                       </div>
                     </div>
@@ -186,7 +187,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,computed } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Dialog from "primevue/dialog";
@@ -205,6 +206,11 @@ import faEye from "../../../../assets/icons/eye.svg";
 import faWebhook from "../../../../assets/icons/webhook.svg";
 import Paginator from "primevue/paginator";
 
+import { login } from "../../../store/modules/login";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
+const loginStore = login();
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 
 const auctionData = ref([]);
@@ -217,17 +223,38 @@ const agree = ref(false);
 
 const selectedStartDate = ref();
 const selectedEndDate = ref();
-
+const minPaymentPeriod = ref()
 const minDate = ref();
-minDate.value = moment().add(1, "minutes").toDate();
+// minDate.value = moment().add(1, "minutes").toDate();
 const endMinDate = ref();
-endMinDate.value = moment().add(2, "minutes").toDate();
+// endMinDate.value = moment().add(2, "minutes").toDate();
 const dbEndDate = ref();
 const dbStartDate = ref();
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
 const filter = ref('');
+const serverDate = ref();
+const rules = computed(() => ({
+  
+  selectedStartDate: { 
+    required,
+    validator: checkDates
+  }
+}));
+const $v = useVuelidate(rules, {selectedStartDate});
+
+function checkDates(){
+let startDate = moment(selectedStartDate.value);
+let endDate = moment(selectedEndDate.value);
+let daysDifference = endDate.diff(startDate, 'days');
+  console.log("daysDifference is ",daysDifference)
+  if (daysDifference < minPaymentPeriod.value) {
+    console.log("Inside rules vali date check");
+    return false; // Dates are not valid
+  }
+  return true; // Dates are valid
+};
 
 function handlePageChange(event) {
   currentPage.value = event.page;
@@ -319,20 +346,24 @@ function viewPublishDetails(row) {
     visible.value = true
 }
 
-function publishAuction() {
-  if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
-    // console.log(
-    //   "log-",
-    //   moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")
-    // );
-    alert(`Start Date should not be equal or after End Date !`);
-  } else {
+async function publishAuction() {
+
+  let result = await $v.value.$validate(); 
+  //console.log("here", result);
+  if (!result) {
+    return;
+  }
+
+  // if (moment(selectedEndDate.value).isSameOrBefore(moment(selectedStartDate.value), "minute")) {
+    
+  //   alert(`Start Date should not be equal or after End Date !`);
+  // } else {
     processingFeeEmdPaymentStartEndDate();
     iAgreeStatusUpdate();
     visible.value = false
     fetchAuctionWithApprovedStatus()
     toaster.success("Auction Published !!!");
-  }
+  // }
 }
 
 function iAgreeStatusUpdate() {
@@ -351,7 +382,54 @@ function iAgreeStatusUpdate() {
     });
 }
 
-onMounted(() => {
+function fetchPaymentPeriod() {
+  return new Promise((resolve, reject) => {
+          new MQL()
+          .useCoreServer()
+			.setActivity("o.[FetchEntityDetailsById]")
+			.setData({"entityId":loginStore.entityId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchEntityDetailsById",true)
+			if (rs.isValid("FetchEntityDetailsById")) {
+        minPaymentPeriod.value = res.result.columnValue
+			} else
+			 { 
+			rs.showErrorToast("FetchEntityDetailsById")
+			}
+      resolve()
+			})
+    })
+			
+
+}
+
+function getServerDate() {
+  return new Promise((resolve, reject) => {
+  new MQL()
+    .useManagementServer()
+    .setActivity("o.[getServerDate]")
+    .setData({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("getServerDate", true);
+      serverDate.value = res.result.serverDate.currentDate;
+      minDate.value = moment(serverDate.value).add(1, "minutes").toDate()
+      endMinDate.value = moment(serverDate.value).add(1, "minutes").toDate()
+      //console.log("serverDate-", serverDate.value);
+      if (rs.isValid("getServerDate")) {
+      } else {
+        rs.showErrorToast("getServerDate");
+      }
+      resolve()
+    });
+  })
+}
+
+onMounted(async() => {
   fetchAuctionWithApprovedStatus();
+  await getServerDate();
+    
+    await fetchPaymentPeriod();
 });
 </script>
