@@ -212,7 +212,7 @@
                                                     <div class="fm-label">Step</div>
                                                     <div class="fm-inner">
                                                         <Dropdown v-model="workflowStepData.stepId"
-                                                            placeholder="Select a Organization" :options="stepsMaster"
+                                                            placeholder="Select a Step" :options="stepsMaster"
                                                             option-label="stepName" option-value="stepId"
                                                             :disabled="workflowStepData.workflowStepId" />
                                                     </div>
@@ -315,6 +315,7 @@ const activeStep = ref(0);
 
 const organizations = ref([]);
 const entities = ref([]);
+const stepsMaster = ref([]);
 
 
 const workflowSteps = ref([]);
@@ -328,6 +329,22 @@ const filters = ref({
 const changeFlag = (flag_) => {
     flag.value = flag_;
 };
+const fetchWorkflowStepMaster = () => {
+    // Automatically generated
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[query_2kbRa16oh1LXOaC3oz2O6EyGHIE]")
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("query_2kbRa16oh1LXOaC3oz2O6EyGHIE", true)
+            if (rs.isValid("query_2kbRa16oh1LXOaC3oz2O6EyGHIE")) {
+                stepsMaster.value = res;
+            } else {
+                rs.showErrorToast("query_2kbRa16oh1LXOaC3oz2O6EyGHIE")
+            }
+        })
+}
+
 
 function fetchWorkflows() {
     loading.value = true;
@@ -412,6 +429,7 @@ const submitWorkflow = async () => {
     }
     activeStep.value = activeStep.value + 1;
     fetchWorkflowSteps();
+    fetchWorkflowStepMaster()
 }
 
 const closeForm = () => {
