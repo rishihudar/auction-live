@@ -67,9 +67,10 @@ export default defineConfig({
       '/ups-server/o/': {
         target: 'http://localhost:5000/o/',
         changeOrigin: true,
-        pathRewrite: {
-          '^/ups-server/o/': ''
-        }
+        // pathRewrite: {
+        //   '^/ups-server/o/': ''
+        // },
+        rewrite: (p) => p.replace(/^\/ups-server\/o/, "")
       },
       "/login-server": {
         target: "https://cs.mkcl.org/2ZnbxLhWpB5qU6xyCW7sZPKiEvS",
