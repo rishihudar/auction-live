@@ -84,7 +84,7 @@
           <div class="fm-group">
             <label class="fm-label" for="password">Reset Password</label>
             <div class="fm-inner">
-              <Password v-model="password" :feedback="false" toggleMask />
+              <Password v-model="password" :feedback="false" toggleMask autocomplete="off"/>
               <fa-lock class="fm-icon fm-prefix"></fa-lock>
             </div>
             <div v-if="$v.password.$error" class="fm-error">
@@ -100,7 +100,7 @@
           <div class="fm-group">
             <label class="fm-label" for="confirmPassword">Confirm Reset Password</label>
             <div class="fm-inner">
-              <Password v-model="confirmPassword" :feedback="false" toggleMask />
+              <Password v-model="confirmPassword" :feedback="false" toggleMask autocomplete="off" />
               <fa-lock class="fm-icon fm-prefix"></fa-lock>
             </div>
             <div v-if="$v.confirmPassword.$error" class="fm-error">
