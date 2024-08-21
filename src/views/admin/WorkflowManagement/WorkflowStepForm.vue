@@ -104,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 3</div>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 4</div>
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 5</div>
@@ -141,7 +141,12 @@
 
         </div>
         <DataTable :value="workflowSteps">
-            <Column field="displayName" header="Step Name"></Column>
+            <Column field="stepDisplayName" header="Step Display Name"></Column>
+            <Column field="stepId" header="Step Name">
+                <template #body="{ data }">
+                    {{ stepName(data.stepId) }}
+                </template>
+            </Column>
             <Column field="Action" header="Action">
                 <template #body="{ data }">
                     <Button @click="editData(data)" severity="secondary" class="btn-sm">
@@ -208,6 +213,12 @@ const previousWorkflowStep = () => {
 
 const editData = (data) => {
     console.log(data);
+}
+
+
+const stepName = (id) => {
+    let step = stepsMaster.value.find(step => step.stepId == id)
+    return step ? step.stepName : ''
 }
 
 
