@@ -1,4 +1,11 @@
 .box-login-holder {@apply py-4 min-h-screen flex items-center; background: var(--bg-login-image) no-repeat center / cover; background-attachment: fixed;}
+.box-login-captcha {
+    .card-login {padding-top: 2rem;}
+    h1.title {display: none;}
+    .fm-group {margin-bottom: 12px;}
+    .fm-action-link {margin-top: 10px;}
+    .box-footer {margin-top: 1.5rem;}
+}
 
 .box-top {
     &-holder {@apply -mt-4 mb-2 flex items-center justify-between;}

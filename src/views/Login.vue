@@ -1,5 +1,5 @@
 <template>
-    <div id="login" class="box-login-holder">
+    <div id="login" class="box-login-holder" :class="{ 'box-login-captcha': captachrequired }">
         <div class="card-login">
             <div class="cl-header">
                 <div class="cl-header-media">
@@ -12,16 +12,15 @@
             <form class="form-login form-grid">
                 <div class="col-span-full">
                     <div class="fm-group">
-                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-
                         <label class="fm-label" for="username">Username</label>
                         <div class="fm-inner">
                             <InputText id="username" v-model="user.username" aria-describedby="username-help"
                                 placeholder="Enter Your Username"
                                 :class="{ 'p-invalid': submitted && $v.user.username.$error }" />
+                            <fa-user class="fm-icon fm-prefix"></fa-user>
                         </div>
-                        <div id="username-help" class="fm-info">Your username will be unique across the entire
-                            application and it will be used across the entire application.</div>
+                        <!-- <div id="username-help" class="fm-info">Your username will be unique across the entire
+                            application and it will be used across the entire application.</div> -->
                         <div class="fm-error" v-if="submitted && $v.user.username.$error">
                             {{ $v.user.username.$errors[0].$message }}
                         </div>
@@ -35,80 +34,49 @@
                         </div>
                         <div class="fm-inner">
                             <Password id="password" v-model="user.password" :feedback="false" toggleMask
-                                placeholder="Enter Your Password" unstyled  autocomplete="off"/>
-                        </div></div>
+                                placeholder="Enter Your Password" unstyled  autocomplete="off" />
+                            <fa-lock class="fm-icon fm-prefix"></fa-lock>
+                        </div>
                         <div class="fm-error" v-if="submitted && $v.user.password.$error">
                             {{ $v.user.password.$errors[0].$message }}
-                          </div>
-                    </div>
-                        
-                        
-                            <div class="form-grid" v-if="captachrequired">
-                                
-                            <div class="col-span-full md:col-span-7">
-                                <div class="fm-group">
-
-                        <label class="fm-label">{{ $t("Captcha") }}</label>
-                        <div class="fm-inner captcha-wrapper" for="captcha" >
-                          <InputText
-                            v-model="generatedCaptcha"
-                            class="form-control captcha-input"
-                            :placeholder="$t('Captcha')"
-                            @dragover.prevent
-                            @dragenter.prevent
-                            @cut.prevent
-                            @copy.prevent
-                            @paste.prevent
-                            disabled
-                          />
-                          
-                          <div class="fm-inner">
-                            <b-button
-                              variant="success"
-                              type="button"
-                              id="btnrefresh"
-                              value="Refresh"
-                              class="btn-refresh"
-                              @click="generateCaptcha()"
-                            >
-                              <i class="mdi mdi-cached" />
-                              {{ $t("") }}
-                            </b-button>
-                          </div>
                         </div>
-                      </div>
                     </div>
                 </div>
-                <!-- <div class="col-span-full"> -->
-                <div class="col-span-full md:col-span-12" v-if="captachrequired">
-                    <div class="fm-group required">
-                  <label class="fm-label">{{
-                    $t("Enter Captcha")
-                  }}</label>
-                  <div class="fm-inner" for="Entercaptcha">
-                    <i class="mdi mdi-shield-key-outline input-icon" />
-                    <InputText
-                      v-model="user.enteredCaptcha"
-                      name="Captcha Code"
-                      autocomplete="off"
-                      @dragover.prevent
-                      @dragenter.prevent
-                      @cut.prevent
-                      @copy.prevent
-                      @paste.prevent
-                      maxlength="10"
-                      class="form-control enter-captcha-input"
-                      :placeholder="$t('Enter Captcha')"
-                      v-validate="'required|max:10'"
-                    />
-                    <div class="fm-error" v-if="submitted && $v.user.enteredCaptcha.$error">
-                        {{ $v.user.enteredCaptcha.$errors[0].$message }}
-                      </div>
-<!-- <div v-if="generatedCaptcha != user.enteredCaptcha">
-     Please enter correct details.
-</div> -->
-</div>
+                <div class="col-span-full md:col-span-6" v-if="captachrequired">
+                    <div class="fm-group fm-captcha">
+                        <label class="fm-label">{{ $t("Captcha") }}</label>
+                        <div class="fm-inner">
+                            <InputText v-model="generatedCaptcha" :placeholder="$t('Captcha')" @dragover.prevent @dragenter.prevent @cut.prevent @copy.prevent @paste.prevent disabled />
+                            <button type="button" id="btnrefresh" value="Refresh" class="btn-refresh fm-suffix fm-icon-action" @click="generateCaptcha()">
+                                <fa-rotate></fa-rotate>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-span-full md:col-span-6" v-if="captachrequired">
+                    <div class="fm-group">
+                        <label class="fm-label">{{ $t("Enter Captcha") }}</label>
+                        <div class="fm-inner" for="Entercaptcha">
+                            <InputText
+                                v-model="user.enteredCaptcha"
+                                name="Captcha Code"
+                                autocomplete="off"
+                                @dragover.prevent
+                                @dragenter.prevent
+                                @cut.prevent
+                                @copy.prevent
+                                @paste.prevent
+                                maxlength="10"
+                                class="form-control enter-captcha-input"
+                                :placeholder="$t('Enter Captcha')"
+                                v-validate="'required|max:10'"
+                            />
+                            <fa-shield-check class="fm-icon fm-prefix"></fa-shield-check>
+                        </div>
+                        <div class="fm-error" v-if="submitted && $v.user.enteredCaptcha.$error">
+                            {{ $v.user.enteredCaptcha.$errors[0].$message }}
+                        </div>
+                    </div>
                 </div>
                 <div class="fm-action">
                     <Button label="Login" @click="authenticate" :isFormValid/>
@@ -140,6 +108,10 @@ import { required, email } from "@vuelidate/validators";
 import MQL from '@/plugins/mql.js';
 import { Input } from 'postcss';
 
+import faLock from '../../assets/icons/lock.svg';
+import faRotate from '../../assets/icons/rotate.svg';
+import faShieldCheck from '../../assets/icons/shield-check.svg';
+import faUser from '../../assets/icons/user.svg';
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
