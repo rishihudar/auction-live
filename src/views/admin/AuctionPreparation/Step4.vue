@@ -18,7 +18,7 @@
                 showTime
                 dateFormat="yy/mm/dd"
                 hourFormat="24"
-                :minDate="minDate"
+                :minDate="minPaymentPeriodDate"
                 :showIcon="true"
               />
             </div>
@@ -33,9 +33,9 @@
             >
               Start Date should not be equal or after End Date !
             </div> -->
-            <span v-if="$v.selectedStartDate.$error" class="text-red-500">{{
-                  $v.selectedStartDate.$errors[0].$message
-              }}</span>
+            <span v-if="$v.selectedStartDate.$error" class="text-red-500">
+                  Difference between Start Date and End Date should be greater than {{ minPaymentPeriod }}
+              </span>
           </div>
         </div>
         <div class="col-span-full md:col-span-6">
@@ -52,7 +52,7 @@
                 showTime
                 dateFormat="yy/mm/dd"
                 hourFormat="24"
-                :minDate="endMinDate"
+                :minDate="minPaymentPeriodDate"
                 :showIcon="true"
               />
             </div>
@@ -196,7 +196,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, computed } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import moment from "moment";
 import Calendar from "primevue/calendar";
 import FileUpload from "primevue/fileupload";
@@ -236,7 +236,8 @@ const { auctionId, config, multiplyingFactor } = defineProps({
     }
 });
 
-
+const minPaymentPeriod=ref()
+let minPaymentPeriodDate=ref()
 const auctionCodeToShow = ref();
 const serverDate = ref();
 //const startDate = ref(new Date());
@@ -277,7 +278,8 @@ const rules = computed(() => ({
     required: helpers.withMessage("Document is required", required),
   },
   selectedStartDate: { 
-    required,validator: helpers.withMessage("End date should not be same or before as that of Start date",checkDates)
+    required,
+    validator: checkDates
   },
 }));
 const $v = useVuelidate(rules, { AucUrl, NoticeUrl,selectedStartDate});
@@ -294,20 +296,31 @@ function nextCallback() {
 }
 
 function formattedStartDateCalc() {
+  return new Promise((resolve, reject) => {
   formattedStartDate.value = moment(serverDate.value)
     .add(60, "seconds")
     .format("YYYY/MM/DD HH:mm:ss");
-  //console.log("formattedStartDate.value", formattedStartDate.value);
+  console.log("formattedStartDate.value", formattedStartDate.value);
+  resolve();
+  })
 }
 function formattedEndDateCalc() {
+  return new Promise((resolve, reject) => {
   formattedEndDate.value = moment(serverDate.value)
-    .add(120, "seconds")
+    .add(minPaymentPeriod.value, "days")
+    .add(60, "seconds")
     .format("YYYY/MM/DD HH:mm:ss");
-  //console.log("formattedEndDate.value", formattedEndDate.value);
+  console.log("formattedEndDate.value", formattedEndDate.value);
+  resolve();
+  })
 }
 function checkDates(){
-  if (moment(selectedEndDate.value).isSameOrBefore(selectedStartDate.value, "minute")) {
-    //console.log("Inside rules vali date check");
+  let startDate = moment(selectedStartDate.value);
+let endDate = moment(selectedEndDate.value);
+  let daysDifference = endDate.diff(startDate, 'days');
+  // console.log("daysDifference is ",daysDifference,daysDifference,minPaymentPeriod.value)
+  if (daysDifference < minPaymentPeriod.value) {
+    // console.log("Inside rules vali date check");
     return false; // Dates are not valid
   }
   return true; // Dates are valid
@@ -392,7 +405,8 @@ const onAdvancedUpload = async (event, id) => {
 };
 
 function fetchDocumentsValidationDetails() {
-  // Automatically generated
+  
+  return new Promise((resolve, reject) => {
   new MQL()
     .useCoreServer()
     .setActivity("o.[fetchDocumentsValidationDetails]")
@@ -422,11 +436,14 @@ function fetchDocumentsValidationDetails() {
       } else {
         rs.showErrorToast("fetchDocumentsValidationDetails");
       }
+      resolve()
     });
+  })
 }
 
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
+  return new Promise((resolve, reject) => {
   new MQL()
     .useManagementServer()
     .setActivity("o.[FetchAllStepsAuctionPreview]")
@@ -451,10 +468,12 @@ function fetchAllStepsAuctionPreview() {
       }
       auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
+        resolve();
       } else {
         rs.showErrorToast("FetchAllStepsAuctionPreview");
       }
     });
+  })
 }
 
 async function processingFeeEmdPaymentStartEndDate() {
@@ -620,7 +639,7 @@ async function onSave() {
 }
 
 function getServerDate() {
-  // Automatically generated
+  return new Promise((resolve, reject) => {
   new MQL()
     .useManagementServer()
     .setActivity("o.[getServerDate]")
@@ -634,7 +653,9 @@ function getServerDate() {
       } else {
         rs.showErrorToast("getServerDate");
       }
+      resolve()
     });
+  })
 }
 function DownloadDocument(url) {
   if (url !== "") {
@@ -658,15 +679,62 @@ function DownloadDocument(url) {
   }
 }
 
-onMounted(() => {
-  fetchDocumentsValidationDetails();
-  formattedEndDateCalc();
-  formattedStartDateCalc();
-  getServerDate();
+
+function fetchPaymentPeriod() {
+  return new Promise((resolve, reject) => {
+          new MQL()
+          .useCoreServer()
+			.setActivity("o.[FetchEntityDetailsById]")
+			.setData({"entityId":loginStore.entityId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchEntityDetailsById",true)
+			if (rs.isValid("FetchEntityDetailsById")) {
+        minPaymentPeriod.value = res.result.columnValue
+        console.log("minPaymentPeriod is ",minPaymentPeriod.value)
+
+        minPaymentPeriodDate.value = moment(serverDate.value).toDate()
+
+    console.log("minPaymentPeriodDate is ",minPaymentPeriodDate.value)
+    
+
+			} else
+			 { 
+			rs.showErrorToast("FetchEntityDetailsById")
+			}
+      resolve()
+			})
+    })
+			
+
+}
+
+// watch(bidderTypeId, (newValue) => {
+//   if (newValue === "1") {
+//     rules.value = rulesIndividual;
+//   } }
+// )
+
+onBeforeMount(async () => {
+
+  await fetchDocumentsValidationDetails()
+    await getServerDate();
+    
+    await fetchPaymentPeriod();
+  await formattedEndDateCalc();
+    await formattedStartDateCalc();
+    await fetchAllStepsAuctionPreview();
+  
+  // fetchDocumentsValidationDetails();
+  // formattedEndDateCalc();
+  // formattedStartDateCalc();
+  // getServerDate();
+  // fetchPaymentPeriod();
 });
-onBeforeMount(() => {
-  fetchAllStepsAuctionPreview();
-});
+
+// onMounted(() => {
+//   fetchAllStepsAuctionPreview();
+// });
 </script>
 
 <!-- <style scoped>

@@ -35,7 +35,7 @@
                         </div>
                         <div class="fm-inner">
                             <Password id="password" v-model="user.password" :feedback="false" toggleMask
-                                placeholder="Enter Your Password" unstyled />
+                                placeholder="Enter Your Password" unstyled  autocomplete="off"/>
                         </div></div>
                         <div class="fm-error" v-if="submitted && $v.user.password.$error">
                             {{ $v.user.password.$errors[0].$message }}
