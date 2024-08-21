@@ -13,6 +13,13 @@ function loadWorkflowView(view) {
       /* webpackChunkName: "view-[request]" */ `@/views/WorkflowManagement/${view}.vue`
     );
 }
+
+function loadWorkflowManagementView(view) {
+  return () =>
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/WorkflowManagement/${view}.vue`
+    );
+}
 function loadAuctionView(view) {
   return () =>
     import(
@@ -1141,7 +1148,7 @@ const router = createRouter({
     {
       path: "/workflow-management",
       name: "Workflow Management",
-      component: loadAdminView("WorkflowManagement"),
+      component: loadWorkflowManagementView("WorkflowManagement"),
       meta: {
         title: "Workflow Management",
         lang: "en",
@@ -1151,7 +1158,7 @@ const router = createRouter({
     {
       path: "/workflow-step-master",
       name: "Workflow Step Master",
-      component: loadAdminView("WorkflowStepMaster"),
+      component: loadWorkflowManagementView("WorkflowStepMaster"),
       meta: {
         title: "Workflow step master",
         lang: "en",
