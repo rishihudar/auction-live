@@ -31,7 +31,8 @@
                 <div class="fm-group">
                     <div class="fm-label">Workflow Name</div>
                     <div class="fm-inner">
-                        <InputText id="workflowName" v-model="workflowData.workflowName" />
+                        <InputText id="workflowName" v-model="workflowData.workflowName"
+                            :disabled="workflowData.workflowId" />
                     </div>
                 </div>
             </div>
@@ -45,70 +46,70 @@
                             v-model="workflowData.workflowCode" />
                     </div>
                 </div>
-                </div>
+            </div>
 
-                <!-- Data 1 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 1</div>
-                        <div class="fm-inner">
-                            <InputText id="Data1" v-model="workflowData.data1" />
-                        </div>
+            <!-- Data 1 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 1</div>
+                    <div class="fm-inner">
+                        <InputText id="Data1" v-model="workflowData.data1" />
                     </div>
                 </div>
+            </div>
 
-                <!-- Data 2 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 2</div>
-                        <div class="fm-inner">
-                            <InputText id="Data2" v-model="workflowData.data2" />
-                        </div>
+            <!-- Data 2 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 2</div>
+                    <div class="fm-inner">
+                        <InputText id="Data2" v-model="workflowData.data2" />
                     </div>
                 </div>
+            </div>
 
-                <!-- Data 3 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 3</div>
-                        <div class="fm-inner">
-                            <InputText id="Data3" v-model="workflowData.data3" />
-                        </div>
+            <!-- Data 3 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 3</div>
+                    <div class="fm-inner">
+                        <InputText id="Data3" v-model="workflowData.data3" />
                     </div>
                 </div>
+            </div>
 
-                <!-- Data 4 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 4</div>
-                        <div class="fm-inner">
-                            <InputText id="Data4" v-model="workflowData.data4" />
-                        </div>
+            <!-- Data 4 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 4</div>
+                    <div class="fm-inner">
+                        <InputText id="Data4" v-model="workflowData.data4" />
                     </div>
                 </div>
+            </div>
 
 
-                <!-- Data 5 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 5</div>
-                        <div class="fm-inner">
-                            <InputText id="Data5" v-model="workflowData.data5" />
-                        </div>
+            <!-- Data 5 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 5</div>
+                    <div class="fm-inner">
+                        <InputText id="Data5" v-model="workflowData.data5" />
                     </div>
                 </div>
+            </div>
 
-                <!-- Data 6 -->
-                <div class="col-span-2">
-                    <div class="fm-group">
-                        <div class="fm-label">Data 6</div>
-                        <div class="fm-inner">
-                            <InputText id="Data6" v-model="workflowData.data6" />
-                        </div>
+            <!-- Data 6 -->
+            <div class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Data 6</div>
+                    <div class="fm-inner">
+                        <InputText id="Data6" v-model="workflowData.data6" />
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     <div class="flex justify-between">
         <Button @click="closeForm()" class="btn btn-danger">
@@ -132,10 +133,18 @@ const loginStore = login();
 
 const organizations = ref([]);
 const entities = ref([]);
-const workflowData = ref({})
+const workflowData = ref({
+    data1: null,
+    data2: null,
+    data3: null,
+    data4: null,
+    data5: null,
+    data6: null,
+})
 
 
-const emits = defineEmits(['nextTab', 'prevTab'])
+
+const emits = defineEmits(['nextTab', 'prevTab', 'workflowId'])
 const { workflowId } = defineProps(['workflowId'])
 
 
@@ -179,12 +188,13 @@ const createWorkflowMaster = () => {
         new MQL()
             .useManagementServer()
             .setActivity("r.[InsertWorkflow]")
-            .setData({ ...workflowData.value, 'loginId': loginStore.loginId, 'roleId': loginStore.role.roleId })
+            .setData({ ...workflowData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId })
             .fetch()
             .then(rs => {
                 let res = rs.getActivity("InsertWorkflow", true)
                 if (rs.isValid("InsertWorkflow")) {
                     workflowData.value.workflowId = res.result.objectId;
+                    emits('workflowId', res.result.objectId)
                     resolve()
                 } else {
                     rs.showErrorToast("InsertWorkflow")
@@ -253,6 +263,9 @@ const closeForm = () => {
 onMounted(() => {
     FetchOrganizations();
     FetchEntities();
-    fetchWorkflowData()
+    
+    if (workflowId) {
+        fetchWorkflowData()
+    }
 })
 </script>

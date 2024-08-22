@@ -9,7 +9,7 @@
                         <div class="fm-group">
                             <div class="fm-label">Display Name</div>
                             <div class="fm-inner">
-                                <InputText v-model="workflowStepData.displayName" />
+                                <InputText v-model="workflowStepData.displayName" :disabled="workflowStepData.workflowStepId"/>
                             </div>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                             <div class="fm-inner">
                                 <Dropdown v-model="workflowStepData.stepId" placeholder="Select Step"
                                     :options="stepsMaster" option-label="stepName" option-value="stepId"
-                                    :disabled="workflowStepData.workflowSetpId" />
+                                    :disabled="workflowStepData.workflowStepId" />
                             </div>
                         </div>
                     </div>
@@ -29,9 +29,9 @@
                         <div class="fm-group">
                             <div class="fm-label">Step Role Initiator Id</div>
                             <div class="fm-inner">
-                                <Dropdown v-model="workflowStepData.roleInitiatorId" placeholder="Select a Role"
-                                    :options="rolesMaster" option-label="roleName" option-value="roleId"
-                                    :disabled="workflowStepData.workflowStepId" />
+                                <Dropdown v-model="workflowStepData.initiatorRoleId" placeholder="Select a Role"
+                                    :options="rolesMaster" option-label="roleDisplayName" option-value="roleId"
+                                    :disabled="workflowStepData.workflowStepId" @change="fetchLogins" />
                             </div>
                         </div>
                     </div>
@@ -41,8 +41,8 @@
                         <div class="fm-group">
                             <div class="fm-label">Step Initiator Login Id</div>
                             <div class="fm-inner">
-                                <Dropdown v-model="workflowStepData.stepId" placeholder="Select a Login"
-                                    :options="loginsMaster" option-label="loginName" option-value="loginId"
+                                <Dropdown v-model="workflowStepData.initiatorLoginId" placeholder="Select a Login"
+                                    :options="loginsMaster" option-label="fullName" option-value="userId" showClear
                                     :disabled="workflowStepData.workflowStepId" />
                             </div>
                         </div>
@@ -52,9 +52,9 @@
                         <div class="fm-group">
                             <div class="fm-label">Step Enable</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="0" />
+                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="0" :disabled="workflowStepData.workflowStepId" />
                                 <label for="enabled">No</label>
-                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="1" />
+                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="1" :disabled="workflowStepData.workflowStepId" />
                                 <label for="enabled">Yes</label>
                             </div>
                         </div>
@@ -65,9 +65,9 @@
                         <div class="fm-group">
                             <div class="fm-label">Start Step</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="0" />
+                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="0" :disabled="workflowStepData.workflowStepId" />
                                 <label for="startStep">No</label>
-                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="1" />
+                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="1" :disabled="workflowStepData.workflowStepId" />
                                 <label for="startStep">Yes</label>
                             </div>
                         </div>
@@ -77,9 +77,9 @@
                         <div class="fm-group">
                             <div class="fm-label">End Step</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="0" />
+                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="0" :disabled="workflowStepData.workflowStepId" />
                                 <label for="endStep">No</label>
-                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="1" />
+                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="1" :disabled="workflowStepData.workflowStepId" />
                                 <label for="endStep">Yes</label>
                             </div>
                         </div>
@@ -135,13 +135,13 @@
 
                 </div>
             </div>
-            <Button @click="insertWorkflowStep" class="btn btn-success">
-                Add Step
+            <Button @click="submitWorkflowStep" class="btn btn-success">
+                {{ workflowStepData.workflowStepId ? 'Edit' : 'Add' }} Step
             </Button>
 
         </div>
         <DataTable :value="workflowSteps">
-            <Column field="stepDisplayName" header="Step Display Name"></Column>
+            <Column field="displayName" header="Step Display Name"></Column>
             <Column field="stepId" header="Step Name">
                 <template #body="{ data }">
                     {{ stepName(data.stepId) }}
@@ -163,7 +163,7 @@
         <Button @click="previousWorkflowStep" class="btn btn-secondary">
             Previous
         </Button>
-        <Button @click="submitWorkflowStep" class="btn btn-success">
+        <Button @click="nextTab" class="btn btn-success">
             Save & Next
         </Button>
     </div>
@@ -176,9 +176,22 @@ import { ref, onMounted } from 'vue';
 import MQL from '@/plugins/mql.js';
 import faPenToSquare from "../../../../assets/icons/pen-to-square.svg";
 import trashCan from "../../../../assets/icons/trash-can.svg";
+import { login } from '@/store/modules/login.js'
 
-const workflowStepData = ref({})
+
+const loginStore = login();
+
+const workflowStepData = ref({
+    initiatorLoginId: null,
+    data1: null,
+    data2: null,
+    data3: null,
+    data4: null,
+    data5: null
+})
 const workflowSteps = ref([])
+const rolesMaster = ref([])
+const loginsMaster = ref([])
 const stepsMaster = ref([])
 
 
@@ -186,6 +199,38 @@ const { workflowId } = defineProps(['workflowId'])
 
 const emits = defineEmits(['nextTab', 'prevTab'])
 
+const fetchLogins = () => {
+    // Automatically generated
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[query_2l0kJtvarJt4TQtG9u9cTcFJF0Y]")
+        .setData({ 'roleId': workflowStepData.value.initiatorRoleId })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("query_2l0kJtvarJt4TQtG9u9cTcFJF0Y", true)
+            if (rs.isValid("query_2l0kJtvarJt4TQtG9u9cTcFJF0Y")) {
+                loginsMaster.value = res
+            } else {
+                rs.showErrorToast("query_2l0kJtvarJt4TQtG9u9cTcFJF0Y")
+            }
+        })
+}
+
+const fetchRoles = () => {
+    // Automatically generated
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[query_2l0fpK138ZDo9ktNbzsyfNNktYs]")
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("query_2l0fpK138ZDo9ktNbzsyfNNktYs", true)
+            if (rs.isValid("query_2l0fpK138ZDo9ktNbzsyfNNktYs")) {
+                rolesMaster.value = res.map(a => ({ ...a, roleId: Number(a.roleId) }))
+            } else {
+                rs.showErrorToast("query_2l0fpK138ZDo9ktNbzsyfNNktYs")
+            }
+        })
+}
 
 const fetchWorkflowStepMaster = () => {
     // Automatically generated
@@ -196,14 +241,14 @@ const fetchWorkflowStepMaster = () => {
         .then(rs => {
             let res = rs.getActivity("query_2kbRa16oh1LXOaC3oz2O6EyGHIE", true)
             if (rs.isValid("query_2kbRa16oh1LXOaC3oz2O6EyGHIE")) {
-                stepsMaster.value = res;
+                stepsMaster.value = res.map(r => ({ ...r, stepId: Number(r.stepId) }));
             } else {
                 rs.showErrorToast("query_2kbRa16oh1LXOaC3oz2O6EyGHIE")
             }
         })
 }
 
-const submitWorkflowStep = () => {
+const nextTab = () => {
     emits('nextTab')
 }
 
@@ -213,6 +258,46 @@ const previousWorkflowStep = () => {
 
 const editData = (data) => {
     console.log(data);
+    workflowStepData.value = { ...data }
+}
+
+const updateWorkflowStep = () => {
+    return new Promise((resolve) => {
+        // Automatically generated
+        new MQL()
+            .useManagementServer()
+            .setActivity("r.[UpdateWorkflowStep]")
+            .setData({ ...workflowStepData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId, 'organizationId': loginStore.organizationId })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("UpdateWorkflowStep", true)
+                if (rs.isValid("UpdateWorkflowStep")) {
+                    resolve()
+                } else {
+                    rs.showErrorToast("UpdateWorkflowStep")
+                }
+            })
+    })
+
+
+}
+
+
+const submitWorkflowStep = async () => {
+    if (workflowStepData.value.workflowStepId) {
+        await updateWorkflowStep()
+    } else {
+        await insertWorkflowStep()
+    }
+    fetchWorkflowSteps()
+    workflowStepData.value = {
+        initiatorLoginId: null,
+        data1: null,
+        data2: null,
+        data3: null,
+        data4: null,
+        data5: null
+    }
 }
 
 
@@ -229,12 +314,11 @@ const insertWorkflowStep = () => {
         new MQL()
             .useManagementServer()
             .setActivity("r.[InsertWorkflowStep]")
-            .setData({ ...workflowStepData.value, 'loginId': loginStore.loginId, 'roleId': loginStore.role.roleId })
+            .setData({ ...workflowStepData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId, 'organizationId': loginStore.organizationId, 'workflowId': workflowId })
             .fetch()
             .then(rs => {
                 let res = rs.getActivity("InsertWorkflowStep", true)
                 if (rs.isValid("InsertWorkflowStep")) {
-                    workflowStepData.value.workflowStepId = res.result.objectId;
                     resolve()
                 } else {
                     rs.showErrorToast("InsertWorkflowStep")
@@ -265,6 +349,7 @@ const fetchWorkflowSteps = () => {
 onMounted(() => {
     fetchWorkflowStepMaster()
     fetchWorkflowSteps()
+    fetchRoles()
 })
 
 

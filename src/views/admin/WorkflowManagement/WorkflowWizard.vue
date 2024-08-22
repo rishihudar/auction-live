@@ -5,7 +5,7 @@
             <Stepper linear class="wizard-wrapper wizard-wrapper-prime" :active-step="activeStep">
                 <StepperPanel header="Workflow">
                     <template #content="{ nextCallback }">
-                        <WorkflowForm @next-tab="nextCallback" @prev-tab="closeForm"  :workflow-id="workflowId"/>
+                        <WorkflowForm @next-tab="nextCallback" @prev-tab="closeForm"  @workflow-id="assignWorkflowId" :workflow-id="workflowId"/>
                     </template>
                 </StepperPanel>
 
@@ -46,6 +46,11 @@ import WorflowStepOrderForm from './WorkflowStepOrderForm.vue';
 const activeStep = ref(0);
 
 const { workflowId } = defineProps(['workflowId'])
+
+
+const assignWorkflowId = (workflowId) => {
+    emits('workflowId', workflowId)
+}
 
 
 const emits = defineEmits(['closeForm'])
