@@ -61,7 +61,7 @@
 
         </template>
         <template v-else>
-            <workflow-wizard :workflow-id="workflowId" @close-form="closeForm" />
+            <workflow-wizard :workflow-id="workflowId" @close-form="closeForm" @workflow-id="assignWorkflowId" />
         </template>
     </div>
 </template>
@@ -84,6 +84,10 @@ const handlePageChange = (event) => {
 
 
 const workflowId = ref(null)
+
+const assignWorkflowId = (workflowId) => {
+    workflowId.value = workflowId;
+}
 
 
 const workflows = ref([
