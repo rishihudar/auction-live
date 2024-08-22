@@ -66,7 +66,7 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
         span {@apply hidden;}
     }
 }
-.fm-calender-panel {min-width: auto !important;}
+// .fm-calender-panel {min-width: auto !important;}
 
 .fm-check-holder {@apply flex flex-wrap gap-x-5 gap-y-2 items-center;
     &.fm-check-vertical {@apply flex-col items-start;}
@@ -132,6 +132,19 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 
 .fm-action-link {@apply mt-4 col-span-full text-center;
     a {@apply text-sm font-medium text-primary-600;}
+}
+
+
+// CAPTCHA
+.fm-captcha {
+    .fm-inner {position: relative; border-radius: var(--fm-border-radius); background: #fff; overflow: hidden;
+        &:before, &:after {position: absolute; inset: 0; content: '';}
+        &:before {z-index: 5; background: repeating-linear-gradient(45deg, rgb(var(--primary-400)), rgb(var(--primary-400)) 2px, transparent 3px, transparent 6px); opacity: 0.14;}
+    }
+    .fm-control {@apply relative z-10 font-bold; border-color: rgb(var(--primary-600)); font-size: 20px; text-align: center; letter-spacing: 0; color: rgb(var(--primary-800)); background: transparent}
+    .fm-icon-action {z-index: 40;
+        svg {fill: rgb(var(--primary-800));}
+    }
 }
 
 
