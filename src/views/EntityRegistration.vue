@@ -1,425 +1,482 @@
 <template>
     <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Entity Registration</h2>
+            </div>
+            <div class="ph-action" v-if="flag === 0">
+                <Button @click="changeFlag(1)" class="btn btn-primary btn-add">
+                    <fa-plus></fa-plus>
+                    Add New Entity
+                </Button>
+            </div>
+        </div>
         <Toast />
         <template v-if="flag === 0">
-            <div class="card">
+            <div class="table-custom">
+                <Paginator
+                    class="pagination-up"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[10, 20, 30]"
+                    :totalRecords="totalRows"
+                    template="RowsPerPageDropdown"
+                    @page="handlePageChange"
+                >
+                    <template #start>
+                        <div class="fm-inner">
+                            <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                            <fa-magnifying-glass class="fm-icon fm-prefix"></fa-magnifying-glass>
+                        </div>
+                    </template>
+                </Paginator>
                 <DataTable responsiveLayout="scroll" v-model:filters="filters" :value="entities" paginator :rows="10"
                     dataKey="id" filterDisplay="row" :loading="loading"
                     :globalFilterFields="['entityId', 'entityName', 'entityShortName', 'entityAddress', 'entityContactNumber']">
-                    <template #header>
-                        <div class="flex justify-content-end">
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search" />
-                                <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-                            </span>
-                            <div class="ml-auto">
-                                <span class="p-buttonset">
-                                    <Button label="ADD" @click="changeFlag(1)" icon="pi pi-trash" />
-                                </span>
-                            </div>
-                        </div>
-                    </template>
                     <template #empty>No data found.</template>
-                    <Column field="entityId" header="Id" style="min-width: 12rem">
+                    <Column field="entityId" header="Id">
                         <template #body="{ data }">
                             {{ data.entityId }}
                         </template>
-
                     </Column>
 
-                    <Column field="entityName" header="Entity Name" style="min-width: 12rem">
+                    <Column field="entityName" header="Entity Name">
                         <template #body="{ data }">
                             {{ data.entityName }}
                         </template>
-
                     </Column>
-                    <Column field="entityShortName" header="Entity Short Name" style="min-width: 12rem">
+                    <Column field="entityShortName" header="Entity Short Name">
                         <template #body="{ data }">
                             {{ data.entityShortName }}
                         </template>
-
                     </Column>
-                    <Column field="entityAddress" header="Entity Address" style="min-width: 12rem">
+                    <Column field="entityAddress" header="Entity Address">
                         <template #body="{ data }">
                             {{ data.entityAddress }}
                         </template>
-
                     </Column>
-                    <Column field="districtName" header="Entity District Name" style="min-width: 12rem">
+                    <Column field="districtName" header="Entity District Name">
                         <template #body="{ data }">
                             {{ data.districtName }}
                         </template>
-
                     </Column>
-
-                    <Column field=" entityContactNumber" header="Entity Contact Number" style="min-width: 12rem">
+                    <Column field=" entityContactNumber" header="Entity Contact Number">
                         <template #body="{ data }">
                             {{ data.entityContactNumber }}
                         </template>
                     </Column>
-                    <Column field="roundRule" header="Round Rule" style="min-width: 12rem">
+                    <Column field="roundRule" header="Round Rule">
                         <template #body="{ data }">
                             {{ data.roundRule }}
                         </template>
                     </Column>
-                    <Column field=" eventProcessingFees" header="Entity Event Processing Fees" style="min-width: 12rem">
+                    <Column field=" eventProcessingFees" header="Entity Event Processing Fees">
                         <template #body="{ data }">
                             {{ data.eventProcessingFees }}
                         </template>
                     </Column>
-                    <Column field=" emiPaymentPercentage" header="Entity EMI Payment Percentage"
-                        style="min-width: 12rem">
+                    <Column field=" emiPaymentPercentage" header="Entity EMI Payment Percentage">
                         <template #body="{ data }">
                             {{ data.emiPaymentPercentage }}
                         </template>
                     </Column>
-
-
-                    <Column field="isParent" header="Entity Parent" style="min-width: 12rem">
+                    <Column field="isParent" header="Entity Parent">
                         <template #body="{ data }">
                             {{ data.isParent }}
                         </template>
                     </Column>
-                    <Column field="userCode" header="WT-Code For H1_10_Percent_Payment" style="min-width: 12rem">
+                    <Column field="userCode" header="WT-Code For H1_10_Percent_Payment">
                         <template #body="{ data }">
                             {{ data.userCode }}
                         </template>
                     </Column>
-                    <Column field="emdPaymentUserCode" header="WT-Code For EMD_Payment" style="min-width: 12rem">
+                    <Column field="emdPaymentUserCode" header="WT-Code For EMD_Payment">
                         <template #body="{ data }">
                             {{ data.emdPaymentUserCode }}
                         </template>
                     </Column>
-                    <Column header="Actions" style="min-width:12rem">
-
+                    <Column header="Actions">
                         <template #body="{ data }">
-                            <span class="p-buttonset">
-                                <Button label="Edit" @click="editEntity(data), changeFlag(2)" icon="pi pi-trash" />
-                            </span>
-                            <!-- <span class="p-buttonset">
-                                <Button label="Delete" @click="deleteEntity(data),reloadPage()" icon="pi pi-trash" />
-                            </span> -->
-                        
-                            <div class="w-1/2">
-                                <div class="fm-group">
-                                   
-                                    <!-- <Button @click="confirmDelete(data)" type="submit"
-                                        class="p-button p-button-primary"></Button> -->
-                                        <!-- <Button label="Delete" @click="confirmDelete(data)" icon="pi pi-trash" /> -->
-
-                                        <Button @click="confirmDelete(data)" label="Delete" severity="danger" outlined></Button>
-
-                                </div>
+                            <div class="btn-wrapper-table">
+                                <Button @click="editEntity(data), changeFlag(2)" severity="secondary" class="btn-sm">
+                                    <fa-pen-to-square></fa-pen-to-square>
+                                    Edit
+                                </Button>
+                                <!-- <Button label="Delete" @click="deleteEntity(data),reloadPage()" /> -->
+                                <Button @click="confirmDelete(data)" severity="danger" class="btn-sm">
+                                    <fa-trash-can></fa-trash-can>
+                                    Delete
+                                </Button>
                             </div>
                         </template>
                     </Column>
-                </DataTable> <ConfirmDialog></ConfirmDialog>
+                </DataTable>
+                <Paginator
+                    class="pagination-down"
+                    :rows="perPage"
+                    :rowsPerPageOptions="[5, 10, 20]"
+                    :totalRecords="totalRows"
+                    template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                    @page="handlePageChange"
+                />
             </div>
+            <ConfirmDialog></ConfirmDialog>
         </template>
         <template v-else-if="flag === 1">
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-
-
-                        <label for="organization">Select Organization<span>*</span></label>
-                        <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
-                            :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
-                            class="w-full md:w-14rem"  />
-                    </div>
-                    <div v-if="$v.entityData.organizationId.$error" class="fm-error">
-                        {{ $v.entityData.organizationId.$errors[0].$message }}
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Add Entity</div>
                 </div>
-            </div>
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-
-                        <!-- Bind the selected country to entityData.fklENtityTypeId -->
-                        <label for="entityName">Entity Type<span>*</span></label>
-                        <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
-                            optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
-                    </div>
-                    <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
-                        {{ $v.entityData.entityTypeId.$errors[0].$message }}
-                    </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityName">Entity Name<span>*</span></label>
-                        <!-- <InputText id="entityName" v-model="entityData.entityName" /> -->
-                        <InputText id="entityName" v-model="entityData.entityName" placeholder="Enter Entity Name" />
-
-                    </div>
-                    <div v-if="$v.entityData.entityName.$error" class="fm-error">
-                        {{ $v.entityData.entityName.$errors[0].$message }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityShortName">Entity Short Name<span>*</span></label>
-                        <InputText id="entityShortName" v-model="entityData.entityShortName"
-                            placeholder="Enter Entity Short Name" @input="checkEntityShortName" />
-                    </div>
-                    <!-- <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
-                        {{ $v.entityData.entityShortName.$errors[0].$message }}
-                    </div> -->
-                    <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
-                        {{ $v.entityData.entityShortName.$errors[0]?.$message }}
-                    </div>
-                </div>
-                <div class="w-1/2">
-                    <label for="countryName">Entity District Name<span>*</span></label>
-                    <!-- Bind the selected country to stateData.fklCountryId -->
-                    <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
-                        optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
-                </div>
-                <div v-if="$v.entityData.districtId.$error" class="fm-error">
-                    {{ $v.entityData.districtId.$errors[0].$message }}
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityAddress">Entity Address<span>*</span></label>
-                        <InputText id="entityAddress" v-model="entityData.entityAddress"
-                            placeholder="Enter Entity Address" />
-
-                    </div>
-                    <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
-                        {{ $v.entityData.entityAddress.$errors[0].$message }}
-                    </div>
-                </div>
-            </div>
-            <div class="fm-row">
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityContactNumber">Entity Contact Number<span>*</span></label>
-                        <InputText id="entityContactNumber" v-model="entityData.entityContactNumber"
-                            placeholder="Enter Entity Contact Number" />
-                        <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
-                    </div>
-                    <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
-                        {{ $v.entityData.entityContactNumber.$errors[0].$message }}
-                    </div>
-                </div>
-
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityContactNumber">Entity Round Rule<span>*</span></label>
-                        <InputText id="entityContactNumber" v-model="entityData.roundRule"
-                            placeholder="Enter Entity Round Rule" />
-                        <!-- <small id="username-help">Enter Entity Round Rule E.g 3</small> -->
-                    </div>
-                    <div v-if="$v.entityData.roundRule.$error" class="fm-error">
-                        {{ $v.entityData.roundRule.$errors[0].$message }}
-                    </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityContactNumber">Entity Event Processing Fees<span>*</span></label>
-                        <InputText id="entityContactNumber" v-model="entityData.eventProcessingFees"
-                            placeholder="Enter Entity Event Processing Fees" />
-                        <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
-                    </div>
-                    <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
-                        {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
-                    </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityContactNumber">Entity EMI Payment Percentage<span>*</span></label>
-                        <InputText id="entityContactNumber" v-model="entityData.emiPaymentPercentage"
-                            placeholder="Enter Entity EMI Payment Percentage " />
-                        <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25</small> -->
-                    </div>
-                    <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                        {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-                    </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="userCode">WT-Code For H1_10_Percent_Payment<span>*</span></label>
-                        <InputText id="userCode" v-model="entityData.userCode"
-                            placeholder="Enter WT-Code For H1_10_Percent_Payment " />
-                       
-                    </div>
-                    <div v-if="$v.entityData.userCode.$error" class="fm-error">
-                {{ $v.entityData.userCode.$errors[0].$message }}
-            </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="emdPaymentUserCode">WT-Code For EMD_Payment<span>*</span></label>
-                        <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode"
-                            placeholder="Enter WT-Code For EMD_Payment " />
-                       
-                    </div>
-                    <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
-                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
-            </div>
-                </div>
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <label for="entityParent">Entity Parent<span>*</span></label>
-                        <div class="card flex justify-content-center">
-                            <Checkbox v-model="entityData.isParent" :binary="true" />
-                        </div>
-                        <small id="username-help">Enter Entity Parent E.g Yes or NO </small>
-                    </div>
-                    <div v-if="$v.entityData.isParent.$error" class="fm-error">
-                        {{ $v.entityData.isParent.$errors[0].$message }}
-                    </div>
-                </div>
-              
-                
-                <div class="w-1/4">
-                    <div class="fm-group">
-                        <Toast />
-                        <ConfirmDialog></ConfirmDialog>
-                        <div class="card flex flex-wrap gap-2 justify-content-center">
-                            <Button @click="confirmADD(entityData) " icon="pi pi-check" label="Submit"></Button>
-                            <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel" severity="danger"></Button>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="organization">Select Organization</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
+                                    :options="organization" optionLabel="organizationName" placeholder="Select a Organization" />
+                            </div>
+                            <div v-if="$v.entityData.organizationId.$error" class="fm-error">
+                                {{ $v.entityData.organizationId.$errors[0].$message }}
+                            </div>
                         </div>
                     </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <!-- Bind the selected country to entityData.fklENtityTypeId -->
+                            <label class="fm-label" for="entityName">Entity Type</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
+                                    optionLabel="entityTypeName" placeholder="Select a Entity Type" />
+                            </div>
+                            <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
+                                {{ $v.entityData.entityTypeId.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityName">Entity Name</label>
+                            <div class="fm-inner">
+                                <!-- <InputText id="entityName" v-model="entityData.entityName" /> -->
+                                <InputText id="entityName" v-model="entityData.entityName" placeholder="Enter Entity Name" />
+                            </div>
+                            <div v-if="$v.entityData.entityName.$error" class="fm-error">
+                                {{ $v.entityData.entityName.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityShortName">Entity Short Name</label>
+                            <div class="fm-inner">
+                                <InputText id="entityShortName" v-model="entityData.entityShortName"
+                                    placeholder="Enter Entity Short Name" @input="checkEntityShortName" />
+                            </div>
+                            <!-- <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                                {{ $v.entityData.entityShortName.$errors[0].$message }}
+                            </div> -->
+                            <div v-if="$v.entityData.entityShortName.$error" class="fm-error">
+                                {{ $v.entityData.entityShortName.$errors[0]?.$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="countryName">Entity District Name</label>
+                            <div class="fm-inner">
+                                <!-- Bind the selected country to stateData.fklCountryId -->
+                                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
+                                    optionLabel="districtName" placeholder="Select a district" />
+                            </div>
+                            <div v-if="$v.entityData.districtId.$error" class="fm-error">
+                                {{ $v.entityData.districtId.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityAddress">Entity Address</label>
+                            <div class="fm-inner">
+                                <InputText id="entityAddress" v-model="entityData.entityAddress"
+                                    placeholder="Enter Entity Address" />
+                            </div>
+                            <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
+                                {{ $v.entityData.entityAddress.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label for="entityContactNumber">Entity Contact Number</label>
+                            <div class="fm-inner">
+                                <InputText id="entityContactNumber" v-model="entityData.entityContactNumber"
+                                    placeholder="Enter Entity Contact Number" />
+                                <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
+                            </div>
+                            <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
+                                {{ $v.entityData.entityContactNumber.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityContactNumber">Entity Round Rule</label>
+                            <div class="fm-inner">
+                                <InputText id="entityContactNumber" v-model="entityData.roundRule"
+                                    placeholder="Enter Entity Round Rule" />
+                                <!-- <small id="username-help">Enter Entity Round Rule E.g 3</small> -->
+                            </div>
+                            <div v-if="$v.entityData.roundRule.$error" class="fm-error">
+                                {{ $v.entityData.roundRule.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityContactNumber">Entity Event Processing Fees</label>
+                            <div class="fm-inner">
+                                <InputText id="entityContactNumber" v-model="entityData.eventProcessingFees"
+                                    placeholder="Enter Entity Event Processing Fees" />
+                                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+                            </div>
+                            <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
+                                {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityContactNumber">Entity EMI Payment Percentage</label>
+                            <div class="fm-inner">
+                                <InputText id="entityContactNumber" v-model="entityData.emiPaymentPercentage"
+                                    placeholder="Enter Entity EMI Payment Percentage " />
+                                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25</small> -->
+                            </div>
+                            <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="userCode">WT-Code For H1_10_Percent_Payment</label>
+                            <div class="fm-inner">
+                                <InputText id="userCode" v-model="entityData.userCode"
+                                    placeholder="Enter WT-Code For H1_10_Percent_Payment" />
+                            </div>
+                            <div v-if="$v.entityData.userCode.$error" class="fm-error">
+                                {{ $v.entityData.userCode.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="emdPaymentUserCode">WT-Code For EMD_Payment</label>
+                            <div class="fm-inner">
+                                <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode"
+                                    placeholder="Enter WT-Code For EMD_Payment " />
+                            </div>
+                            <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
+                                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityParent">Entity Parent</label>
+                            <div class="fm-check-holder">
+                                <div class="fm-checkbox">
+                                    <Checkbox v-model="entityData.isParent" :binary="true" />
+                                    <label>Is Parent?</label>
+                                </div>
+                                <!-- <small id="username-help">Enter Entity Parent E.g Yes or NO </small> -->
+                            </div>
+                            <div v-if="$v.entityData.isParent.$error" class="fm-error">
+                                {{ $v.entityData.isParent.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fm-action">
+                        <Button @click="confirmADD(entityData)" label="Submit"></Button>
+                        <Button @click="changeFlag(0)" label="Cancel" severity="danger"></Button>
+                    </div>
+                    <Toast />
+                    <ConfirmDialog></ConfirmDialog>
                 </div>
             </div>
         </template>
 
         <template v-else-if="flag === 2">
-            <div class="fm-row">
-                <div class="w-1/2">
-                    <div class="fm-group">
-                        <label for="organizationName">Select Organization<span>*</span></label>
-
-                        <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
-                            :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
-                            class="w-full md:w-14rem" @change="fetchEntityTypesByOrganization" />
+            <div class="card">
+                <div class="card-header">
+                    <div class="ch-title">Edit Entity</div>
+                </div>
+                <div class="form-grid">
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="organizationName">Select Organization</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="entityData.organizationId" optionValue="organizationId"
+                                    :options="organization" optionLabel="organizationName" placeholder="Select a Organization"
+                                @change="fetchEntityTypesByOrganization" />
+                            </div>
+                            <div v-if="$v.entityData.organizationId.$error" class="fm-error">
+                                {{ $v.entityData.organizationId.$errors[0].$message }}
+                            </div>
+                        </div>
                     </div>
-
-                    <div v-if="$v.entityData.organizationId.$error" class="fm-error">
-                        {{ $v.entityData.organizationId.$errors[0].$message }}
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityName">Select Entity Type</label>
+                            <div class="fm-inner">
+                                <!-- Bind the selected entitytype to entityData.entityTypeId -->
+                                <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
+                                    optionLabel="entityTypeName" placeholder="Select a Entity Type" />
+                            </div>
+                            <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
+                                {{ $v.entityData.entityTypeId.$errors[0].$message }}
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityName">Entity Name</label>
+                            <div class="fm-inner">
+                                <InputText id="entityName" v-model="entityData.entityName" />
+                                <!-- <small id="username-help">Enter Entity Name E.g UttarPradesh</small> -->
+                            </div>
+                            <div v-if="$v.entityData.entityName.$error" class="fm-error">
+                                {{ $v.entityData.entityName.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityShortName">Entity Short Name</label>
+                            <div class="fm-inner">
+                                <InputText id="entityShortName" v-model="entityData.entityShortName" readonly />
+                            </div>
+                            <!-- <small id="username-help">Enter Entity Short Name E.g MCF</small> -->
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="countryName">Entity District Name</label>
+                            <div class="fm-inner">
+                                <!-- Bind the selected country to stateData.fklCountryId -->
+                                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
+                                    optionLabel="districtName" placeholder="Select a district" />
+                            </div>
+                            <div v-if="$v.entityData.districtId.$error" class="fm-error">
+                                {{ $v.entityData.districtId.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityAddress">Entity Address</label>
+                            <div class="fm-inner">
+                                <InputText id="entityAddress" v-model="entityData.entityAddress" />
+                                <!-- <small id="username-help">Enter Entity Address E.g MCF</small> -->
+                            </div>
+                            <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
+                                {{ $v.entityData.entityAddress.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityContactNumber">Entity Contact Number</label>
+                            <div class="fm-inner">
+                                <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
+                                <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
+                            </div>
+                            <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
+                                {{ $v.entityData.entityContactNumber.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="roundRule">Entity Round Rule</label>
+                            <div class="fm-inner">
+                                <InputText id="roundRule" v-model="entityData.roundRule" />
+                                <!-- <small id="username-help">Enter Entity Round Rule E.g 1</small> -->
+                            </div>
+                            <div v-if="$v.entityData.roundRule.$error" class="fm-error">
+                                {{ $v.entityData.roundRule.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="eventProFees">Entity Event Processing Fees</label>
+                            <div class="fm-inner">
+                                <InputText id="eventProFees" v-model="entityData.eventProcessingFees" />
+                                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+                            </div>
+                            <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
+                                {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="emiPayPercent">Entity EMI Payment Percentage</label>
+                            <div class="fm-inner">
+                                <InputText id="emiPayPercent" v-model="entityData.emiPaymentPercentage" />
+                            </div>
+                            <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
+                                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="userCode">WT-Code For H1_10_Percent_Payment</label>
+                            <div class="fm-inner">
+                                <InputText id="userCode" v-model="entityData.userCode" />
+                            </div>
+                            <div v-if="$v.entityData.userCode.$error" class="fm-error">
+                                {{ $v.entityData.userCode.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="emdPaymentUserCode">WT-Code For EMD_Payment</label>
+                            <div class="fm-inner">
+                                <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode" />
+                                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
+                            </div>
+                            <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
+                                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="fm-group required">
+                            <label class="fm-label" for="entityParent">Entity Parent</label>
+                            <div class="fm-check-holder">
+                                <div class="fm-checkbox">
+                                    <Checkbox v-model="entityData.isParent" :binary="true" />
+                                    <label>Is Parent?</label>
+                                </div>
+                            </div>
+                            <div v-if="$v.entityData.isParent.$error" class="fm-error">
+                                {{ $v.entityData.isParent.$errors[0].$message }}
+                            </div>
+                            <!-- <small id="username-help">Enter Entity Parent E.g Yes or NO </small> -->
+                        </div>
+                    </div>
+                    <div class="fm-action">
+                        <Button @click="confirmEdit(entityData)" type="submit">Submit</Button>
+                        <Button @click="changeFlag(0)" label="Cancel" severity="danger"></Button>
+                    </div>
+                    <Toast />
+                    <ConfirmDialog></ConfirmDialog>
                 </div>
             </div>
-            <div class="fm-row">
-                <div class="w-1/2">
-                    <div class="fm-group">
-                        <label for="entityName"> Select Entity Type <span>*</span></label>
-                        <!-- Bind the selected entitytype to entityData.entityTypeId -->
-                        <Dropdown v-model="entityData.entityTypeId" optionValue="entityTypeId" :options="entitytype"
-                            optionLabel="entityTypeName" placeholder="Select a Entity Type" class="w-full md:w-14rem" />
-                    </div>
-                    <div v-if="$v.entityData.entityTypeId.$error" class="fm-error">
-                        {{ $v.entityData.entityTypeId.$errors[0].$message }}
-                    </div>
-                </div>
-
-                <div class="w-1/2">
-                    <div class="fm-group">
-                        <label for="entityName">Entity Name<span>*</span></label>
-                        <InputText id="entityName" v-model="entityData.entityName" />
-                        <!-- <small id="username-help">Enter Entity Name E.g UttarPradesh</small> -->
-                    </div>
-                    <div v-if="$v.entityData.entityName.$error" class="fm-error">
-                        {{ $v.entityData.entityName.$errors[0].$message }}
-                    </div>
-                </div>
-            </div>
-            <div class="w-1/2">
-                <label for="entityShortName">Entity Short Name<span>*</span></label>
-                <InputText id="entityShortName" v-model="entityData.entityShortName" readonly />
-                <!-- <small id="username-help">Enter Entity Short Name E.g MCF</small> -->
-            </div>
-            <div class="w-1/2">
-                <label for="countryName">Entity District Name<span>*</span></label>
-                <!-- Bind the selected country to stateData.fklCountryId -->
-                <Dropdown v-model="entityData.districtId" optionValue="districtId" :options="districts"
-                    optionLabel="districtName" placeholder="Select a district" class="w-full md:w-14rem" />
-            </div>
-            <div v-if="$v.entityData.districtId.$error" class="fm-error">
-                {{ $v.entityData.districtId.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="entityAddress">Entity Address<span>*</span></label>
-                <InputText id="entityAddress" v-model="entityData.entityAddress" />
-                <!-- <small id="username-help">Enter Entity Address E.g MCF</small> -->
-            </div>
-            <div v-if="$v.entityData.entityAddress.$error" class="fm-error">
-                {{ $v.entityData.entityAddress.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="entityContactNumber">Entity Contact Number<span>*</span></label>
-                <InputText id="entityContactNumber" v-model="entityData.entityContactNumber" />
-                <!-- <small id="username-help">Enter Entity Contact Number E.g 6398302275</small> -->
-            </div>
-            <div v-if="$v.entityData.entityContactNumber.$error" class="fm-error">
-                {{ $v.entityData.entityContactNumber.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="roundRule">Entity Round Rule<span>*</span></label>
-                <InputText id="roundRule" v-model="entityData.roundRule" />
-                <!-- <small id="username-help">Enter Entity Round Rule E.g 1</small> -->
-            </div>
-            <div v-if="$v.entityData.roundRule.$error" class="fm-error">
-                {{ $v.entityData.roundRule.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="eventProFees">Entity Event Processing Fees<span>*</span></label>
-                <InputText id="eventProFees" v-model="entityData.eventProcessingFees" />
-                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
-            </div>
-            <div v-if="$v.entityData.eventProcessingFees.$error" class="fm-error">
-                {{ $v.entityData.eventProcessingFees.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="emiPayPercent">Entity EMI Payment Percentage<span>*</span></label>
-                <InputText id="emiPayPercent" v-model="entityData.emiPaymentPercentage" />
-           
-            </div>
-            <div v-if="$v.entityData.emiPaymentPercentage.$error" class="fm-error">
-                {{ $v.entityData.emiPaymentPercentage.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="userCode">WT-Code For H1_10_Percent_Payment<span>*</span></label>
-                <InputText id="userCode" v-model="entityData.userCode" />
-              
-            </div>
-            <div v-if="$v.entityData.userCode.$error" class="fm-error">
-                {{ $v.entityData.userCode.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="emdPaymentUserCode">WT-Code For EMD_Payment<span>*</span></label>
-                <InputText id="emdPaymentUserCode" v-model="entityData.emdPaymentUserCode" />
-                <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
-            </div>
-            <div v-if="$v.entityData.emdPaymentUserCode.$error" class="fm-error">
-                {{ $v.entityData.emdPaymentUserCode.$errors[0].$message }}
-            </div>
-            <div class="w-1/2">
-                <label for="entityParent">Entity Parent</label>
-                <div class="card flex justify-content-center">
-
-                    <Checkbox v-model="entityData.isParent" :binary="true" />
-                </div>
-                <div v-if="$v.entityData.isParent.$error" class="fm-error">
-                    {{ $v.entityData.isParent.$errors[0].$message }}
-                </div>
-                <!-- <small id="username-help">Enter Entity Parent E.g Yes or NO </small> -->
-            </div>
-            <Toast />
-            <ConfirmDialog></ConfirmDialog>
-            <div class="w-1/2">
-                <div class="fm-group">
-                    <Button @click="confirmEdit(entityData)" type="submit"
-                        class="p-button p-button-primary">Submit</Button>
-                    <Button @click="changeFlag(0)" icon="pi pi-times" label="Cancel" severity="danger"></Button>
-                </div>
-
-            </div>
-
         </template>
 
     </div>
@@ -440,6 +497,10 @@ import { or } from '@vuelidate/validators';
 import Checkbox from 'primevue/checkbox';
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
+
+import faPenToSquare from "../../assets/icons/pen-to-square.svg";
+import faPlus from "../../assets/icons/plus.svg";
+import faTrashCan from "../../assets/icons/trash-can.svg";
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -841,19 +902,3 @@ onMounted(() => {
 
 });
 </script>
-<style scoped>
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.gap-2 {
-    gap: 2rem;
-    /* Adjust the gap as needed */
-}
-
-.form-row {
-    margin-bottom: 1rem;
-    /* Adjust the margin as needed */
-}
-</style>

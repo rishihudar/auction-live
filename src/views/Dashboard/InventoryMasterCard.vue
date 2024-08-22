@@ -150,9 +150,8 @@
         </div>
       </div>
     </div>
+    <Toast />
   </div>
-
-  <Toast />
 </template>
 
 <script setup>
