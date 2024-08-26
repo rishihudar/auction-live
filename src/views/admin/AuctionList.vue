@@ -178,6 +178,11 @@ import { fetchAuctionStatus } from "../../plugins/helpers";
 import { useAuctionPreparation } from "../../store/auctionPreparation.js";
 import { storeToRefs } from "pinia";
 import Paginator from "primevue/paginator";
+
+import { login } from "../../store/modules/login";
+const loginStore = login();
+const { entityId } = storeToRefs(loginStore);
+
 const perPage = ref(10);
 const totalRows = ref();
 const currentPage = ref(0);
@@ -217,6 +222,7 @@ async function AuctionList() {
     .useManagementServer()
     .setActivity("o.[FetchAuctionsWithDraftedStatus]")
     .setData({
+      entityId: entityId.value,
       statusId: AUCTION_DRAFTED,
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),
