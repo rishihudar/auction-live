@@ -8,7 +8,8 @@
                     <div class="fm-group">
                         <div class="fm-label">From Step</div>
                         <div class="fm-inner">
-                            <Dropdown v-model="workflowStepOrderData.fromStepId" :options="workflowSteps" showClear
+                            <Dropdown v-model="workflowStepOrderData.fromWorkflowStepId" :options="workflowsSteps"
+                                showClear option-label="displayName" option-value="workflowStepId"
                                 placeHolder="Select from step" />
                         </div>
                     </div>
@@ -19,6 +20,7 @@
                         <div class="fm-label">From Status</div>
                         <div class="fm-inner">
                             <Dropdown v-model="workflowStepOrderData.fromStatusId" :options="statuses" showClear
+                                option-label="statusDisplayName" option-value="statusId"
                                 placeHolder="Select from status" />
                         </div>
                     </div>
@@ -28,7 +30,8 @@
                     <div class="fm-group">
                         <div class="fm-label">To Step</div>
                         <div class="fm-inner">
-                            <Dropdown v-model="workflowStepOrderData.toStepId" :options="workflowSteps" showClear
+                            <Dropdown v-model="workflowStepOrderData.toWorkflowStepId" :options="workflowsSteps"
+                                showClear option-label="displayName" option-value="workflowStepId"
                                 placeHolder="Select to step" />
                         </div>
                     </div>
@@ -39,6 +42,7 @@
                         <div class="fm-label">To Status</div>
                         <div class="fm-inner">
                             <Dropdown v-model="workflowStepOrderData.toStatusId" :options="statuses" showClear
+                                option-label="statusDisplayName" option-value="statusId"
                                 placeHolder="Select from status" />
                         </div>
                     </div>
@@ -47,10 +51,26 @@
 
             </div>
             <DataTable :value="workflowStepOrders">
-                <Column field="fromStepdisplayName" header="From Step"></Column>
-                <Column field="fromStatusdisplayName" header="From Status"></Column>
-                <Column field="toStepdisplayName" header="To Step"></Column>
-                <Column field="toStepdisplayName" header="To Status"></Column>
+                <Column field="fromStepdisplayName" header="From Step">
+                    <template #body="{ data }">
+                        {{ stepName(data.fromStep) }}
+                    </template>
+                </Column>
+                <Column field="fromStatusdisplayName" header="From Status">
+                    <template #body="{ data }">
+                        {{ statusName(data.fromStatus) }}
+                    </template>
+                </Column>
+                <Column field="toStepdisplayName" header="To Step">
+                    <template #body="{ data }">
+                        {{ stepName(data.toStep) }}
+                    </template>
+                </Column>
+                <Column field="toStepdisplayName" header="To Status">
+                    <template #body="{ data }">
+                        {{ statusName(data.toStatus) }}
+                    </template>
+                </Column>
                 <Column field="Action" header="Action">
                     <template #body="{ data }">
                         <Button @click="deleteData(data)" severity="danger" class="btn-sm">
@@ -77,6 +97,8 @@ import Button from 'primevue/button'
 import { onMounted, ref } from 'vue'
 import { login } from '@/store/modules/login.js'
 import MQL from '@/plugins/mql.js'
+import trashCan from "../../../../assets/icons/trash-can.svg";
+
 
 
 const loginStore = login()
@@ -95,13 +117,13 @@ const workflowStepOrders = ref([])
 
 const stepName = (stepId) => {
     let workflowStep = workflowsSteps.value.find(w => w.workflowStepId == stepId)
-    return step ? workflowStep.displayName : '-'
+    return workflowStep ? workflowStep.displayName : '-'
 }
 
 
 const statusName = (statusId) => {
     let status = statuses.value.find(s => s.statusId == statusId)
-    return status ? status.statusName : '-'
+    return status ? status.statusDisplayName : '-'
 }
 
 
@@ -114,8 +136,22 @@ const deleteData = (data) => {
 
 const fetchWorkflowSteps = () => {
     // Automatically generated
-   
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[query_2kauHSwfx6s4TLIKFed7d5oRsgO]")
+        .setData({ 'workflowId': workflowId })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("query_2kauHSwfx6s4TLIKFed7d5oRsgO", true)
+            if (rs.isValid("query_2kauHSwfx6s4TLIKFed7d5oRsgO")) {
+                workflowsSteps.value = res;
+            } else {
+                rs.showErrorToast("query_2kauHSwfx6s4TLIKFed7d5oRsgO")
+            }
+        })
 }
+
+
 
 //TODO: fetch statuses
 
@@ -147,12 +183,12 @@ const insertworkflowStepOrder = () => {
     new MQL()
         .useManagementServer()
         .setActivity("r.[InsertWorkflowStepOrder]")
-        .setData({ ...workflowStepOrderData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId, 'organisationId': loginStore.organisationId })
+        .setData({ ...workflowStepOrderData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId, 'organizationId': loginStore.organizationId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("InsertWorkflowStepOrder", true)
             if (rs.isValid("InsertWorkflowStepOrder")) {
-
+                fetchWorkflowStepOrder()
             } else {
                 rs.showErrorToast("InsertWorkflowStepOrder")
             }
@@ -172,6 +208,7 @@ const deleteWorkflowStepOrder = (id) => {
         .then(rs => {
             let res = rs.getActivity("DeleteWorkflowStepOrder", true)
             if (rs.isValid("DeleteWorkflowStepOrder")) {
+                fetchWorkflowStepOrder()
             } else {
                 rs.showErrorToast("DeleteWorkflowStepOrder")
             }
