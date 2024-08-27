@@ -269,6 +269,7 @@ function fetchAuctionWithApprovedStatus() {
     .useManagementServer()
     .setActivity("o.[FetchAuctionsWithApprovedStatus]")
     .setData({
+      entityId:loginStore.entityId,
       statusId: 28,
       filter: "%" + filter.value.trim() + "%",
       skip: String(currentPage.value * perPage.value),

@@ -82,7 +82,7 @@ $roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
         transform: translate3d(-100%, -100%, 0) rotate3d(0, 0, 1, -45deg); transition: transform 0.7s ease;}
     
     @for $i from 1 through length($roleColors) {
-        &:nth-child(#{$i}) {
+        &:nth-child(5n + #{$i}) {
             .cr-icon {
                 svg {fill: nth($roleColors, $i); background-color: rgba(nth($roleColors, $i), 0.1);}
             }
