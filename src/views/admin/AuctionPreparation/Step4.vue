@@ -594,9 +594,9 @@ async function onSave() {
     // toaster.success(" Data Saved !!!");
     if (config == null) {
       await insertInWorkflow();
-    }
-    if (config == null) {
       auctionPrompt.value = true
+    } else {
+      nextCallback()
     }
   }
 }
