@@ -213,10 +213,10 @@
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">
                     <Button v-if="uploadedFile" severity="secondary" @click="DownloadDocument(filePath)">
-                        <fa-eye></fa-eye> View Document
+                        <fa-eye></fa-eye> 
                     </Button>
-                    <Button v-if="uploadedFile" severity="danger" @click="uploadedFile = false">
-                        <fa-trash-can></fa-trash-can> Remove Document
+                    <Button v-if="uploadedFile" severity="danger" @click="deleteDoc()">
+                        <fa-trash-can></fa-trash-can> 
                     </Button>
                 </div>
                 <div class="fm-action  fm-action-center">
@@ -938,6 +938,42 @@ function fetchAvailablePropertyCount(id) {
                 rs.showErrorToast("FetchAvailablePropertyCount")
             }
         })
+
+}
+
+const deleteFile = (url) => {
+    console.log("url is",url)
+    return new Promise((resolve) => {
+        new MQLCdn()
+        
+        .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb")
+        .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument")
+
+            .setFileName(url)
+            .enablePageLoader(true)
+            .deleteFile()
+            .then((res) => {
+                //console.log(res);
+                if (res.isValid()) {
+                    toaster.error("file deleted");
+                    
+                    resolve()
+                } else {
+                    res.showErrorToast();
+                }
+            });
+    })
+}
+
+
+const deleteDoc = async () => {
+    await deleteFile(fileName.value)
+    fileName.value = null
+    uploadedFile.value = false
+    
+    
 
 }
 
