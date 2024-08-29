@@ -11,7 +11,7 @@
         </div>
         <Dialog v-model:visible="visible" modal :header=modalItem.statusDisplayName :style="{ width: '25rem' }">
             <span class="p-text-secondary block mb-5" v-if="workflowStepData.endStep == 0">Assign to <strong>{{
-                role.roleName }}</strong></span>
+                    role.roleName }}</strong></span>
             <label for="comment" class="font-semibold w-6rem">Comment</label>
             <InputText id="comment" v-model="comment" class="flex-auto" autocomplete="off" />
             <small class="fm-error" v-if="$v.comment.$error">{{ $v.comment.$errors[0].$message }}</small><br />
@@ -25,6 +25,13 @@
             </div>
         </Dialog>
     </div>
+    <Dialog v-model:visible="auctionPublish" modal header="Auction Publish" :style="{ width: '25rem' }">
+        <p>Auction <strong>{{ auctionId }}</strong> Approved Successfully.</p>
+        <p>Do you want to publish this auction?</p>
+        <p class="bg-yellow-100 rounded-2xl border-2 border-yellow-500 border-dashed p-2 my-2 text-sm "><strong>NOTE:</strong>The following action will change the role to <strong>PUBLISHER</strong></p>
+        <Button @click="redirectToPublish">Ok</Button>
+        <Button  @click="cancel" severity="info">Cancel</Button>
+    </Dialog>
 </template>
 
 <script setup>
@@ -35,10 +42,12 @@ import { login } from "../../store/modules/login";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { createToaster } from "@meforma/vue-toaster";
+import { useRouter } from "vue-router";
 import AuctionPreview from "../AuctionPreview.vue";
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login()
+const router = useRouter()
 
 const visible = ref(false);
 const comment = ref(null)
@@ -46,6 +55,7 @@ const role = ref({})
 const logins = ref([])
 const modalItem = ref({})
 const auctionId = ref()
+const auctionPublish = ref(false)
 
 const { workflowStepDetailsId } = defineProps({
     // Basic prop definition
@@ -113,14 +123,30 @@ async function submitWorkflow() {
             if (rs.isValid("UpdateWorkflowStepDetails")) {
                 visible.value = false
                 // modalItem.value = null
-        toaster.success(`${modalItem.value.statusDisplayName} Successfully`)
-                emit('workflowsubmit')
-
+                toaster.success(`${modalItem.value.statusDisplayName} Successfully`)
+                if (modalItem.value.statusDisplayName == 'Approve Auction') {
+                    if (loginStore.roleNames.findIndex((r) => r.roleCode == 'ROLE_PUBLISHER') > -1) {
+                        auctionPublish.value = true
+                    } else {
+                    emit('workflowsubmit')
+                }
+                } else {
+                    emit('workflowsubmit')
+                }
             } else {
                 rs.showErrorToast("UpdateWorkflowStepDetails")
             }
         })
+}
 
+
+function redirectToPublish() {
+    loginStore.SET_ROLE(loginStore.roleNames.find((r) => r.roleCode == 'ROLE_PUBLISHER'))
+    router.push({name: 'ROLE_PUBLISHER'})
+}
+
+function cancel() {
+    emit('workflowsubmit')
 }
 
 function fetchLogin() {
