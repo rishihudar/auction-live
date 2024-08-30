@@ -226,7 +226,7 @@ import Dropdown from 'primevue/dropdown';
                 life: 3000,
                 });
                 console.log('something went wrong, please try again later ', response.data, "challanExpiryDate", moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"), "responseDetails", responseDetails.value);   
-                UpdateChallanModificationDetails(response.data, moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
+                updateChallanModificationDetails(response.data, moment(responseDetails.value.challanExpiryDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss"));
             }
         }).catch((error) => {
                 console.log('Error:', error);
