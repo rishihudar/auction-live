@@ -2,7 +2,7 @@
 
     <div class="card">
         <div class="card-header">
-            <div class="ch-title">Deactivate Bidders</div>
+            <div class="ch-title">Activate Bidders</div>
         </div>
         <div class="form-grid">
             <div class="col-span-6">
@@ -21,22 +21,22 @@
             <div class="col-span-6">
                 <!-- <label class="fm-label" for="role">.</label> -->
                 <div class="fm-group">
-                    <Button @click="openModal()" label="Deactivate"></Button>
+                    <Button @click="openModal()" label="Activate"></Button>
                 </div>
             </div>
         </div>
     </div>
     <Toast />
     <div>
-        <Dialog v-model:visible="visible" modal header="Confirm Deactivation" :style="{ width: '50rem' }">
+        <Dialog v-model:visible="visible" modal header="Confirm Activation" :style="{ width: '50rem' }">
 
             <div>
-                <span>Are you sure you want to deactivate the selected bidders?</span>
+                <span>Are you sure you want to Activate the selected bidders?</span>
             </div>
 
             <div class="fm-action  fm-action-center">
                 <Button @click="visible = false" label="Close"></Button>
-                <Button @click="DeactivateBidders" label="Deactivate"></Button>
+                <Button @click="ActivateBidders" label="Activate"></Button>
             </div>
 
         </Dialog>
@@ -92,54 +92,55 @@ const openModal = async () => {
     }
 }
 
-function DeactivateBidders() {
+function ActivateBidders() {
     new MQL()
         .useManagementServer()
-        .setActivity("r.[DeactivateBidders]")
+        .setActivity("r.[ActivateBidders]")
         .setData({ "data": data })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("DeactivateBidders", true)
-            if (rs.isValid("DeactivateBidders")) {
-                toast.add({ severity: 'success', summary: 'Success', detail: 'Bidders Deactivated Successfully', life: 3000 });
+            let res = rs.getActivity("ActivateBidders", true)
+            if (rs.isValid("ActivateBidders")) {
+                toast.add({ severity: 'success', summary: 'Success', detail: 'Bidders Activated Successfully', life: 3000 });
                 visible.value = false
-                FetchBidderData()
-                resetForm() // Reset the form
+                FetchDiactivatedBidderData()
+                // selectedBidders.value = []
+                resetForm() // Reset the form   
             } else {
-                toast.add({ severity: 'error', summary: 'Error', detail: 'Error in Deactivating Bidders, please try again', life: 3000 });
+                toast.add({ severity: 'error', summary: 'Error', detail: 'Error in Activating Bidders, please try again', life: 3000 });
                 visible.value = false
-                // rs.showErrorToast("DeactivateBidders")
+                // rs.showErrorToast("ActivateBidders")
             }
         })
 }
 
-function fetchBidderDeactivationStatus() {
+function fetchBidderApprovedStatus() {
     new MQL()
         .useManagementServer()
-        .setActivity("r.[FetchBidderDeactivationStatus]")
-        .setData({ "key": "BIDDER_DEACTIVATION" })
+        .setActivity("r.[FetchBidderApprovedStatus]")
+        .setData({ "key": "APPROVED" })
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchBidderDeactivationStatus", true)
-            if (rs.isValid("FetchBidderDeactivationStatus")) {
+            let res = rs.getActivity("FetchBidderApprovedStatus", true)
+            if (rs.isValid("FetchBidderApprovedStatus")) {
                 statusId.value = res.result[0].statusId
                 console.log("statusId.value", statusId.value)
             } else {
-                rs.showErrorToast("FetchBidderDeactivationStatus")
+                rs.showErrorToast("FetchBidderApprovedStatus")
             }
         })
 }
 
 
-function FetchBidderData() {
+function FetchDiactivatedBidderData() {
     new MQL()
         .useManagementServer()
-        .setActivity("r.[FetchBidders]")
+        .setActivity("r.[FetchDiactivatedBidders]")
         .setData()
         .fetch()
         .then(rs => {
-            let res = rs.getActivity("FetchBidders", true)
-            if (rs.isValid("FetchBidders")) {
+            let res = rs.getActivity("FetchDiactivatedBidders", true)
+            if (rs.isValid("FetchDiactivatedBidders")) {
                 // bidderMaster.value = res.result
                 bidderMaster.value = res.result.map((el) => {
                     return {
@@ -149,7 +150,7 @@ function FetchBidderData() {
                 })
                 console.log("bidderMaster.value", bidderMaster.value)
             } else {
-                rs.showErrorToast("FetchBidders")
+                rs.showErrorToast("FetchDiactivatedBidders")
             }
         })
 
@@ -158,8 +159,8 @@ function FetchBidderData() {
 const resetForm = () => {
     console.log("resetForm")
     selectedBidders.value = '';
-      $v.value.$reset(); // Reset the validation state
-    };
+    $v.value.$reset(); // Reset the validation state
+};
 
 const rules = {
     selectedBidders: {
@@ -170,7 +171,7 @@ const $v = useVuelidate(rules, { selectedBidders });
 
 
 onMounted(() => {
-    FetchBidderData()
-    fetchBidderDeactivationStatus()
+    fetchBidderApprovedStatus()
+    FetchDiactivatedBidderData()
 });
 </script>

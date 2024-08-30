@@ -227,6 +227,12 @@ const router = createRouter({
       meta: { title: "BidderDeactivation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
     },
     {
+      path: "/BidderActivation",
+      name:"BidderActivation",
+      component: loadAdminView("BidderActivation"),
+      meta: { title: "BidderActivation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+    {
       path: "/ModifyChallan",
       name:"ModifyChallan",
       component: loadAdminView("ModifyChallan"),
