@@ -46,7 +46,8 @@
     </div>
     <Dialog v-model:visible="visible" modal :header="`Enter Auction ${auction?.vsAuctionCode} Password`"
       :style="{ width: '40rem' }">
-      <div class="fm-group">
+
+      <div class="fm-group" v-if=isWatcherPasscodeEnabled>
         <label class="fm-label" for="password">PassCode</label>
         <div class="fm-inner">
           <InputText type=password v-model="auctionPassword" />
@@ -55,8 +56,12 @@
           {{ v$?.auctionPassword?.$errors[0]?.$message }}
         </div>
       </div>
-      <div class="modal-action fm-action justify-center">
+      <div class="modal-action fm-action justify-center" v-if=isWatcherPasscodeEnabled>
         <Button label="Submit" @click="submitAuctionPassword()"></Button>
+        <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
+      </div>
+      <div class="modal-action fm-action justify-center" v-if=!isWatcherPasscodeEnabled>
+        <Button label="Confirm Join" @click="submitAuctionPassword()"></Button>
         <Button label="Cancel" severity="grey" class="btn-grey" @click="cancel()"></Button>
       </div>
     </Dialog>
@@ -106,7 +111,7 @@ import { useAuctionStore } from "../../store/Auction.js";
 import faTrashCan from '../../../assets/icons/trash-can.svg';
 // import moment from 'moment'; // Import Moment.js
 
-
+let isWatcherPasscodeEnabled=ref()
 
 const toast = useToast()
 const auctionStore = useAuctionStore()
@@ -164,12 +169,42 @@ const rules = {
 const v$ = useVuelidate(rules, { auctionPassword,  reason});
 
 
+function fetchWatcherPasscodeSet() {
+
+          new MQL()
+          .useBidderServer()
+			.setActivity("o.[fetchWatcherPasscode]")
+			.setData({"entityId":loginStore.entityId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("fetchWatcherPasscode",true)
+			if (rs.isValid("fetchWatcherPasscode")) {
+
+        console.log("res.result is ",res.result.isWatcherPasscodeEnabled)
+
+        if(res.result.isWatcherPasscodeEnabled == 1) {
+          isWatcherPasscodeEnabled.value = true
+          
+        } else {
+          isWatcherPasscodeEnabled.value = false
+          
+        }
+
+			} else
+			 { 
+			rs.showErrorToast("fetchWatcherPasscode")
+			}
+			})
+			
+}
+
 onMounted(() => {
   // ProductService.getProductsMini().then((data) => (products.value = data));
   entityId.value = route.params.id
    setInterval(() => {
     fetchScheduledAuctionsBidder()
      }, 1000);
+     fetchWatcherPasscodeSet()
   // fetchCustomParam()
 });
 function handlePageChange(event) {
@@ -342,12 +377,28 @@ const submitAuctionPassword = async () => {
   // Handle submission of auction password here
   //console.log('Auction password submitted:', auctionPassword.value)
   // Close the modal
-  v$.value['auctionPassword'].$touch()
-  //console.log(formValid);
-  if (v$.value['auctionPassword'].$invalid) {
+  if(!isWatcherPasscodeEnabled.value) {
+
+     await fetchWatcherPasscodeDetails()
+
+  } else {
+
+    v$.value['auctionPassword'].$touch()
+
+    if (v$.value['auctionPassword'].$invalid) {
     toast.add({ severity: 'error', summary: 'Form Invalid', detail: 'Please fill the form correctly', life: 3000 })
     return
   }
+
+  }
+
+  // console.log("auctionPassword is --> ",auctionPassword.value)
+  // v$.value['auctionPassword'].$touch()
+  //console.log(formValid);
+  // if (v$.value['auctionPassword'].$invalid) {
+  //   toast.add({ severity: 'error', summary: 'Form Invalid', detail: 'Please fill the form correctly', life: 3000 })
+  //   return
+  // }
   visible.value = false
   //router.push("BidderAuctionBidding")
   // TODO: check if the passcode is correct
@@ -358,6 +409,29 @@ const submitAuctionPassword = async () => {
     router.push({ path: '/UserDashboard' })
   }
 };
+
+function fetchWatcherPasscodeDetails() {
+  return new Promise((resolve) => {
+          new MQL()
+          .useBidderServer()
+			.setActivity("o.[fetchMasterPasscodeDetails]")
+			.setData({"auctionId": auction.value.pklAuctionId,"userId": loginStore.loginId })
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("fetchMasterPasscodeDetails",true)
+			if (rs.isValid("fetchMasterPasscodeDetails")) {
+        auctionPassword.value = res.result.passCode;
+        console.log("test auctionPassword.value ",auctionPassword.value)
+        resolve()
+			} else
+			 { 
+			rs.showErrorToast("fetchMasterPasscodeDetails")
+			}
+			})
+
+    })
+			
+}
 
 function checkPasscode() {
   return new Promise((resolve) => {
