@@ -153,6 +153,24 @@ const router = createRouter({
       meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
     },
     {
+      path: "/concluded-auctions-MIS",
+      name: "ConcludedAuctionsMIS",
+      component: loadAdminView("ConcludedAuctionsMIS"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/emd-MISReport",
+      name: "EMDMISReports",
+      component: loadAdminView("EMDMISReports"),
+      meta: { title: "EMDMISReports",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/h1Payments-MISReport",
+      name: "H1PaymentsMISReports",
+      component: loadAdminView("H1PaymentsMISReports"),
+      meta: { title: "H1PaymentsMISReports",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/registration-feeReport",
       name: "MISRegistrationFeeReport",
       component: loadAdminView("MISRegistrationFeeReport"),
