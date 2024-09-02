@@ -11,16 +11,8 @@
               Processing Fee And EMD payment Start Date
             </label>
             <div class="fm-inner">
-              <Calendar
-                :disabled="config?.selectedStartDateReadonly"
-                id="calendar-24h"
-                v-model="selectedStartDate"
-                showTime
-                dateFormat="yy/mm/dd"
-                hourFormat="24"
-                :minDate="minPaymentPeriodDate"
-                :showIcon="true"
-              />
+              <Calendar :disabled="config?.selectedStartDateReadonly" id="calendar-24h" v-model="selectedStartDate"
+                showTime dateFormat="yy/mm/dd" hourFormat="24" :minDate="minPaymentPeriodDate" :showIcon="true" />
             </div>
             <!-- <div
               v-if="
@@ -34,8 +26,8 @@
               Start Date should not be equal or after End Date !
             </div> -->
             <span v-if="$v.selectedStartDate.$error" class="text-red-500">
-                  Difference between Start Date and End Date should be greater than {{ minPaymentPeriod }}
-              </span>
+              Difference between Start Date and End Date should be greater than {{ minPaymentPeriod }}
+            </span>
           </div>
         </div>
         <div class="col-span-full md:col-span-6">
@@ -45,16 +37,8 @@
               Processing Fee And EMD payment End Date
             </label>
             <div class="fm-inner">
-              <Calendar
-                :disabled="config?.selectedEndDateReadonly"
-                id="calendar"
-                v-model="selectedEndDate"
-                showTime
-                dateFormat="yy/mm/dd"
-                hourFormat="24"
-                :minDate="minPaymentPeriodDate"
-                :showIcon="true"
-              />
+              <Calendar :disabled="config?.selectedEndDateReadonly" id="calendar" v-model="selectedEndDate" showTime
+                dateFormat="yy/mm/dd" hourFormat="24" :minDate="minPaymentPeriodDate" :showIcon="true" />
             </div>
           </div>
         </div>
@@ -63,16 +47,10 @@
             <label class="fm-label"> Auction Document </label>
             <div class="fm-inner">
               <div class="col-span-full" v-if="!auctionCheck">
-                <FileUpload
-                  :disabled="config?.docNameReadonly"
-                  v-model="docName"
-                  :accept="docType"
-                  :multiple="false"
-                  :fileLimit="1"
-                  :max-file-size="docSize * multiplyingFactor"
-                  :custom-upload="true"
-                  @uploader="onAdvancedUpload($event, AuctionDocTypeId)"
-                  ><Toast />
+                <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false"
+                  :fileLimit="1" :max-file-size="docSize * multiplyingFactor" :custom-upload="true"
+                  @uploader="onAdvancedUpload($event, AuctionDocTypeId)">
+                  <Toast />
                   <template #empty>
                     <p>
                       Drag and drop files here to upload, Max. file size is {{ docSize }}
@@ -87,16 +65,11 @@
               }}</div>
 
               <div class="fm-buttons" v-if="auctionCheck">
-                <Button
-                  @click="DownloadDocument(AucUrl)"
-                >
-                    <fa-download></fa-download> Download Auction Document
+                <Button @click="DownloadDocument(AucUrl)">
+                  <fa-download></fa-download> Download Auction Document
                 </Button>
-                <Button
-                  v-if="auctionCheck"
-                  severity="danger"
-                  @click="(auctionCheck = false), (AucUrl = null),documentsArray.pop()"
-                >
+                <Button v-if="auctionCheck" severity="danger"
+                  @click="(auctionCheck = false), (AucUrl = null), documentsArray.pop()">
                   <fa-trash-can></fa-trash-can> Remove Document
                 </Button>
               </div>
@@ -109,16 +82,10 @@
             <!-- multiplying Factor :- {{ multiplyingFactor }} -->
             <div class="fm-inner">
               <div class="col-span-full" v-if="!noticeCheck">
-                <FileUpload
-                  :disabled="config?.NoticeDocNameReadonly"
-                  v-model="noticeCheck"
-                  :accept="NoticeDocType"
-                  :multiple="false"
-                  :fileLimit="1"
-                  :max-file-size="NoticeDocSize * multiplyingFactor"
-                  :custom-upload="true"
-                  @uploader="onAdvancedUpload($event, NoticeDocTypeId)"
-                  ><Toast />
+                <FileUpload :disabled="config?.NoticeDocNameReadonly" v-model="noticeCheck" :accept="NoticeDocType"
+                  :multiple="false" :fileLimit="1" :max-file-size="NoticeDocSize * multiplyingFactor"
+                  :custom-upload="true" @uploader="onAdvancedUpload($event, NoticeDocTypeId)">
+                  <Toast />
                   <template #empty>
                     <p>
                       Drag and drop files here to upload, Max. file size is {{ NoticeDocSize }}
@@ -133,17 +100,12 @@
               }}</div>
 
               <div class="fm-buttons" v-if="noticeCheck">
-                <Button
-                    @click="DownloadDocument(NoticeUrl)"
-                >
-                    <fa-download></fa-download> Download Notice Document
+                <Button @click="DownloadDocument(NoticeUrl)">
+                  <fa-download></fa-download> Download Notice Document
                 </Button>
-                <Button
-                    v-if="noticeCheck"
-                    severity="danger"
-                    @click="(noticeCheck = false), (NoticeUrl = null), documentsArray.pop()"
-                >
-                    <fa-trash-can></fa-trash-can> Remove Document
+                <Button v-if="noticeCheck" severity="danger"
+                  @click="(noticeCheck = false), (NoticeUrl = null), documentsArray.pop()">
+                  <fa-trash-can></fa-trash-can> Remove Document
                 </Button>
               </div>
             </div>
@@ -192,6 +154,12 @@
       <!-- <Button label="Next" @click="auctionPreview" /> -->
       <!-- <Button label="Next" @click="nextCallback()" /> -->
     </div>
+    <Dialog :visible="auctionPrompt" modal header="Edit Profile" :style="{ width: '25rem' }">
+      <p>Auction <strong>{{ auctionCodeToShow }}</strong> Prepared Successfully.</p>
+      <p>Do you want to start Workflow?</p>
+      <Button label="Cancel" severity="info" @click="cancelPrompt" />
+      <Button label="Ok" @click="startWorkflow" />
+    </Dialog>
   </div>
 </template>
 
@@ -210,7 +178,7 @@ import { login } from "../../../store/modules/login";
 // import { createToaster } from "@meforma/vue-toaster";
 // const toaster = createToaster({ position: "top-right", duration: 5000 });
 import { useVuelidate } from "@vuelidate/core";
-import { helpers, required,minValue } from "@vuelidate/validators";
+import { helpers, required, minValue } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
 
 import faDownload from '../../../../assets/icons/download.svg'
@@ -230,14 +198,14 @@ const { auctionId, config, multiplyingFactor } = defineProps({
     type: Object,
     default: null,
   },
-  multiplyingFactor : {
-        type : Number,
-        default: null
-    }
+  multiplyingFactor: {
+    type: Number,
+    default: null
+  }
 });
 
-const minPaymentPeriod=ref()
-let minPaymentPeriodDate=ref()
+const minPaymentPeriod = ref()
+let minPaymentPeriodDate = ref()
 const auctionCodeToShow = ref();
 const serverDate = ref();
 //const startDate = ref(new Date());
@@ -272,17 +240,18 @@ const filePath = ref();
 const fullPath = ref();
 const noticeCheck = ref(false);
 const auctionCheck = ref(false);
+const auctionPrompt = ref(false)
 const rules = computed(() => ({
   AucUrl: { required: helpers.withMessage("Document is required", required) },
   NoticeUrl: {
     required: helpers.withMessage("Document is required", required),
   },
-  selectedStartDate: { 
+  selectedStartDate: {
     required,
     validator: checkDates
   },
 }));
-const $v = useVuelidate(rules, { AucUrl, NoticeUrl,selectedStartDate});
+const $v = useVuelidate(rules, { AucUrl, NoticeUrl, selectedStartDate });
 const emit = defineEmits({
   nextTab: null,
   previousTab: null,
@@ -297,26 +266,26 @@ function nextCallback() {
 
 function formattedStartDateCalc() {
   return new Promise((resolve, reject) => {
-  formattedStartDate.value = moment(serverDate.value)
-    .add(60, "seconds")
-    .format("YYYY/MM/DD HH:mm:ss");
-  console.log("formattedStartDate.value", formattedStartDate.value);
-  resolve();
+    formattedStartDate.value = moment(serverDate.value)
+      .add(60, "seconds")
+      .format("YYYY/MM/DD HH:mm:ss");
+    console.log("formattedStartDate.value", formattedStartDate.value);
+    resolve();
   })
 }
 function formattedEndDateCalc() {
   return new Promise((resolve, reject) => {
-  formattedEndDate.value = moment(serverDate.value)
-    .add(minPaymentPeriod.value, "days")
-    .add(60, "seconds")
-    .format("YYYY/MM/DD HH:mm:ss");
-  console.log("formattedEndDate.value", formattedEndDate.value);
-  resolve();
+    formattedEndDate.value = moment(serverDate.value)
+      .add(minPaymentPeriod.value, "days")
+      .add(60, "seconds")
+      .format("YYYY/MM/DD HH:mm:ss");
+    console.log("formattedEndDate.value", formattedEndDate.value);
+    resolve();
   })
 }
-function checkDates(){
+function checkDates() {
   let startDate = moment(selectedStartDate.value);
-let endDate = moment(selectedEndDate.value);
+  let endDate = moment(selectedEndDate.value);
   let daysDifference = endDate.diff(startDate, 'days');
   // console.log("daysDifference is ",daysDifference,daysDifference,minPaymentPeriod.value)
   if (daysDifference < minPaymentPeriod.value) {
@@ -405,74 +374,74 @@ const onAdvancedUpload = async (event, id) => {
 };
 
 function fetchDocumentsValidationDetails() {
-  
-  return new Promise((resolve, reject) => {
-  new MQL()
-    .useCoreServer()
-    .setActivity("o.[fetchDocumentsValidationDetails]")
 
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("fetchDocumentsValidationDetails", true);
-      docValidation.value = res.result.validation;
-      docValidation.value.forEach((item) => {
-        if (item.typeName == "AUCTION_DOCUMENT") {
-          docName.value = item.typeName;
-          docSize.value = item.fileSize;
-          docType.value = item.fileType;
-          AuctionDocTypeId.value = item.typeId;
-          //console.log("docName.value", docName.value);
-          //console.log("AuctionDocTypeId.value", AuctionDocTypeId.value);
-        } else if (item.typeName == "NOTICE_DOCUMENT") {
-          NoticeDocName.value = item.typeName;
-          NoticeDocSize.value = item.fileSize;
-          NoticeDocType.value = item.fileType;
-          NoticeDocTypeId.value = item.typeId;
-          //console.log("docName.value", NoticeDocName.value);
-          //console.log("NoticeDocTypeId.value", NoticeDocTypeId.value);
+  return new Promise((resolve, reject) => {
+    new MQL()
+      .useCoreServer()
+      .setActivity("o.[fetchDocumentsValidationDetails]")
+
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("fetchDocumentsValidationDetails", true);
+        docValidation.value = res.result.validation;
+        docValidation.value.forEach((item) => {
+          if (item.typeName == "AUCTION_DOCUMENT") {
+            docName.value = item.typeName;
+            docSize.value = item.fileSize;
+            docType.value = item.fileType;
+            AuctionDocTypeId.value = item.typeId;
+            //console.log("docName.value", docName.value);
+            //console.log("AuctionDocTypeId.value", AuctionDocTypeId.value);
+          } else if (item.typeName == "NOTICE_DOCUMENT") {
+            NoticeDocName.value = item.typeName;
+            NoticeDocSize.value = item.fileSize;
+            NoticeDocType.value = item.fileType;
+            NoticeDocTypeId.value = item.typeId;
+            //console.log("docName.value", NoticeDocName.value);
+            //console.log("NoticeDocTypeId.value", NoticeDocTypeId.value);
+          }
+        });
+        if (rs.isValid("fetchDocumentsValidationDetails")) {
+        } else {
+          rs.showErrorToast("fetchDocumentsValidationDetails");
         }
+        resolve()
       });
-      if (rs.isValid("fetchDocumentsValidationDetails")) {
-      } else {
-        rs.showErrorToast("fetchDocumentsValidationDetails");
-      }
-      resolve()
-    });
   })
 }
 
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
   return new Promise((resolve, reject) => {
-  new MQL()
-    .useManagementServer()
-    .setActivity("o.[FetchAllStepsAuctionPreview]")
-    .setData({ auctionId: auctionId })
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
-      ////console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
-      if (
-        res.result.fetchStep4AuctionPreview.length == 0 ||
-        res.result.fetchStep4AuctionPreview[0].startDate == null ||
-        res.result.fetchStep4AuctionPreview[0].endDate == null
-      ) {
-        selectedStartDate.value = formattedStartDate.value;
-        selectedEndDate.value = formattedEndDate.value;
-        //console.log("formattedStartDate.value", formattedStartDate.value);
-      } else {
-        dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
-        dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
-        selectedStartDate.value = dbStartDate.value;
-        selectedEndDate.value = dbEndDate.value;
-      }
-      auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
-      if (rs.isValid("FetchAllStepsAuctionPreview")) {
-        resolve();
-      } else {
-        rs.showErrorToast("FetchAllStepsAuctionPreview");
-      }
-    });
+    new MQL()
+      .useManagementServer()
+      .setActivity("o.[FetchAllStepsAuctionPreview]")
+      .setData({ auctionId: auctionId })
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("FetchAllStepsAuctionPreview", true);
+        ////console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
+        if (
+          res.result.fetchStep4AuctionPreview.length == 0 ||
+          res.result.fetchStep4AuctionPreview[0].startDate == null ||
+          res.result.fetchStep4AuctionPreview[0].endDate == null
+        ) {
+          selectedStartDate.value = formattedStartDate.value;
+          selectedEndDate.value = formattedEndDate.value;
+          //console.log("formattedStartDate.value", formattedStartDate.value);
+        } else {
+          dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
+          dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
+          selectedStartDate.value = dbStartDate.value;
+          selectedEndDate.value = dbEndDate.value;
+        }
+        auctionCodeToShow.value = res.result.fetchStep1AuctionPreview.auctionCode;
+        if (rs.isValid("FetchAllStepsAuctionPreview")) {
+          resolve();
+        } else {
+          rs.showErrorToast("FetchAllStepsAuctionPreview");
+        }
+      });
   })
 }
 
@@ -490,8 +459,6 @@ async function processingFeeEmdPaymentStartEndDate() {
     });
     //toaster.error("Oops! Please Contact Support");
   }
-  
-  
 
   return new Promise((resolve) => {
 
@@ -505,7 +472,7 @@ async function processingFeeEmdPaymentStartEndDate() {
         registrationEndDate1: moment(selectedEndDate.value).format("YYYY-MM-DD HH:mm:ss"),
         auctionId: auctionId,
         statusId: statusId,
-        moduleName:"AP-STEP4"
+        moduleName: "AP-STEP4"
       })
       .fetch()
       .then((rs) => {
@@ -518,7 +485,6 @@ async function processingFeeEmdPaymentStartEndDate() {
         }
       });
   });
-  
 }
 
 async function insertDocumentPathToDb() {
@@ -595,7 +561,7 @@ async function insertInWorkflow() {
 }
 
 async function onSave() {
-  let result = await $v.value.$validate(); 
+  let result = await $v.value.$validate();
   //console.log("here", result);
   if (!result) {
     return;
@@ -628,33 +594,50 @@ async function onSave() {
     // toaster.success(" Data Saved !!!");
     if (config == null) {
       await insertInWorkflow();
+      auctionPrompt.value = true
+    } else {
+      nextCallback()
     }
   }
+}
+
+
+function cancelPrompt() {
   AuctionStore.$reset();
   if (config != null) {
     nextCallback();
   } else {
-    router.push({name:'AuctionList'});
+    router.push({ name: "AuctionList" });
+  }
+}
+
+
+function startWorkflow() {
+  AuctionStore.$reset();
+  if (config != null) {
+    nextCallback();
+  } else {
+    router.push({ name: "MyTask" });
   }
 }
 
 function getServerDate() {
   return new Promise((resolve, reject) => {
-  new MQL()
-    .useManagementServer()
-    .setActivity("o.[getServerDate]")
-    .setData({})
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("getServerDate", true);
-      serverDate.value = res.result.serverDate.currentDate;
-      //console.log("serverDate-", serverDate.value);
-      if (rs.isValid("getServerDate")) {
-      } else {
-        rs.showErrorToast("getServerDate");
-      }
-      resolve()
-    });
+    new MQL()
+      .useManagementServer()
+      .setActivity("o.[getServerDate]")
+      .setData({})
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("getServerDate", true);
+        serverDate.value = res.result.serverDate.currentDate;
+        //console.log("serverDate-", serverDate.value);
+        if (rs.isValid("getServerDate")) {
+        } else {
+          rs.showErrorToast("getServerDate");
+        }
+        resolve()
+      });
   })
 }
 function DownloadDocument(url) {
@@ -682,30 +665,29 @@ function DownloadDocument(url) {
 
 function fetchPaymentPeriod() {
   return new Promise((resolve, reject) => {
-          new MQL()
-          .useCoreServer()
-			.setActivity("o.[FetchEntityDetailsById]")
-			.setData({"entityId":loginStore.entityId})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("FetchEntityDetailsById",true)
-			if (rs.isValid("FetchEntityDetailsById")) {
-        minPaymentPeriod.value = res.result.columnValue
-        console.log("minPaymentPeriod is ",minPaymentPeriod.value)
+    new MQL()
+      .useCoreServer()
+      .setActivity("o.[FetchEntityDetailsById]")
+      .setData({ "entityId": loginStore.entityId })
+      .fetch()
+      .then(rs => {
+        let res = rs.getActivity("FetchEntityDetailsById", true)
+        if (rs.isValid("FetchEntityDetailsById")) {
+          minPaymentPeriod.value = res.result.columnValue
+          console.log("minPaymentPeriod is ", minPaymentPeriod.value)
 
-        minPaymentPeriodDate.value = moment(serverDate.value).toDate()
+          minPaymentPeriodDate.value = moment(serverDate.value).toDate()
 
-    console.log("minPaymentPeriodDate is ",minPaymentPeriodDate.value)
-    
+          console.log("minPaymentPeriodDate is ", minPaymentPeriodDate.value)
 
-			} else
-			 { 
-			rs.showErrorToast("FetchEntityDetailsById")
-			}
-      resolve()
-			})
-    })
-			
+
+        } else {
+          rs.showErrorToast("FetchEntityDetailsById")
+        }
+        resolve()
+      })
+  })
+
 
 }
 
@@ -718,13 +700,13 @@ function fetchPaymentPeriod() {
 onBeforeMount(async () => {
 
   await fetchDocumentsValidationDetails()
-    await getServerDate();
-    
-    await fetchPaymentPeriod();
+  await getServerDate();
+
+  await fetchPaymentPeriod();
   await formattedEndDateCalc();
-    await formattedStartDateCalc();
-    await fetchAllStepsAuctionPreview();
-  
+  await formattedStartDateCalc();
+  await fetchAllStepsAuctionPreview();
+
   // fetchDocumentsValidationDetails();
   // formattedEndDateCalc();
   // formattedStartDateCalc();
