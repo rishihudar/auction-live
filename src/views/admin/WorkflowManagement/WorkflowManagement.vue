@@ -85,8 +85,8 @@ const handlePageChange = (event) => {
 
 const workflowId = ref(null)
 
-const assignWorkflowId = (workflowId) => {
-    workflowId.value = workflowId;
+const assignWorkflowId = (workflowId_) => {
+    workflowId.value = workflowId_;
 }
 
 
