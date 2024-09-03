@@ -2,7 +2,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h2 class="title">Registration Fee Report</h2>
+                <h2 class="title">EMD MIS Report</h2>
             </div>
         </div>
         <div class="box-grid">

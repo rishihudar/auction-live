@@ -2,7 +2,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h2 class="title">Registration Fee Report</h2>
+                <h2 class="title">H1 Payments MIS Report</h2>
             </div>
         </div>
         <div class="box-grid">
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="fm-action">
-                        <JsonExcel :data="json_data" type="xlsx" :fields="h1ReportFields" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="Concluded Auctions EMD Report.xlsx">
+                        <JsonExcel :data="json_data" type="xlsx" :fields="h1ReportFields" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="Concluded Auctions H1 Payment Report.xlsx">
                             Excel Report
                         </JsonExcel>
                     </div>
