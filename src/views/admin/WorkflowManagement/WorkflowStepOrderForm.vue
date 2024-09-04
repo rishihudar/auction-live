@@ -189,6 +189,9 @@ const insertworkflowStepOrder = () => {
             let res = rs.getActivity("InsertWorkflowStepOrder", true)
             if (rs.isValid("InsertWorkflowStepOrder")) {
                 fetchWorkflowStepOrder()
+                workflowStepOrderData.value = {
+                    'workflowId': workflowId
+                }
             } else {
                 rs.showErrorToast("InsertWorkflowStepOrder")
             }

@@ -24,7 +24,7 @@
 
                 <StepperPanel header="Workflow Step Order">
                     <template #content="{ nextCallback, prevCallback }">
-                        <WorflowStepOrderForm @next-tab="nextCallback" @prev-tab="prevCallback"  :workflow-id="workflowId" />
+                        <WorflowStepOrderForm @next-tab="closeForm" @prev-tab="prevCallback"  :workflow-id="workflowId" />
                     </template>
                 </StepperPanel>
             </Stepper>

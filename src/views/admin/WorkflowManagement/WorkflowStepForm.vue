@@ -9,7 +9,8 @@
                         <div class="fm-group">
                             <div class="fm-label">Display Name</div>
                             <div class="fm-inner">
-                                <InputText v-model="workflowStepData.displayName" :disabled="workflowStepData.workflowStepId"/>
+                                <InputText v-model="workflowStepData.displayName"
+                                    :disabled="workflowStepData.workflowStepId" />
                             </div>
                         </div>
                     </div>
@@ -52,9 +53,11 @@
                         <div class="fm-group">
                             <div class="fm-label">Step Enable</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="0" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="0"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="enabled">No</label>
-                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="1" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.enabled" name="enabled" value="1"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="enabled">Yes</label>
                             </div>
                         </div>
@@ -63,11 +66,13 @@
 
                     <div class="col-span-4">
                         <div class="fm-group">
-                            <div class="fm-label">Start Step</div>
+                            <div class="fm-label">Is this the Start Step?</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="0" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="0"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="startStep">No</label>
-                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="1" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.startStep" name="startStep" value="1"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="startStep">Yes</label>
                             </div>
                         </div>
@@ -75,18 +80,20 @@
 
                     <div class="col-span-4">
                         <div class="fm-group">
-                            <div class="fm-label">End Step</div>
+                            <div class="fm-label">Is this the End Step?</div>
                             <div class="fm-inner">
-                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="0" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="0"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="endStep">No</label>
-                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="1" :disabled="workflowStepData.workflowStepId" />
+                                <RadioButton v-model="workflowStepData.endStep" name="endStep" value="1"
+                                    :disabled="workflowStepData.workflowStepId" />
                                 <label for="endStep">Yes</label>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 1</div>
                             <div class="fm-inner">
@@ -96,7 +103,7 @@
                     </div>
 
 
-                    <div class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 2</div>
                             <div class="fm-inner">
@@ -105,7 +112,7 @@
                         </div>
                     </div>
 
-                    <div class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 3</div>
                             <div class="fm-inner">
@@ -114,7 +121,7 @@
                         </div>
                     </div>
 
-                    <div class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 4</div>
                             <div class="fm-inner">
@@ -123,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 5</div>
                             <div class="fm-inner">
@@ -183,6 +190,7 @@ const loginStore = login();
 
 const workflowStepData = ref({
     initiatorLoginId: null,
+    enabled: "1",
     data1: null,
     data2: null,
     data3: null,
@@ -300,6 +308,27 @@ const submitWorkflowStep = async () => {
     }
 }
 
+const deleteData = (data) => {
+
+    console.log(data);
+    
+    // Automatically generated
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[DeleteWorkflowStep]")
+        .setData({ 'workflowStepId': data.workflowStepId })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("DeleteWorkflowStep", true)
+            if (rs.isValid("DeleteWorkflowStep")) {
+                console.log(res);
+                fetchWorkflowSteps()
+            } else {
+                rs.showErrorToast("DeleteWorkflowStep")
+            }
+        })
+
+}
 
 const stepName = (id) => {
     let step = stepsMaster.value.find(step => step.stepId == id)

@@ -21,7 +21,8 @@
                             <div class="fm-label">Step Status</div>
                             <div class="fm-inner">
                                 <Dropdown v-model="workflowStepStatusData.statusId" placeholder="Select Status"
-                                    :options="statuses" option-label="statusDisplayName" option-value="statusId"
+                                    @update:model-value="AssignValues" :options="statuses"
+                                    option-label="statusDisplayName" option-value="statusId"
                                     :disabled="workflowStepStatusData.workflowStepStatusId" />
                             </div>
                         </div>
@@ -121,11 +122,26 @@ const statuses = ref([])
 const workflowSteps = ref([])
 
 const editData = (data) => {
-    workflowStepStatusData.value = {...data}
+    workflowStepStatusData.value = { ...data }
 }
 
 
 const deleteData = (data) => {
+    console.log(data);
+    // Automatically generated
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[DeleteWorkflowStepStatus]")
+        .setData({ 'workflowStepStatusId': data.workflowStepStatusId })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("DeleteWorkflowStepStatus", true)
+            if (rs.isValid("DeleteWorkflowStepStatus")) {
+                fetchWorkflowStatues()
+            } else {
+                rs.showErrorToast("DeleteWorkflowStepStatus")
+            }
+        })
 
 }
 
@@ -136,6 +152,14 @@ const nextStep = () => {
 
 const previousWorkflowStepStatus = () => {
     emits('prevTab')
+}
+
+const AssignValues = () => {
+    let status = statuses.value.find((s) => s.statusId == workflowStepStatusData.value.statusId)
+    console.log(status);
+    workflowStepStatusData.value.displayName = status.defaultStepDisplayName
+    workflowStepStatusData.value.displayOrder = status.defaultStepDisplayOrder
+
 }
 
 
