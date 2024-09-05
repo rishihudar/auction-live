@@ -93,7 +93,7 @@
                     </div>
 
 
-                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 1</div>
                             <div class="fm-inner">
@@ -103,7 +103,7 @@
                     </div>
 
 
-                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 2</div>
                             <div class="fm-inner">
@@ -112,7 +112,7 @@
                         </div>
                     </div>
 
-                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 3</div>
                             <div class="fm-inner">
@@ -121,7 +121,7 @@
                         </div>
                     </div>
 
-                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 4</div>
                             <div class="fm-inner">
@@ -130,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div v-if="loginStore.role.roleCode == 'DEVELOPER'" class="col-span-2">
+                    <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                         <div class="fm-group">
                             <div class="fm-label">Data 5</div>
                             <div class="fm-inner">

@@ -20,8 +20,8 @@
                     <div class="fm-label">Entity</div>
                     <div class="fm-inner">
                         <Dropdown v-model="workflowData.entityId" :options="entities" option-value="entityId"
-                            @update:modelValue="AssignWorkflowName" option-label="entityName" placeholder="Select a Entity"
-                            :disabled="workflowData.workflowId" />
+                            @update:modelValue="AssignWorkflowName" option-label="entityName"
+                            placeholder="Select a Entity" :disabled="workflowData.workflowId" />
                     </div>
                 </div>
             </div>
@@ -47,67 +47,67 @@
                     </div>
                 </div>
             </div>
-
             <!-- Data 1 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 1</div>
                     <div class="fm-inner">
                         <InputText id="Data1" v-model="workflowData.data1" />
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Data 2 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 2</div>
                     <div class="fm-inner">
                         <InputText id="Data2" v-model="workflowData.data2" />
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Data 3 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 3</div>
                     <div class="fm-inner">
                         <InputText id="Data3" v-model="workflowData.data3" />
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Data 4 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 4</div>
                     <div class="fm-inner">
                         <InputText id="Data4" v-model="workflowData.data4" />
                     </div>
                 </div>
-            </div> -->
+            </div>
 
 
             <!-- Data 5 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 5</div>
                     <div class="fm-inner">
                         <InputText id="Data5" v-model="workflowData.data5" />
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!-- Data 6 -->
-            <!-- <div class="col-span-2">
+            <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
                 <div class="fm-group">
                     <div class="fm-label">Data 6</div>
                     <div class="fm-inner">
                         <InputText id="Data6" v-model="workflowData.data6" />
                     </div>
                 </div>
-            </div> -->
+            </div>
+
         </div>
     </div>
 

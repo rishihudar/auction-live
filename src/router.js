@@ -284,6 +284,7 @@ const router = createRouter({
           "ROLE_SCHEDULER",
           "ROLE_SUPERADMIN",
           "ROLE_PUBLISHER",
+          "ROLE_DEVELOPER"
         ],
       },
     },
