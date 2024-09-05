@@ -37,8 +37,8 @@
 
                 <div class="col-span-full md:col-span-6">
                     <div class="fm-group">
-                        <label class="fm-label" for="step1">Auction Id: </label>
-                        {{ bidderDetails.auctionId }}
+                        <label class="fm-label" for="step1">Auction Code: </label>
+                        {{ bidderDetails.auctionCode }}
                     </div>
                 </div>
 
@@ -124,9 +124,11 @@ const bidderDetails = ref({
     // mobileNo: '8484840948',
     // status: 'paid',
     auctionId: '123',
+    auctionCode: 'MCF-1',
     auctionEMD: '40000',
     processingFeesCount: '2',
     totalEMDPaid: '80000',
+    emdPaid: '40000',
     propertyAllocated: '1',
     refundAmount: '40000',
     userId:''

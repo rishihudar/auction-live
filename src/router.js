@@ -206,6 +206,24 @@ const router = createRouter({
       },
     },
     {
+      path: "/concluded-auctions-MIS",
+      name: "ConcludedAuctionsMIS",
+      component: loadAdminView("ConcludedAuctionsMIS"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/emd-MISReport",
+      name: "EMDMISReports",
+      component: loadAdminView("EMDMISReports"),
+      meta: { title: "EMDMISReports",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/h1Payments-MISReport",
+      name: "H1PaymentsMISReports",
+      component: loadAdminView("H1PaymentsMISReports"),
+      meta: { title: "H1PaymentsMISReports",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/registration-feeReport",
       name: "MISRegistrationFeeReport",
       component: loadAdminView("MISRegistrationFeeReport"),
@@ -349,6 +367,24 @@ const router = createRouter({
       name:"BidderActivityReport",
       component: loadAdminView("BidderActivityReport"),
       meta: { title: "BidderActivityReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/BidderDeactivation",
+      name:"BidderDeactivation",
+      component: loadAdminView("BidderDeactivation"),
+      meta: { title: "BidderDeactivation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/BidderActivation",
+      name:"BidderActivation",
+      component: loadAdminView("BidderActivation"),
+      meta: { title: "BidderActivation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
+    },
+    {
+      path: "/BidderManagement",
+      name:"BidderManagement",
+      component: loadAdminView("BidderManagement"),
+      meta: { title: "BidderManagement",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN']},
     },
     {
       path: "/ModifyChallan",
