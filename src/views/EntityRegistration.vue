@@ -485,7 +485,7 @@
           <div class="col-span-4">
             <div class="fm-group required">
               <label class="fm-label" for="watcherPassocode"
-                >Watcher Passocode</label
+                >Watcher Passocode Required</label
               >
               <div class="fm-check-holder">
                 <div class="fm-checkbox">
