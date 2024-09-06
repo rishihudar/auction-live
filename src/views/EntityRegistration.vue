@@ -567,7 +567,7 @@
             <div class="fm-group required">
               <label class="fm-label" for="entityName">Entity Name</label>
               <div class="fm-inner">
-                <InputText id="entityName" v-model="entityData.entityName" />
+                <InputText id="entityName" v-model="entityData.entityName"  placeholder="Enter Entity Name"  />
                 <!-- <small id="username-help">Enter Entity Name E.g UttarPradesh</small> -->
               </div>
               <div v-if="$v.entityData.entityName.$error" class="fm-error">
@@ -616,7 +616,7 @@
               <div class="fm-inner">
                 <InputText
                   id="entityAddress"
-                  v-model="entityData.entityAddress"
+                  v-model="entityData.entityAddress" placeholder="Enter Entity Address"
                 />
                 <!-- <small id="username-help">Enter Entity Address E.g MCF</small> -->
               </div>
@@ -651,7 +651,7 @@
             <div class="fm-group required">
               <label class="fm-label" for="roundRule">Entity Round Rule</label>
               <div class="fm-inner">
-                <InputText id="roundRule" v-model="entityData.roundRule" />
+                <InputText id="roundRule" v-model="entityData.roundRule" placeholder="Enter Entity Round Rule" />
                 <!-- <small id="username-help">Enter Entity Round Rule E.g 1</small> -->
               </div>
               <div v-if="$v.entityData.roundRule.$error" class="fm-error">
@@ -668,6 +668,7 @@
                 <InputText
                   id="eventProFees"
                   v-model="entityData.eventProcessingFees"
+                    placeholder="Enter Entity Event Processing Fees"
                 />
                 <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
               </div>
@@ -688,6 +689,7 @@
                 <InputText
                   id="emiPayPercent"
                   v-model="entityData.emiPaymentPercentage"
+                  placeholder="Enter Entity EMI Payment Percentage"
                 />
               </div>
               <div
@@ -704,7 +706,8 @@
                 >WT-Code For H1 10 Percent Payment</label
               >
               <div class="fm-inner">
-                <InputText id="userCode" v-model="entityData.userCode" />
+                <InputText id="userCode" v-model="entityData.userCode"  
+                placeholder="Enter WT-Code For H1 10 Percent Payment"/>
               </div>
               <div v-if="$v.entityData.userCode.$error" class="fm-error">
                 {{ $v.entityData.userCode.$errors[0].$message }}
@@ -720,6 +723,7 @@
                 <InputText
                   id="emdPaymentUserCode"
                   v-model="entityData.emdPaymentUserCode"
+                  placeholder="Enter WT-Code For EMD Payment"
                 />
                 <!-- <small id="username-help">Enter Entity EMI Payment Percentage E.g 25 </small> -->
               </div>
@@ -742,6 +746,7 @@
                 <InputText
                   id="accountLockTime"
                   v-model="entityData.accountLockTime"
+                    placeholder="Enter Account Lock Time"
                 />
               </div>
               <div v-if="$v.entityData.accountLockTime.$error" class="fm-error">
@@ -759,6 +764,7 @@
                 <InputText
                   id="passwordAttemptLimit"
                   v-model="entityData.passwordAttemptLimit"
+                  placeholder="Enter Password Attempt Limit"
                 />
               </div>
               <div
@@ -776,7 +782,8 @@
               <div class="fm-inner">
                 <InputText
                   id="paymentPeriod"
-                  v-model="entityData.paymentPeriod"
+                  v-model="entityData.paymentPeriod" 
+                   placeholder="Enter Payment Period"
                 />
               </div>
               <div v-if="$v.entityData.paymentPeriod.$error" class="fm-error">
@@ -1023,7 +1030,7 @@ const rules = computed(() => ({
     userCode: {
       required: helpers.withMessage("User code is required", required),
       matchesPattern: helpers.withMessage(
-        "EMD payment user code must follow the format WT-XXXX",
+        "EMD payment user code must follow the format XZ-XXXX",
         (value) => wtCodePattern.test(value)
       ),
     },
@@ -1034,7 +1041,7 @@ const rules = computed(() => ({
       ),
       // Adding regex validation for WT-Code pattern
       matchesPattern: helpers.withMessage(
-        "EMD payment user code must follow the format WT-XXXX",
+        "EMD payment user code must follow the format XZ-XXXX",
         (value) => wtCodePattern.test(value)
       ),
 
