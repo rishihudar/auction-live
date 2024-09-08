@@ -47,7 +47,9 @@ import Vuelidate from 'vuelidate';
 import JsonExcel from "vue-json-excel3";
 
 const piniaStore = createPinia()
-const isProduction = process.env.NODE_ENV === 'production'
+//const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = import.meta.env.MODE === 'production';
+
 piniaStore.use(piniaPluginPersistedstate)
 
 var vm = createApp({
