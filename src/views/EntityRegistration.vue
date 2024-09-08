@@ -493,13 +493,12 @@
                     v-model="entityData.watcherPasscode"
                     :binary="true"
                   />
-                  <span v-if="entityData.watcherPasscode==true">{{ "Watcher Passcode Required" }}</span>
-                <span v-else>{{ "Watcher Passcode Not Required" }}</span>
-                  
+                  <span v-if="entityData.watcherPasscode == true">{{
+                    "Watcher Passcode Required"
+                  }}</span>
+                  <span v-else>{{ "Watcher Passcode Not Required" }}</span>
                 </div>
-               
               </div>
-           
             </div>
           </div>
 
@@ -567,7 +566,11 @@
             <div class="fm-group required">
               <label class="fm-label" for="entityName">Entity Name</label>
               <div class="fm-inner">
-                <InputText id="entityName" v-model="entityData.entityName"  placeholder="Enter Entity Name"  />
+                <InputText
+                  id="entityName"
+                  v-model="entityData.entityName"
+                  placeholder="Enter Entity Name"
+                />
                 <!-- <small id="username-help">Enter Entity Name E.g UttarPradesh</small> -->
               </div>
               <div v-if="$v.entityData.entityName.$error" class="fm-error">
@@ -616,7 +619,8 @@
               <div class="fm-inner">
                 <InputText
                   id="entityAddress"
-                  v-model="entityData.entityAddress" placeholder="Enter Entity Address"
+                  v-model="entityData.entityAddress"
+                  placeholder="Enter Entity Address"
                 />
                 <!-- <small id="username-help">Enter Entity Address E.g MCF</small> -->
               </div>
@@ -651,7 +655,11 @@
             <div class="fm-group required">
               <label class="fm-label" for="roundRule">Entity Round Rule</label>
               <div class="fm-inner">
-                <InputText id="roundRule" v-model="entityData.roundRule" placeholder="Enter Entity Round Rule" />
+                <InputText
+                  id="roundRule"
+                  v-model="entityData.roundRule"
+                  placeholder="Enter Entity Round Rule"
+                />
                 <!-- <small id="username-help">Enter Entity Round Rule E.g 1</small> -->
               </div>
               <div v-if="$v.entityData.roundRule.$error" class="fm-error">
@@ -668,7 +676,7 @@
                 <InputText
                   id="eventProFees"
                   v-model="entityData.eventProcessingFees"
-                    placeholder="Enter Entity Event Processing Fees"
+                  placeholder="Enter Entity Event Processing Fees"
                 />
                 <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
               </div>
@@ -706,8 +714,11 @@
                 >WT-Code For H1 10 Percent Payment</label
               >
               <div class="fm-inner">
-                <InputText id="userCode" v-model="entityData.userCode"  
-                placeholder="Enter WT-Code For H1 10 Percent Payment"/>
+                <InputText
+                  id="userCode"
+                  v-model="entityData.userCode"
+                  placeholder="Enter WT-Code For H1 10 Percent Payment"
+                />
               </div>
               <div v-if="$v.entityData.userCode.$error" class="fm-error">
                 {{ $v.entityData.userCode.$errors[0].$message }}
@@ -746,7 +757,7 @@
                 <InputText
                   id="accountLockTime"
                   v-model="entityData.accountLockTime"
-                    placeholder="Enter Account Lock Time"
+                  placeholder="Enter Account Lock Time"
                 />
               </div>
               <div v-if="$v.entityData.accountLockTime.$error" class="fm-error">
@@ -782,8 +793,8 @@
               <div class="fm-inner">
                 <InputText
                   id="paymentPeriod"
-                  v-model="entityData.paymentPeriod" 
-                   placeholder="Enter Payment Period"
+                  v-model="entityData.paymentPeriod"
+                  placeholder="Enter Payment Period"
                 />
               </div>
               <div v-if="$v.entityData.paymentPeriod.$error" class="fm-error">
@@ -819,9 +830,10 @@
                     v-model="entityData.watcherPasscode"
                     :binary="true"
                   />
-               <span v-if="entityData.watcherPasscode==true">{{ "Watcher Passcode Required" }}</span>
-                <span v-else>{{ "Watcher Passcode Not Required" }}</span>
-                  
+                  <span v-if="entityData.watcherPasscode == true">{{
+                    "Watcher Passcode Required"
+                  }}</span>
+                  <span v-else>{{ "Watcher Passcode Not Required" }}</span>
                 </div>
               </div>
               <!-- <div v-if="$v.entityData.watcherPasscode.$error" class="fm-error">
@@ -830,7 +842,9 @@
             </div>
           </div>
           <div class="fm-action">
-            <Button @click="confirmEdit(entityData)" type="submit"
+            <Button
+              @click="confirmEdit(entityData)"
+              type="submit"
               >Submit</Button
             >
             <Button
@@ -861,7 +875,13 @@ import ConfirmDialog from "primevue/confirmdialog";
 import { or } from "@vuelidate/validators";
 import Checkbox from "primevue/checkbox";
 import { useVuelidate } from "@vuelidate/core";
-import { helpers, required,  numeric,maxLength,alphaNum } from "@vuelidate/validators";
+import {
+  helpers,
+  required,
+  numeric,
+  maxLength,
+  alphaNum,
+} from "@vuelidate/validators";
 import { login } from "../store/modules/login";
 import faPenToSquare from "../../assets/icons/pen-to-square.svg";
 import faPlus from "../../assets/icons/plus.svg";
@@ -894,8 +914,6 @@ let entityData = ref({
   passwordAttemptLimit: "",
   paymentPeriod: "",
   watcherPasscode: false,
-
-
 });
 
 const isUniqueEntityShortName = helpers.withAsync(async (value) => {
@@ -986,22 +1004,21 @@ const rules = computed(() => ({
         "Emi Payment Percentage is required",
         required
       ),
-      numeric
+      numeric,
     },
     eventProcessingFees: {
       required: helpers.withMessage(
         "Event processing fees is required",
         required
       ),
-        numeric
+      numeric,
     },
     roundRule: {
       required: helpers.withMessage("Round rule is required", required),
-        numeric
+      numeric,
     },
     organizationId: {
       required: helpers.withMessage("Organization is required", required),
-
     },
     entityTypeId: {
       required: helpers.withMessage("Entity type is required", required),
@@ -1012,7 +1029,7 @@ const rules = computed(() => ({
         required
       ),
       numeric,
-      maxLength
+      maxLength,
     },
     entityAddress: {
       required: helpers.withMessage("Entity address is required", required),
@@ -1044,24 +1061,22 @@ const rules = computed(() => ({
         "EMD payment user code must follow the format XZ-XXXX",
         (value) => wtCodePattern.test(value)
       ),
-
-   
     },
     accountLockTime: {
       required: helpers.withMessage("Account lock time is required", required),
-      numeric
+      numeric,
     },
     passwordAttemptLimit: {
       required: helpers.withMessage(
         "Password attempt limit is required",
         required
       ),
-        numeric
+      numeric,
     },
     paymentPeriod: {
       required: helpers.withMessage("Payment period is required", required),
-        numeric
-    }
+      numeric,
+    },
   },
 }));
 const $v = useVuelidate(rules, { entityData });
@@ -1072,6 +1087,7 @@ let count = ref([]);
 const organization = ref([]);
 const organizationId = ref(null);
 const entitytype = ref([]);
+//let entityId = ref([]);
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -1097,6 +1113,8 @@ function FetchEntities() {
       let res = rs.getActivity("FetchEntityDetails", true);
       if (rs.isValid("FetchEntityDetails")) {
         //console.log(res.result);
+       // entityId = res.result[0].entityId;
+       // console.log("entityId ***", entityId);
         entities.value = res.result.map((entity) => ({
           ...entity,
           isParent: entity.isParent == 1 ? "Yes" : "No",
@@ -1169,11 +1187,11 @@ const fetchEntityTypesByOrganization = () => {
 };
 
 function insertEntity(entityData) {
-    console.log("entityData", entityData)
+  console.log("entityData", entityData);
   new MQL()
     .useCoreServer()
     .setActivity("o.[InsertEntity]")
-    .setData({...entityData.value,createdBy: loginStore.loginId})
+    .setData({ ...entityData.value, createdBy: loginStore.loginId })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("InsertEntity", true);
@@ -1189,11 +1207,11 @@ function insertEntity(entityData) {
 }
 
 const updateEntity = async (entityData) => {
-    console.log("entityData", entityData)
+  console.log("entityData", entityData);
   new MQL()
     .useCoreServer()
     .setActivity("o.[UpdateEntityById]")
-    .setData({...entityData, modifiedBy: loginStore.loginId})
+    .setData({ ...entityData, modifiedBy: loginStore.loginId })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("UpdateEntityById", true);
@@ -1219,10 +1237,10 @@ function editEntity(entity) {
     ...entityData.value,
     isParent: entityData.value.isParent == "Yes" ? true : false,
   };
-    entityData.value = {
-        ...entityData.value,
-        watcherPasscode: entityData.value.watcherPasscode == "Yes" ? true : false,
-    };
+  entityData.value = {
+    ...entityData.value,
+    watcherPasscode: entityData.value.watcherPasscode == "Yes" ? true : false,
+  };
 
   //console.log("After edit: ", entityData);
 
@@ -1245,6 +1263,7 @@ const confirmEdit = async (entityData) => {
             detail: "Entity Edited Successfully",
             life: 3000,
           }),
+          entityRegistrationAudit(),
           changeFlag(0);
       },
       reject: () => {
@@ -1270,6 +1289,23 @@ const confirmEdit = async (entityData) => {
     return;
   }
 };
+
+function entityRegistrationAudit() {
+  console.log("entityId", entityData.value.entityId);
+  console.log("Function called *****************");
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[EntityRegistrationAudit]")
+    .setData({ entityId: entityData.value.entityId })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("EntityRegistrationAudit", true);
+      if (rs.isValid("EntityRegistrationAudit")) {
+      } else {
+        rs.showErrorToast("EntityRegistrationAudit");
+      }
+    });
+}
 
 const confirmADD = async () => {
   const result = await $v.value.$validate();
