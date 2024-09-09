@@ -40,7 +40,12 @@
               @change="(e) => updateAccepted(rowData, e.value,e)"
               :disabled="disabled"
             />
+            <!-- <div v-if="rowData.data.approvalStatusResult === 'Reject'"> -->
+            
+
+
           </template>
+          
           <!-- <template #body="rowData" v-if="!disabled">
             <Dropdown
               v-model="rowData.data.approvalStatusResult"
@@ -56,6 +61,19 @@
 
           <template #body="rowData" v-else>
             {{ rowData.data.ApprovalStatus }}
+           
+            <!-- <div class="card flex flex-wrap justify-content-center gap-2">
+
+            < v-tooltip.top="'{{ rowData.data.rejectionReason }}'"  type="text" placeholder="Right">
+            </div> -->
+            <!-- <div v-if="rowData.data.ApprovalStatus === 'Reject'"> -->
+              <i v-if="rowData.data.ApprovalStatus === 'Reject'"
+                class=" pi pi-info-circle" 
+                v-tooltip.top="rowData.data.rejectionReason" 
+              ></i>
+            
+
+            <!-- </div> -->
           </template>
         </Column>
         <Column header="INTENT_LETTER">
@@ -70,7 +88,49 @@
         </Column>
       </DataTable>
     </div>
-
+    <!-- <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h3>Reason for Rejection</h3>
+        </header>
+        <main class="modal-body">
+          <textarea
+            v-model="rejectionReason"
+            placeholder="Please provide a reason for rejection"
+          ></textarea>
+        </main>
+        <footer class="modal-footer">
+          <button @click="submitRejection">Submit</button>
+          <button @click="closeModal">Cancel</button>
+        </footer>
+      </div>
+    </div> -->
+    <Dialog v-model:visible="showModal" modal header="Reason for Rejection" :style="{ width: '40rem' }">
+      <div class="form-group">
+        <InputText
+          v-model="rejectionReason"
+          placeholder="Please provide a reason for rejection"
+          rows="4"
+          class="form-control"
+        ></InputText>
+      </div>
+      <div class="modal-action">
+        <Button 
+          type="button" 
+          label="Confirm" 
+          :disabled="isConfirmDisabled"
+          @click="submitRejection">
+        </Button>
+        <Button 
+          type="button" 
+          label="Cancel" 
+          class="p-button-secondary" 
+          severity="danger"
+          @click="closeModal(true)">
+        </Button>
+      </div>
+    </Dialog>
+    <!-- Your Submit button component -->
     <div class="table-exp-action centered">
       <Button label="Submit" @click="submitForm" :disabled="disabled" />
     </div>
@@ -81,10 +141,15 @@
         Percentage) - EMD amount
       </span>
     </div>
+   
   </div>
 </template>
 
 <script setup>
+import Dialog from "primevue/dialog";
+// import Tooltip from 'primevue/tooltip';
+import 'primeicons/primeicons.css';
+import { defineEmits } from 'vue';
 import Checkbox from "primevue/checkbox";
 import { computed, ref, onMounted, reactive } from "vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -98,12 +163,21 @@ import { storeToRefs } from "pinia";
 import { login } from "../../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
 import Dropdown from "primevue/dropdown";
+// import faEye from '../../../assets/icons/eye.svg';
 
+let isSubmitButtonDisabled=ref(false);
+const emit = defineEmits(['close']);
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const props = defineProps({
   auctionId: Number,
 });
-
+const isSubmitButtonClicked = ref(false);
+//const disabled = ref(false);
+// const showRejectionIcon = ref(false);
+// const showRejectionTooltip = ref(false);
+const showModal = ref(false);
+const rejectionReason = ref('');
+const modalData = ref(null);
 let auctionId = ref(props.auctionId);
 const loginStore = login();
 const { organizationId, entityId, loginId } = storeToRefs(loginStore);
@@ -120,14 +194,98 @@ let rules = computed(() => ({
     minValue: minValue(98, 'The minimum value for "Number of Hours" is 98'),
   },
 }));
-
+const status = ref('');
 const $v = useVuelidate(rules, { noOfDays });
-
+const isConfirmDisabled = computed(() => {
+  return !rejectionReason.value.trim(); // Check if rejectionReason is empty or only whitespace
+});
 let disabled = ref(false);
 const approvalStatusResult = ref({ id: 0, approvalStatus: "" });
 const dropdownOptions = ref([]);
+function openRejectModal(rowData) {
+  showModal.value = true;
+  modalData.value = rowData;
+  roundNumber.value=rowData.data.roundNumber;
+}
+// function closeModal() {
+//   if (modalData.value) {
+//     modalData.value.data.approvalStatusResult = null; // Reset the dropdown value
+//   }
+//   showModal.value = false;
+//   rejectionReason.value = '';
+//   //emit('close');
+// }
+function closeModal(isCancel = false) {
+  // Reset approval status if canceling
+  if (isCancel && modalData.value) {
+    modalData.value.data.approvalStatusResult = null; // Reset to 'kindly select'
+  }
+  showModal.value = false;
+  rejectionReason.value = ''; // Reset rejection reason
+}
 
-function fetchH1ApprovalStatus() {
+// function submitRejection() {
+//   console.log(rejectionReason.value);
+//   closeModal();
+// }
+function updateH1RejectionReason() {
+		// Automatically generated
+    new MQL()
+          .useManagementServer()
+			.setActivity("r.[H1RejectionReason]")
+			.setData({auctionId:auctionId.value,h1RejectionReason:rejectionReason.value,roundNumber:roundNumber.value})
+			//.setHeaders({"Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NCIsImdyb3VwcyI6WyJSb2xlIE1ha2VyIiwiUm9sZSBDaGVja2VyIiwiUm9sZSBBcHByb3ZlciIsIlJvbGUgU2NoZWR1bGVyIiwiU3VwZXJBZG1pbiIsIk9yZ2FuaXphdGlvbkFkbWluIiwiUm9sZSBXYXRjaGVyIiwiUm9sZSBBZG1pbiIsIlJvbGUgUHVibGlzaGVyIiwiUm9sZSBEZXZlbG9wZXIiXSwiY2xpZW50SVAiOiIxMDMuODUuMTgxLjYxIiwiaGl0c0NvdW50IjowLCJ0b2tlbiI6IiIsIm1ldGFkYXRhIjoie1wiZnVsbE5hbWVcIjpcInNod2V0YSBwYW5kZXlcIixcIm1vYmlsZU51bWJlclwiOlwiNjM5MzMwMjI4NFwiLFwidXNlcm5hbWVcIjpcInNod2V0YUBnbWFpbC5jb21cIixcImVudGl0eUlkXCI6MixcIm9yZ2FuaXphdGlvbklkXCI6MSxcIm9yZ2FuaXphdGlvbk5hbWVcIjpcIkRVTEIgSGFyeWFuYVwiLFwicmVnU3RhdHVzSWRcIjowLFwicmVnU3RhdHVzTmFtZVwiOlwiVVNFUl9BUFBST1ZFRFwiLFwibG9naW5JZFwiOlwiOTRcIn0iLCJleHAiOjE3MjU2MDU2OTV9.NW1KmYLgcs8FB6AJ4X2d1FKZy6_4Vb-QZT2mFSDHORA"})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("H1RejectionReason",true)
+			if (rs.isValid("H1RejectionReason")) {
+			} else
+			 { 
+			rs.showErrorToast("H1RejectionReason")
+			}
+			})
+    }
+function submitRejection() {
+  // Check if the rejection reason is provided
+  if (!rejectionReason.value.trim()) {
+    // If no rejection reason, show an error or keep the modal open
+    toaster.error('Please provide a reason for rejection.');
+    return;
+  }
+  // if (modalData.value) {
+  //   const index = resultList.findIndex((item) => item.id === modalData.value.id);
+  //   if (index !== -1) {
+  //     resultList[index].rejectionReason = rejectionReason.value; // Store rejection reason
+  //     resultList[index].data.approvalStatusResult = dropdownOptions.value.find(
+  //       (option) => option.label === 'Reject'
+  //     ).value; // Update approval status
+  //   }
+  // }
+			
+			
+  // If the reason is provided, set approval status to "Reject"
+  if (modalData.value) {
+    modalData.value.data.approvalStatusResult = dropdownOptions.value.find(
+      (option) => option.label === 'Reject'
+    ).value;
+  }
+  updateH1RejectionReason();
+
+  closeModal(); 
+  //toaster.success('Rejection reason submiited successfully')// Close the modal after setting "Reject"
+  
+}
+// const isSubmitButtonDisabled = computed(() => {
+//   // Check if any dropdown is missing a selected value
+//   const allDropdownsSelected = resultList.every(item => item.approvalStatusResult);
+//   // Disable the button if not all dropdowns are selected or if the button has already been clicked
+//   return !allDropdownsSelected || isSubmitButtonClicked.value;
+// });
+
+// const isSubmitDisabled = computed(() => {
+//   return status.value === 'Rejected' && !rejectionReason.value.trim();
+// });
+ function fetchH1ApprovalStatus() {
   new MQL()
     .useManagementServer()
     .setActivity("r.[FetchH1ApprovalStatus]")
@@ -147,7 +305,7 @@ function fetchH1ApprovalStatus() {
       }
     });
 }
-
+const roundNumber=ref(null);
 function h1AuctionDetails() {
   new MQL()
     .useManagementServer()
@@ -158,11 +316,15 @@ function h1AuctionDetails() {
       let res = rs.getActivity("FetchH1BiddersAuctionDetails", true);
       if (rs.isValid("FetchH1BiddersAuctionDetails")) {
         res.result.fetchH1BidderAuctionDetails;
+     //  res.result.fetchH1BidderAuctionDetails[0].roundNumber;
+        //console.log(res.result.fetchH1BidderAuctionDetails[0]);
+       
         // console.log("ResultList!!!!!",res.result.fetchH1BidderAuctionDetails)
         res.result.fetchH1BidderAuctionDetails.forEach((item) => {
           resultList.push({
             ...item,
            // accepted: item.accepted === 1 ? 1 : 2,
+           //rejectionReason: item.rejectionReason || 'No reason provided',
           });
           
         });
@@ -198,6 +360,9 @@ function updateAccepted(rowData, selectedValue) {
     //   "result list ",
     //   resultList
     // );
+    if (label === "Reject") {
+    openRejectModal(rowData); // Trigger the modal opening
+  }
   }
 }
 
@@ -236,6 +401,7 @@ function submitForm() {
         if (rs.isValid("UpdateH1BidderDetails")) {
           disabled.value = true;
           toaster.success("Successfully Updated");
+          //isSubmitButtonDisabled.value = true;
           sendEmailH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
