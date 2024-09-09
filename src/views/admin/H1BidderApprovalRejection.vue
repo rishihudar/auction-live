@@ -63,14 +63,6 @@
             {{ rowData.data.ApprovalStatus }}
            
             <!-- <div class="card flex flex-wrap justify-content-center gap-2">
-
-            < v-tooltip.top="'{{ rowData.data.rejectionReason }}'"  type="text" placeholder="Right">
-            </div> -->
-            <!-- <div v-if="rowData.data.ApprovalStatus === 'Reject'"> -->
-              <i v-if="rowData.data.ApprovalStatus === 'Reject'"
-                class=" pi pi-info-circle" 
-                v-tooltip.top="rowData.data.rejectionReason" 
-              ></i>
             
 
             <!-- </div> -->
@@ -88,23 +80,7 @@
         </Column>
       </DataTable>
     </div>
-    <!-- <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <header class="modal-header">
-          <h3>Reason for Rejection</h3>
-        </header>
-        <main class="modal-body">
-          <textarea
-            v-model="rejectionReason"
-            placeholder="Please provide a reason for rejection"
-          ></textarea>
-        </main>
-        <footer class="modal-footer">
-          <button @click="submitRejection">Submit</button>
-          <button @click="closeModal">Cancel</button>
-        </footer>
-      </div>
-    </div> -->
+   
     <Dialog v-model:visible="showModal" modal header="Reason for Rejection" :style="{ width: '40rem' }">
       <div class="form-group">
         <InputText
@@ -171,10 +147,7 @@ const toaster = createToaster({ position: "top-right", duration: 3000 });
 const props = defineProps({
   auctionId: Number,
 });
-const isSubmitButtonClicked = ref(false);
-//const disabled = ref(false);
-// const showRejectionIcon = ref(false);
-// const showRejectionTooltip = ref(false);
+
 const showModal = ref(false);
 const rejectionReason = ref('');
 const modalData = ref(null);
@@ -207,14 +180,7 @@ function openRejectModal(rowData) {
   modalData.value = rowData;
   roundNumber.value=rowData.data.roundNumber;
 }
-// function closeModal() {
-//   if (modalData.value) {
-//     modalData.value.data.approvalStatusResult = null; // Reset the dropdown value
-//   }
-//   showModal.value = false;
-//   rejectionReason.value = '';
-//   //emit('close');
-// }
+
 function closeModal(isCancel = false) {
   // Reset approval status if canceling
   if (isCancel && modalData.value) {
@@ -224,10 +190,6 @@ function closeModal(isCancel = false) {
   rejectionReason.value = ''; // Reset rejection reason
 }
 
-// function submitRejection() {
-//   console.log(rejectionReason.value);
-//   closeModal();
-// }
 function updateH1RejectionReason() {
 		// Automatically generated
     new MQL()
@@ -252,16 +214,7 @@ function submitRejection() {
     toaster.error('Please provide a reason for rejection.');
     return;
   }
-  // if (modalData.value) {
-  //   const index = resultList.findIndex((item) => item.id === modalData.value.id);
-  //   if (index !== -1) {
-  //     resultList[index].rejectionReason = rejectionReason.value; // Store rejection reason
-  //     resultList[index].data.approvalStatusResult = dropdownOptions.value.find(
-  //       (option) => option.label === 'Reject'
-  //     ).value; // Update approval status
-  //   }
-  // }
-			
+
 			
   // If the reason is provided, set approval status to "Reject"
   if (modalData.value) {
@@ -275,16 +228,7 @@ function submitRejection() {
   //toaster.success('Rejection reason submiited successfully')// Close the modal after setting "Reject"
   
 }
-// const isSubmitButtonDisabled = computed(() => {
-//   // Check if any dropdown is missing a selected value
-//   const allDropdownsSelected = resultList.every(item => item.approvalStatusResult);
-//   // Disable the button if not all dropdowns are selected or if the button has already been clicked
-//   return !allDropdownsSelected || isSubmitButtonClicked.value;
-// });
 
-// const isSubmitDisabled = computed(() => {
-//   return status.value === 'Rejected' && !rejectionReason.value.trim();
-// });
  function fetchH1ApprovalStatus() {
   new MQL()
     .useManagementServer()
