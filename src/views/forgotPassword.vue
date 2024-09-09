@@ -1,438 +1,590 @@
 <template>
-  <div>
-    <div class="fm-group">
-      <label class="fm-label" for="horizontal-buttons">Number of Hours</label>
-      <InputNumber
-        v-model="noOfDays"
-        placeholder="Enter number greater than 98"
-        showButtons
-        :step="1"
-        :disabled="disabled"
-      >
-        <template #incrementbuttonicon>+</template>
-        <template #decrementbuttonicon>-</template>
-      </InputNumber>
-      <div v-if="$v.noOfDays.$error" class="fm-error">
-        {{ $v.noOfDays.$errors[0].$message }}
+  <div id="forgot-password" class="box-login-holder">
+    <div class="card-login">
+      <div class="box-top-holder">
+        <div class="box-top box-top-left">
+          <router-link to="/">Back to Login</router-link>
+        </div>
       </div>
-    </div>
-
-    <div class="table-custom">
-      <DataTable :value="resultList" dataKey="id" :disabled="disabled">
-        <Column field="roundNumber" header="ROUND NUMBER"></Column>
-        <Column field="allocatedProperty" header="ALLOCATED PROPERTY"></Column>
-        <Column
-          field="highestQuotedValue"
-          header="HIGHEST QUOTED VALUE (₹)"
-        ></Column>
-        <Column
-          field="firstPayment"
-          header="1st payment TO BE PAID (₹)"
-        ></Column>
-        <Column header="ELIGIBLE ?">
-          <template #body="rowData" v-if="!disabled">
-            <Dropdown
-              v-model="rowData.data.approvalStatusResult"
-              :options="dropdownOptions"
-              placeholder="kindly select"
-              optionLabel="label"
-              optionValue="value"
-              @change="(e) => updateAccepted(rowData, e.value,e)"
-              :disabled="disabled"
-            />
-            <!-- <div v-if="rowData.data.approvalStatusResult === 'Reject'"> -->
-            
-
-
-          </template>
-          
-          <!-- <template #body="rowData" v-if="!disabled">
-            <Dropdown
-              v-model="rowData.data.approvalStatusResult"
-              :options="dropdownOptions"
-              placeholder="kindly select"
-              optionLabel="label"
-              optionValue="value"
-              @change="e => updateAccepted(rowData, e.value)"
-              :disabled="disabled"
-              
-            />
-          </template> -->
-
-          <template #body="rowData" v-else>
-            {{ rowData.data.ApprovalStatus }}
-           
-            <!-- <div class="card flex flex-wrap justify-content-center gap-2">
-
-            < v-tooltip.top="'{{ rowData.data.rejectionReason }}'"  type="text" placeholder="Right">
-            </div> -->
-            <!-- <div v-if="rowData.data.ApprovalStatus === 'Reject'"> -->
-              <i v-if="rowData.data.ApprovalStatus === 'Reject'"
-                class=" pi pi-info-circle" 
-                v-tooltip.top="rowData.data.rejectionReason" 
-              ></i>
-            
-
-            <!-- </div> -->
-          </template>
-        </Column>
-        <Column header="INTENT_LETTER">
-          <template #body="slotProps">
-            <span>Intent letter</span>
-          </template>
-        </Column>
-        <Column header="ALLOTMENT LETTER">
-          <template #body="slotProps">
-            <span>Intent letter</span>
-          </template>
-        </Column>
-      </DataTable>
-    </div>
-    <!-- <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <header class="modal-header">
-          <h3>Reason for Rejection</h3>
-        </header>
-        <main class="modal-body">
-          <textarea
-            v-model="rejectionReason"
-            placeholder="Please provide a reason for rejection"
-          ></textarea>
-        </main>
-        <footer class="modal-footer">
-          <button @click="submitRejection">Submit</button>
-          <button @click="closeModal">Cancel</button>
-        </footer>
+      <div class="cl-header">
+        <div class="cl-header-media">
+          <img src="../../assets/images/logo_dulb.webp" alt="DULB logo" width="956" height="193" />
+        </div>
+        <h1 class="title">Forgot Password</h1>
       </div>
-    </div> -->
-    <Dialog v-model:visible="showModal" modal header="Reason for Rejection" :style="{ width: '40rem' }">
-      <div class="form-group">
-        <InputText
-          v-model="rejectionReason"
-          placeholder="Please provide a reason for rejection"
-          rows="4"
-          class="form-control"
-        ></InputText>
-      </div>
-      <div class="modal-action">
-        <Button 
-          type="button" 
-          label="Confirm" 
-          :disabled="isConfirmDisabled"
-          @click="submitRejection">
-        </Button>
-        <Button 
-          type="button" 
-          label="Cancel" 
-          class="p-button-secondary" 
-          severity="danger"
-          @click="closeModal(true)">
-        </Button>
-      </div>
-    </Dialog>
-    <!-- Your Submit button component -->
-    <div class="table-exp-action centered">
-      <Button label="Submit" @click="submitForm" :disabled="disabled" />
+      <form class="form-login form-grid" v-if="show_verify">
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="emailId">Username</label>
+            <Toast />
+            <InputGroup>
+              <div class="fm-inner">
+                <InputText v-model="emailId" placeholder="Enter your Username" :disabled="emailchecked" />
+              </div>
+              <Button label="Verify Username" @click="isEmailExist" :disabled="!emailId || emailchecked" />
+            </InputGroup>
+            <!-- <div v-if="$v.emailId.$error" class="fm-error">
+                                {{ $v.emailId.$errors[0].$message }}
+                            </div> 
+                            <div v-if="OTPVerified" :style="{ color: 'green', fontSize: 'small' }">
+                                Email Verified 
+                            </div>
+                        </div> -->
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="mobileNumber">Enter Mobile Number</label>
+            <div class="fm-input-group-holder">
+              <InputGroup>
+                <div class="fm-inner">
+                  <InputText v-model="mobileNumber" placeholder="xxx-xxx-xxxx"
+                    :disabled="isSmsOTPSent || !emailVerification || !emailchecked" />
+                  <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
+                </div>
+                <Button label="Verify Mobile Number" severity="secondary" :disabled="!emailVerification || isSmsOTPSent"
+                  @click="verifyMobile" />
+              </InputGroup>
+              <Button label="Send OTP" severity="secondary" @click="sendOTPMobile"
+                :disabled="isSmsOTPSent || !checkMobileNumber" />
+            </div>
+            <div v-if="$v.mobileNumber.$error" class="fm-error">
+              {{ $v.mobileNumber.$errors[0].$message }}
+            </div>
+            <div v-if="OTPSmsVerified" :style="{ color: 'green', fontSize: 'small' }">
+              Mobile Number verified
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="fm-group" v-if="mobileOtpEnable">
+            <label class="fm-label" for="verifyMobileNumber">Enter OTP received on Mobile</label>
+            <InputGroup>
+              <div class="fm-inner">
+                <InputText v-model="verifyMobileNumber" placeholder="xxx-xxx"
+                  :class="{ 'p-invalid': $v.verifyMobileNumber.$error }" :disabled="isSmsOTPVerified" />
+                <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
+              </div>
+              <Button label="Verify OTP" severity="secondary" @click="verifyOTPMobile(), (resetButton = true)"
+                :disabled="isSmsOTPVerified" />
+            </InputGroup>
+            <div id="username-help" class="fm-info">OTP is valid for 5 mins</div>
+            <div v-if="$v.verifyMobileNumber.$error" class="fm-error">
+              {{ $v.verifyMobileNumber.$errors[0].$message }}
+            </div>
+          </div>
+        </div>
+        <div class="fm-action">
+          <Button type="button" @click="changePassword" :disabled="!OTPSmsVerified">
+            Change Password</Button>
+        </div>
+      </form>
+      <form class="form-login form-grid" v-else>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="password">Reset Password</label>
+            <div class="fm-inner">
+              <Password v-model="password" :feedback="false" toggleMask autocomplete="off"/>
+              <fa-lock class="fm-icon fm-prefix"></fa-lock>
+            </div>
+            <div v-if="$v.password.$error" class="fm-error">
+              {{ $v.password.$errors[0].$message }}
+            </div>
+            <div v-if="!$v.password.passwordValidation.$response" class="fm-error">
+              Alphanumeric with at least one uppercase and one lower case letter and at least one special
+              character. Length: min 8 max 12.
+            </div>
+          </div>
+        </div>
+        <div class="col-span-full">
+          <div class="fm-group">
+            <label class="fm-label" for="confirmPassword">Confirm Reset Password</label>
+            <div class="fm-inner">
+              <Password v-model="confirmPassword" :feedback="false" toggleMask autocomplete="off" />
+              <fa-lock class="fm-icon fm-prefix"></fa-lock>
+            </div>
+            <div v-if="$v.confirmPassword.$error" class="fm-error">
+              {{ $v.confirmPassword.$errors[0].$message }}
+            </div>
+            <div v-if="password != confirmPassword" class="fm-error">
+              Password does not match
+            </div>
+          </div>
+        </div>
+        <div class="fm-action">
+          <Button type="button" @click="resetPassword" :disabled="!isSmsOTPSent ||
+        password !== confirmPassword ||
+        !confirmPassword
+        ">
+            Reset Password</Button>
+        </div>
+      </form>
+      <Footer name="box"></Footer>
     </div>
-    <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
-      <strong>Note:</strong>
-      <span>
-        First payment is calculated as = (Highest quoted value * First Payment
-        Percentage) - EMD amount
-      </span>
-    </div>
-   
   </div>
 </template>
 
 <script setup>
-import Dialog from "primevue/dialog";
-// import Tooltip from 'primevue/tooltip';
-import 'primeicons/primeicons.css';
-import { defineEmits } from 'vue';
-import Checkbox from "primevue/checkbox";
-import { computed, ref, onMounted, reactive } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, numeric, minValue } from "@vuelidate/validators";
-import MQL from "@/plugins/mql.js";
-import InputNumber from "primevue/inputnumber";
+import { ref, computed, onBeforeMount } from "vue";
+import Password from "primevue/password";
+import { useRouter } from 'vue-router';
 import Button from "primevue/button";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import { storeToRefs } from "pinia";
-import { login } from "../../store/modules/login";
+import Textarea from "primevue/textarea";
+import MQL from "@/plugins/mql.js";
+import { useVuelidate } from "@vuelidate/core";
+import Footer from "@/components/common/Footer.vue";
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+  email,
+  helpers,
+} from "@vuelidate/validators";
+import MQLCdn from "@/plugins/mqlCdn.js";
+import faEmail from "../../assets/icons/envelope.svg";
+import faMobileButton from "../../assets/icons/mobile-button.svg";
+import faLock from "../../assets/icons/lock.svg";
+import { useToast } from "primevue/usetoast";
 import { createToaster } from "@meforma/vue-toaster";
-import Dropdown from "primevue/dropdown";
-// import faEye from '../../../assets/icons/eye.svg';
+const toaster = createToaster({ position: "top-right", duration: 3000 })
+const router = useRouter()
+const toast = useToast();
 
-let isSubmitButtonDisabled=ref(false);
-const emit = defineEmits(['close']);
-const toaster = createToaster({ position: "top-right", duration: 3000 });
-const props = defineProps({
-  auctionId: Number,
-});
-const isSubmitButtonClicked = ref(false);
-//const disabled = ref(false);
-// const showRejectionIcon = ref(false);
-// const showRejectionTooltip = ref(false);
-const showModal = ref(false);
-const rejectionReason = ref('');
-const modalData = ref(null);
-let auctionId = ref(props.auctionId);
-const loginStore = login();
-const { organizationId, entityId, loginId } = storeToRefs(loginStore);
-let tick = ref();
-const resultList = reactive([]);
-const selectedRows = ref([]);
-let accepted = ref();
-let noOfDays = ref(98);
-let rules = computed(() => ({
-  noOfDays: {
+const show_verify = ref(true);
+const mobileNumber = ref("");
+let isSmsOTPSent = ref(false);
+const mobileOtpEnable = ref();
+let OTPSmsVerified = ref(false);
+let isSmsOTPVerified = ref(true);
+const verifyMobileNumber = ref("");
+const submitted = ref(false);
+const emailId = ref(null);
+const password = ref(null);
+const confirmPassword = ref(null);
+const emailVerification = ref();
+const resetButton = ref(false);
+const checkMobileNumber = ref(false);
+const emailchecked = ref(false)
+let countMobileNumberUser = ref("");
+
+let rulesIndividual = computed(() => ({
+  mobileNumber: {
     required,
     numeric,
-    minLength: minLength(1),
-    minValue: minValue(98, 'The minimum value for "Number of Hours" is 98'),
+    minLength: minLength(10),
+    maxLength: maxLength(10),
+  },
+  verifyMobileNumber: {
+    required,
+  },
+  password: {
+    required,
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12)
+  },
+  confirmPassword: {
+    required,
   },
 }));
-const status = ref('');
-const $v = useVuelidate(rules, { noOfDays });
-const isConfirmDisabled = computed(() => {
-  return !rejectionReason.value.trim(); // Check if rejectionReason is empty or only whitespace
+let rulesAll = computed(() => ({
+  mobileNumber: {
+    required,
+    numeric,
+    minLength: minLength(10),
+    maxLength: maxLength(10),
+  },
+  verifyMobileNumber: {
+    required,
+  },
+  password: {
+    required,
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12)
+  },
+  confirmPassword: {
+    required,
+  },
+}));
+let rulesCompany = computed(() => ({
+  mobileNumber: {
+    required,
+    numeric,
+    minLength: minLength(10),
+    maxLength: maxLength(10),
+  },
+  verifyMobileNumber: {
+    required,
+  },
+  emailId: {
+    required,
+    email,
+  },
+  password: {
+    passwordValidation: helpers.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*])[A-Za-z\d@#$%^&*]{8,12}$/)
+    ,
+    minLength: minLength(8),
+    maxLength: maxLength(12),
+    required
+  },
+  confirmPassword: {
+    required,
+  },
+}));
+let rules = ref("");
+rules.value = rulesAll;
+const $v = useVuelidate(rules, {
+  mobileNumber,
+  emailId,
+  verifyMobileNumber,
+  confirmPassword,
+  password
 });
-let disabled = ref(false);
-const approvalStatusResult = ref({ id: 0, approvalStatus: "" });
-const dropdownOptions = ref([]);
-function openRejectModal(rowData) {
-  showModal.value = true;
-  modalData.value = rowData;
-  roundNumber.value=rowData.data.roundNumber;
-}
-// function closeModal() {
-//   if (modalData.value) {
-//     modalData.value.data.approvalStatusResult = null; // Reset the dropdown value
-//   }
-//   showModal.value = false;
-//   rejectionReason.value = '';
-//   //emit('close');
-// }
-function closeModal(isCancel = false) {
-  // Reset approval status if canceling
-  if (isCancel && modalData.value) {
-    modalData.value.data.approvalStatusResult = null; // Reset to 'kindly select'
-  }
-  showModal.value = false;
-  rejectionReason.value = ''; // Reset rejection reason
+
+
+function changePassword() {
+  show_verify.value = false
 }
 
-// function submitRejection() {
-//   console.log(rejectionReason.value);
-//   closeModal();
-// }
-function updateH1RejectionReason() {
-		// Automatically generated
-    new MQL()
-          .useManagementServer()
-			.setActivity("r.[H1RejectionReason]")
-			.setData({auctionId:auctionId.value,h1RejectionReason:rejectionReason.value,roundNumber:roundNumber.value})
-			//.setHeaders({"Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NCIsImdyb3VwcyI6WyJSb2xlIE1ha2VyIiwiUm9sZSBDaGVja2VyIiwiUm9sZSBBcHByb3ZlciIsIlJvbGUgU2NoZWR1bGVyIiwiU3VwZXJBZG1pbiIsIk9yZ2FuaXphdGlvbkFkbWluIiwiUm9sZSBXYXRjaGVyIiwiUm9sZSBBZG1pbiIsIlJvbGUgUHVibGlzaGVyIiwiUm9sZSBEZXZlbG9wZXIiXSwiY2xpZW50SVAiOiIxMDMuODUuMTgxLjYxIiwiaGl0c0NvdW50IjowLCJ0b2tlbiI6IiIsIm1ldGFkYXRhIjoie1wiZnVsbE5hbWVcIjpcInNod2V0YSBwYW5kZXlcIixcIm1vYmlsZU51bWJlclwiOlwiNjM5MzMwMjI4NFwiLFwidXNlcm5hbWVcIjpcInNod2V0YUBnbWFpbC5jb21cIixcImVudGl0eUlkXCI6MixcIm9yZ2FuaXphdGlvbklkXCI6MSxcIm9yZ2FuaXphdGlvbk5hbWVcIjpcIkRVTEIgSGFyeWFuYVwiLFwicmVnU3RhdHVzSWRcIjowLFwicmVnU3RhdHVzTmFtZVwiOlwiVVNFUl9BUFBST1ZFRFwiLFwibG9naW5JZFwiOlwiOTRcIn0iLCJleHAiOjE3MjU2MDU2OTV9.NW1KmYLgcs8FB6AJ4X2d1FKZy6_4Vb-QZT2mFSDHORA"})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("H1RejectionReason",true)
-			if (rs.isValid("H1RejectionReason")) {
-			} else
-			 { 
-			rs.showErrorToast("H1RejectionReason")
-			}
-			})
-    }
-function submitRejection() {
-  // Check if the rejection reason is provided
-  if (!rejectionReason.value.trim()) {
-    // If no rejection reason, show an error or keep the modal open
-    toaster.error('Please provide a reason for rejection.');
-    return;
-  }
-  // if (modalData.value) {
-  //   const index = resultList.findIndex((item) => item.id === modalData.value.id);
-  //   if (index !== -1) {
-  //     resultList[index].rejectionReason = rejectionReason.value; // Store rejection reason
-  //     resultList[index].data.approvalStatusResult = dropdownOptions.value.find(
-  //       (option) => option.label === 'Reject'
-  //     ).value; // Update approval status
-  //   }
-  // }
-			
-			
-  // If the reason is provided, set approval status to "Reject"
-  if (modalData.value) {
-    modalData.value.data.approvalStatusResult = dropdownOptions.value.find(
-      (option) => option.label === 'Reject'
-    ).value;
-  }
-  updateH1RejectionReason();
+async function sendOTPMobile() {
+  // //console.log("$v.value.mobileNumber.$validate() is ",$v.value.mobileNumber.$invalid)
 
-  closeModal(); 
-  //toaster.success('Rejection reason submiited successfully')// Close the modal after setting "Reject"
-  
-}
-// const isSubmitButtonDisabled = computed(() => {
-//   // Check if any dropdown is missing a selected value
-//   const allDropdownsSelected = resultList.every(item => item.approvalStatusResult);
-//   // Disable the button if not all dropdowns are selected or if the button has already been clicked
-//   return !allDropdownsSelected || isSubmitButtonClicked.value;
-// });
-
-// const isSubmitDisabled = computed(() => {
-//   return status.value === 'Rejected' && !rejectionReason.value.trim();
-// });
- function fetchH1ApprovalStatus() {
-  new MQL()
-    .useManagementServer()
-    .setActivity("r.[FetchH1ApprovalStatus]")
-    .setData({})
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("FetchH1ApprovalStatus", true);
-      if (rs.isValid("FetchH1ApprovalStatus")) {
-        approvalStatusResult.value = res.result;
-        dropdownOptions.value = approvalStatusResult.value.map((item) => ({
-          label: item.approvalStatus,
-          value: item.id,
-        }));
-        // console.log("approvalStatusResult", approvalStatusResult.value);
-      } else {
-        rs.showErrorToast("FetchH1ApprovalStatus");
-      }
+  await isMobileNumberExist();
+  //console.log("countMobileNumberUser is ", countMobileNumberUser.value);
+  if (countMobileNumberUser.value === 1) {
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "OTP Sent",
+      life: 3000,
     });
+    $v.value.mobileNumber.$validate();
+
+    if (!$v.value.mobileNumber.$invalid) {
+      // Automatically generated
+      new MQL()
+        .useCoreServer()
+        .setActivity("o.[SendOTPSMS]")
+        .setData({ mobileNumber: mobileNumber.value })
+        // .setHeaders({})
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity("SendOTPSMS", true);
+          if (rs.isValid("SendOTPSMS")) {
+            //console.log("Received OTP ", res.result);
+
+            isSmsOTPSent.value = true;
+            isSmsOTPVerified.value = false;
+
+            setTimeout(() => {
+              // //console.log("HI")
+              if (OTPSmsVerified.value == true) {
+                //console.log("OTPSmsVerified t");
+
+                isSmsOTPVerified.value = true;
+                isSmsOTPSent.value = true;
+              } else {
+                isSmsOTPSent.value = false;
+                verifyMobileNumber.value = "";
+                // isSmsOTPVerified.value = true;
+              }
+            }, 30000);
+          } else {
+            rs.showErrorToast("SendOTPSMS");
+          }
+        });
+    } else {
+      toaster.error("Invalid Mobile Number");
+    }
+  }
 }
-const roundNumber=ref(null);
-function h1AuctionDetails() {
+function verifyOTPMobile() {
+  // Automatically generated
   new MQL()
-    .useManagementServer()
-    .setActivity("r.[FetchH1BiddersAuctionDetails]")
-    .setData({ auctionId: auctionId.value, entityId: entityId.value })
+    .useCoreServer()
+    .setActivity("o.[ValidateOTPSMS]")
+    .setData({
+      mobileNumber: mobileNumber.value,
+      otp: verifyMobileNumber.value,
+    })
+    // .setHeaders({})
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("FetchH1BiddersAuctionDetails", true);
-      if (rs.isValid("FetchH1BiddersAuctionDetails")) {
-        res.result.fetchH1BidderAuctionDetails;
-     //  res.result.fetchH1BidderAuctionDetails[0].roundNumber;
-        //console.log(res.result.fetchH1BidderAuctionDetails[0]);
-       
-        // console.log("ResultList!!!!!",res.result.fetchH1BidderAuctionDetails)
-        res.result.fetchH1BidderAuctionDetails.forEach((item) => {
-          resultList.push({
-            ...item,
-           // accepted: item.accepted === 1 ? 1 : 2,
-           //rejectionReason: item.rejectionReason || 'No reason provided',
-          });
-          
-        });
-        // console.log("resultList is **** ", resultList);
+      let res = rs.getActivity("ValidateOTPSMS", true);
+      if (rs.isValid("ValidateOTPSMS")) {
+        //console.log("OTP status is ", res.result["otpValidationResult"]);
 
-        if (
-          res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0
-        ) {
-          noOfDays.value =
-            res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours;
-          // console.log("indentDays is ", noOfDays.value);
-          disabled.value = true;
+        if (res.result["otpValidationResult"] == "OTPFOUND") {
+          toast.add({
+            severity: "success",
+            summary: "Success",
+            detail: "SMS OTP verified!",
+            life: 3000,
+          });
+          isSmsOTPVerified.value = true;
+          isSmsOTPSent.value = true;
+          OTPSmsVerified.value = true;
         } else {
-          disabled.value = false;
+          toast.add({
+            severity: "error",
+            summary: "ERROR",
+            detail: "SMS OTP does not match!!",
+            life: 3000,
+          });
         }
       } else {
-        rs.showErrorToast("FetchH1BiddersAuctionDetails");
+        rs.showErrorToast("ValidateOTPSMS");
+      }
+    });
+}
+// async function sendOTPEmail() {
+//   await isEmailExist();
+//   //console.log("countEmailUsers is ", countEmailUsers.value);
+//   if (countEmailUsers.value > 0) {
+//     toaster.error("Email already exist");
+//     return;
+//   }
+
+//   $v.value.fullName.$validate();
+//   $v.value.emailId.$validate();
+//   // $v.emailId.$validate()
+//   // Automatically generated
+
+//   if (!$v.value.emailId.$invalid && !$v.value.fullName.$invalid) {
+//     new MQL()
+//       .useCoreServer()
+//       .setActivity("o.[SendOTPEmail]")
+//       .setData({
+//         from: "test@mkcl.org",
+//         to: emailId.value,
+//         fullName: fullName.value,
+//       })
+//       // .setHeaders({})
+//       .fetch()
+//       .then((rs) => {
+//         let res = rs.getActivity("SendOTPEmail", true);
+//         // if (rs.isValid("SendOTPEmail") && res.result == "SUCCESS") {
+//         if (rs.isValid("SendOTPEmail")) {
+//           //console.log("Sending OTP to email", res.result);
+
+//           isEmailOTPSent.value = true;
+//           isEmailOTPVerified.value = false;
+
+//           setTimeout(() => {
+//             if (OTPVerified.value == true) {
+//               isEmailOTPVerified.value = true;
+//               isEmailOTPSent.value = true;
+//             } else {
+//               isEmailOTPSent.value = false;
+
+//               emailOTP.value = "";
+//               // isEmailOTPVerified.value = true;
+//             }
+//           }, 30000);
+//         } else {
+//           // rs.showErrorToast("SendOTPEmail")
+//         }
+//       });
+//   } else {
+//     toaster.error("Invalid Details");
+//   }
+// }
+
+function verifyOTPEmail() {
+  // Automatically generated
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[ValidateOTPEmail]")
+    .setData({ otp: emailOTP.value, to: emailId.value })
+    // .setHeaders({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("ValidateOTPEmail", true);
+      if (rs.isValid("ValidateOTPEmail")) {
+        //console.log(res.result["OTPValidStatus"]);
+
+        if (res.result["OTPValidStatus"] == "OTPFOUND") {
+          toaster.success("Email OTP verified");
+          isEmailOTPVerified.value = true;
+          isEmailOTPSent.value = true;
+          OTPVerified.value = true;
+        } else {
+          toaster.error("Email OTP did not match");
+        }
+      } else {
+        rs.showErrorToast("ValidateOTPEmail");
+      }
+    });
+}
+function isEmailExist() {
+  new MQL()
+    .useLoginServer()
+    .setActivity("o.[ForgetPasswordService]")
+    .setData({
+      userEmail: emailId.value,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("ForgetPasswordService", true);
+      //console.log("res", res.result.email_count);
+      emailVerification.value = res.result.email_count;
+      if (emailVerification.value == 1) {
+        toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Username Verified !!!",
+          life: 5000,
+        });
+        emailchecked.value = true
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Username does'nt exist,please kindly check your Username!!!",
+          life: 7000,
+        });
+        emailchecked.value = false
+      }
+      if (rs.isValid("ForgetPasswordService")) {
+      } else {
+        rs.showErrorToast("ForgetPasswordService");
       }
     });
 }
 
-function updateAccepted(rowData, selectedValue) {
-  let label = rowData.data.approvalStatusResult == 1 ? "Accept" : "Reject"
-  // console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
-  // Find the index of the item in resultList to ensure reactivity
-  const index = resultList.findIndex((item) => item.id === rowData.id);
-  if (index !== -1) {
-    // Update the reactive property
-    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue };
-    // console.log(
-    //   "rowData.accepted#################",
-    //   resultList[index].accepted,
-    //   "result list ",
-    //   resultList
-    // );
-    if (label === "Reject") {
-    openRejectModal(rowData); // Trigger the modal opening
-  }
-  }
+function verifyMobile() {
+  // Automatically generated
+  new MQL()
+    .useLoginServer()
+    .setActivity("o.[VerifyMobileNumber]")
+    .setData({
+      userEmail: emailId.value,
+      userMobile: mobileNumber.value,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("VerifyMobileNumber", true);
+      if (rs.isValid("VerifyMobileNumber")) {
+        //console.log("resVerifyMobile", res.result.mobileVerify);
+        if (res.result.mobileVerify == 0) {
+
+          toast.add({
+            severity: "error",
+            summary: "ERROR",
+            detail:
+              "Verification Failed !Mobile number entered does not match with email!!",
+            life: 7000,
+          });
+        } else {
+          checkMobileNumber.value = true
+          toast.add({
+            severity: "success",
+            summary: "Success",
+            detail: "Mobile Number Verified !!",
+            life: 5000,
+          });
+        }
+      } else {
+        rs.showErrorToast("VerifyMobileNumber");
+      }
+    });
 }
+function mobileOtpRequired() {
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[FetchCustomValueByKey]")
+    .setData({ key: "OTPMOBILE" })
+    // .setHeaders({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchCustomValueByKey", true);
+      if (rs.isValid("FetchCustomValueByKey")) {
+        //console.log("value is ", res.result.vsCustomParamValue);
 
-function submitForm() {
-  // console.log("Auction id ", auctionId.value);
-  const validation = $v.value.$validate();
-  if (!$v.value.$error) {
-    // Check if all dropdowns are selected
-    const allDropdownsSelected = resultList.every(
-      (item) => item.approvalStatusResult
-    );
-
-    if (!allDropdownsSelected) {
-      toaster.error(
-        "Please select an option for all dropdowns before submitting."
-      );
-      return;
-    }
-
-    // console.log("result list ", resultList);
-
-    // if (!$v.value.$error) {
-    //   console.log("result list ", resultList);
-
+        if (res.result.vsCustomParamValue == "YES") {
+          mobileOtpEnable.value = true;
+        } else {
+          mobileOtpEnable.value = false;
+        }
+      } else {
+        rs.showErrorToast("FetchCustomValueByKey");
+      }
+    });
+}
+function isMobileNumberExist() {
+  return new Promise((resolve, reject) => {
     new MQL()
-      .useManagementServer()
-      .setActivity("r.[UpdateH1BidderDetails]")
-      .setData({
-        auctionId: auctionId.value,
-        h1ApprovedBidders: resultList,
-        noOfDays: noOfDays.value,
-      })
+      .useCoreServer()
+      .setActivity("o.[VerifyMobileUserDetails]")
+      .setData({ mobileNumber: mobileNumber.value })
+      // .setHeaders({})
       .fetch()
       .then((rs) => {
-        let res = rs.getActivity("UpdateH1BidderDetails", true);
-        if (rs.isValid("UpdateH1BidderDetails")) {
-          disabled.value = true;
-          toaster.success("Successfully Updated");
-          //isSubmitButtonDisabled.value = true;
-          sendEmailH1Bidders();
+        let res = rs.getActivity("VerifyMobileUserDetails", true);
+        if (rs.isValid("VerifyMobileUserDetails")) {
+          //console.log("res.result.countUsers", res.result.countUsers);
+          countMobileNumberUser.value = res.result.countUsers;
+
+          resolve();
+
+          // submitForm();
         } else {
-          rs.showErrorToast("UpdateH1BidderDetails");
+          rs.showErrorToast("VerifyMobileUserDetails");
         }
       });
+  });
+}
+function resetPasswordWithHashing() {
+  // Automatically generated
+  new MQL()
+    .useLoginServer()
+    .setActivity("o.[ResetPasswordWithHashing]")
+    .setData({
+      password: password.value,
+      userEmail: emailId.value,
+      userMobile: mobileNumber.value,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("ResetPasswordWithHashing", true);
+      //console.log("res", res.result);
+      if (rs.isValid("ResetPasswordWithHashing")) {
+      } else {
+        rs.showErrorToast("ResetPasswordWithHashing");
+      }
+    });
+}
+function resetPassword() {
+  //console.log("resetButton.value=true", resetButton.value);
+  if (resetButton.value) {
+    ////console.log(emailId.value !== null && mobileNumber.value !== null);
+    //console.log("Email:", emailId.value);
+    //console.log("Mobile:", mobileNumber.value);
+    //console.log("password:", password.value);
+    //console.log("confirmPassword:", confirmPassword.value);
+    resetPasswordWithHashing();
+    toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Password reset has been successful !",
+      life: 3000,
+    });
+    router.push({ path: '/' })
   } else {
-    toaster.error("Invalid Number of Hours");
+    toast.add({
+      severity: "error",
+      summary: "ERROR",
+      detail: "SMS OTP verification is mandatory !!",
+      life: 3000,
+    });
   }
 }
 
-function sendEmailH1Bidders() {
-
-          new MQL()
-          .useNotificationServer()
-			.setActivity("r.[NotifyH1ApprovedBidders]")
-			.setData({"resultList":resultList})
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("NotifyH1ApprovedBidders",true)
-			if (rs.isValid("NotifyH1ApprovedBidders")) {
-			} else
-			 { 
-			rs.showErrorToast("NotifyH1ApprovedBidders")
-			}
-			})
-			
-
-}
-
-onMounted(() => {
-  h1AuctionDetails();
-  fetchH1ApprovalStatus();
+onBeforeMount(() => {
+  mobileOtpRequired();
 });
 </script>
