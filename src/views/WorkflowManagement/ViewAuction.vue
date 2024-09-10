@@ -2,7 +2,7 @@
     <div>
         <h6>{{ workflowStepData.displayName }}</h6>
         <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
-            :auctionId="auctionId" :config="workflowStepData.data1" />
+            :auctionId="auctionId" :vsAuctionCode="vsAuctionCode" :config="workflowStepData.data1" />
     </div>
     <div>
         <div v-if="showAction" class="btn-wrapper centered mt-5">
@@ -55,9 +55,8 @@ const role = ref({})
 const logins = ref([])
 const modalItem = ref({})
 const auctionId = ref()
-const vsAuctionCode = ref()
 const auctionPublish = ref(false)
-
+const vsAuctionCode = ref()
 const { workflowStepDetailsId } = defineProps({
     // Basic prop definition
     workflowStepDetailsId: {
