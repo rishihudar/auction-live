@@ -2,7 +2,7 @@
     <div>
         <div class="page-header">
             <div class="ph-text">
-                <h5 class="title">Auction {{ auctionId }} Summary Page</h5>
+                <h5 class="title">Auction {{vsAuctionCode }} Summary Page</h5>
                 <!-- <Breadcrumb :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
@@ -412,7 +412,7 @@ const crumbs = ref([
     { label: 'Aution Preview' }
 ])
 
-const { auctionId, workflowStepDetailsId, config } = defineProps({
+const { auctionId, workflowStepDetailsId, config, vsAuctionCode } = defineProps({
     auctionId: {
         type: [Number, String],
         default: null,
@@ -425,8 +425,13 @@ const { auctionId, workflowStepDetailsId, config } = defineProps({
     config: {
         type: Object,
         default: null
+    },
+    vsAuctionCode:{
+        type: String,
+        default: null
     }
-})
+    
+});
 
 
 
