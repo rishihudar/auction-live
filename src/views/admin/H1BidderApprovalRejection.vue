@@ -347,6 +347,7 @@ function submitForm() {
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
           sendEmailH1Bidders();
+          sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
         }
@@ -374,7 +375,22 @@ function sendEmailH1Bidders() {
 			
 
 }
-
+function sendSmsH1Bidders() {
+					// Automatically generated
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[FetchDetailsForH1Rejection]")
+			.setData({approvalId:approvalId.value,auctionId:auctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchDetailsForH1Rejection",true)
+			if (rs.isValid("FetchDetailsForH1Rejection")) {
+			} else
+			 { 
+			rs.showErrorToast("FetchDetailsForH1Rejection")
+			}
+			})
+    }		
 onMounted(() => {
   h1AuctionDetails();
   fetchH1ApprovalStatus();
