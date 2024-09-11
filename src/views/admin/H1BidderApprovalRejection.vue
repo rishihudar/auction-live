@@ -346,7 +346,7 @@ function submitForm() {
           disabled.value = true;
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
-          sendEmailH1Bidders();
+         // sendEmailH1Bidders();
           sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
@@ -380,11 +380,12 @@ function sendSmsH1Bidders() {
           new MQL()
           .useNotificationServer()
 			.setActivity("r.[FetchDetailsForH1Rejection]")
-			.setData({approvalId:approvalId.value,auctionId:auctionId.value})
+			.setData({auctionId:auctionId.value})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchDetailsForH1Rejection",true)
 			if (rs.isValid("FetchDetailsForH1Rejection")) {
+        console.log("FetchDetailsForH1Rejection",res.result);
 			} else
 			 { 
 			rs.showErrorToast("FetchDetailsForH1Rejection")
