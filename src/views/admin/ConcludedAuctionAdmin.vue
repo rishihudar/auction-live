@@ -50,7 +50,7 @@
         <template #expansion="slot">
           <AuctionDetailsForConcludedAuction :auctionId="slot.data.auctionId" />
 
-          <H1BidderApprovalRejection :auctionId="slot.data.auctionId" />
+          <H1BidderApprovalRejection :auctionId="slot.data.auctionId" :auctionCode="slot.data.auctionCode" />
         </template>
       </DataTable>
       <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"

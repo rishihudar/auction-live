@@ -140,20 +140,21 @@ import { login } from "../../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
 import Dropdown from "primevue/dropdown";
 // import faEye from '../../../assets/icons/eye.svg';
-
+const loginStore = login();
 let isSubmitButtonDisabled=ref(false);
 const emit = defineEmits(['close']);
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const props = defineProps({
   auctionId: Number,
+  auctionCode: String,
 });
 
 const showModal = ref(false);
 const rejectionReason = ref('');
 const modalData = ref(null);
 let auctionId = ref(props.auctionId);
-const loginStore = login();
-const { organizationId, entityId, loginId } = storeToRefs(loginStore);
+
+const { organizationId, entityId, loginId ,currentRole,auctionCode} = storeToRefs(loginStore);
 let tick = ref();
 const resultList = reactive([]);
 const selectedRows = ref([]);
@@ -222,6 +223,7 @@ function submitRejection() {
       (option) => option.label === 'Reject'
     ).value;
   }
+  sendRejectionEmailH1Bidders();
   updateH1RejectionReason();
 
   closeModal(); 
@@ -356,7 +358,23 @@ function submitForm() {
     toaster.error("Invalid Number of Hours");
   }
 }
-
+function sendRejectionEmailH1Bidders(){
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendEmailH1RejectedBidders]")
+			.setData({loginId:loginStore.loginId,roleName:loginStore.currentRole.roleName,auctionCode:auctionCode.value}) 
+      //setData({auctionId:auctionId.value})
+			//.setHeaders({})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendEmailH1RejectedBidders",true)
+			if (rs.isValid("SendEmailH1RejectedBidders")) {
+			} else
+			 { 
+			rs.showErrorToast("SendEmailH1RejectedBidders")
+			}
+			})
+    }
 function sendEmailH1Bidders() {
 
           new MQL()
