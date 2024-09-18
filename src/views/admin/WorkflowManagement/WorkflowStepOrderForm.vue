@@ -2,8 +2,39 @@
     <div>
         <div>Workflow Step Order</div>
         <div>
+            <DataTable :value="workflowStepOrders">
+                <template #empty>
+                    No Steps Order Configured
+                </template>
+                <Column field="fromStepdisplayName" header="From Step">
+                    <template #body="{ data }">
+                        {{ stepName(data.fromStep) }}
+                    </template>
+                </Column>
+                <Column field="fromStatusdisplayName" header="From Status">
+                    <template #body="{ data }">
+                        {{ statusName(data.fromStatus) }}
+                    </template>
+                </Column>
+                <Column field="toStepdisplayName" header="To Step">
+                    <template #body="{ data }">
+                        {{ stepName(data.toStep) }}
+                    </template>
+                </Column>
+                <Column field="toStepdisplayName" header="To Status">
+                    <template #body="{ data }">
+                        {{ statusName(data.toStatus) }}
+                    </template>
+                </Column>
+                <Column field="Action" header="Action">
+                    <template #body="{ data }">
+                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
+                            <trash-can></trash-can>Delete
+                        </Button>
+                    </template>
+                </Column>
+            </DataTable>
             <div class="form-grid">
-
                 <div class="col-span-6">
                     <div class="fm-group">
                         <div class="fm-label">From Step</div>
@@ -50,35 +81,6 @@
                 <Button @click="insertworkflowStepOrder">Add</Button>
 
             </div>
-            <DataTable :value="workflowStepOrders">
-                <Column field="fromStepdisplayName" header="From Step">
-                    <template #body="{ data }">
-                        {{ stepName(data.fromStep) }}
-                    </template>
-                </Column>
-                <Column field="fromStatusdisplayName" header="From Status">
-                    <template #body="{ data }">
-                        {{ statusName(data.fromStatus) }}
-                    </template>
-                </Column>
-                <Column field="toStepdisplayName" header="To Step">
-                    <template #body="{ data }">
-                        {{ stepName(data.toStep) }}
-                    </template>
-                </Column>
-                <Column field="toStepdisplayName" header="To Status">
-                    <template #body="{ data }">
-                        {{ statusName(data.toStatus) }}
-                    </template>
-                </Column>
-                <Column field="Action" header="Action">
-                    <template #body="{ data }">
-                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
-                            <trash-can></trash-can>Delete
-                        </Button>
-                    </template>
-                </Column>
-            </DataTable>
         </div>
     </div>
     <div class="flex justify-between">

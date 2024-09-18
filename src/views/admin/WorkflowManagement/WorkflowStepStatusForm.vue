@@ -2,6 +2,39 @@
     <div>
         <p>Workflow Step Status</p>
         <div>
+            <DataTable :value="workflowStepStatus">
+                <template #empty>
+                    No Steps Status Configured
+                </template>
+                <Column field="workflowStepId" header="Workflow Step">
+                    <template #body="{ data }">
+                        <span>{{ workflowStepName(data.workflowStepId) }}</span>
+                    </template>
+                </Column>
+
+                <Column field="statusId" header="Workflow Step Status">
+                    <template #body="{ data }">
+                        <span>{{ statusName(data.statusId) }}</span>
+                    </template>
+                </Column>
+
+                <Column field="displayName" header="Workflow Step Status Display Name">
+                    <template #body="{ data }">
+                        <span>{{ data.displayName }}</span>
+                    </template>
+                </Column>
+
+                <Column field="Action" header="Action">
+                    <template #body="{ data }">
+                        <Button @click="editData(data)" severity="secondary" class="btn-sm">
+                            <fa-pen-to-square></fa-pen-to-square>Edit
+                        </Button>
+                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
+                            <trash-can></trash-can>Delete
+                        </Button>
+                    </template>
+                </Column>
+            </DataTable>
             <div>
                 <div class="form-grid">
 
@@ -51,38 +84,6 @@
                     {{ workflowStepStatusData.workflowStepStatusId ? 'Edit' : 'Add' }} Workflow Step Status
                 </Button>
             </div>
-
-            <DataTable :value="workflowStepStatus">
-                <Column field="workflowStepId" header="Workflow Step">
-                    <template #body="{ data }">
-                        <span>{{ workflowStepName(data.workflowStepId) }}</span>
-                    </template>
-                </Column>
-
-                <Column field="statusId" header="Workflow Step Status">
-                    <template #body="{ data }">
-                        <span>{{ statusName(data.statusId) }}</span>
-                    </template>
-                </Column>
-
-                <Column field="displayName" header="Workflow Step Status Display Name">
-                    <template #body="{ data }">
-                        <span>{{ data.displayName }}</span>
-                    </template>
-                </Column>
-
-                <Column field="Action" header="Action">
-                    <template #body="{ data }">
-                        <Button @click="editData(data)" severity="secondary" class="btn-sm">
-                            <fa-pen-to-square></fa-pen-to-square>Edit
-                        </Button>
-                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
-                            <trash-can></trash-can>Delete
-                        </Button>
-                    </template>
-                </Column>
-
-            </DataTable>
         </div>
     </div>
     <div class="flex justify-between">

@@ -2,6 +2,27 @@
     <div>
         <div>Workflow Step</div>
         <div>
+            <DataTable :value="workflowSteps">
+                <template #empty>
+                    No Steps Configured
+                </template>
+                <Column field="displayName" header="Step Display Name"></Column>
+                <Column field="stepId" header="Step Name">
+                    <template #body="{ data }">
+                        {{ stepName(data.stepId) }}
+                    </template>
+                </Column>
+                <Column field="Action" header="Action">
+                    <template #body="{ data }">
+                        <Button @click="editData(data)" severity="secondary" class="btn-sm">
+                            <fa-pen-to-square></fa-pen-to-square>Edit
+                        </Button>
+                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
+                            <trash-can></trash-can>Delete
+                        </Button>
+                    </template>
+                </Column>
+            </DataTable>
             <div>
                 <div class="form-grid">
 
@@ -147,24 +168,6 @@
             </Button>
 
         </div>
-        <DataTable :value="workflowSteps">
-            <Column field="displayName" header="Step Display Name"></Column>
-            <Column field="stepId" header="Step Name">
-                <template #body="{ data }">
-                    {{ stepName(data.stepId) }}
-                </template>
-            </Column>
-            <Column field="Action" header="Action">
-                <template #body="{ data }">
-                    <Button @click="editData(data)" severity="secondary" class="btn-sm">
-                        <fa-pen-to-square></fa-pen-to-square>Edit
-                    </Button>
-                    <Button @click="deleteData(data)" severity="danger" class="btn-sm">
-                        <trash-can></trash-can>Delete
-                    </Button>
-                </template>
-            </Column>
-        </DataTable>
     </div>
     <div class="flex justify-between">
         <Button @click="previousWorkflowStep" class="btn btn-secondary">
@@ -311,7 +314,7 @@ const submitWorkflowStep = async () => {
 const deleteData = (data) => {
 
     console.log(data);
-    
+
     // Automatically generated
     new MQL()
         .useManagementServer()

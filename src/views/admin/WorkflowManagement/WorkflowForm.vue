@@ -108,6 +108,17 @@
                 </div>
             </div>
 
+            <div v-if="!workflowData.workflowId" class="col-span-2">
+                <div class="fm-group">
+                    <div class="fm-label">Use a Workflow Template?</div>
+                    <div class="fm-inner">
+                        <Dropdown v-model="workflowTemplateId" :options="workflowTemplates"
+                            option-value="workflowTemplateId" option-label="workflowTemplateName"
+                            placeholder="Select a Template" :disabled="workflowData.workflowId" />
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -132,6 +143,7 @@ import { login } from '@/store/modules/login.js'
 const loginStore = login();
 
 const organizations = ref([]);
+const workflowTemplates = ref([]);
 const entities = ref([]);
 const workflowData = ref({
     data1: null,
@@ -141,6 +153,8 @@ const workflowData = ref({
     data5: null,
     data6: null,
 })
+
+const workflowTemplateId = ref(0)
 
 
 
@@ -245,11 +259,39 @@ const fetchWorkflowData = () => {
         })
 }
 
+
+const makeWorkflowFromTemplate = () => {
+
+    return new Promise((resolve, reject) => {
+        // Automatically generated
+        new MQL()
+            .useManagementServer()
+            .setActivity("r.[MakeWorkflowFromTemplate]")
+            .setData({ "entityId": workflowData.value.entityId, "loginId": loginStore.loginId, "organizationId": workflowData.value.organizationId, "roleId": loginStore.role.roleId, "workflowCode": workflowData.value.workflowCode, "workflowMasterTemplateId": workflowTemplateId.value, "workflowName": workflowData.value.workflowName })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("MakeWorkflowFromTemplate", true)
+                if (rs.isValid("MakeWorkflowFromTemplate")) {
+                    resolve()
+                } else {
+                    rs.showErrorToast("MakeWorkflowFromTemplate" )
+                }
+            })
+    })
+
+
+}
+
 const submitWorkflow = async () => {
+
     if (workflowData.value.workflowId) {
         await updateWorkflowMaster();
     } else {
-        await createWorkflowMaster();
+        if (workflowTemplateId.value != 0) {
+            await makeWorkflowFromTemplate()
+        } else {
+            await createWorkflowMaster();
+        }
     }
     emits('nextTab')
 }
@@ -264,10 +306,30 @@ const closeForm = () => {
 }
 
 
+const fetchWorkflowTemplates = () => {
+    new MQL()
+        .useManagementServer()
+        .setActivity("r.[query_2mEReQDLrgzMelGutYwOe7DBb8s]")
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("query_2mEReQDLrgzMelGutYwOe7DBb8s", true)
+            if (rs.isValid("query_2mEReQDLrgzMelGutYwOe7DBb8s")) {
+                workflowTemplates.value = res
+                workflowTemplates.value.unshift({
+                    'workflowTemplateId': 0,
+                    'workflowTemplateName': 'Manual'
+                })
+            } else {
+                rs.showErrorToast("query_2mEReQDLrgzMelGutYwOe7DBb8s")
+            }
+        })
+}
+
+
 onMounted(() => {
     FetchOrganizations();
     FetchEntities();
-
+    fetchWorkflowTemplates();
     if (workflowId) {
         fetchWorkflowData()
     }
