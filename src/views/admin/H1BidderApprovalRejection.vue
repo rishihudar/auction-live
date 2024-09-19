@@ -140,20 +140,21 @@ import { login } from "../../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
 import Dropdown from "primevue/dropdown";
 // import faEye from '../../../assets/icons/eye.svg';
-
+const loginStore = login();
 let isSubmitButtonDisabled=ref(false);
 const emit = defineEmits(['close']);
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const props = defineProps({
   auctionId: Number,
+  auctionCode: String,
 });
 
 const showModal = ref(false);
 const rejectionReason = ref('');
 const modalData = ref(null);
 let auctionId = ref(props.auctionId);
-const loginStore = login();
-const { organizationId, entityId, loginId } = storeToRefs(loginStore);
+
+const { organizationId, entityId, loginId ,currentRole,auctionCode} = storeToRefs(loginStore);
 let tick = ref();
 const resultList = reactive([]);
 const selectedRows = ref([]);
@@ -229,6 +230,7 @@ function submitRejection() {
       (option) => option.label === 'Reject'
     ).value;
   }
+  sendRejectionEmailH1Bidders();
   updateH1RejectionReason();
 
   closeModal(); 
@@ -353,7 +355,7 @@ function submitForm() {
           disabled.value = true;
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
-          sendEmailH1Bidders();
+         // sendEmailH1Bidders();
           sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
@@ -363,7 +365,23 @@ function submitForm() {
     toaster.error("Invalid Number of Hours");
   }
 }
-
+function sendRejectionEmailH1Bidders(){
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendEmailH1RejectedBidders]")
+			.setData({loginId:loginStore.loginId,roleName:loginStore.currentRole.roleName,auctionCode:auctionCode.value}) 
+      //setData({auctionId:auctionId.value})
+			//.setHeaders({})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendEmailH1RejectedBidders",true)
+			if (rs.isValid("SendEmailH1RejectedBidders")) {
+			} else
+			 { 
+			rs.showErrorToast("SendEmailH1RejectedBidders")
+			}
+			})
+    }
 function sendEmailH1Bidders() {
 
           new MQL()
@@ -387,11 +405,12 @@ function sendSmsH1Bidders() {
           new MQL()
           .useNotificationServer()
 			.setActivity("r.[FetchDetailsForH1Rejection]")
-			.setData({approvalId:approvalId.value,auctionId:auctionId.value})
+			.setData({auctionId:auctionId.value})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchDetailsForH1Rejection",true)
 			if (rs.isValid("FetchDetailsForH1Rejection")) {
+        console.log("FetchDetailsForH1Rejection",res.result);
 			} else
 			 { 
 			rs.showErrorToast("FetchDetailsForH1Rejection")
