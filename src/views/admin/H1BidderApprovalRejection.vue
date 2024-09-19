@@ -216,7 +216,7 @@ function submitRejection() {
     return;
   }
 
-  console.log("rejectionReason.valueis "+rejectionReason.value.length)
+  // console.log("rejectionReason.valueis "+rejectionReason.value.length)
 
   if(rejectionReason.value.length <5 || rejectionReason.value.length > 100) {
     toaster.error('Minimum 5 characters and Maximum 100 characters only allowed');
