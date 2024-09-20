@@ -81,7 +81,7 @@
       </DataTable>
     </div>
    
-    <Dialog v-model:visible="showModal" modal header="Reason for Rejection" :style="{ width: '40rem' }">
+    <Dialog v-model:visible="showModal" modal header="Reason for Rejection" :style="{ width: '40rem' }" :closable="false">
       <div class="form-group">
         <InputText
           v-model="rejectionReason"
@@ -213,6 +213,13 @@ function submitRejection() {
   if (!rejectionReason.value.trim()) {
     // If no rejection reason, show an error or keep the modal open
     toaster.error('Please provide a reason for rejection.');
+    return;
+  }
+
+  // console.log("rejectionReason.valueis "+rejectionReason.value.length)
+
+  if(rejectionReason.value.length <5 || rejectionReason.value.length > 100) {
+    toaster.error('Minimum 5 characters and Maximum 100 characters only allowed');
     return;
   }
 
