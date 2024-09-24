@@ -75,6 +75,7 @@ import { onMounted, ref } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
 import InputText from 'primevue/inputtext';
 import workflowWizard from './WorkflowWizard.vue';
+import { watch } from "vue";
 
 const perPage = ref(10);
 const totalRows = ref(0);
@@ -142,6 +143,12 @@ const closeForm = () => {
     workflowId.value = null;
     changeFlag(true);
 }
+
+watch(flag,(flagvalue) => {
+    if (flagvalue) {
+        fetchWorkflows()
+    }
+})
 
 const editData = (data) => {
     workflowId.value = data.workflowId;

@@ -2,38 +2,69 @@
     <div>
         <div>Workflow Step Order</div>
         <div>
-            <DataTable :value="workflowStepOrders">
+            <!-- <DataTable :value="workflowStepOrders">
                 <template #empty>
                     No Steps Order Configured
                 </template>
-                <Column field="fromStepdisplayName" header="From Step">
-                    <template #body="{ data }">
+<Column field="fromStepdisplayName" header="From Step">
+    <template #body="{ data }">
                         {{ stepName(data.fromStep) }}
                     </template>
-                </Column>
-                <Column field="fromStatusdisplayName" header="From Status">
-                    <template #body="{ data }">
+</Column>
+<Column field="fromStatusdisplayName" header="From Status">
+    <template #body="{ data }">
                         {{ statusName(data.fromStatus) }}
                     </template>
-                </Column>
-                <Column field="toStepdisplayName" header="To Step">
-                    <template #body="{ data }">
+</Column>
+<Column field="toStepdisplayName" header="To Step">
+    <template #body="{ data }">
                         {{ stepName(data.toStep) }}
                     </template>
-                </Column>
-                <Column field="toStepdisplayName" header="To Status">
-                    <template #body="{ data }">
+</Column>
+<Column field="toStepdisplayName" header="To Status">
+    <template #body="{ data }">
                         {{ statusName(data.toStatus) }}
                     </template>
-                </Column>
-                <Column field="Action" header="Action">
-                    <template #body="{ data }">
+</Column>
+<Column field="Action" header="Action">
+    <template #body="{ data }">
                         <Button @click="deleteData(data)" severity="danger" class="btn-sm">
                             <trash-can></trash-can>Delete
                         </Button>
                     </template>
-                </Column>
-            </DataTable>
+</Column>
+</DataTable> -->
+            <DataView :value="workflowStepOrders">
+
+                <template #list="data">
+                    <div v-for="(item) in data.items" :key="item.workflowStepOrderId">
+                        <!-- {{ item }} -->
+                        <div class="flex flex-row justify-between">
+                            <div class="card max-w-min">
+                                <p class="text-lg font-semibold text-gray-500">
+                                    {{ stepName(item.fromStep) }}
+                                </p>
+                                <p class="mt-1 text-base font-light text-gray-700">
+                                    {{ statusName(item.fromStatus) }}
+                                </p>
+                            </div>
+                                <arrow-right></arrow-right>
+                            <div class="card max-w-min">
+                                <p class="text-lg font-semibold text-gray-500">
+                                    {{ stepName(item.toStep) }}
+                                </p>
+                                <p class="mt-1 text-base font-light text-gray-700">
+                                    {{ statusName(item.toStatus) }}
+                                </p>
+                            </div>
+                            <Button @click="deleteData(item)" severity="danger" class="btn-sm">
+                                <trash-can></trash-can>Delete
+                            </Button>
+                        </div>
+
+                    </div>
+                </template>
+            </DataView>
             <div class="form-grid">
                 <div class="col-span-6">
                     <div class="fm-group">
@@ -100,6 +131,8 @@ import { onMounted, ref } from 'vue'
 import { login } from '@/store/modules/login.js'
 import MQL from '@/plugins/mql.js'
 import trashCan from "../../../../assets/icons/trash-can.svg";
+import arrowRight from "../../../../assets/icons/arrow-right.svg"
+import DataView from "primevue/dataview"
 
 
 

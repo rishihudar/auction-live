@@ -139,6 +139,9 @@ import Dropdown from 'primevue/dropdown'
 import MQL from '@/plugins/mql.js'
 import { login } from '@/store/modules/login.js'
 
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 })
+
 
 const loginStore = login();
 
@@ -289,6 +292,8 @@ const submitWorkflow = async () => {
     } else {
         if (workflowTemplateId.value != 0) {
             await makeWorkflowFromTemplate()
+            toaster.success('Workflow created form Template')
+            closeForm()
         } else {
             await createWorkflowMaster();
         }
