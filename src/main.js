@@ -45,9 +45,13 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import Vuelidate from 'vuelidate';
 import JsonExcel from "vue-json-excel3";
+import Tooltip from 'primevue/tooltip';
+
 
 const piniaStore = createPinia()
-const isProduction = process.env.NODE_ENV === 'production'
+//const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = import.meta.env.MODE === 'production';
+
 piniaStore.use(piniaPluginPersistedstate)
 
 var vm = createApp({
@@ -107,6 +111,7 @@ vm.use(Toaster, {
   position: "top-right",
   duration: 3000
 })
+vm.directive('tooltip', Tooltip);
 
 // var coreURL = '/core-server'
 // var loginURL = '/login-server'

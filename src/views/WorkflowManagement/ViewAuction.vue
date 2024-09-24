@@ -2,7 +2,7 @@
     <div>
         <h6>{{ workflowStepData.displayName }}</h6>
         <AuctionPreview v-if="workflowStepDetailsId && auctionId" :workflowStepDetailsId="workflowStepDetailsId"
-            :auctionId="auctionId" :config="workflowStepData.data1" />
+            :auctionId="auctionId" :vsAuctionCode="vsAuctionCode" :config="workflowStepData.data1" />
     </div>
     <div>
         <div v-if="showAction" class="btn-wrapper centered mt-5">
@@ -26,7 +26,7 @@
         </Dialog>
     </div>
     <Dialog v-model:visible="auctionPublish" modal header="Auction Publish" :style="{ width: '25rem' }">
-        <p>Auction <strong>{{ auctionId }}</strong> Approved Successfully.</p>
+        <p>Auction <strong>{{ vsAuctionCode }}</strong> Approved Successfully.</p>
         <p>Do you want to publish this auction?</p>
         <p class="bg-yellow-100 rounded-2xl border-2 border-yellow-500 border-dashed p-2 my-2 text-sm "><strong>NOTE:</strong>The following action will change the role to <strong>PUBLISHER</strong></p>
         <Button @click="redirectToPublish">Ok</Button>
@@ -56,7 +56,7 @@ const logins = ref([])
 const modalItem = ref({})
 const auctionId = ref()
 const auctionPublish = ref(false)
-
+const vsAuctionCode = ref()
 const { workflowStepDetailsId } = defineProps({
     // Basic prop definition
     workflowStepDetailsId: {
@@ -190,6 +190,8 @@ function fetchWorkflowStepData() {
                     workflowStepData.value = res[0]
                     workflowStepData.value.data1 = JSON.parse(workflowStepData.value.data1)
                     auctionId.value = workflowStepData.value.auctionId
+                    vsAuctionCode.value = workflowStepData.value.vsAuctionCode
+                    console.log(workflowStepData.value, "workflowStepData")
                     // AuctionStore.setLastInsertedAuctionId( workflowStepData.value.auctionId)
                     resolve()
                 } else {
