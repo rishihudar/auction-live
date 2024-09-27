@@ -559,16 +559,16 @@ function FetchOrganizationId(){
 		// Automatically generated
 			new MQL()
             .useCoreServer()
-			.setActivity("o.[FetchOrganizationDetails]")
+			.setActivity("o.[FetchOrganizationsforUserManagement]")
 			.setData()
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("FetchOrganizationDetails",true)
-			if (rs.isValid("FetchOrganizationDetails")) {
+			let res = rs.getActivity("FetchOrganizationsforUserManagement",true)
+			if (rs.isValid("FetchOrganizationsforUserManagement")) {
                 organizationMaster.value = res.result
 			} else
 			 { 
-			rs.showErrorToast("FetchOrganizationDetails")
+			rs.showErrorToast("FetchOrganizationsforUserManagement")
 			}
 			})
 			
