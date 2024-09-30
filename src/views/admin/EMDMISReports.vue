@@ -58,6 +58,7 @@ const emdReportFields = {
 
 function FetchConcludedAuctionsEMDReports() {
     // Check if both dates are selected and end date is not null
+    
     if (dates.value[0] && dates.value[1] !== null) {
         new MQL()
             .useManagementServer()
