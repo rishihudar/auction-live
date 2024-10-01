@@ -838,6 +838,12 @@ const router = createRouter({
         icon: "mdi mdi-information-variant",
       },
     },
+    {
+      path: "/global-mis-report",
+      name: "GlobalMISReport",
+      component: loadAdminView("GlobalMISReport"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_GLOBAL_SUPERADMIN']},
+    },
 
   ],
 });
