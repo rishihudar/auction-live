@@ -226,7 +226,7 @@ const router = createRouter({
       path: "/UserDashboard",
       name: "UserDashboard",
       component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN','ROLE_PUBLISHER','ROLE_GLOBAL_SUPERADMIN']},
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN','ROLE_PUBLISHER','ROLE_GLOBAL_SUPERADMIN','ROLE_DEVELOPER']},
     },
     {
       path: "/add-Dashboard",
