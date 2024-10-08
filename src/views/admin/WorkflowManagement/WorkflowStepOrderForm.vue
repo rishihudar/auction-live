@@ -1,71 +1,19 @@
 <template>
     <div>
         <div>Workflow Step Order</div>
-        <div>
-            <!-- <DataTable :value="workflowStepOrders">
-                <template #empty>
-                    No Steps Order Configured
-                </template>
-<Column field="fromStepdisplayName" header="From Step">
-    <template #body="{ data }">
-                        {{ stepName(data.fromStep) }}
-                    </template>
-</Column>
-<Column field="fromStatusdisplayName" header="From Status">
-    <template #body="{ data }">
-                        {{ statusName(data.fromStatus) }}
-                    </template>
-</Column>
-<Column field="toStepdisplayName" header="To Step">
-    <template #body="{ data }">
-                        {{ stepName(data.toStep) }}
-                    </template>
-</Column>
-<Column field="toStepdisplayName" header="To Status">
-    <template #body="{ data }">
-                        {{ statusName(data.toStatus) }}
-                    </template>
-</Column>
-<Column field="Action" header="Action">
-    <template #body="{ data }">
-                        <Button @click="deleteData(data)" severity="danger" class="btn-sm">
-                            <trash-can></trash-can>Delete
-                        </Button>
-                    </template>
-</Column>
-</DataTable> -->
-            <DataView :value="workflowStepOrders">
+        <div class="form-grid">
+            <div class="col-span-8 h-80 w-auto">
+                <VueFlow v-if="nodes.length > 0 && edges.length > 0" :nodes="nodes" :edges="edges"
+                    :default-viewport="{ zoom: 1.5 }" class="border rounded-md">
 
-                <template #list="data">
-                    <div v-for="(item) in data.items" :key="item.workflowStepOrderId">
-                        <!-- {{ item }} -->
-                        <div class="flex flex-row justify-between">
-                            <div class="card max-w-min">
-                                <p class="text-lg font-semibold text-gray-500">
-                                    {{ stepName(item.fromStep) }}
-                                </p>
-                                <p class="mt-1 text-base font-light text-gray-700">
-                                    {{ statusName(item.fromStatus) }}
-                                </p>
-                            </div>
-                                <arrow-right></arrow-right>
-                            <div class="card max-w-min">
-                                <p class="text-lg font-semibold text-gray-500">
-                                    {{ stepName(item.toStep) }}
-                                </p>
-                                <p class="mt-1 text-base font-light text-gray-700">
-                                    {{ statusName(item.toStatus) }}
-                                </p>
-                            </div>
-                            <Button @click="deleteData(item)" severity="danger" class="btn-sm">
-                                <trash-can></trash-can>Delete
-                            </Button>
-                        </div>
+                    <Background pattern-color="#aaa" :gap="16" />
 
-                    </div>
-                </template>
-            </DataView>
-            <div class="form-grid">
+                    <!-- <MiniMap /> -->
+                    <Controls position="top-left"></Controls>
+
+                </VueFlow>
+            </div>
+            <div class="col-span-4 form-grid">
                 <div class="col-span-6">
                     <div class="fm-group">
                         <div class="fm-label">From Step</div>
@@ -109,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <Button @click="insertworkflowStepOrder">Add</Button>
+                <Button class="col-span-12" @click="insertworkflowStepOrder">Add</Button>
 
             </div>
         </div>
@@ -122,6 +70,17 @@
             Save & Next
         </Button>
     </div>
+    <Dialog :closable="false" :style="{ width: '50rem' }" modal header="Delete Connection" v-model:visible="visible"
+        :draggable="false">
+        Would you like to delete the order from <br />
+        <strong>
+            {{ edge.sourceNode.data.label }} -> {{ edge.targetNode.data.label }} ({{ edge.data.label }})
+        </strong>
+        <div class="flex justify-between mt-1">
+            <Button @click="cancelModal">Cancel</Button>
+            <Button severity="danger" @click="deleteStepOrder">Delete</Button>
+        </div>
+    </Dialog>
 </template>
 
 <script setup>
@@ -133,6 +92,65 @@ import MQL from '@/plugins/mql.js'
 import trashCan from "../../../../assets/icons/trash-can.svg";
 import arrowRight from "../../../../assets/icons/arrow-right.svg"
 import DataView from "primevue/dataview"
+
+import { VueFlow, useVueFlow, MarkerType } from '@vue-flow/core'
+import { Background } from '@vue-flow/background'
+import { Controls } from '@vue-flow/controls'
+import { MiniMap } from '@vue-flow/minimap'
+import { createToaster } from '@meforma/vue-toaster'
+
+
+const toaster = createToaster()
+
+const edge = ref(null)
+
+const visible = ref(false)
+
+const cancelModal = () => {
+    visible.value = false
+    edge.value = null
+}
+
+
+const deleteStepOrder = async () => {
+    visible.value = false
+    console.log(edge.value.id);
+    deleteWorkflowStepOrder(edge.value.id)
+    edge.value = null
+    await fetchWorkflowStepOrder()
+    toaster.success('Flow Deleted Successfully')
+
+}
+
+
+const { onInit, onConnect, addEdges, onEdgeClick } = useVueFlow()
+
+
+onEdgeClick(async (e) => {
+    visible.value = true
+    console.log(e.edge);
+    edge.value = e.edge
+
+})
+
+
+
+onInit((vueFlowInstance) => {
+    // instance is the same as the return of `useVueFlow`
+    vueFlowInstance.fitView()
+})
+
+
+onConnect((connection) => {
+    addEdges(connection)
+})
+
+
+const nodes = ref([])
+
+const edges = ref([])
+
+
 
 
 
@@ -170,20 +188,43 @@ const deleteData = (data) => {
 //TODO: fetch workflowsteps
 
 const fetchWorkflowSteps = () => {
-    // Automatically generated
-    new MQL()
-        .useManagementServer()
-        .setActivity("r.[query_2kauHSwfx6s4TLIKFed7d5oRsgO]")
-        .setData({ 'workflowId': workflowId })
-        .fetch()
-        .then(rs => {
-            let res = rs.getActivity("query_2kauHSwfx6s4TLIKFed7d5oRsgO", true)
-            if (rs.isValid("query_2kauHSwfx6s4TLIKFed7d5oRsgO")) {
-                workflowsSteps.value = res;
-            } else {
-                rs.showErrorToast("query_2kauHSwfx6s4TLIKFed7d5oRsgO")
-            }
-        })
+    return new Promise((resolve) => {
+        // Automatically generated
+        new MQL()
+            .useManagementServer()
+            .setActivity("r.[query_2kauHSwfx6s4TLIKFed7d5oRsgO]")
+            .setData({ 'workflowId': workflowId })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("query_2kauHSwfx6s4TLIKFed7d5oRsgO", true)
+                if (rs.isValid("query_2kauHSwfx6s4TLIKFed7d5oRsgO")) {
+                    workflowsSteps.value = res
+                    nodes.value = []
+                    let positionX = 50
+                    let positionY = 50
+                    for (let index = 0; index < res.length; index++) {
+                        let element = res[index];
+                        let node = {
+                            id: String(element.workflowStepId),
+                            data: { label: element.displayName },
+                            position: { x: positionX + (200 * index), y: positionY + (100 * index) },
+                            class: 'light',
+                        }
+                        if (element.startStep == 1) {
+                            node.type = 'input'
+                        }
+                        if (element.endStep == 1) {
+                            node.type = 'output'
+                        }
+                        nodes.value.push(node)
+                    }
+                    resolve()
+                } else {
+                    rs.showErrorToast("query_2kauHSwfx6s4TLIKFed7d5oRsgO")
+                }
+            })
+    })
+
 }
 
 
@@ -192,20 +233,24 @@ const fetchWorkflowSteps = () => {
 
 
 const fetchStatues = () => {
-    // Automatically generated
-    new MQL()
-        .useManagementServer()
-        .setActivity("r.[query_2kyQwSEKcUNG7zNUhNBIv0I75ii]")
-        .fetch()
-        .then(rs => {
-            let res = rs.getActivity("query_2kyQwSEKcUNG7zNUhNBIv0I75ii", true)
-            if (rs.isValid("query_2kyQwSEKcUNG7zNUhNBIv0I75ii")) {
-                console.log(res);
-                statuses.value = res.map((r) => ({ ...r, statusId: Number(r.statusId) }))
-            } else {
-                rs.showErrorToast("query_2kyQwSEKcUNG7zNUhNBIv0I75ii")
-            }
-        })
+    return new Promise((resolve, reject) => {
+
+        // Automatically generated
+        new MQL()
+            .useManagementServer()
+            .setActivity("r.[query_2kyQwSEKcUNG7zNUhNBIv0I75ii]")
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("query_2kyQwSEKcUNG7zNUhNBIv0I75ii", true)
+                if (rs.isValid("query_2kyQwSEKcUNG7zNUhNBIv0I75ii")) {
+                    console.log(res);
+                    statuses.value = res.map((r) => ({ ...r, statusId: Number(r.statusId) }))
+                    resolve()
+                } else {
+                    rs.showErrorToast("query_2kyQwSEKcUNG7zNUhNBIv0I75ii")
+                }
+            })
+    })
 }
 
 
@@ -220,10 +265,11 @@ const insertworkflowStepOrder = () => {
         .setActivity("r.[InsertWorkflowStepOrder]")
         .setData({ ...workflowStepOrderData.value, 'userId': loginStore.loginId, 'roleId': loginStore.role.roleId, 'organizationId': loginStore.organizationId })
         .fetch()
-        .then(rs => {
+        .then(async (rs) => {
             let res = rs.getActivity("InsertWorkflowStepOrder", true)
             if (rs.isValid("InsertWorkflowStepOrder")) {
-                fetchWorkflowStepOrder()
+                await fetchWorkflowStepOrder()
+                await fetchWorkflowSteps()
                 workflowStepOrderData.value = {
                     'workflowId': workflowId
                 }
@@ -243,10 +289,10 @@ const deleteWorkflowStepOrder = (id) => {
         .setActivity("r.[DeleteWorkflowStepOrder]")
         .setData({ 'workflowStepOrderId': id })
         .fetch()
-        .then(rs => {
+        .then(async (rs) => {
             let res = rs.getActivity("DeleteWorkflowStepOrder", true)
             if (rs.isValid("DeleteWorkflowStepOrder")) {
-                fetchWorkflowStepOrder()
+                await fetchWorkflowStepOrder()
             } else {
                 rs.showErrorToast("DeleteWorkflowStepOrder")
             }
@@ -256,21 +302,37 @@ const deleteWorkflowStepOrder = (id) => {
 
 
 const fetchWorkflowStepOrder = () => {
-    // Automatically generated
-    new MQL()
-        .useManagementServer()
-        .setActivity("r.[query_2kYHSfWUs7V7YzzaXQDHENCsmak]")
-        .setData({ 'workflowId': workflowId })
-        .fetch()
-        .then(rs => {
-            let res = rs.getActivity("query_2kYHSfWUs7V7YzzaXQDHENCsmak", true)
-            if (rs.isValid("query_2kYHSfWUs7V7YzzaXQDHENCsmak")) {
-                console.log(res)
-                workflowStepOrders.value = res
-            } else {
-                rs.showErrorToast("query_2kYHSfWUs7V7YzzaXQDHENCsmak")
-            }
-        })
+    return new Promise((resolve) => {
+        // Automatically generated
+        new MQL()
+            .useManagementServer()
+            .setActivity("r.[query_2kYHSfWUs7V7YzzaXQDHENCsmak]")
+            .setData({ 'workflowId': workflowId })
+            .fetch()
+            .then(rs => {
+                let res = rs.getActivity("query_2kYHSfWUs7V7YzzaXQDHENCsmak", true)
+                if (rs.isValid("query_2kYHSfWUs7V7YzzaXQDHENCsmak")) {
+                    workflowStepOrders.value = res
+                    edges.value = []
+                    edges.value = workflowStepOrders.value.map((workflowsteporder) => (
+                        {
+                            id: String(workflowsteporder.workflowStepOrderId),
+                            source: String(workflowsteporder.fromStep),
+                            target: String(workflowsteporder.toStep),
+                            label: `${statusName(workflowsteporder.toStatus)} ❌`,
+                            data: { label: `${statusName(workflowsteporder.toStatus)}` },
+                            markerEnd: MarkerType.ArrowClosed,
+                            animated: true,
+                            // style: { stroke: 'Aquamarine' },
+                            type: 'smoothstep',
+                            labelBgStyle: { fill: 'lightgreen' }
+                        }))
+                    resolve()
+                } else {
+                    rs.showErrorToast("query_2kYHSfWUs7V7YzzaXQDHENCsmak")
+                }
+            })
+    })
 }
 
 const statuses = ref([])
@@ -283,9 +345,21 @@ const prevCallback = () => {
     emits('prevTab')
 }
 
-onMounted(() => {
-    fetchWorkflowSteps()
-    fetchStatues()
-    fetchWorkflowStepOrder()
+
+onMounted(async () => {
+    await fetchWorkflowSteps()
+    await fetchStatues()
+    await fetchWorkflowStepOrder()
 })
 </script>
+
+
+<style>
+/* import the necessary styles for Vue Flow to work */
+@import '@vue-flow/core/dist/style.css';
+
+/* import the default theme, this is optional but generally recommended */
+@import '@vue-flow/core/dist/theme-default.css';
+
+@import '@vue-flow/controls/dist/style.css';
+</style>
