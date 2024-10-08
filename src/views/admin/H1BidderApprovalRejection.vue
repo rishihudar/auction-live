@@ -61,7 +61,9 @@
 
           <template #body="rowData" v-else>
             {{ rowData.data.ApprovalStatus }}
-           
+            <i class="pi pi-info-circle" v-if="rowData.data.ApprovalStatus === 'Reject'"
+            v-tooltip.top="rowData.data.rejectionReason"
+            ></i>
             <!-- <div class="card flex flex-wrap justify-content-center gap-2">
             
 
