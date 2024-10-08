@@ -37,7 +37,6 @@ import { storeToRefs } from 'pinia';
 
 const cardStore = useCardStore()
 const { cardId } = storeToRefs(cardStore)
-
 const loginStore = login();
 const userRole = ref();
 const cardsArray = ref([]);

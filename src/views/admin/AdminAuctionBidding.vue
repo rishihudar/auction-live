@@ -1,9 +1,11 @@
 <template>
+     
     <div class="content-holder-full content-auction-bidding" style="padding: 0;">
+        
         <div class="h-screen grid grid-cols-[1fr_320px]">
             <div class="relative py-5 px-8 bg-slate-100">
                 <!-- <Toast/> -->
-                <ConfirmDialog class="modal-confirm modal-confirm-danger" :closable="false"></ConfirmDialog>
+               
                 <div class="mb-5 flex items-start justify-between">
                     <div class="text">
                         <div class="text-2xl font-bold text-[var(--neutral-600)]">Auction Bidding</div>
@@ -15,7 +17,13 @@
                         <div class="text-sm text-green-700">Server Time</div>
                         <div class="text-2xl font-medium text-green-700">{{ latestTime }}</div>
                     </div>
-                    <Button style="padding-inline: 30px;" severity="danger" @click="leaveAuction()">Leave</Button>
+                    <!-- <Button style="padding-inline: 30px;" severity="danger" @click="leaveAuction()">Leave</Button> -->
+                    <Button
+            style="padding-inline: 30px"
+            severity="danger"
+            @click="leaveAuction()"
+            >Leave</Button
+          >
                 </div>
 
                 <!-- Auction Details -->
@@ -208,6 +216,30 @@
                 <!-- <Button label="Save" outlined severity="secondary" @click=" " autofocus /> -->
             </template>
         </Dialog>
+
+        <Dialog
+      v-model:visible="leaveAuctionVisible"
+      modal
+      header="Are you sure?"
+      class="modal-confirm modal-confirm-danger"
+      :closable="false"
+    >
+      <template #default>
+        Are you sure you want to leave
+        <strong>{{ auctionStore.auctionObj.vsAuctionCode }}</strong
+        >?
+      </template>
+      <template #footer>
+        <Button
+          severity="grey"
+          class="btn-grey"
+          @click="leaveAuctionVisible = false"
+          >Cancel</Button
+        >
+        <Button severity="danger" @click="close">Leave</Button>
+      </template>
+    </Dialog>
+
     </div>
 </template>
 
@@ -224,6 +256,10 @@ import moment from 'moment';
 import axios from 'axios';
 import MQL from '../../plugins/mql.js';
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const leaveAuctionVisible = ref(false);
 const timeLeft = ref(null)
 const auctionStore = useAuctionStore()
 const confirm = useConfirm();
@@ -282,24 +318,43 @@ function currencyFormat(value) {
 }
 
 function leaveAuction() {
-    //router.push("BidderCurrentAuctions")
-    confirm1.require({
-        // message: 'Are you sure you want to leave?',
-        // header: 'Confirmation',
-        message: 'You will not be able to participate in the bidding.',
-        header: 'Are you sure?',
-        // icon: 'pi pi-exclamation-triangle',
-        rejectClass: 'btn-grey',
-        rejectLabel: 'Cancel',
-        acceptClass: 'btn-danger',
-        acceptLabel: 'Leave',
-        accept: () => {
-            window.close()
-        },
-        reject: () => {
-        }
-    });
+    // //router.push("BidderCurrentAuctions")
+    // confirm1.require({
+    //     // message: 'Are you sure you want to leave?',
+    //     // header: 'Confirmation',
+    //     message: 'You will not be able to participate in the bidding.',
+    //     header: 'Are you sure?',
+    //     // icon: 'pi pi-exclamation-triangle',
+    //     rejectClass: 'btn-grey',
+    //     rejectLabel: 'Cancel',
+    //     acceptClass: 'btn-danger',
+    //     acceptLabel: 'Leave',
+    //     accept: () => {
+    //         window.close()
+    //     },
+    //     reject: () => {
+    //     }
+    // });
+
+    leaveAuctionVisible.value = true;
 }
+
+function close() {
+//   console.log("Auction Leaving Log inside close fuction");
+  // Auction Leaving Log
+//   auctionLeavingLog(); 
+//   console.log("Auction Leaving Log after auctionLeavingLog fuction");
+  //window.close();
+  goBack();
+}
+
+const goBack = () => {
+  // Navigates one step back in the browser history
+  // router.go(-1); 
+  clearInterval(timeInterval.value)
+  wsConnection.value.close(1000);
+  router.push("/current-auction")
+};
 
 function checkH1(incomingBid) {
     // //console.log(incomingBid.bidderId, loginStore.loginId);
@@ -746,10 +801,10 @@ const makeMultiplieries = () => {
         });
     }
 }
-
+const timeInterval = ref(null)
 onBeforeMount(async () => {
     await fetchAuctionDetails()
-    setInterval(() => {
+    timeInterval.value = setInterval(() => {
         syncTime()
         updateAuctionTimeLeft()
     }, 1000);

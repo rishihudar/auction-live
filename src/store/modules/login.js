@@ -88,8 +88,12 @@ export const login = defineStore("login", {
             if (rs.isValid("UserLogin")) {
               //console.log("res.result", res.result);
               //console.log(res.result.roles);
+              if( res.result.roles==null || res.result.roles.length==0 ){
+                toaster.error("Access Denied: No roles assigned to your account.");
+                return;
+              }
               if (res.result.roles.findIndex((r) => r.roleCode == 'ROLE_BIDDER') > -1) {
-                //console.log(res.result.roles);
+               //console.log(res.result.roles);
                 reject({
                   'error': "BIDDER_LOGIN"
                 })

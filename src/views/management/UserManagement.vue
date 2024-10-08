@@ -171,9 +171,9 @@
                                 <Dropdown v-model="userDetails.entityId" option-value="entityId" :options="entityMaster" optionLabel="entityName" placeholder="Select Entity Name" />
                             </div>
                             <div id="fullName-help" class="fm-info">Select your Entity</div>
-                            <div v-if="$v.userDetails.entityId.$error" class="fm-error">
+                            <!-- <div v-if="$v.userDetails.entityId.$error" class="fm-error">
                             {{ $v.userDetails.entityId.$errors[0].$message }}
-                        </div>
+                        </div> -->
                         </div>
                     </div>
                     <div class="col-span-4">
@@ -341,9 +341,9 @@
                                 <Dropdown v-model="userDetails.entityId" option-value="entityId" :options="entityMaster" optionLabel="entityName" placeholder="Select Entity Name" />
                             </div>
                             <div id="fullName-help" class="fm-info">Select your Entity</div>
-                            <div v-if="$v.userDetails.entityId.$error" class="fm-error">
+                            <!-- <div v-if="$v.userDetails.entityId.$error" class="fm-error">
                             {{ $v.userDetails.entityId.$errors[0].$message }}
-                        </div>
+                        </div> -->
                         </div>
                     </div>
                     <div class="col-span-4">
@@ -441,7 +441,7 @@
                         </div>
                     </div>
                     <div class="fm-action">
-                        <Button @click="updateUserData" label="Submit"></Button>
+                        <Button @click="updateUserData" label="F"></Button>
                         <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button>
                     </div>
                 </div>
@@ -559,16 +559,16 @@ function FetchOrganizationId(){
 		// Automatically generated
 			new MQL()
             .useCoreServer()
-			.setActivity("o.[FetchOrganizationDetails]")
+			.setActivity("o.[FetchOrganizationsforUserManagement]")
 			.setData()
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("FetchOrganizationDetails",true)
-			if (rs.isValid("FetchOrganizationDetails")) {
+			let res = rs.getActivity("FetchOrganizationsforUserManagement",true)
+			if (rs.isValid("FetchOrganizationsforUserManagement")) {
                 organizationMaster.value = res.result
 			} else
 			 { 
-			rs.showErrorToast("FetchOrganizationDetails")
+			rs.showErrorToast("FetchOrganizationsforUserManagement")
 			}
 			})
 			
@@ -800,9 +800,9 @@ const rules = computed(() => ({
         districtName: {
             required: helpers.withMessage('District Name is required', required)
         },
-        entityId: {
-            required: helpers.withMessage('Entity Name is required', required)
-        },
+        // entityId: {
+        //     required: helpers.withMessage('Entity Name is required', required)
+        // },
         roleId: {
             required: helpers.withMessage('Role is required', required)
 

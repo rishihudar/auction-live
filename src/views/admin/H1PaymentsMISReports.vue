@@ -33,7 +33,7 @@ import { ref, onMounted } from "vue";
 import MQL from "@/plugins/mql.js";
 import JsonExcel from "vue-json-excel3";
 import Calendar from 'primevue/calendar';
-
+import { login } from "../../store/modules/login.js";
 const currentDate1 = new Date();
 
 const currentDate2 = new Date();
@@ -63,7 +63,7 @@ function FetchConcludedAuctionsH1PaymentsReport() {
         new MQL()
             .useManagementServer()
             .setActivity("r.[FetchConcludedAuctionsH1PaymentsReport]")
-            .setData({ toDate: formatDate(dates.value[0]), fromDate: formatDate(dates.value[1]) })
+            .setData({ entityId: login().loginDetails.entityId, toDate: formatDate(dates.value[0]), fromDate: formatDate(dates.value[1]) })
             .fetch()
             .then(rs => {
                 let res = rs.getActivity("FetchConcludedAuctionsH1PaymentsReport", true)

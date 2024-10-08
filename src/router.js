@@ -1095,6 +1095,12 @@ const router = createRouter({
       },
     },
     {
+      path: "/global-mis-report",
+      name: "GlobalMISReport",
+      component: loadAdminView("GlobalMISReport"),
+      meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_GLOBAL_SUPERADMIN']},
+    },
+    {
       path: "/workflow-management",
       name: "Workflow Management",
       component: loadWorkflowManagementView("WorkflowManagement"),

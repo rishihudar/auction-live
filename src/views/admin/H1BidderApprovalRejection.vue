@@ -106,9 +106,41 @@
         </Button>
       </div>
     </Dialog>
+
+      <!-- Existing content -->
+      
+      <!-- OTP Modal -->
+      <Dialog v-model:visible="otpModalVisible" modal header="Enter OTP" :style="{ width: '30rem' }" :closable="false">
+        <div class="form-group">
+          <InputText
+            v-model="enteredOtp"
+            placeholder="Enter OTP"
+            class="form-control"
+          />
+          <div v-if="otpError" class="error-message">
+            {{ otpError }}
+          </div>
+        </div>
+        <div class="modal-action">
+          <Button 
+            type="button" 
+            label="Verify OTP" 
+            :disabled="isOtpSubmitDisabled"
+            @click="verifyOtp"
+          />
+          <Button 
+            type="button" 
+            label="Cancel" 
+            class="p-button-secondary" 
+            severity="danger"
+            @click="closeOtpModal">
+          </Button>
+        </div>
+      </Dialog>  
     <!-- Your Submit button component -->
     <div class="table-exp-action centered">
       <Button label="Submit" @click="submitForm" :disabled="disabled" />
+      <!-- <Button label="Submit" @click="openOtpModal" :disabled="disabled" /> -->
     </div>
     <div class="table-exp-notice table-exp-notice-danger mt-4 text-center">
       <strong>Note:</strong>
@@ -141,6 +173,8 @@ import { createToaster } from "@meforma/vue-toaster";
 import Dropdown from "primevue/dropdown";
 // import faEye from '../../../assets/icons/eye.svg';
 const loginStore = login();
+
+const isOtpSubmitDisabled = computed(() => !enteredOtp.value.trim());
 let isSubmitButtonDisabled=ref(false);
 const emit = defineEmits(['close']);
 const toaster = createToaster({ position: "top-right", duration: 3000 });
@@ -148,12 +182,15 @@ const props = defineProps({
   auctionId: Number,
   auctionCode: String,
 });
-
+// const rejectionCount = ref(0);  
+const otpModalVisible = ref(false);
+const enteredOtp = ref('');
+const otpError = ref('');
 const showModal = ref(false);
 const rejectionReason = ref('');
 const modalData = ref(null);
 let auctionId = ref(props.auctionId);
-
+const otp=ref ();
 const { organizationId, entityId, loginId ,currentRole,auctionCode} = storeToRefs(loginStore);
 let tick = ref();
 const resultList = reactive([]);
@@ -176,12 +213,20 @@ const isConfirmDisabled = computed(() => {
 let disabled = ref(false);
 const approvalStatusResult = ref({ id: 0, approvalStatus: "" });
 const dropdownOptions = ref([]);
+
+// const rejectionCount = computed(() => {
+//   return resultList.filter(item => item.data.approvalStatusResult === 'Reject').length;
+// });
+
+// console.log(`Number of rejected items: ${rejectionCount}`);
 function openRejectModal(rowData) {
   showModal.value = true;
   modalData.value = rowData;
   roundNumber.value=rowData.data.roundNumber;
 }
-
+function verifyOtp() {
+  validateH1RejectionOtp();
+}
 function closeModal(isCancel = false) {
   // Reset approval status if canceling
   if (isCancel && modalData.value) {
@@ -209,6 +254,7 @@ function updateH1RejectionReason() {
 			})
     }
 function submitRejection() {
+
   // Check if the rejection reason is provided
   if (!rejectionReason.value.trim()) {
     // If no rejection reason, show an error or keep the modal open
@@ -230,14 +276,95 @@ function submitRejection() {
       (option) => option.label === 'Reject'
     ).value;
   }
-  sendRejectionEmailH1Bidders();
-  updateH1RejectionReason();
+
+  resultList[currentIndex.value] = { ...resultList[currentIndex.value], rejectionReason: rejectionReason.value };
+  console.log(resultList);
+  //sendRejectionEmailH1Bidders();
+  // H1RejectionOtp(); // Send OTP for rejection 
+  //validateH1RejectionOtp(); // Validate OTP for rejection 
+  //updateH1RejectionReason();
 
   closeModal(); 
   //toaster.success('Rejection reason submiited successfully')// Close the modal after setting "Reject"
   
 }
+function H1RejectionOtp() {//rejection otp generator
+const rejectedItems = resultList.filter(item => {
+  console.log("item.value:", item); // Log item.data here
+    if (item.ApprovalStatus == "Reject") {
+      return true; // Include this item in the filtered array
+    }
+    return false; // Exclude this item
+  });
 
+  const rejectionCount = rejectedItems.length;
+  console.log("count**********",rejectedItems.length)
+  // console.log("rejectionCount.value", resultList,rejectedItems,rejectionCount);
+					// Automatically generated
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendH1RejectionOTP]")
+			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId,"rejectionCount":rejectionCount,resultList:resultList})
+      //console.log("rejectionCount",rejectionCount)
+			//.setHeaders({"Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NCIsImdyb3VwcyI6WyJSb2xlIE1ha2VyIiwiUm9sZSBDaGVja2VyIiwiUm9sZSBTY2hlZHVsZXIiLCJSb2xlIEFQUFJPVkVSIiwiUm9sZSBQdWJsaXNoZXIiLCJTdXBlckFkbWluIiwiT3JnYW5pemF0aW9uQWRtaW4iLCJSb2xlIFdhdGNoZXIiLCJSb2xlIEFkbWluIl0sImNsaWVudElQIjoiMTkyLjE2OC4xMC42MSIsImhpdHNDb3VudCI6MCwidG9rZW4iOiIiLCJtZXRhZGF0YSI6IntcImZ1bGxOYW1lXCI6XCJzaHdldGEgcGFuZGV5XCIsXCJtb2JpbGVOdW1iZXJcIjpcIjYzOTMzMDIyODRcIixcInVzZXJuYW1lXCI6XCJzaHdldGFAZ21haWwuY29tXCIsXCJlbnRpdHlJZFwiOjIsXCJvcmdhbml6YXRpb25JZFwiOjEsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJEVUxCIEhhcnlhbmFcIixcInJlZ1N0YXR1c0lkXCI6MCxcInJlZ1N0YXR1c05hbWVcIjpcIlVTRVJfQVBQUk9WRURcIixcImxvZ2luSWRcIjpcIjk0XCJ9IiwiZXhwIjoxNzI3NDk4NDgyfQ.ayV0EAukhSr1h8P6tmTIzvrapE0Ud3C7yP38IpYb2u0"})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendH1RejectionOTP",true)
+			if (rs.isValid("SendH1RejectionOTP")) {
+       
+       openOtpModal();
+			 }else
+			 { 
+			rs.showErrorToast("SendH1RejectionOTP")
+			}
+			})
+}	
+function UpdateH1BidderDetails() {
+new MQL()
+      .useManagementServer()
+      .setActivity("r.[UpdateH1BidderDetails]")
+      .setData({
+        auctionId: auctionId.value,
+        h1ApprovedBidders: resultList,
+        noOfDays: noOfDays.value,
+      })
+      .fetch()
+      .then((rs) => {
+        let res = rs.getActivity("UpdateH1BidderDetails", true);
+        if (rs.isValid("UpdateH1BidderDetails")) {
+          disabled.value = true;
+          toaster.success("Successfully Updated");
+          //isSubmitButtonDisabled.value = true;
+         // sendEmailH1Bidders();
+          sendSmsH1Bidders();
+        } else {
+          rs.showErrorToast("UpdateH1BidderDetails");
+        }
+      });
+    }
+function validateH1RejectionOtp() {
+					// Automatically generated
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[ValidateH1RejectionOtp]")
+			.setData({loginId:loginStore.loginId,verifyotp:enteredOtp.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("ValidateH1RejectionOtp",true)
+			if (rs.isValid("ValidateH1RejectionOtp")) {
+        if (res.result["validateOtp"] == "OTPFOUND") {
+          toaster.success("OTP verified");
+          UpdateH1BidderDetails();
+          closeOtpModal();
+          } //else {
+        //  toaster.error("Invalid OTP");
+        //  }
+			} else
+			 { 
+			rs.showErrorToast("ValidateH1RejectionOtp")
+			}
+			})
+    }
  function fetchH1ApprovalStatus() {
   new MQL()
     .useManagementServer()
@@ -298,29 +425,62 @@ function h1AuctionDetails() {
       }
     });
 }
-
+let rejectCount=ref(0);
+let currentIndex=ref()
 function updateAccepted(rowData, selectedValue) {
   let label = rowData.data.approvalStatusResult == 1 ? "Accept" : "Reject"
+  // if(label=="Reject"){
+  //   rejectCOunt.value++;
+  // } else {
+  //   rejectCount.value--;
+  // }
   // console.log("rowData and label is",rowData.data.approvalStatusResult," ", label)
   // Find the index of the item in resultList to ensure reactivity
   const index = resultList.findIndex((item) => item.id === rowData.id);
   if (index !== -1) {
     // Update the reactive property
-    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue };
-    // console.log(
-    //   "rowData.accepted#################",
-    //   resultList[index].accepted,
-    //   "result list ",
-    //   resultList
-    // );
+    resultList[rowData.index] = { ...resultList[rowData.index],ApprovalStatus:label, accepted: selectedValue,rejectionReason };
+    currentIndex.value=rowData.index;
     if (label === "Reject") {
     openRejectModal(rowData); // Trigger the modal opening
   }
   }
 }
-
+// function SendH1RejectionSMS() {
+  
+// 					// Automatically generated
+//           new MQL()
+//           .useManagementServer()
+// 			.setActivity("r.[SendH1RejectionSMS]")
+// 			.setData({"auctionCode":auctionCode.value})
+// 			.fetch()
+// 			 .then(rs => {
+// 			let res = rs.getActivity("SendH1RejectionSMS",true)
+// 			if (rs.isValid("SendH1RejectionSMS")) {
+// 			} else{ 
+// 		}	rs.showErrorToast("SendH1RejectionSMS");
+//   }
+// });	
+function openOtpModal() {
+  if(approvalStatusResult.value.length>0){
+  otpModalVisible.value = true;
+  }
+}
+function closeOtpModal() {
+  otpModalVisible.value = false;
+  enteredOtp.value = '';
+  otpError.value = '';
+}
 function submitForm() {
-  // console.log("Auction id ", auctionId.value);
+  const rejectedItems = resultList.filter(item => {
+  console.log("item.value:", item); // Log item.data here
+    if (item.ApprovalStatus == "Reject") {
+      return true; // Include this item in the filtered array
+    }
+    return false; // Exclude this item
+  });
+  const rejectionCount = rejectedItems.length;
+  console.log("rejectionCount.value", rejectionCount);
   const validation = $v.value.$validate();
   if (!$v.value.$error) {
     // Check if all dropdowns are selected
@@ -334,37 +494,19 @@ function submitForm() {
       );
       return;
     }
-
-    // console.log("result list ", resultList);
-
-    // if (!$v.value.$error) {
-    //   console.log("result list ", resultList);
-
-    new MQL()
-      .useManagementServer()
-      .setActivity("r.[UpdateH1BidderDetails]")
-      .setData({
-        auctionId: auctionId.value,
-        h1ApprovedBidders: resultList,
-        noOfDays: noOfDays.value,
-      })
-      .fetch()
-      .then((rs) => {
-        let res = rs.getActivity("UpdateH1BidderDetails", true);
-        if (rs.isValid("UpdateH1BidderDetails")) {
-          disabled.value = true;
-          toaster.success("Successfully Updated");
-          //isSubmitButtonDisabled.value = true;
-         // sendEmailH1Bidders();
-          sendSmsH1Bidders();
-        } else {
-          rs.showErrorToast("UpdateH1BidderDetails");
-        }
-      });
-  } else {
+   console.log("rejectionCount.value",rejectionCount);   
+   if(rejectionCount>0){
+    //console.log("approvalStatusResult.value",approvalStatusResult.value); 
+    H1RejectionOtp();
+    } else {
+      UpdateH1BidderDetails();
+    }
+  }
+    else {
     toaster.error("Invalid Number of Hours");
   }
 }
+
 function sendRejectionEmailH1Bidders(){
           new MQL()
           .useNotificationServer()
@@ -382,6 +524,7 @@ function sendRejectionEmailH1Bidders(){
 			}
 			})
     }
+
 function sendEmailH1Bidders() {
 
           new MQL()
@@ -405,7 +548,7 @@ function sendSmsH1Bidders() {
           new MQL()
           .useNotificationServer()
 			.setActivity("r.[FetchDetailsForH1Rejection]")
-			.setData({auctionId:auctionId.value})
+			.setData({auctionId:auctionId.value,loginId:loginStore.loginId})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("FetchDetailsForH1Rejection",true)
