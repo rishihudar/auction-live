@@ -267,9 +267,9 @@ async function sendOTPMobile() {
     if (!$v.value.mobileNumber.$invalid) {
       // Automatically generated
       new MQL()
-        .useCoreServer()
+        .useNotificationServer()
         .setActivity("o.[SendOTPSMS]")
-        .setData({ mobileNumber: mobileNumber.value })
+        .setData({ mobileNumber: mobileNumber.value,orgName: "DULB",templateName: "PASSWORD_RECOVERY" })  
         // .setHeaders({})
         .fetch()
         .then((rs) => {
@@ -305,7 +305,7 @@ async function sendOTPMobile() {
 function verifyOTPMobile() {
   // Automatically generated
   new MQL()
-    .useCoreServer()
+    .useNotificationServer()
     .setActivity("o.[ValidateOTPSMS]")
     .setData({
       mobileNumber: mobileNumber.value,
@@ -538,6 +538,24 @@ function isMobileNumberExist() {
       });
   });
 }
+function passwordChangedSms(){
+ 
+          new MQL()
+          .useNotificationServer()
+			.setActivity("o.[AcccountPasswordChangeSms]")
+			.setData({"mobileNumber": mobileNumber.value})
+			//.setHeaders({})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("AcccountPasswordChangeSms",true)
+			if (rs.isValid("AcccountPasswordChangeSms")) {
+			} else
+			 { 
+			rs.showErrorToast("AcccountPasswordChangeSms")
+			}
+			})
+			
+}
 function resetPasswordWithHashing() {
   // Automatically generated
   new MQL()
@@ -559,6 +577,7 @@ function resetPasswordWithHashing() {
     });
 }
 function resetPassword() {
+  passwordChangedSms();
   //console.log("resetButton.value=true", resetButton.value);
   if (resetButton.value) {
     ////console.log(emailId.value !== null && mobileNumber.value !== null);
