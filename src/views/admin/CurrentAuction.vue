@@ -157,7 +157,7 @@ const aucdata = ref({
 })
 const reason = ref('')
 const userRole = ref(loginStore.currentRole.roleCode);
-
+const multiScreenParam = ref();
 const rules = {
   auctionPassword: {
     required: helpers.withMessage('Password is required', required),
@@ -205,6 +205,7 @@ onMounted(() => {
     fetchScheduledAuctionsBidder()
      }, 1000);
      fetchWatcherPasscodeSet()
+     fetchMultiScreenBiddingParam();
   // fetchCustomParam()
 });
 function handlePageChange(event) {
@@ -301,32 +302,24 @@ function auctionCancellationNotification(auctionCode){
     });
    
 }
+function fetchMultiScreenBiddingParam() {
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[FetchCustomValueByKey]")
+    .setData({ key: "MULTISCREEN_BIDDING" })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchCustomValueByKey", true);
+      if (rs.isValid("FetchCustomValueByKey")) {
+        multiScreenParam.value = res.result.vsCustomParamValue;
+        //console.log(res.result.vsCustomParamValue)
+      } else {
+        rs.showErrorToast("FetchCustomValueByKey");
+      }
+    });
+}
 
-// function fetchCustomParam(){
-//   new MQL()
-//         .useManagementServer()
-//         .setActivity("o.[FetchCacellationCustomParam]")
-//         .setData({
-//         })
-//         .fetch()
-//         .then(rs => {
-//             let res = rs.getActivity("FetchCacellationCustomParam", true)
-//             if (rs.isValid("FetchCacellationCustomParam")) {
-//               cancellationCustomParam.value = res.result.cancellationCustomParam
-//               //console.log("auction startTime:- ", products.value.dtStartDate)
-//                 if(totalEMDPaid.value == null){
-//                   cancellationCustomParam.value = 0
-//                   //console.log("printing from nullFetchCacellationCustomParam", cancellationCustomParam.value)
-//                 }
-//                 //console.log("Printing from FetchCacellationCustomParam(cancellationCustomParam): ", cancellationCustomParam.value)
-              
-//                 cancelAuctionBeforeTime.value = 
-//                 //console.log("Printing from FetchCacellationCustomParam(cancelAuctionBeforeTime): ", cancelAuctionBeforeTime.value)
-//             } else {
-//                 rs.showErrorToast("FetchCacellationCustomParam")
-//             }
-//         })
-// }
+
 
 function fetchScheduledAuctionsBidder() {
   new MQL()
@@ -380,6 +373,23 @@ const submitAuctionPassword = async () => {
   if(!isWatcherPasscodeEnabled.value) {
 
      await fetchWatcherPasscodeDetails()
+     if (multiScreenParam.value == "NO") {
+      router.push({ name: "BidderAuctionBidding" });
+    } else {
+      auctionJoiningLog();
+      console.log("Pushed Data", {
+        auctionId: auction.value.pklAuctionId,
+        password: auctionPassword.value,
+        auctionUserId: auction.value.pklAuctionUserId,
+      });
+      //window.open('/applicant/#/v2/bidder/bidderAuctionBidding','_blank')
+      router.push({ name: "MultiScreenAdminAuctionBidding" });
+      auctionStore.pushAuction({
+        auctionId: auction.value.pklAuctionId,
+        password: auctionPassword.value,
+        auctionUserId: auction.value.pklAuctionUserId,
+      });
+    }
 
   } else {
 
@@ -392,13 +402,24 @@ const submitAuctionPassword = async () => {
 
   }
 
-  // console.log("auctionPassword is --> ",auctionPassword.value)
-  // v$.value['auctionPassword'].$touch()
-  //console.log(formValid);
-  // if (v$.value['auctionPassword'].$invalid) {
-  //   toast.add({ severity: 'error', summary: 'Form Invalid', detail: 'Please fill the form correctly', life: 3000 })
-  //   return
-  // }
+  function auctionJoiningLog() {
+  // Automatically generated
+  new MQL()
+    .useBidderServer()
+    .setActivity("o.[AuctionJoiningLog]")
+    .setData({
+      auctionId: auction.value.pklAuctionId,
+      userId: loginStore.loginId,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("AuctionJoiningLog", true);
+      if (rs.isValid("AuctionJoiningLog")) {
+      } else {
+        rs.showErrorToast("AuctionJoiningLog");
+      }
+    });
+}
   visible.value = false
   //router.push("BidderAuctionBidding")
   // TODO: check if the passcode is correct

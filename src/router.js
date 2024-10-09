@@ -820,9 +820,20 @@ const router = createRouter({
     },
     {
       path: "/admin/AdminAuctionBidding",
+      name:"AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
       meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false,  isHeaderVisible: false },
     },
+
+    {
+      path: "/admin/MultiScreenAdminAuctionBidding",
+      name:"MultiScreenAdminAuctionBidding",
+      component: loadAdminView("MultiScreenAdminAuctionBidding"),
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false,  isHeaderVisible: false },
+    },
+
+
+
     {
       path: "/current-auction",
       component: loadAdminView("CurrentAuction"),
