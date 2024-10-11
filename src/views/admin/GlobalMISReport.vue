@@ -71,7 +71,7 @@ const misTypes = ref([
 ]);
 
 const currentDate1 = new Date();
-console.log("currentdate1#########", currentDate1)
+// console.log("currentdate1#########", currentDate1)
 const currentDate2 = new Date();
 let dates = ref([currentDate1, currentDate2]);
 //console.log("dates@@@@@@@@@", dates)
@@ -106,13 +106,13 @@ function formatDate(date) {
 
 function FetchReports() {
 
-    console.log(selectedMIS.value.name)
+    // console.log(selectedMIS.value.name)
 
     if(selectedMIS.value.name == "H1 MIS Report") {
-        console.log("Inside H1 MIS Report")
+        // console.log("Inside H1 MIS Report")
         FetchH1MISReports();
     } else if (selectedMIS.value.name == "EMD MIS Report"){
-        console.log("Inside EMD MIS Report")
+        // console.log("Inside EMD MIS Report")
         FetchEMDMISReports();
     }
 }
