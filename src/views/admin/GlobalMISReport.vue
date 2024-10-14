@@ -55,10 +55,11 @@
 <script setup>
 
 import Dropdown from 'primevue/dropdown';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import MQL from "@/plugins/mql.js";
 import JsonExcel from "vue-json-excel3";
 import Calendar from 'primevue/calendar';
+import { date } from '@formkit/icons/index.cjs';
 
 const selectedEntity = ref();
 const entities = ref([]);
@@ -70,7 +71,7 @@ const misTypes = ref([
 ]);
 
 const currentDate1 = new Date();
-//console.log("currentdate1#########", currentDate1)
+// console.log("currentdate1#########", currentDate1)
 const currentDate2 = new Date();
 let dates = ref([currentDate1, currentDate2]);
 //console.log("dates@@@@@@@@@", dates)
@@ -90,7 +91,8 @@ const emdReportFields = {
     'Transaction Status':'Transaction Status',
     'Approval Status':'Approval Status',
     'Property': 'Property',
-    'Item Selection Method':'Item Selection Method'
+    'Item Selection Method':'Item Selection Method',
+    'Payment Mode':'Payment Mode'
 
 };
 
@@ -104,13 +106,13 @@ function formatDate(date) {
 
 function FetchReports() {
 
-    console.log(selectedMIS.value.name)
+    // console.log(selectedMIS.value.name)
 
     if(selectedMIS.value.name == "H1 MIS Report") {
-        console.log("Inside H1 MIS Report")
+        // console.log("Inside H1 MIS Report")
         FetchH1MISReports();
     } else if (selectedMIS.value.name == "EMD MIS Report"){
-        console.log("Inside EMD MIS Report")
+        // console.log("Inside EMD MIS Report")
         FetchEMDMISReports();
     }
 }
@@ -178,6 +180,22 @@ function fetchEntityName() {
 			})
 			
 }
+
+watch(selectedMIS, (newValue) => {
+
+ selectedEntity.value=undefined
+ dates.value=[new Date(),new Date()]
+ json_data.value = undefined
+
+  })
+
+  watch(selectedEntity, (newValue) => {
+
+ dates.value=[new Date(),new Date()]
+ json_data.value = undefined
+
+  })
+
 
 onMounted(() => {
     fetchEntityName()
