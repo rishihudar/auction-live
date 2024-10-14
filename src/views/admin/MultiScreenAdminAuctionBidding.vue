@@ -104,7 +104,7 @@
                         <div>IP: {{ clientLoginIpAddress }}</div>
                         <div>{{ loginStore.username }}</div>
                     </div>
-                    <router-link to="/bidder/bidderDashboard" class="btn btn-mbid-back ml-5 border border-slate-200 bg-white">
+                    <router-link to="/UserDashboard" class="btn btn-mbid-back ml-5 border border-slate-200 bg-white">
                         <fa-chevron-left></fa-chevron-left>
                         <div class="text" @click="dashboard">
                             <span class="-mb-1 block text-xs leading-[1] text-[var(--neutral-200)]">back to</span>
@@ -125,7 +125,7 @@
 
             <!-- Joined Auction -->
             <div class="mbid-auction-holder px-8 pb-7">
-                <!-- <p class="text-2xl font-bold">Auction</p> -->
+                
                 <div class="auction-card-container">
                     <WatcherAuctionCard class="mb-6 last:mb-0" v-for="auction in auctionStore.auctionList" :key="auction.auctionId"
                         :auction="auction" :latestTime="latestTime" :active-index="activeAuction"
@@ -211,7 +211,7 @@ function dashboard () {
     auctionStore.clearAucitonStore()
       clearInterval(timeleftInterval.value);
       clearInterval(syncTime1.value);
-      router.push({ name: 'BidderDashboard' })
+      router.push({ name: 'UserDashboard' })
     }
 
 function isAuctionJoined(auctionId_) {

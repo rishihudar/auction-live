@@ -374,8 +374,9 @@ const submitAuctionPassword = async () => {
 
      await fetchWatcherPasscodeDetails()
      if (multiScreenParam.value == "NO") {
-      router.push({ name: "BidderAuctionBidding" });
-    } else {
+      console.log("multiScreenParam.value")
+      router.push({ name: "AdminAuctionBidding" });
+    } else if (multiScreenParam.value=="YES") {
       auctionJoiningLog();
       console.log("Pushed Data", {
         auctionId: auction.value.pklAuctionId,
@@ -426,8 +427,8 @@ const submitAuctionPassword = async () => {
   const passwordValid = await checkPasscode()
   //console.log(passwordValid);
   if (passwordValid) {
-    window.open('/auction/#/admin/AdminAuctionBidding', '_blank')
-    router.push({ path: '/UserDashboard' })
+    // window.open('/auction/#/admin/AdminAuctionBidding', '_blank')
+    // router.push({ path: '/UserDashboard' })
   }
 };
 
