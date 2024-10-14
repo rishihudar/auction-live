@@ -121,13 +121,13 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/notification-server/, ""),
       },
-      '/refund-settlement-server': {
-        target: 'http://localhost:6001/',
+      '/refundsettlement-server': {
+        target: 'http://localhost:6002/',
         changeOrigin: true,
         // pathRewrite: {
         //   '^/ups-server/o/': ''
         // },
-        rewrite: (p) => p.replace(/^\/refund-settlement-server/, "")
+        rewrite: (p) => p.replace(/^\/refundsettlement-server/, "")
       }
       
     },

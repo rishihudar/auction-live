@@ -201,7 +201,7 @@ let bidderDetails=ref([])
                 console.log("refundBidderList is ",refundBidderList.value)
 
                     try {
-                        response.value = await axios.post("/refund-settlement-server/refund", refundBidderList.value);
+                        response.value = await axios.post("/refundsettlement-server/refund", refundBidderList.value);
                         console.log("response.valueis "+response.value)
                         toaster.success("Refund Successfully Initiated");
                     } catch (err) {
