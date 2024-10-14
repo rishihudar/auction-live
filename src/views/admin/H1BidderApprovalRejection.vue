@@ -337,7 +337,7 @@ new MQL()
           disabled.value = true;
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
-         // sendEmailH1Bidders();
+         sendEmailH1Bidders();
           sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
