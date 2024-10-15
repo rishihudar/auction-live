@@ -86,6 +86,9 @@ export const login = defineStore("login", {
           .then((rs) => {
             let res = rs.getActivity("UserLogin", true);
             if (rs.isValid("UserLogin")) {
+              if(res.result==null){
+                toaster.error("Invalid Username or Password");
+              }
               //console.log("res.result", res.result);
               //console.log(res.result.roles);
               if( res.result.roles==null || res.result.roles.length==0 ){
