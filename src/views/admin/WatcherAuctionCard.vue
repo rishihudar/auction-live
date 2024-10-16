@@ -100,11 +100,14 @@
                 Auction Code: {{ auctionDetails.auctionCode }}
               </div>
               <div class="ta-header-action ml-auto">
+                <Button>Total: {{totalCount }}</Button>
+                <Button>Joined:{{ totalJoined }}</Button>
                 <!-- <span class="mr-4 font-normal">{{ auctionDetails.auctionId }}</span> -->
                 <Button severity="danger" class="btn-sm" @click="leaveAuction">
                   <fa-arrow-right-from-bracker></fa-arrow-right-from-bracker>
                   Leave
                 </Button>
+                
               </div>
             </div>
           </th>
@@ -1113,13 +1116,14 @@ function fetchPropertyDetails() {
       });
   });
 }
-const totalCount = ref(0);
+const totalCount = ref();
 const IPAddress = ref("");
 const totalJoined = ref(0);
 
 function fetchBiddersData() {
   new MQL()
     .useCoreServer()
+    .enablePageLoader(false)
     .setActivity("r.[FetchCountAndIPofBidder]")
     .setData({ auctionId:  props.auction.auctionId, userId: loginStore.loginId })
     .fetch()
@@ -1129,9 +1133,9 @@ function fetchBiddersData() {
         console.log(res);
         IPAddress.value = res.result.IpAddressOfBidder;
         console.log("IPAddress",IPAddress.value);
-        totalCount.value = res.result.fetchParticipatedBidderCount;
+        totalCount.value = res.result.fetchParticipatedBidderCount.ParticipatedBidderCount ;
         console.log("totalCount",totalCount.value);
-        totalJoined.value = res.result.fetchJoinedBidderCount;
+        totalJoined.value = res.result.fetchJoinedBidderCount.JoinedBidderCount;
         console.log("totalJoined",totalJoined.value);
       } else {
         rs.showErrorToast("FetchCountAndIPofBidder");
@@ -1144,10 +1148,12 @@ onMounted(async () => {
   await fetchAuctionDetails();
   timeleftInterval.value = setInterval(() => {
     updateAuctionTimeLeft();
+    fetchBiddersData();
   }, 1000);
   makeMultiplieries();
   totalBid();
-  fetchBiddersData();
+
+  
 });
 import { onBeforeUnmount } from "vue";
 

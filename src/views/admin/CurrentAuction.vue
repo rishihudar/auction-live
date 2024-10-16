@@ -377,7 +377,7 @@ const submitAuctionPassword = async () => {
       console.log("multiScreenParam.value")
       router.push({ name: "AdminAuctionBidding" });
     } else if (multiScreenParam.value=="YES") {
-      auctionJoiningLog();
+      // auctionJoiningLog();
       console.log("Pushed Data", {
         auctionId: auction.value.pklAuctionId,
         password: auctionPassword.value,
