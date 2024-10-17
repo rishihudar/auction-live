@@ -100,14 +100,13 @@
                 Auction Code: {{ auctionDetails.auctionCode }}
               </div>
               <div class="ta-header-action ml-auto">
-                <Button>Total: {{totalCount }}</Button>
+                <Button>Total: {{ totalCount }}</Button>
                 <Button>Joined:{{ totalJoined }}</Button>
                 <!-- <span class="mr-4 font-normal">{{ auctionDetails.auctionId }}</span> -->
                 <Button severity="danger" class="btn-sm" @click="leaveAuction">
                   <fa-arrow-right-from-bracker></fa-arrow-right-from-bracker>
                   Leave
                 </Button>
-                
               </div>
             </div>
           </th>
@@ -175,7 +174,9 @@
                       <strong class="my-2">{{
                         currencyFormat(copyData.quoteAmount)
                       }}</strong>
-                      @ <strong>{{ copyData.quoteTime }}</strong>
+                      @ <strong>{{ copyData.quoteTime }}</strong> ,<strong>{{
+                        copyData.clientIPAddress
+                      }}</strong>
                     </li>
                   </ul>
                 </div>
@@ -541,6 +542,7 @@ function bidPlaced() {
   console.log("Bid Placed");
   console.log("Bid Value", bidValue.value);
   console.log("roundNumber", roundNumber);
+  console.log("roundNumber for round", roundNumber);
 }
 
 function activeIndexOpen(e) {
@@ -574,6 +576,7 @@ const auctionDetails = ref({
   totalNoOfBids: null,
   numberOfRounds: null,
   itemSelectionTime: null,
+  clientIPAddress: null,
 });
 
 const timeLeft = ref(null);
@@ -625,14 +628,28 @@ function auctionLeavingFunctionality() {
   auctionStore.removeAuction(auctionDetails.value.auctionId);
 }
 
+// function updateHistory(bidObject) {
+//   if (bidObject.bidderId == loginStore.loginId) {
+//     let bidHistoryObj = {
+//       roundNumber: auctionDetails.value.roundNumber,
+//       quoteAmount: bidObject.bidAmount,
+//       quoteTime: props.latestTime,
+//     };
+//     bidHistory.value.unshift(bidHistoryObj);
+//   }
+// }
+
 function updateHistory(bidObject) {
-  if (bidObject.bidderId == loginStore.loginId) {
+  console.log("Bid Object", bidObject);
+  if (bidObject.bidderId) {
     let bidHistoryObj = {
       roundNumber: auctionDetails.value.roundNumber,
       quoteAmount: bidObject.bidAmount,
       quoteTime: props.latestTime,
     };
     bidHistory.value.unshift(bidHistoryObj);
+    console.log("Bid History new", bidHistory.value);
+    // console.log("Bid Obj", bidHistoryObj);
   }
 }
 
@@ -720,7 +737,7 @@ function checkH1(incomingBid) {
 
 function webSocketConn() {
   wsConnection.value = new WebSocket(
-    `wss://${window.location.host}/bidding-server-ws/ws/auction`
+    `ws://${window.location.host}/bidding-server-ws/ws/admin-auction`
   );
 
   // Error Event Listeners
@@ -752,15 +769,21 @@ function webSocketConn() {
   wsConnection.value.addEventListener("message", function (e) {
     var message;
     message = JSON.parse(e.data);
+    console.log("Message", message);
 
     switch (
       true // Change this to status based code
     ) {
       case message.typeCode === 200:
+        console.log("Message", message);
         auctionDetails.value.currentHigh = message.bidAmount;
+
         auctionDetails.value.modifierValue = message.modifierValue;
+
         auctionDetails.value.roundEndTime = message.roundEndTime;
+
         auctionDetails.value.roundStartTime = message.roundStartTime;
+
         checkH1(message);
         updateHistory(message);
         break;
@@ -934,7 +957,7 @@ async function updateAuctionTimeLeft() {
   }
 
   if (itemSelectionTimeLeft.value < 0) {
-    bidFlag.value = false;
+    // bidFlag.value = false;
     await fetchAuctionDetails();
   }
 }
@@ -974,6 +997,8 @@ function getPreviousRoundHBid(roundNumber, auctionId, offset) {
       });
   });
 }
+
+
 
 function nextRoundReservePrice() {
   return new Promise(async (resolve) => {
@@ -1016,6 +1041,7 @@ function nextRoundReservePrice() {
   });
 }
 
+
 function fetchAuctionDetails() {
   count.value = "";
   return new Promise((resolve) => {
@@ -1033,9 +1059,11 @@ function fetchAuctionDetails() {
         let res = rs.getActivity("FetchDataForBidding", true);
         if (rs.isValid("FetchDataForBidding")) {
           console.log(res);
-
+          console.log("Result of auctiondetails", res.result);
           properties.value = res.result.propertyDetails;
-          bidHistory.value = res.result.auctionHistory;
+          bidHistory.value = res.result.auctionHistoryAdmin;
+          console.log("Bid History123", bidHistory.value);
+         
 
           isItemSelectionBtnDisable.value = true;
           isHighestBidder.value = false;
@@ -1048,11 +1076,15 @@ function fetchAuctionDetails() {
             res.result.inventoryDetails.auctionDescription;
           auctionDetails.value.currentRound =
             res.result.inventoryDetails.currentRoundNumber;
+          console.log("Current Round", auctionDetails.value.currentRound);
+
           auctionDetails.value.startValue =
             res.result.inventoryDetails.startValue;
           auctionDetails.value.maxBidAmount =
             100 * res.result.inventoryDetails.modifierValue;
-          auctionDetails.value.totalNoOfBids = res.result.auctionHistory.length;
+          auctionDetails.value.totalNoOfBids = res.result.auctionHistoryAdmin.length;
+          console.log("Total No of Bids", auctionDetails.value.totalNoOfBids);
+          auctionDetails.value.clientIPAddress= res.result.auctionHistoryAdmin.clientIPAddress
           auctionDetails.value.numberOfRounds =
             res.result.inventoryDetails.numberOfRounds;
           auctionDetails.value.itemSelectionTime = parseInt(
@@ -1117,7 +1149,6 @@ function fetchPropertyDetails() {
   });
 }
 const totalCount = ref();
-const IPAddress = ref("");
 const totalJoined = ref(0);
 
 function fetchBiddersData() {
@@ -1125,18 +1156,17 @@ function fetchBiddersData() {
     .useCoreServer()
     .enablePageLoader(false)
     .setActivity("r.[FetchCountAndIPofBidder]")
-    .setData({ auctionId:  props.auction.auctionId, userId: loginStore.loginId })
+    .setData({ auctionId: props.auction.auctionId, userId: loginStore.loginId })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("FetchCountAndIPofBidder", true);
       if (rs.isValid("FetchCountAndIPofBidder")) {
         console.log(res);
-        IPAddress.value = res.result.IpAddressOfBidder;
-        console.log("IPAddress",IPAddress.value);
-        totalCount.value = res.result.fetchParticipatedBidderCount.ParticipatedBidderCount ;
-        console.log("totalCount",totalCount.value);
+        totalCount.value =
+          res.result.fetchParticipatedBidderCount.ParticipatedBidderCount;
+        console.log("totalCount", totalCount.value);
         totalJoined.value = res.result.fetchJoinedBidderCount.JoinedBidderCount;
-        console.log("totalJoined",totalJoined.value);
+        console.log("totalJoined", totalJoined.value);
       } else {
         rs.showErrorToast("FetchCountAndIPofBidder");
       }
@@ -1148,12 +1178,10 @@ onMounted(async () => {
   await fetchAuctionDetails();
   timeleftInterval.value = setInterval(() => {
     updateAuctionTimeLeft();
-    fetchBiddersData();
+    // fetchBiddersData();
   }, 1000);
   makeMultiplieries();
   totalBid();
-
-  
 });
 import { onBeforeUnmount } from "vue";
 
