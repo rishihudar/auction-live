@@ -90,6 +90,8 @@ const props = defineProps({
   propertiesAvailable: Number
 });
 
+let previousstartDate = props.startDate;
+
 const loginStore = login()
 
 const emit = defineEmits(["update:modelValue"]);
@@ -170,8 +172,16 @@ async function schedule() {
       if (rs.isValid("ScheduleAuction")) {
         if (res && res.result == "SUCCESS") {
           display.value = false;
-          NotifyScheduledAuctionBidders()
-          NotifyAuctionScheduledAndPasscodes()
+          if(statusCode.value === 'AUCTION_PUBLISHED'){
+            NotifyScheduledAuctionBidders()
+          }
+         // NotifyScheduledAuctionBidders()
+          NotifyAuctionScheduledAndPasscodes() ;
+          if (statusCode.value === 'AUCTION_SCHEDULED') {
+            NotifyAuctionReScheduledAndPasscodes();
+          }
+
+          // NotifyAuctionReScheduledAndPasscodes()
           //alert("Auction Scheduled Successfully");
           // toaster.success("Auction Scheduled Successfully");
           // reloadPage();
@@ -195,7 +205,22 @@ function formatDate(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   //return moment(date).format('MM/DD/YYYY HH:mm');
 }
-
+function NotifyAuctionReScheduledAndPasscodes(){
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendEmailAuctionRescheduled]")
+			.setData({auctionId:props.auctionCode,previousstartDate:previousstartDate})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendEmailAuctionRescheduled",true)
+			if (rs.isValid("SendEmailAuctionRescheduled")) {
+			} else
+			 { 
+			rs.showErrorToast("SendEmailAuctionRescheduled")
+			}
+			})
+			
+    }
 function NotifyAuctionScheduledAndPasscodes(){
 			new MQL()
       .useNotificationServer()
