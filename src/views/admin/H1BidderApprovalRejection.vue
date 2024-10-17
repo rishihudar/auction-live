@@ -281,6 +281,7 @@ function submitRejection() {
 
   resultList[currentIndex.value] = { ...resultList[currentIndex.value], rejectionReason: rejectionReason.value };
   console.log(resultList);
+  
   //sendRejectionEmailH1Bidders();
   // H1RejectionOtp(); // Send OTP for rejection 
   //validateH1RejectionOtp(); // Validate OTP for rejection 
@@ -338,6 +339,7 @@ new MQL()
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
          sendEmailH1Bidders();
+         sendEmailH1BidRejection();
           sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
@@ -545,6 +547,22 @@ function sendEmailH1Bidders() {
 			
 
 }
+function sendEmailH1BidRejection() {
+					// Automatically generated
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendEmailH1BidRejection]")
+			.setData({auctionId:auctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendEmailH1BidRejection",true)
+			if (rs.isValid("SendEmailH1BidRejection")) {
+			} else
+			 { 
+			rs.showErrorToast("SendEmailH1BidRejection")
+			}
+			})
+    }
 function sendSmsH1Bidders() {
 					// Automatically generated
           new MQL()
