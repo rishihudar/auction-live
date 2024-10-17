@@ -64,6 +64,7 @@
                 <Column field="bidderEmail" header="Bidder Email"></Column>
                 <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
                 <Column field="amount" header="Amount in Rs"></Column>
+                <Column field="refundStatus" header="Refund Status"></Column>
                 <Column expander header="Details" style="width: 5rem"></Column>
                 <template #expansion="slot">
                     <p><b>Auction Code:</b> {{slot.data.auctionId}}</p>
