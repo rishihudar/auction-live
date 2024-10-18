@@ -386,11 +386,7 @@ const submitAuctionPassword = async () => {
       router.push({ name: "MultiScreenAdminAuctionBidding" });
      
     }
-    auctionStore.pushAuction({
-        auctionId: auction.value.pklAuctionId,
-        password: auctionPassword.value,
-        auctionUserId: auction.value.pklAuctionUserId,
-      });
+  
   } else {
 
     v$.value['auctionPassword'].$touch()
@@ -401,6 +397,11 @@ const submitAuctionPassword = async () => {
   }
 
   }
+  auctionStore.pushAuction({
+        auctionId: auction.value.pklAuctionId,
+        password: auctionPassword.value,
+        auctionUserId: auction.value.pklAuctionUserId,
+      });
   visible.value = false
   //router.push("BidderAuctionBidding")
   // TODO: check if the passcode is correct
