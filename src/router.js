@@ -829,7 +829,7 @@ const router = createRouter({
       path: "/admin/MultiScreenAdminAuctionBidding",
       name:"MultiScreenAdminAuctionBidding",
       component: loadAdminView("MultiScreenAdminAuctionBidding"),
-      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false,  isHeaderVisible: false },
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_WATCHER','ROLE_ADMIN'], isSideBarVisible: false,  isHeaderVisible: false },
     },
 
 
