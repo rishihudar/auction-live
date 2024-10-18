@@ -377,7 +377,6 @@ const submitAuctionPassword = async () => {
       console.log("multiScreenParam.value")
       router.push({ name: "AdminAuctionBidding" });
     } else if (multiScreenParam.value=="YES") {
-      // auctionJoiningLog();
       console.log("Pushed Data", {
         auctionId: auction.value.pklAuctionId,
         password: auctionPassword.value,
@@ -385,13 +384,13 @@ const submitAuctionPassword = async () => {
       });
       //window.open('/applicant/#/v2/bidder/bidderAuctionBidding','_blank')
       router.push({ name: "MultiScreenAdminAuctionBidding" });
-      auctionStore.pushAuction({
+     
+    }
+    auctionStore.pushAuction({
         auctionId: auction.value.pklAuctionId,
         password: auctionPassword.value,
         auctionUserId: auction.value.pklAuctionUserId,
       });
-    }
-
   } else {
 
     v$.value['auctionPassword'].$touch()
@@ -402,25 +401,6 @@ const submitAuctionPassword = async () => {
   }
 
   }
-
-  function auctionJoiningLog() {
-  // Automatically generated
-  new MQL()
-    .useBidderServer()
-    .setActivity("o.[AuctionJoiningLog]")
-    .setData({
-      auctionId: auction.value.pklAuctionId,
-      userId: loginStore.loginId,
-    })
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("AuctionJoiningLog", true);
-      if (rs.isValid("AuctionJoiningLog")) {
-      } else {
-        rs.showErrorToast("AuctionJoiningLog");
-      }
-    });
-}
   visible.value = false
   //router.push("BidderAuctionBidding")
   // TODO: check if the passcode is correct
