@@ -112,6 +112,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-span-2">
+                        <div class="fm-group">
+                            <Button @click="stepDataModal = true">Show Step1 Data</Button>
+                        </div>
+                    </div>
 
 
                     <div v-if="loginStore.role.roleCode == 'ROLE_DEVELOPER'" class="col-span-2">
@@ -177,6 +182,9 @@
             Save & Next
         </Button>
     </div>
+    <Dialog v-model:visible="stepDataModal" modal title="Auction Preiew" header="Auction Preview Configuration">
+        <Data1Form :form-data="JSON.parse(workflowStepData.data1)" @data="saveData" />
+    </Dialog>
 </template>
 
 <script setup>
@@ -187,6 +195,7 @@ import MQL from '@/plugins/mql.js';
 import faPenToSquare from "../../../../assets/icons/pen-to-square.svg";
 import trashCan from "../../../../assets/icons/trash-can.svg";
 import { login } from '@/store/modules/login.js'
+import Data1Form from '../../WorkflowManagement/Data1Form.vue';
 
 
 const loginStore = login();
@@ -205,6 +214,7 @@ const rolesMaster = ref([])
 const loginsMaster = ref([])
 const stepsMaster = ref([])
 
+const stepDataModal = ref(false)
 
 const { workflowId } = defineProps(['workflowId'])
 
@@ -225,6 +235,13 @@ const fetchLogins = () => {
                 rs.showErrorToast("query_2l0kJtvarJt4TQtG9u9cTcFJF0Y")
             }
         })
+}
+
+
+
+const saveData = (args) => {
+    workflowStepData.value.data1 = args
+    stepDataModal.value = false
 }
 
 const fetchRoles = () => {
