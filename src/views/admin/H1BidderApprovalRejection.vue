@@ -193,7 +193,7 @@ const rejectionReason = ref('');
 const modalData = ref(null);
 let auctionId = ref(props.auctionId);
 const otp=ref ();
-const { organizationId, entityId, loginId ,currentRole,auctionCode} = storeToRefs(loginStore);
+const { organizationId, entityId, loginId ,currentRole,auctionCode,roleId} = storeToRefs(loginStore);
 let tick = ref();
 const resultList = reactive([]);
 const selectedRows = ref([]);
@@ -307,7 +307,7 @@ const rejectedItems = resultList.filter(item => {
           new MQL()
           .useNotificationServer()
 			.setActivity("r.[SendH1RejectionOTP]")
-			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId,"rejectionCount":rejectionCount,resultList:resultList})
+			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId,"rejectionCount":rejectionCount,resultList:resultList,roleId:loginStore.currentRole.roleId})
       //console.log("rejectionCount",rejectionCount)
 			//.setHeaders({"Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NCIsImdyb3VwcyI6WyJSb2xlIE1ha2VyIiwiUm9sZSBDaGVja2VyIiwiUm9sZSBTY2hlZHVsZXIiLCJSb2xlIEFQUFJPVkVSIiwiUm9sZSBQdWJsaXNoZXIiLCJTdXBlckFkbWluIiwiT3JnYW5pemF0aW9uQWRtaW4iLCJSb2xlIFdhdGNoZXIiLCJSb2xlIEFkbWluIl0sImNsaWVudElQIjoiMTkyLjE2OC4xMC42MSIsImhpdHNDb3VudCI6MCwidG9rZW4iOiIiLCJtZXRhZGF0YSI6IntcImZ1bGxOYW1lXCI6XCJzaHdldGEgcGFuZGV5XCIsXCJtb2JpbGVOdW1iZXJcIjpcIjYzOTMzMDIyODRcIixcInVzZXJuYW1lXCI6XCJzaHdldGFAZ21haWwuY29tXCIsXCJlbnRpdHlJZFwiOjIsXCJvcmdhbml6YXRpb25JZFwiOjEsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJEVUxCIEhhcnlhbmFcIixcInJlZ1N0YXR1c0lkXCI6MCxcInJlZ1N0YXR1c05hbWVcIjpcIlVTRVJfQVBQUk9WRURcIixcImxvZ2luSWRcIjpcIjk0XCJ9IiwiZXhwIjoxNzI3NDk4NDgyfQ.ayV0EAukhSr1h8P6tmTIzvrapE0Ud3C7yP38IpYb2u0"})
 			.fetch()
