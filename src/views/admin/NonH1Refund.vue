@@ -16,7 +16,7 @@
             </div>
           </template>
         </Paginator>
-        <DataTable v-model:expandedRows="expandedRows" showGridlines :value="products" :filters="filters" :loading=loading>
+        <DataTable  @rowExpand="onRowExpand" v-model:expandedRows="expandedRows" showGridlines :value="products" :filters="filters" :loading=loading>
           <!-- <Column field="srNo" header="Sr No"></Column> -->
           <Column field="auctionCode" header=" Auction Code"></Column>
           <!-- <Column
@@ -35,24 +35,49 @@
           </Column>
           <Column field="auctionStartDate" header="Auction StartDate/Time"></Column>
           <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
-          <Column expander header="Details" style="width: 5rem">
-                    <template #body="row">
-                        <Button
-                            @click="viewDetails(row.data.auctionCode)"
-                            class="btn-sm"
-                            label="Details"
-                        />
-                    </template>
-            </Column>
             <Column header="Refund" style="width: 5rem">
                     <template #body="row">
                         <Button
                             @click="startRefund(row.data.auctionCode)"
                             class="btn-sm"
                             label="Start"
+                            :disabled="row.data.refundStarted"
                         />
                     </template>
             </Column>
+            <Column expander header="Details" style="width: 5rem">
+                    <!-- <template #rowtogglericon="row">
+                        <Button
+                            @click="viewDetails(row.data.auctionCode)"
+                            class="btn-sm"
+                            label="Details"
+                        />
+                    </template> -->
+            </Column>
+            <template #expansion="row">
+
+              <div class="table-custom">
+                <DataTable v-model:expandedRows="expandedRows" showGridlines :value="bidderDetails">
+                
+                <Column field="bidderName" header="Bidder Name"></Column>
+                <Column field="bidderEmail" header="Bidder Email"></Column>
+                <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
+                <Column field="amount" header="Amount in Rs"></Column>
+                <Column field="refundStatus" header="Refund Status"></Column>
+                <Column expander header="Details" style="width: 5rem"></Column>
+                <template #expansion="slot">
+                    <p><b>Auction Code:</b> {{slot.data.auctionId}}</p>
+                    <p><b>Auction EMD:</b> {{slot.data.auctionEmd}}</p>
+                    <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
+                    <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
+                    <p><b>No of Properties allocated:</b> {{slot.data.noOfPropertiesAllocated}}</p>
+                    <p><b>Refund Amount:</b> {{slot.data.amount}}</p>
+                </template>
+
+                </DataTable>
+            </div>
+                    
+                </template>
         </DataTable>
 
         <Dialog v-model:visible="visible" modal header="Bidder Details"> 
@@ -88,7 +113,7 @@
   </template>
   
   <script setup>
-  import DataTable from 'primevue/datatable';
+import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
 import Dialog from 'primevue/dialog';
@@ -182,11 +207,33 @@ let bidderDetails=ref([])
   function viewDetails(value) {
     console.log("received value ",value)
     fetchNonH1AuctionBidderDetails(value)
-    visible.value=true
+    // visible.value=true
   }
 
   let refundBidderList=ref([])
   let response = ref()
+
+  function UpdateRefundStatus(val) {
+    
+					// Automatically generated
+			new MQL()
+      .useManagementServer()
+			.setActivity("r.[UpdateNonH1AuctionRefundStatus]")
+			.setData({"auctionCode":val})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("UpdateNonH1AuctionRefundStatus",true)
+			if (rs.isValid("UpdateNonH1AuctionRefundStatus")) {
+        toaster.success("Refund Initiated");
+			} else
+			 { 
+			// rs.showErrorToast("UpdateNonH1AuctionRefundStatus")
+      toaster.error("Refund could not be Initiated Please try again after some time");
+			}
+			})
+			
+  }
+
   async function startRefund(val) {
     loading.value=true
     
@@ -202,9 +249,17 @@ let bidderDetails=ref([])
                 console.log("refundBidderList is ",refundBidderList.value)
 
                     try {
-                        response.value = await axios.post("/refundsettlement-server/refund", refundBidderList.value);
-                        console.log("response.valueis "+response.value)
-                        toaster.success("Refund Successfully Initiated");
+                        const result = await axios.post("/refundsettlement-server/refund", refundBidderList.value);
+                        console.log("response.valueis "+result.data) //Refund processed successfully
+                        // toaster.success("Refund Initiated");
+
+                        if(result.data == "Refund processed successfully") {
+                          UpdateRefundStatus(val)
+                          
+                        } else {
+                          toaster.error("Refund could not be Initiated Please try again after some time");
+                        }
+
                     } catch (err) {
 
                         console.error('API Error: ', err);
@@ -223,5 +278,10 @@ let bidderDetails=ref([])
 
 }
   
+const onRowExpand = (event) => {
+  console.log("Print here "+event.data.auctionCode)
+  viewDetails(event.data.auctionCode)
+};
+
   </script>
   

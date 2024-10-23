@@ -120,13 +120,29 @@
 
     <Dialog  v-model:visible="documentVisible" modal header="Bidder Documents" >
       <div class="table-custom">
-
+<p>Bank Documents</p>
         <DataTable :value="documentList" showGridlines>
           <Column field="docName" header="Document Name"></Column>
           <Column field="docPath" header="View Document">
             <template #body="row">
               <!-- {{ row.data.docPath }} -->
               <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
+              <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
+                      <!-- {{ row.data.docPath }} -->
+              <!-- <VPdfViewer :src="row.data.docPath"/> -->
+              <!-- <img :src="row.data.docPath"> -->
+            </template>
+          </Column>
+        </DataTable>
+       <br> <p>Joint Holder Documents</p>
+        <DataTable :value="jointHolderDocument" showGridlines>
+          <Column field="docName" header="Document Name"></Column>
+          <Column field="docPath" header="View Document">
+            <template #body="row">
+              <!-- {{ row.data.docPath }} -->
+              <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
               <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
                       <!-- {{ row.data.docPath }} -->
               <!-- <VPdfViewer :src="row.data.docPath"/> -->
@@ -178,7 +194,7 @@
       
       <Dialog v-model:visible="viewImageModalImage" modal header="View Image" :style="{ width: '30rem' }" >
         <div class="form-group">
-          <img :src="imagePath" alt="No preview available... Please download the file">
+          <img :src="imagePath" alt="No preview available... Please download the file" target="_blank">
         </div>
       </Dialog> 
       <Dialog v-model:visible="viewImageModalPDF" modal header="View PDF" :style="{ width: '30rem' }" >
@@ -641,7 +657,7 @@ function sendSmsH1Bidders() {
     }
 
     let documentList=ref([])
-  
+    let jointHolderDocument=ref([])
     function viewDetails(roundNumberParam) {
       console.log(auctionId.value,roundNumberParam)
       // window.open('https://testcdncs.mkcl.org/2czAobDzoGCmipmIZOtO7LXyOEF/bidderBankDocuments/12/1236/1728973709525_save.png', '_blank');
@@ -655,7 +671,12 @@ function sendSmsH1Bidders() {
 			 .then(rs => {
 			let res = rs.getActivity("FetchConcludedAuctionBidderDocuments",true)
 			if (rs.isValid("FetchConcludedAuctionBidderDocuments")) {
-        documentList.value = res.result
+
+        documentList.value = res.result.filter(doc => !doc.docName.includes('holder'));
+        console.log(documentList.value);
+
+        jointHolderDocument.value = res.result.filter(doc => doc.docName.includes('holder'));
+console.log(jointHolderDocument.value);
     //     documentList.value = res.result.map(doc => {
     //   if(!doc.docPath.startsWith('http')) {
     //     return {
@@ -667,7 +688,7 @@ function sendSmsH1Bidders() {
     // })
 
 
-        console.log("-->",res.result)
+        // console.log("-->",res.result)
 
 
 
@@ -680,24 +701,6 @@ function sendSmsH1Bidders() {
       documentVisible.value = true
     }
 
-let imagePath=ref()
-    function viewImage(path) {
-      imagePath.value = path;
-
-      if(path.startsWith('http')) {
-        imagePath.value =   Vue.getCDNBaseURL()+imagePath.value
-      }
-
-console.log("path is "+path)
-      if (path.endsWith('.pdf')) {
-        console.log("inside pdfs")
-        viewImageModalPDF.value = true;
-} else {
-  viewImageModalImage.value=true;
-}
-
-    }
-
 function DownloadDocument(url) {
   console.log("URL --->"+url)
     if (url !== "") {
@@ -706,14 +709,68 @@ function DownloadDocument(url) {
             .enablePageLoader(true)
             .downloadFile("downloadBtn")
             .then((res) => {
+              console.log("res0 is ",res)
                 if (!res.isValid()) {
+                  console.log("res is ",res)
                     res.showErrorToast();
                 }
+                console.log("res1 is ",res)
             });
     } else {
         toaster.error("File can'nt be downloaded!")
     }
 };
+
+let imagePath=ref()
+    function viewImage(path) {
+      imagePath.value = path;
+
+      if(!path.startsWith('http')) {
+        console.log("Inside "+path)
+        imagePath.value =   Vue.getCDNBaseURL()+'/'+imagePath.value
+      }
+
+console.log("path is "+imagePath.value)
+      // if (path.endsWith('.pdf')) {
+      //   console.log("inside pdfs")
+        fetchImage(imagePath.value)
+//         viewImageModalPDF.value = true;
+// } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+// }
+
+
+
+    }
+
+function fetchImage(url) {
+
+  const myHeaders = new Headers();
+
+myHeaders.append("Authorization", 'Bearer ' + sessionStorage.getItem('user-token'));
+myHeaders.append("Accept", "application/json, text/plain, */*");
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch(url, requestOptions)
+  .then((response) =>
+    response.blob())
+    .then((blob) => {
+    // Create a URL for the image
+    const imageUrl = URL.createObjectURL(blob);
+
+    imagePath.value =  imageUrl;
+    console.log("imagePath.value is",imagePath.value)
+    // viewImageModalImage.value=true
+    window.open(imageUrl);
+  })
+  .catch((error) => console.error(error));
+  
+}
 
 
 
