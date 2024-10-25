@@ -3,15 +3,7 @@
         <div>Workflow Step Order</div>
         <div class="form-grid">
             <div class="col-span-8 h-80 w-auto">
-                <VueFlow v-if="nodes.length > 0 && edges.length > 0" :nodes="nodes" :edges="edges"
-                    :default-viewport="{ zoom: 1.5 }" class="border rounded-md">
-
-                    <Background pattern-color="#aaa" :gap="16" />
-
-                    <!-- <MiniMap /> -->
-                    <Controls position="top-left"></Controls>
-
-                </VueFlow>
+                <div id="paper"></div>
             </div>
             <div class="col-span-4 form-grid">
                 <div class="col-span-6">
@@ -74,13 +66,15 @@
         :draggable="false">
         Would you like to delete the order from <br />
         <strong>
-            {{ edge.sourceNode.data.label }} -> {{ edge.targetNode.data.label }} ({{ edge.data.label }})
+            {{ findStepFromId(edge[1].get('source').id) }} to {{ findStepFromId(edge[1].get('target').id) }} for {{
+                edge[1].get('labels')[0].attrs.text.text }}
         </strong>
         <div class="flex justify-between mt-1">
             <Button @click="cancelModal">Cancel</Button>
-            <Button severity="danger" @click="deleteStepOrder">Delete</Button>
+            <Button severity="danger" @click="deleteWorkflowStepOrder(edge[0])">Delete</Button>
         </div>
     </Dialog>
+
 </template>
 
 <script setup>
@@ -89,79 +83,32 @@ import Button from 'primevue/button'
 import { onMounted, ref } from 'vue'
 import { login } from '@/store/modules/login.js'
 import MQL from '@/plugins/mql.js'
-import trashCan from "../../../../assets/icons/trash-can.svg";
-import arrowRight from "../../../../assets/icons/arrow-right.svg"
-import DataView from "primevue/dataview"
-
-import { VueFlow, useVueFlow, MarkerType } from '@vue-flow/core'
-import { Background } from '@vue-flow/background'
-import { Controls } from '@vue-flow/controls'
-import { MiniMap } from '@vue-flow/minimap'
+// import { MarkerType } from '@vue-flow/core'
 import { createToaster } from '@meforma/vue-toaster'
+
+import { dia, shapes, linkTools } from '@joint/core';
 
 
 const toaster = createToaster()
 
-const edge = ref(null)
+const nodes = ref({})
+const edges = ref({})
 
 const visible = ref(false)
 
-const cancelModal = () => {
-    visible.value = false
-    edge.value = null
-}
+const edge = ref(null)
 
 
-const deleteStepOrder = async () => {
-    visible.value = false
-    console.log(edge.value.id);
-    deleteWorkflowStepOrder(edge.value.id)
-    edge.value = null
-    await fetchWorkflowStepOrder()
-    toaster.success('Flow Deleted Successfully')
-
-}
-
-
-const { onInit, onConnect, addEdges, onEdgeClick } = useVueFlow()
-
-
-onEdgeClick(async (e) => {
-    visible.value = true
-    console.log(e.edge);
-    edge.value = e.edge
-
-})
-
-
-
-onInit((vueFlowInstance) => {
-    // instance is the same as the return of `useVueFlow`
-    vueFlowInstance.fitView()
-})
-
-
-onConnect((connection) => {
-    addEdges(connection)
-})
-
-
-const nodes = ref([])
-
-const edges = ref([])
-
-
-
-
+const graph = ref(null)
+const paper = ref(null)
 
 const loginStore = login()
+
 const { workflowId } = defineProps(['workflowId'])
 
 const emits = defineEmits(['nextTab', 'prevTab'])
 
-const workflowStepOrderData = ref({
-    'workflowId': workflowId
-})
+const workflowStepOrderData = ref({ 'workflowId': workflowId })
 
 
 const workflowsSteps = ref([])
@@ -174,14 +121,42 @@ const stepName = (stepId) => {
 }
 
 
+const cancelModal = () => {
+    visible.value = false
+    edge.value = null
+}
+
+
+
 const statusName = (statusId) => {
     let status = statuses.value.find(s => s.statusId == statusId)
     return status ? status.statusDisplayName : '-'
 }
 
 
+const findStepFromId = (id) => {
+    var fromStep = Object.entries(nodes.value).find(([key, value]) => {
+        // console.log(key, value.id, id);
+        if (value.id == id) {
+            return key
+        }
+    })
+    // console.log(fromStep[1].attributes.attrs.label.text);
+    return fromStep[1].attributes.attrs.label.text
+
+}
+
+
 const deleteData = (data) => {
-    deleteWorkflowStepOrder(data.workflowStepOrderId)
+    Object.entries(edges.value).map(([key, value]) => {
+
+        if (value.id == data) {
+            visible.value = true
+            edge.value = [key, value]
+            console.log(key);
+
+        }
+    })
 }
 
 
@@ -199,24 +174,35 @@ const fetchWorkflowSteps = () => {
                 let res = rs.getActivity("query_2kauHSwfx6s4TLIKFed7d5oRsgO", true)
                 if (rs.isValid("query_2kauHSwfx6s4TLIKFed7d5oRsgO")) {
                     workflowsSteps.value = res
-                    nodes.value = []
+                    nodes.value = {}
                     let positionX = 50
                     let positionY = 50
+                    graph.value.clear()
                     for (let index = 0; index < res.length; index++) {
                         let element = res[index];
-                        let node = {
-                            id: String(element.workflowStepId),
-                            data: { label: element.displayName },
-                            position: { x: positionX + (200 * index), y: positionY + (100 * index) },
-                            class: 'light',
+
+                        // let node = {
+                        //     id: String(element.workflowStepId),
+                        //     data: { label: element.displayName },
+                        //     position: { x: positionX + (200 * index), y: positionY + (100 * index) },
+                        //     class: 'light',
+                        // }
+                        // // if (element.startStep == 1) {
+                        // //     node.type = 'input'
+                        // // }
+                        // // if (element.endStep == 1) {
+                        // //     node.type = 'output'
+                        // // }
+                        if (true) {
+                            console.log(element.workflowStepId, element.workflowStepId in nodes.value, nodes.value);
+
+                            nodes.value[element.workflowStepId] = new shapes.standard.Rectangle();
+                            nodes.value[element.workflowStepId].position(positionX + (200 * index), positionY + (100 * index));
+                            nodes.value[element.workflowStepId].resize(180, 50);
+                            nodes.value[element.workflowStepId].addTo(graph.value);
+                            nodes.value[element.workflowStepId].attr('body', { stroke: '#CAB460', rx: 2, ry: 2 });
+                            nodes.value[element.workflowStepId].attr('label', { text: element.displayName, fill: '#353535' });
                         }
-                        if (element.startStep == 1) {
-                            node.type = 'input'
-                        }
-                        if (element.endStep == 1) {
-                            node.type = 'output'
-                        }
-                        nodes.value.push(node)
                     }
                     resolve()
                 } else {
@@ -224,17 +210,10 @@ const fetchWorkflowSteps = () => {
                 }
             })
     })
-
 }
-
-
-
-//TODO: fetch statuses
-
 
 const fetchStatues = () => {
     return new Promise((resolve, reject) => {
-
         // Automatically generated
         new MQL()
             .useManagementServer()
@@ -243,7 +222,6 @@ const fetchStatues = () => {
             .then(rs => {
                 let res = rs.getActivity("query_2kyQwSEKcUNG7zNUhNBIv0I75ii", true)
                 if (rs.isValid("query_2kyQwSEKcUNG7zNUhNBIv0I75ii")) {
-                    console.log(res);
                     statuses.value = res.map((r) => ({ ...r, statusId: Number(r.statusId) }))
                     resolve()
                 } else {
@@ -252,10 +230,6 @@ const fetchStatues = () => {
             })
     })
 }
-
-
-
-// TODO: insert workflow step order
 
 const insertworkflowStepOrder = () => {
 
@@ -268,8 +242,8 @@ const insertworkflowStepOrder = () => {
         .then(async (rs) => {
             let res = rs.getActivity("InsertWorkflowStepOrder", true)
             if (rs.isValid("InsertWorkflowStepOrder")) {
-                await fetchWorkflowStepOrder()
                 await fetchWorkflowSteps()
+                await fetchWorkflowStepOrder()
                 workflowStepOrderData.value = {
                     'workflowId': workflowId
                 }
@@ -280,7 +254,6 @@ const insertworkflowStepOrder = () => {
 
 }
 
-// TODO: delete workflow step order
 const deleteWorkflowStepOrder = (id) => {
 
     // Automatically generated
@@ -292,14 +265,15 @@ const deleteWorkflowStepOrder = (id) => {
         .then(async (rs) => {
             let res = rs.getActivity("DeleteWorkflowStepOrder", true)
             if (rs.isValid("DeleteWorkflowStepOrder")) {
+                visible.value = false
+                edges.value[id].remove()
+                edge.value = null
                 await fetchWorkflowStepOrder()
             } else {
                 rs.showErrorToast("DeleteWorkflowStepOrder")
             }
         })
 }
-
-
 
 const fetchWorkflowStepOrder = () => {
     return new Promise((resolve) => {
@@ -313,20 +287,55 @@ const fetchWorkflowStepOrder = () => {
                 let res = rs.getActivity("query_2kYHSfWUs7V7YzzaXQDHENCsmak", true)
                 if (rs.isValid("query_2kYHSfWUs7V7YzzaXQDHENCsmak")) {
                     workflowStepOrders.value = res
-                    edges.value = []
-                    edges.value = workflowStepOrders.value.map((workflowsteporder) => (
-                        {
-                            id: String(workflowsteporder.workflowStepOrderId),
-                            source: String(workflowsteporder.fromStep),
-                            target: String(workflowsteporder.toStep),
-                            label: `${statusName(workflowsteporder.toStatus)} ❌`,
-                            data: { label: `${statusName(workflowsteporder.toStatus)}` },
-                            markerEnd: MarkerType.ArrowClosed,
-                            animated: true,
-                            // style: { stroke: 'Aquamarine' },
-                            type: 'smoothstep',
-                            labelBgStyle: { fill: 'lightgreen' }
-                        }))
+                    edges.value = {}
+                    for (let workflowsteporder of workflowStepOrders.value) {
+                        //     let edge = {
+                        //         id: String(workflowsteporder.workflowStepOrderId),
+                        //         source: String(workflowsteporder.fromStep),
+                        //         target: String(workflowsteporder.toStep),
+                        //         label: `${statusName(workflowsteporder.toStatus)} ❌`,
+                        //         data: { label: `${statusName(workflowsteporder.toStatus)}` },
+                        //         markerEnd: MarkerType.ArrowClosed,
+                        //         animated: true,
+                        //         type: 'smoothstep',
+                        //         labelBgStyle: { fill: 'lightgreen' }
+                        // }
+                        //     edges.value.push(edge)
+                        edges.value[workflowsteporder.workflowStepOrderId] = new shapes.standard.Link();
+                        edges.value[workflowsteporder.workflowStepOrderId].source(nodes.value[workflowsteporder.fromStep]);
+                        edges.value[workflowsteporder.workflowStepOrderId].target(nodes.value[workflowsteporder.toStep])
+                        edges.value[workflowsteporder.workflowStepOrderId].addTo(graph.value);
+                        edges.value[workflowsteporder.workflowStepOrderId].appendLabel({ attrs: { text: { text: `${statusName(workflowsteporder.toStatus)}` } } });
+                        edges.value[workflowsteporder.workflowStepOrderId].router('orthogonal');
+                        edges.value[workflowsteporder.workflowStepOrderId].connector('straight', { cornerType: 'line' });
+
+                        const removeButton = new linkTools.Remove({
+                            action: function (evt, linkView, buttonView) {
+                                deleteData(this.model.id)
+                            }
+                        });
+
+
+
+                        const toolsView = new dia.ToolsView({
+                            tools: [removeButton]
+                        });
+
+
+                        const linkView = edges.value[workflowsteporder.workflowStepOrderId].findView(paper.value);
+                        linkView.addTools(toolsView);
+
+                        paper.value.on('link:mouseenter', function (linkView) {
+                            linkView.addTools(toolsView);
+                        });
+
+                        paper.value.on('link:mouseleave', function (linkView) {
+                            linkView.removeTools();
+                        });
+
+
+
+                    }
                     resolve()
                 } else {
                     rs.showErrorToast("query_2kYHSfWUs7V7YzzaXQDHENCsmak")
@@ -345,8 +354,28 @@ const prevCallback = () => {
     emits('prevTab')
 }
 
+const makeWorkflow = () => {
+    return new Promise((resolve, reject) => {
+        const namespace = shapes;
+
+        graph.value = new dia.Graph({}, { cellNamespace: namespace });
+
+        paper.value = new dia.Paper({
+            el: document.getElementById('paper'),
+            model: graph.value,
+            width: 900,
+            height: 300,
+            background: { color: '#F5F5F5' },
+            cellViewNamespace: namespace
+        });
+        resolve()
+    })
+    // create paper
+}
+
 
 onMounted(async () => {
+    await makeWorkflow()
     await fetchWorkflowSteps()
     await fetchStatues()
     await fetchWorkflowStepOrder()
@@ -355,11 +384,11 @@ onMounted(async () => {
 
 
 <style>
-/* import the necessary styles for Vue Flow to work */
-@import '@vue-flow/core/dist/style.css';
+body {
+    margin: unset;
+}
 
-/* import the default theme, this is optional but generally recommended */
-@import '@vue-flow/core/dist/theme-default.css';
-
-@import '@vue-flow/controls/dist/style.css';
+#paper {
+    margin: auto auto 0 auto;
+}
 </style>
