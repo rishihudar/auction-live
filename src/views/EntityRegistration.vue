@@ -140,6 +140,31 @@
               {{ data.watcherPasscode }}
             </template>
           </Column>
+          <Column field="refundClientCode" header="Refund Client Code">
+            <template #body="{ data }">
+              {{ data.refundClientCode }}
+            </template>
+          </Column>
+        <Column field="refundFCName" header="Refund FC Name">
+          <template #body="{ data }">
+            {{ data.refundFCName }}
+          </template>
+        </Column>
+        <Column field="settlementClientCode" header="Settlement Client Code">
+          <template #body="{ data }">
+            {{ data.settlementClientCode }}
+          </template>
+        </Column>
+        <Column field="settlementFCName" header="Settlement FC Name">
+          <template #body="{ data }">
+            {{ data.settlementFCName }}
+          </template>
+        </Column>
+          <!-- <Column field="watcherPasscode" header="Watcher Passcode Required">
+            <template #body="{ data }">
+              {{ data.watcherPasscode }}
+            </template>
+          </Column> -->
           <Column header="Actions">
             <template #body="{ data }">
               <div class="btn-wrapper-table">
@@ -468,6 +493,90 @@
           </div>
           <div class="col-span-4">
             <div class="fm-group required">
+              <label class="fm-label" for="refundClientCode">
+                Refund Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundClientCode"
+                  v-model="entityData.refundClientCode"
+                  placeholder="Enter Refund Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundFCName"
+                >Refund FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundFCName"
+                  v-model="entityData.refundFCName"
+                  placeholder="Enter Refund FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementClientCode"
+                >Settlement Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementClientCode"
+                  v-model="entityData.settlementClientCode"
+                  placeholder="Enter Settlement Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementFCName"
+                >Settlement FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementFCName"
+                  v-model="entityData.settlementFCName"
+                  placeholder="Enter Settlement FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
               <label class="fm-label" for="entityParent">Entity Parent</label>
               <div class="fm-check-holder">
                 <div class="fm-checkbox">
@@ -501,7 +610,7 @@
               </div>
             </div>
           </div>
-
+         
           <div class="fm-action">
             <Button @click="confirmADD(entityData)" label="Submit"></Button>
             <Button
@@ -802,7 +911,89 @@
               </div>
             </div>
           </div>
-
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundClientCode">
+                Refund Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundClientCode"
+                  v-model="entityData.refundClientCode"
+                  placeholder="Enter Refund Client Code"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.refundClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundFCName"
+                >Refund FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundFCName"
+                  v-model="entityData.refundFCName"
+                  placeholder="Enter Refund FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementClientCode"
+                >Settlement Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementClientCode"
+                  v-model="entityData.settlementClientCode"
+                  placeholder="Enter Settlement Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementFCName"
+                >Settlement FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementFCName"
+                  v-model="entityData.settlementFCName"
+                  placeholder="Enter Settlement FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
           <div class="col-span-4">
             <div class="fm-group required">
               <label class="fm-label" for="entityParent">Entity Parent</label>
@@ -841,6 +1032,7 @@
               </div> -->
             </div>
           </div>
+         
           <div class="fm-action">
             <Button
               @click="confirmEdit(entityData)"
@@ -914,6 +1106,10 @@ let entityData = ref({
   passwordAttemptLimit: "",
   paymentPeriod: "",
   watcherPasscode: false,
+  refundClientCode: "",
+  refundFCName: "",
+  settlementClientCode: "",
+  settlementFCName: "",
 });
 
 const isUniqueEntityShortName = helpers.withAsync(async (value) => {
@@ -1077,6 +1273,22 @@ const rules = computed(() => ({
       required: helpers.withMessage("Payment period is required", required),
       numeric,
     },
+    refundClientCode: {
+      required: helpers.withMessage("Refund client code is required", required),
+      alphaNum,
+    },
+    refundFCName: {
+      required: helpers.withMessage("Refund FC name is required", required),
+      alphaNum,
+    },
+    settlementClientCode: {
+      required: helpers.withMessage("Settlement client code is required", required),
+      alphaNum,
+    },
+    settlementFCName: {
+      required: helpers.withMessage("Settlement FC name is required", required),
+      alphaNum,
+    },
   },
 }));
 const $v = useVuelidate(rules, { entityData });
@@ -1188,15 +1400,16 @@ const fetchEntityTypesByOrganization = () => {
 
 function insertEntity(entityData) {
   console.log("entityData", entityData);
+  //here entityData has insert data getting from frontend
   new MQL()
     .useCoreServer()
     .setActivity("o.[InsertEntity]")
-    .setData({ ...entityData.value, createdBy: loginStore.loginId })
+    .setData({ ...entityData.value, createdBy: loginStore.loginId ,refundClientCode:entityData.value.refundClientCode,refundFCName:entityData.value.refundFCName,settlementClientCode:entityData.value.settlementClientCode,settlementFCName:entityData.value.settlementFCName})
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("InsertEntity", true);
       if (rs.isValid("InsertEntity")) {
-        //console.log(res.result);
+        console.log(res.result);
         //console.log("entityData from Insert", entityData);
         FetchEntities();
       } else {
