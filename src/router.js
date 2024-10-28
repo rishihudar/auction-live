@@ -855,6 +855,25 @@ const router = createRouter({
       component: loadAdminView("GlobalMISReport"),
       meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_GLOBAL_SUPERADMIN']},
     },
+    {
+      path: "/refund-emd",
+      name: "RefundEMD",
+      component: loadAdminView("RefundEMD"),
+      meta: { title: "RefundEMD",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/non-h1-refund",
+      name: "NonH1Refund",
+      component: loadAdminView("NonH1Refund"),
+      meta: { title: "NonH1Refund",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/rejected-h1-refund",
+      name: "RejectedH1Refund",
+      component: loadAdminView("RejectedH1Refund"),
+      meta: { title: "RejectedH1Refund",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    }
+
 
   ],
 });
