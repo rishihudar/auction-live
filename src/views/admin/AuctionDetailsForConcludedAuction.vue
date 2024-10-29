@@ -56,7 +56,7 @@
             <div class="bs-item col-span-6 2xl:col-span-4" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
                 <div class="bs-buttons">
                     <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                    <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                    <button @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
                     doc.documentTypeName }}</button>
                 </div>
             </div>
@@ -132,6 +132,55 @@ function DownloadDocument(url) {
           toaster.error("File can'nt be downloaded!")
         }
       };
+      const Vue = window.app;
+let imagePath = ref();
+function viewImage(path) {
+  imagePath.value = path;
+
+  if (!path.startsWith("http")) {
+    console.log("Inside " + path);
+    imagePath.value = Vue.getCDNBaseURL() + "/" + imagePath.value;
+  }
+
+  console.log("path is " + imagePath.value);
+  // if (path.endsWith('.pdf')) {
+  //   console.log("inside pdfs")
+  fetchImage(imagePath.value);
+  //         viewImageModalPDF.value = true;
+  // } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+  // }
+}
+
+function fetchImage(url) {
+  const myHeaders = new Headers();
+
+  myHeaders.append(
+    "Authorization",
+    "Bearer " + sessionStorage.getItem("user-token")
+  );
+  myHeaders.append("Accept", "application/json, text/plain, */*");
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(url, requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+      // Create a URL for the image
+      const imageUrl = URL.createObjectURL(blob);
+
+      imagePath.value = imageUrl;
+      console.log("imagePath.value is", imagePath.value);
+      // viewImageModalImage.value=true
+      window.open(imageUrl);
+    })
+    .catch((error) => console.error(error));
+}
+
 
 onMounted(() => {
     FetchAuctionDetailsByAuctionId()
