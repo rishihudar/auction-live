@@ -354,6 +354,23 @@ const prevCallback = () => {
     emits('prevTab')
 }
 
+
+const scaleToFit = () => {
+
+    let graphBBox = graph.value.getBBox();
+    console.log(graphBBox.y);
+    console.log(paper.value);
+    
+    
+
+    paper.value.scaleContentToFit({
+        padding: 40,
+        contentArea: graphBBox,
+    });
+    const sy = paper.value.scale().sy;
+    paper.value.translate(0, (paper.value.getArea().height / 2 - graphBBox.y - graphBBox.height / 2) * sy);
+}
+
 const makeWorkflow = () => {
     return new Promise((resolve, reject) => {
         const namespace = shapes;
@@ -363,11 +380,19 @@ const makeWorkflow = () => {
         paper.value = new dia.Paper({
             el: document.getElementById('paper'),
             model: graph.value,
-            width: 900,
-            height: 300,
+            width: '100%',
+            height: '100%',
             background: { color: '#F5F5F5' },
             cellViewNamespace: namespace
         });
+
+
+
+
+
+
+        // window.addEventListener('resize', () => scaleToFit());
+        // // scaleToFit();
         resolve()
     })
     // create paper
