@@ -165,9 +165,9 @@
             {{ data.settlementAccountName }}
           </template>
         </Column>
-        <Column field="settlementAccountNumber" header="Settlement Account Number">
+        <Column field="vsBankAccountNumber" header="Settlement Account Number">
           <template #body="{ data }">
-            {{ data.settlementAccountNumber }}
+            {{ data.vsBankAccountNumber }}
           </template>
         </Column>
         <Column field="settlementAccountIFSCCode" header="Settlement Account IFSC Code">
@@ -615,21 +615,21 @@
 
 <div class="col-span-4">
             <div class="fm-group required">
-              <label class="fm-label" for="settlementAccountNumber"
+              <label class="fm-label" for="vsBankAccountNumber"
                 >Settlement Account Number</label
               >
               <div class="fm-inner">
                 <InputText
-                  id="settlementAccountNumber"
-                  v-model="entityData.settlementAccountNumber"
+                  id="vsBankAccountNumber"
+                  v-model="entityData.vsBankAccountNumber"
                   placeholder="Enter Settlement Account Number"
                 />
               </div>
               <div
-                v-if="$v.entityData.settlementAccountNumber.$error"
+                v-if="$v.entityData.vsBankAccountNumber.$error"
                 class="fm-error"
               >
-                {{ $v.entityData.settlementAccountNumber.$errors[0].$message }}
+                {{ $v.entityData.vsBankAccountNumber.$errors[0].$message }}
               </div>
             </div>
           </div>
@@ -1103,21 +1103,21 @@
 
 <div class="col-span-4">
             <div class="fm-group required">
-              <label class="fm-label" for="settlementAccountNumber"
+              <label class="fm-label" for="vsBankAccountNumber"
                 >Settlement Account Number</label
               >
               <div class="fm-inner">
                 <InputText
-                  id="settlementAccountNumber"
-                  v-model="entityData.settlementAccountNumber"
+                  id="vsBankAccountNumber"
+                  v-model="entityData.vsBankAccountNumber"
                   placeholder="Enter Settlement Account Number"
                 />
               </div>
               <div
-                v-if="$v.entityData.settlementAccountNumber.$error"
+                v-if="$v.entityData.vsBankAccountNumber.$error"
                 class="fm-error"
               >
-                {{ $v.entityData.settlementAccountNumber.$errors[0].$message }}
+                {{ $v.entityData.vsBankAccountNumber.$errors[0].$message }}
               </div>
             </div>
           </div>
@@ -1227,6 +1227,7 @@ import {
   required,
   numeric,
   maxLength,
+  minLength,
   alphaNum,
 } from "@vuelidate/validators";
 import { login } from "../store/modules/login";
@@ -1266,7 +1267,7 @@ let entityData = ref({
   settlementClientCode: "",
   settlementFCName: "",
   settlementAccountName:"",
-  settlementAccountNumber:"",
+  vsBankAccountNumber:"",
   settlementIFSCCode:""
 });
 
@@ -1453,13 +1454,17 @@ const rules = computed(() => ({
       required: helpers.withMessage("Settlement Account Name is required", required),
       
     },
-    settlementAccountNumber: {
+    vsBankAccountNumber: {
       required: helpers.withMessage("Settlement Account Number is required", required),
+      numeric,
+    minLength: minLength(9),
+    maxLength: maxLength(32),
       
     },
     settlementIFSCCode: {
       required: helpers.withMessage("Settlement IFSC Code is required", required),
-      
+      maxLength: maxLength(11),
+    ifscCodeValidation: helpers.regex(/^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$/),
     },
     
   },
