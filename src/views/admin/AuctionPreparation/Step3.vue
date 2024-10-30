@@ -212,7 +212,7 @@
                     </div>
                 </div>
                 <div class="col-span-full fm-action fm-action-center mb-3">
-                    <Button v-if="uploadedFile" severity="secondary" @click="DownloadDocument(filePath)">
+                    <Button v-if="uploadedFile" severity="secondary" @click="viewImage(filePath)">
                         <fa-eye></fa-eye> 
                     </Button>
                     <Button v-if="uploadedFile" severity="danger" @click="deleteDoc()">
@@ -527,40 +527,11 @@ const onAdvancedUpload = async (event) => {
             }
         });
 
-    //-----------------------------------------------------------------------------------
-    // userDataSheet.value.push(...event.files);
-    // // Check if there are any selected files
-    // if (userDataSheet.value.length === 0) {
-
-    // //console.log('No files selected', userDataSheet);
-    //   console.error('No files selected', userDataSheet);
-    //   return;
-    // }
-
-    //try {
-    // const files = event.files;
-
-    // if (files.length === 0) {
-    //   console.error('No files selected');
-    //   return;
-    // }
+   
 
 
 
 
-    //   } catch (error) {
-    //     toast.add({ severity: 'error', summary: 'Error', detail: 'Error processing files', life: 3000 });
-    //   }
-    //   } catch (error) {
-    //     if (error.name === 'AbortError') {
-    //       // Handle user-aborted request
-    //       toast.add({ severity: 'error', summary: 'Error', detail: 'Request aborted by the user', life: 3000 });
-    //     } else {
-    //       // Handle other types of errors
-    //       console.error('Error uploading files', error);
-    //       //toast.add({ severity: 'error', summary: 'Error', detail: 'Error uploading files', life: 3000 });
-    //     }
-    //   }
 }
 
 
@@ -578,38 +549,7 @@ const AddStep3AuctionData = async () => {
     // //console.log("inventoryCategoryId", getPropertyCategoryId.value);
     // //console.log("statusId", statusId.value);
 
-    // new MQL()
-    // .useCoreServer()
-    //     .setActivity('o.[InsertStep3AuctionData]')
-    //     .setData(
-    //         {
-    //             auctionId: getLastInsertedAuctionId,
-    //             inventoryId: inventoryAreaDetails.value.inventoryId,
-    //             modifierValue: modifierValue.value,
-    //             modifierValueChangeId: selectedModifierValueChange.value.modifierValueChangeId,
-    //             numberOfExtension: modifierValueExtentionCount.value,
-    //             modifierValueAfterExtension: modifierValueAfterExtention.value,
-    //             documentTypeId: docTypeId.value,
-    //             documentFilePath:filePath.value ,
-    //             documentPath: fullPath.value + "/" + fileName.value,
-    //             documentFileName:fileName.value,
-    //             inventoryCategoryId: getPropertyCategoryId,
-    //             statusId: statusId.value,
-    //         }
-    //     )
-    //     .fetch()
-    //     .then((rs) => {
-    //         let res = rs.getActivity('InsertStep3AuctionData', true);
-    //         //console.log("Response of Step 3 Data insert : ",rs);
-    //         if (rs.isValid('InsertStep3AuctionData')) {
-    //             //console.log("Response of Step 3 Data insert : ",res.result);
-    //             addItem();
-    //             handleClick(true);
-    //              visible.value = false
-    //         } else {
-    //             rs.showErrorToast('InsertStep3AuctionData');
-    //         }
-    //     });
+    
     const result = await $v.value.$validate();
     let errorCount = $v.value.$errors.length;
     if (selectedModifierValueChange.value.modifierValueChangeId === '1') {
@@ -692,30 +632,7 @@ function fetchDocumentsValidationDetails() {
 
 
 async function FetchAuctionStatus(code) {
-    // Automatically generated
-    // return new Promise((resolve, reject) => {
-    //     new MQL()
-    //         .useCoreServer()
-    //         .setActivity('o.[fetchStatusFromStatusMaster]')
-    //         .setData({ statusCode: code })
-    //         .fetch()
-    //         .then((rs) => {
-    //             let res = rs.getActivity('fetchStatusFromStatusMaster', true);
-    //             if (rs.isValid('fetchStatusFromStatusMaster')) {
-    //                 //console.log("Auction Status Data", res.result);
-    //                 statusData.value = res.result;
-    //                 statusData.value.forEach(item => {
-    //                     statusId.value = item.statusId;
-    //                     displayName.value = item.displayName;
-    //                 });
-    //                 //console.log("Auction Status Data", statusData.value);
-    //                 resolve(true)
-    //             } else {
-    //                 rs.showErrorToast('fetchStatusFromStatusMaster');
-    //                 reject(false)
-    //             }
-    //         });
-    // })
+    
     const statusResult = await fetchAuctionStatus(code)
     if (statusResult.error == null) {
         statusId.value = statusResult.result.statusId
@@ -725,22 +642,7 @@ async function FetchAuctionStatus(code) {
     }
 }
 
-// const confirm1 = () => {
-//     confirm.require({
-//         message: 'Are you sure you want to proceed?',
-//         header: 'Confirmation',
-//         icon: 'pi pi-exclamation-triangle',
-//         rejectClass: 'p-button-secondary p-button-outlined',
-//         rejectLabel: 'Save',
-//         acceptLabel: 'Send For Checking',
-//         accept: () => {
-//             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-//         },
-//         reject: () => {
-//             toast.add({ severity: 'info', summary: 'Drafted', detail: 'You have drafted', life: 3000 });
-//         }
-//     });
-// };
+
 
 function addItem() {
     new MQL()
@@ -765,21 +667,9 @@ function addItem() {
             }
         })
 
-    // let srNumber = addedItem.value.length + 1;
-    // let inventoryId = inventoryAreaDetails.value.inventoryId;
-    // let inventoryAreaName = inventoryAreaDetails.value.inventoryHierarchy;
-    // let itemReservePrice = inventoryAreaDetails.value.inventoryReservePrice;
-    // let modifierVal = modifierValue.value;
-    // let modifierValAfter = selectedModifierValueChange.value.modifierValueChangeName;
-    // addedItem.value.push({ inventoryId, inventoryAreaName, itemReservePrice, modifierVal, modifierValAfter });
-    // reset();
+
 }
-// function reset(){
-//     inventoryDistrictDetails.value.inventoryId = null;
-//     inventoryMcDetails.value.inventoryId = null;
-//     inventoryLocationDetails.value.inventoryId = null;
-//     inventoryAreaDetails.value.inventoryId = null;
-// };
+
 const documentDetails = ref([])
 
 const docFileName = ref("")
@@ -976,6 +866,61 @@ const deleteDoc = async () => {
     
 
 }
+
+
+let imagePath=ref()
+    function viewImage(path) {
+      imagePath.value = path;
+
+      if(!path.startsWith('http')) {
+        console.log("Inside "+path)
+        imagePath.value =   Vue.getCDNBaseURL()+'/'+imagePath.value
+      }
+
+console.log("path is "+imagePath.value)
+      // if (path.endsWith('.pdf')) {
+      //   console.log("inside pdfs")
+        fetchImage(imagePath.value)
+//         viewImageModalPDF.value = true;
+// } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+// }
+
+
+
+    }
+
+function fetchImage(url) {
+
+  const myHeaders = new Headers();
+
+myHeaders.append("Authorization", 'Bearer ' + sessionStorage.getItem('user-token'));
+myHeaders.append("Accept", "application/json, text/plain, */*");
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch(url, requestOptions)
+  .then((response) =>
+    response.blob())
+    .then((blob) => {
+    // Create a URL for the image
+    const imageUrl = URL.createObjectURL(blob);
+
+    imagePath.value =  imageUrl;
+    console.log("imagePath.value is",imagePath.value)
+    // viewImageModalImage.value=true
+    window.open(imageUrl);
+  })
+  .catch((error) => console.error(error));
+  
+}
+
+
+
 
 onMounted(() => {
     fetchInventoryCategoryId();
