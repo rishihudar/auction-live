@@ -10,6 +10,12 @@
                 <div class="form-grid">
                     <div class="col-span-full">
                         <div class="fm-group">
+                            
+                            <label class="fm-label">Select Entity</label>
+                            <div class="fm-inner">
+                                <Dropdown v-model="selectedEntity" :options="entities" optionLabel="entityName"
+                                    placeholder="Select Entity" />
+                            </div>
                             <label class="fm-label">Select Date</label>
                             <div class="fm-inner">
                                 <Calendar v-model="dates" selectionMode="range" :manualInput="false" :maxDate="currentDate2" :show-icon="true"
@@ -29,11 +35,11 @@
 </template>
 
 <script setup>
-import { ref} from "vue";
+import { ref,onMounted,watch} from "vue";
 import MQL from "@/plugins/mql.js";
 import JsonExcel from "vue-json-excel3";
 import Calendar from 'primevue/calendar';
-
+import Dropdown from 'primevue/dropdown';
 const currentDate1 = new Date();
 //console.log("currentdate1#########", currentDate1)
 const currentDate2 = new Date();
@@ -41,6 +47,27 @@ let dates = ref([currentDate1, currentDate2]);
 //console.log("dates@@@@@@@@@", dates)
 
 let json_data = ref([]);
+
+const selectedEntity = ref();
+const entities = ref([]);
+function fetchEntityName() {
+new MQL()
+.useCoreServer()
+.setActivity("o.[FetchEntityData]")
+.setData({})
+.fetch()
+.then(rs => {
+let res = rs.getActivity("FetchEntityData",true)
+if (rs.isValid("FetchEntityData")) {
+entities.value = res.result
+entities.value = entities.value.filter(entity => entity.entityId !== "1");
+} else
+{ 
+rs.showErrorToast("FetchEntityData")
+}
+})
+
+}
 const processingReportFields = {
     
    'Auction Code':'auctionCode',
@@ -57,7 +84,7 @@ function MISProcessingFeeReport() {
     new MQL()
         .useManagementServer()
         .setActivity("r.[MISProcessingFeeReport]")
-        .setData({ toDate: formatDate(dates.value[0]), fromDate: formatDate(dates.value[1]) })
+        .setData({ toDate: formatDate(dates.value[0]), fromDate: formatDate(dates.value[1]),entityId:selectedEntity.value.entityId })
         .fetch()
         .then(rs => {
             let res = rs.getActivity("MISProcessingFeeReport", true)
@@ -77,7 +104,16 @@ function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+watch(selectedEntity, (newValue) => {
 
+dates.value=[new Date(),new Date()]
+json_data.value = undefined
+
+ })
+
+onMounted(() => {
+    fetchEntityName();
+})
 </script>
 
 <style></style>
