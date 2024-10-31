@@ -1227,7 +1227,7 @@ import {
   required,
   numeric,
   maxLength,
-  minLength,
+ minLength,
   alphaNum,
 } from "@vuelidate/validators";
 import { login } from "../store/modules/login";
@@ -1464,7 +1464,6 @@ const rules = computed(() => ({
     settlementIFSCCode: {
       required: helpers.withMessage("Settlement IFSC Code is required", required),
       maxLength: maxLength(11),
-    ifscCodeValidation: helpers.regex(/^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$/),
     },
     
   },
@@ -1578,6 +1577,7 @@ const fetchEntityTypesByOrganization = () => {
 
 function insertEntity(entityData) {
   console.log("entityData", entityData);
+  console.log("createdBy",loginStore.loginId)
   //here entityData has insert data getting from frontend
   new MQL()
     .useCoreServer()
