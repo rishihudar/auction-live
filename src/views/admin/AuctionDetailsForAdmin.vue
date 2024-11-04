@@ -67,7 +67,7 @@
             <div class="bs-item col-span-6 2xl:col-span-4" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
                 <div class="bs-buttons">
                     <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                    <button @click="DownloadDocument(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                    <button @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
                     doc.documentTypeName }}</button>
                 </div>
             </div>
@@ -93,66 +93,7 @@
                 </div>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
-                <!-- <div class="bs-buttons">
-                    <Button @click="visible = true,viewPublishDetails()"><Toast />
-                        Extend Participation Date
-
-                        <Dialog v-model:visible="visible" modal header="Publish Auction" :position="position" :style="{ width: '50rem' }" :draggable="false">
-                <div class="modal-subtitle">
-                    Auction Code: <span> {{ auctionCode }}</span>
-                </div>
-                <div class="form-grid">
-                    <div class="col-span-full md:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment Start
-                        Date:</label>
-                        <div class="fm-inner">
-                        <Calendar id="calendar-24h" v-model="selectedStartDate" showTime dateFormat="yy/mm/dd" hourFormat="24"
-                            :minDate="minDate" :showIcon="true" readonly="true"/>
-                        </div>
-                        <div class="fm-info">
-                        {{ selectedStartDate }}
-                        </div>
-                    </div>
-                    </div>
-                    <div class="col-span-full md:col-span-6">
-                    <div class="fm-group">
-                        <label class="fm-label" for="Processing Fee">Processing Fee And EMD payment End Date:</label>
-                        <div class="fm-inner">
-                        <Calendar id="calendar" v-model="selectedEndDate" showTime dateFormat="yy/mm/dd" hourFormat="24"
-                            :minDate="endMinDate" :showIcon="true" />
-                        </div>
-                        <div class="fm-info">
-                        {{ selectedEndDate }}
-                        </div>
-                    </div>
-                    </div>
-                    <div class="col-span-full"
-                    v-if="moment(selectedEndDate).isSameOrBefore(moment(selectedStartDate), 'minute')">
-                    <div class="fm-group">
-                        <label class="fm-error" for="">
-                        Start Date should not be equal or after End Date !
-                        </label>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-span-full">
-                    <div class="fm-group">
-                    <div class="fm-check-holder fm-check-center">
-                        <div class="fm-checkbox">
-                        <input type="checkbox" id="agreeCheckbox" v-model="agree" />
-                        <label for="agreeCheckbox">I agree that to Extend Participation Date.
-                        </label>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="modal-action">
-                    <Button type="button" label="Extend EndDate" :disabled="!agree" @click="UpdateExtendParticipationEndDate()"></Button>
-                </div>
-                </Dialog>
-                    </button>
-                </div> -->
+              
                 <Button v-if="!upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
                         <fa-trash-can></fa-trash-can> Cancel Auction
                     </Button>
@@ -328,14 +269,55 @@ function DownloadDocument(url) {
         toaster.error("File can'nt be downloaded!")
     }
 };
-// function viewPublishDetails() {
-//   ////console.log("rowAuctionId", row);
-// //   auctionId.value = auctionId;
-// //   auctionCode.value = auctionCode
-//   fetchAllStepsAuctionPreview(),
-//     visible.value = true
-//     //console.log("auctionId",auctionId,"auctionCode",auctionCode);
-// }
+const Vue = window.app;
+let imagePath = ref();
+function viewImage(path) {
+  imagePath.value = path;
+
+  if (!path.startsWith("http")) {
+    console.log("Inside " + path);
+    imagePath.value = Vue.getCDNBaseURL() + "/" + imagePath.value;
+  }
+
+  console.log("path is " + imagePath.value);
+  // if (path.endsWith('.pdf')) {
+  //   console.log("inside pdfs")
+  fetchImage(imagePath.value);
+  //         viewImageModalPDF.value = true;
+  // } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+  // }
+}
+
+function fetchImage(url) {
+  const myHeaders = new Headers();
+
+  myHeaders.append(
+    "Authorization",
+    "Bearer " + sessionStorage.getItem("user-token")
+  );
+  myHeaders.append("Accept", "application/json, text/plain, */*");
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(url, requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+      // Create a URL for the image
+      const imageUrl = URL.createObjectURL(blob);
+
+      imagePath.value = imageUrl;
+      console.log("imagePath.value is", imagePath.value);
+      // viewImageModalImage.value=true
+      window.open(imageUrl);
+    })
+    .catch((error) => console.error(error));
+}
+
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
   new MQL()

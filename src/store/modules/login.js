@@ -4,6 +4,8 @@ import MQL from "@/plugins/mql.js";
 import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
+import { getActivePinia } from "pinia"
+
 export const login = defineStore("login", {
   persist: {
     storage: sessionStorage,
@@ -198,6 +200,8 @@ export const login = defineStore("login", {
       return new Promise((resolve) => {
         sessionStorage.removeItem("user-token");
         this.LOGOUT_LOG();
+         // map through that list and use the **$reset** fn to reset the state
+         getActivePinia()._s.forEach(store => store.$reset());
         // remove the axios default header
         // TODO: Add logout log activity
         delete axios.defaults.headers.common["Authorization"];
