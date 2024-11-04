@@ -222,7 +222,7 @@
 <script setup>
 import faEye from '../../../assets/icons/eye.svg';
 import downloadIcon from '../../../assets/icons/download.svg';
-import PDF from "pdf-vue3";
+//import PDF from "pdf-vue3";
 import Dialog from "primevue/dialog";
 // import Tooltip from 'primevue/tooltip';
 import 'primeicons/primeicons.css';
