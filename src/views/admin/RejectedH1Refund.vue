@@ -41,7 +41,7 @@
                           @click="startRefund(row.data.auctionCode)"
                           class="btn-sm"
                           label="Start"
-                          :disabled="row.data.refundStarted"
+                          :disabled="row.data.rejectionRefundStarted"
                       />
                   </template>
           </Column>
@@ -70,8 +70,8 @@
                   <p><b>Auction EMD:</b> {{slot.data.auctionEmd}}</p>
                   <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
                   <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
-                  <p><b>No of Properties allocated:</b> {{slot.data.noOfPropertiesAllocated}}</p>
-                  <p><b>Refund Amount:</b> {{slot.data.amount}}</p>
+                  <p><b>No of Properties rejected:</b> {{slot.data.noOfPropertiesRejected}}</p>
+                  <p><b>Refund Amount:</b> {{slot.data.rejectedAmount}}</p>
               </template>
 
               </DataTable>
@@ -185,20 +185,20 @@ function fetchConcludedAuctionsUser() {
     });
 }
 
-function fetchNonH1AuctionBidderDetails(val) {
+function FetchRejectedH1BidderAuctionDetails(val) {
   
     new MQL()
           .useManagementServer()
-    .setActivity("r.[FetchNonH1BidderAuctionDetails]")
+    .setActivity("r.[FetchRejectedH1BidderAuctionDetails]")
     .setData({"auctionCode":val})
     .fetch()
      .then(rs => {
-    let res = rs.getActivity("FetchNonH1BidderAuctionDetails",true)
-    if (rs.isValid("FetchNonH1BidderAuctionDetails")) {
+    let res = rs.getActivity("FetchRejectedH1BidderAuctionDetails",true)
+    if (rs.isValid("FetchRejectedH1BidderAuctionDetails")) {
               bidderDetails.value = res.result
     } else
      { 
-    rs.showErrorToast("FetchNonH1BidderAuctionDetails")
+    rs.showErrorToast("FetchRejectedH1BidderAuctionDetails")
     }
     })
     
@@ -206,24 +206,24 @@ function fetchNonH1AuctionBidderDetails(val) {
 
 function viewDetails(value) {
   console.log("received value ",value)
-  fetchNonH1AuctionBidderDetails(value)
+  FetchRejectedH1BidderAuctionDetails(value)
   // visible.value=true
 }
 
 let refundBidderList=ref([])
 let response = ref()
 
-function UpdateRefundStatus(val) {
+function UpdateRejectedRefundStatus(val) {
   
         // Automatically generated
     new MQL()
     .useManagementServer()
-    .setActivity("r.[UpdateNonH1AuctionRefundStatus]")
+    .setActivity("r.[UpdateRejectedStatus]")
     .setData({"auctionCode":val})
     .fetch()
      .then(rs => {
-    let res = rs.getActivity("UpdateNonH1AuctionRefundStatus",true)
-    if (rs.isValid("UpdateNonH1AuctionRefundStatus")) {
+    let res = rs.getActivity("UpdateRejectedStatus",true)
+    if (rs.isValid("UpdateRejectedStatus")) {
       toaster.success("Refund Initiated");
     } else
      { 
@@ -239,12 +239,12 @@ async function startRefund(val) {
   
           new MQL()
           .useManagementServer()
-    .setActivity("r.[FetchNonH1DetailsStartRefund]")
+    .setActivity("r.[FetchRejectedDetailsStartRefund]")
     .setData({"auctionCode":val,"userId":parseInt(loginStore.loginId)})
       .fetch()
       .then(async rs => {
-          let res = rs.getActivity("FetchNonH1DetailsStartRefund", true)
-          if (rs.isValid("FetchNonH1DetailsStartRefund")) {
+          let res = rs.getActivity("FetchRejectedDetailsStartRefund", true)
+          if (rs.isValid("FetchRejectedDetailsStartRefund")) {
               refundBidderList.value = res.result;
               console.log("refundBidderList is ",refundBidderList.value)
 
@@ -254,7 +254,7 @@ async function startRefund(val) {
                       // toaster.success("Refund Initiated");
 
                       if(result.data == "Refund processed successfully") {
-                        UpdateRefundStatus(val)
+                        UpdateRejectedRefundStatus(val)
                         
                       } else {
                         toaster.error("Refund could not be Initiated Please try again after some time");
@@ -272,7 +272,7 @@ async function startRefund(val) {
 
 
           } else {
-              rs.showErrorToast("FetchNonH1DetailsStartRefund")
+              rs.showErrorToast("FetchRejectedDetailsStartRefund")
           }
       })
 
