@@ -292,6 +292,23 @@ function fetchAuctionWithApprovedStatus() {
       }
     });
 }
+function serverDateAndTime() {
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[GetCurrentDateAndTimeFromServer]")
+    .setData({})
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("GetCurrentDateAndTimeFromServer", true);
+      if (rs.isValid("GetCurrentDateAndTimeFromServer")) {
+        selectedStartDate.value = res.result.currentDateTime;
+        ////console.log("currentDate", currentDate.value);
+      } else {
+        rs.showErrorToast("GetCurrentDateAndTimeFromServer");
+      }
+    });
+}
+
 function fetchAllStepsAuctionPreview() {
   // Automatically generated
   new MQL()
@@ -304,7 +321,7 @@ function fetchAllStepsAuctionPreview() {
       dbStartDate.value = res.result.fetchStep4AuctionPreview[0].startDate;
       dbEndDate.value = res.result.fetchStep4AuctionPreview[0].endDate;
       // console.log("dbStartDate.value", dbStartDate.value, "dbEndDate.value", dbEndDate.value);
-      selectedStartDate.value = dbStartDate.value;
+      //selectedStartDate.value = dbStartDate.value;
       selectedEndDate.value = dbEndDate.value;
       if (rs.isValid("FetchAllStepsAuctionPreview")) {
       } else {
@@ -432,5 +449,6 @@ onMounted(async() => {
   await getServerDate();
     
     await fetchPaymentPeriod();
+    serverDateAndTime();
 });
 </script>
