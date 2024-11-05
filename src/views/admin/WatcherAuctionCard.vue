@@ -344,13 +344,13 @@
                   @click="bidFlag = true"
                   >Bid</Button
                 >
-                <Button
+                <!-- <Button
                   v-if="bidFlag && !roundHasEnded"
                   :disabled="!count"
                   @click="bidPlaced()"
                 >
                   Place Bid
-                </Button>
+                </Button> -->
               </div>
 
               <!-- Other details -->
@@ -517,33 +517,33 @@ const isAuctionActive = computed(() => {
   }
 });
 
-function bidPlaced() {
-  bidFlag.value = false;
-  let totalvalue =
-    parseInt(bidValue.value) + parseInt(auctionDetails.value.currentHigh);
+// function bidPlaced() {
+//   bidFlag.value = false;
+//   let totalvalue =
+//     parseInt(bidValue.value) + parseInt(auctionDetails.value.currentHigh);
 
-  wsConnection.value.send(
-    JSON.stringify({
-      auctionId: parseInt(auctionDetails.value.auctionId),
-      bidderId: parseInt(loginStore.loginId),
-      auctionUserId: parseInt(props.auction.auctionUserId),
-      roundNumber: parseInt(auctionDetails.value.roundNumber),
-      currentPrice: parseInt(auctionDetails.value.currentHigh),
-      roundEndTime: moment(auctionDetails.value.roundEndTime),
-      roundStartTime: moment(auctionDetails.value.roundStartTime),
-      bidAmount: parseInt(totalvalue),
-      bidValue: parseInt(bidValue.value),
-      bidFactor: parseInt(count.value),
-      typeCode: parseInt(200),
-      clientLoginIpAddress: props.clientLoginIpAddress,
-    })
-  );
-  count.value = "";
-  console.log("Bid Placed");
-  console.log("Bid Value", bidValue.value);
-  console.log("roundNumber", roundNumber);
-  console.log("roundNumber for round", roundNumber);
-}
+//   wsConnection.value.send(
+//     JSON.stringify({
+//       auctionId: parseInt(auctionDetails.value.auctionId),
+//       bidderId: parseInt(loginStore.loginId),
+//       auctionUserId: parseInt(props.auction.auctionUserId),
+//       roundNumber: parseInt(auctionDetails.value.roundNumber),
+//       currentPrice: parseInt(auctionDetails.value.currentHigh),
+//       roundEndTime: moment(auctionDetails.value.roundEndTime),
+//       roundStartTime: moment(auctionDetails.value.roundStartTime),
+//       bidAmount: parseInt(totalvalue),
+//       bidValue: parseInt(bidValue.value),
+//       bidFactor: parseInt(count.value),
+//       typeCode: parseInt(200),
+//       clientLoginIpAddress: props.clientLoginIpAddress,
+//     })
+//   );
+//   count.value = "";
+//   console.log("Bid Placed");
+//   console.log("Bid Value", bidValue.value);
+//   console.log("roundNumber", roundNumber);
+//   console.log("roundNumber for round", roundNumber);
+// }
 
 function activeIndexOpen(e) {
   console.log(e);
@@ -646,6 +646,7 @@ function updateHistory(bidObject) {
       roundNumber: auctionDetails.value.roundNumber,
       quoteAmount: bidObject.bidAmount,
       quoteTime: props.latestTime,
+      clientIPAddress:bidObject.clientLoginIpAddress
     };
     bidHistory.value.unshift(bidHistoryObj);
     console.log("Bid History new", bidHistory.value);
