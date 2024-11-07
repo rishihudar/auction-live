@@ -861,6 +861,7 @@ const deleteFile = (url) => {
 const deleteDoc = async () => {
     await deleteFile(fileName.value)
     fileName.value = null
+    filePath.value = ""
     uploadedFile.value = false
     
     
