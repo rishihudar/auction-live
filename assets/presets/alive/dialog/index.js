@@ -36,7 +36,7 @@ export default {
         class: [
             'modal-title',
             // Flexbox and Alignment
-            'flex items-center justify-between',
+            'flex items-start justify-between',
             'gap-3',
             'shrink-0',
 
@@ -109,7 +109,7 @@ export default {
 
             // Shape
             'border-0',
-            'rounded-full',
+            'rounded-md',
 
             // Colors
             'text-surface-500',

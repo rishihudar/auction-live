@@ -2,8 +2,9 @@ export default {
     root: ({ context, props }) => ({
         class: [
             // Position and Shadows
+            'pv-tooltip',
             'absolute',
-            'shadow-md',
+            // 'shadow-md',
             'p-fadein',
             // Spacing
             {
@@ -15,7 +16,7 @@ export default {
     arrow: ({ context, props }) => ({
         class: [
             // Position
-
+            'pv-tooltip-arrow',
             'absolute',
 
             // Size
@@ -41,6 +42,6 @@ export default {
         ]
     }),
     text: {
-        class: ['p-3', 'bg-surface-600 dark:bg-surface-700', 'text-white', 'leading-none', 'rounded-md', 'whitespace-pre-line', 'break-words']
+        class: ['pv-tooltip-text', 'p-3', 'bg-surface-600 dark:bg-surface-700', 'text-white', 'leading-none', 'rounded-md', 'whitespace-pre-line', 'break-words']
     }
 };

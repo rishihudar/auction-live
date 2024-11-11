@@ -1,4 +1,6 @@
 .form-grid {@apply grid gap-x-[var(--fm-grid-gap)] grid-cols-12;
+    .form-grid-inner {@apply grid gap-x-4 grid-cols-12;}
+    .form-grid-otp {@apply grid gap-x-3 grid-cols-1 sm:grid-cols-[1fr_240px] lg:grid-cols-[1fr_165px];}
     .fm-row {@apply grid gap-x-[var(--fm-grid-gap)] grid-cols-12;}
 
     .section-header:first-child {@apply mt-0;}

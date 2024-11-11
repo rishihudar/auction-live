@@ -1,5 +1,5 @@
-.box-menu[id^="ddmenu"] {@apply py-2 w-60 border border-[var(--border-color)] rounded-md bg-white shadow;
-    .dropdown-item {@apply px-4 py-2 flex gap-2 items-center text-[var(--neutral-400)] cursor-pointer;
+.box-menu[id^="ddmenu"] {@apply pb-2 w-60 border border-[var(--border-color)] rounded-md bg-white shadow lg:py-2;
+    .dropdown-item {@apply px-4 py-1.5 flex gap-2 items-center text-[var(--neutral-400)] cursor-pointer lg:py-2;
         svg {@apply w-5 h-5 fill-[var(--neutral-300)];}
 
         &:hover {@apply bg-slate-200;}
@@ -9,10 +9,14 @@
 
 .dropdown-profile {
     .btn {@apply px-5 py-2 h-auto border-none hover:bg-slate-200 focus:bg-slate-200;}
-    .dp-text {@apply flex flex-col items-end;}
+    .dp-text {@apply hidden flex-col items-end lg:flex;}
     .dp-name {@apply -mb-0.5 text-[15px] font-medium;}
     .dp-info {@apply text-sm font-normal text-[var(--neutral-200)];}
     .dp-media {@apply w-12 h-12 rounded-full overflow-hidden;
         img {@apply w-full h-full object-cover;}
     }
+}
+.dp-intro {@apply mb-2 border-b border-slate-200 bg-slate-100 lg:hidden;
+    .dp-text {@apply px-4 py-3 flex flex-col items-center;}
+    .dp-name {@apply font-semibold;}
 }

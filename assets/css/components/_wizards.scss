@@ -1,4 +1,4 @@
-.wizard-wrapper {--wizard-item-width: theme('width[36]'); --wizard-icon-size: theme('height[14]'); --wizard-progress-height: theme('height[1]'); --wizard-content-padding: theme('padding[8]'); @apply relative;}
+.wizard-wrapper {--wizard-item-width: theme('width[36]'); --wizard-icon-size: theme('height[14]'); --wizard-progress-height: theme('height[1]'); --wizard-content-padding: theme('padding[4]'); @apply relative;}
 
 .wizard-progress {@apply absolute left-1/2 w-10 h-[var(--wizard-progress-height)] rounded-full bg-slate-300 overflow-hidden; top: calc(var(--wizard-icon-size) / 2 - var(--wizard-progress-height) / 2); transform: translateX(-50%);
     .wp-value {@apply absolute left-0 w-0 h-full rounded-full bg-primary-400; transition: width 0.4s ease;}
@@ -27,11 +27,12 @@
     }
 }
 
-.wizard-content {@apply mt-6 rounded-lg bg-white shadow w-full;
-    .wc-item {@apply px-[var(--wizard-content-padding)] py-8;} 
+.wizard-content {@apply mt-4 rounded-lg bg-white shadow w-full;
+    .wc-item {@apply p-[var(--wizard-content-padding)] py-6 lg:py-8;}
 
-    .wc-header {@apply mb-5;}
+    .wc-header {@apply mb-5 flex flex-col items-center justify-between lg:flex-row;}
     .wc-title {@apply text-2xl font-bold text-[var(--neutral-600)];}
+    .wc-info {@apply mt-2 lg:mt-0;}
 
     .wc-action {@apply px-[var(--wizard-content-padding)] py-4 flex gap-2 items-center; border-top: 1px solid var(--border-color);
         .btn {@apply px-8 min-w-32 whitespace-nowrap;}
@@ -41,22 +42,58 @@
 
 
 .wizard-wrapper-prime {--wizard-sep-spacing: 4px;
-    [data-pc-section="nav"] {@apply px-4 flex items-start justify-center;
+    [data-pc-section="nav"], [data-pc-section="menu"] {@apply px-4 flex items-start justify-center;
         > li {@apply relative flex items-center;
-            > button {@apply relative w-[var(--wizard-item-width)] shrink-0 text-center;
+            > button, > .wizard-step {@apply relative w-[var(--wizard-item-width)] shrink-0 text-center cursor-pointer;
                 [data-pc-section="number"] {@apply mx-auto w-[var(--wizard-icon-size)] h-[var(--wizard-icon-size)] flex items-center justify-center rounded-full text-xl text-[var(--neutral-200)]; border: 2px solid theme('colors.slate[300]'); transition: color 0.2s ease;}
                 [data-pc-section="title"] {@apply mt-2 block text-[15px] leading-5 text-[var(--neutral-200)]; transition: color 0.2s ease;}
             }
-            [data-pc-section="separator"] {@apply absolute mb-6 h-0.5 bg-slate-300; top: calc(var(--wizard-icon-size) / 2 - 1px); left: calc(50% + var(--wizard-icon-size) / 2 + var(--wizard-sep-spacing)); width: calc(var(--wizard-item-width) - var(--wizard-icon-size) - var(--wizard-sep-spacing) - var(--wizard-sep-spacing)); transition: all 0.2s ease;}
+            [data-pc-section="separator"], .wizard-step:before {@apply absolute mb-6 h-0.5 bg-slate-300; top: calc(var(--wizard-icon-size) / 2 - 1px); left: calc(50% + var(--wizard-icon-size) / 2 + var(--wizard-sep-spacing)); width: calc(var(--wizard-item-width) - var(--wizard-icon-size) - var(--wizard-sep-spacing) - var(--wizard-sep-spacing)); transition: all 0.2s ease;}
+
+            &:last-child {
+                .wizard-step:before {@apply hidden;}
+            }
         }
-        [data-pc-section="header"]:has(~ [data-p-active="true"]) {
+        [data-pc-section="header"]:has(~ [data-p-active="true"]), .wizard-step.wizard-step-completed {
             [data-pc-section="number"] {@apply border-primary-600 text-white bg-primary-600;}
             [data-pc-section="title"] {@apply text-primary-600;}
             [data-pc-section="separator"] {@apply bg-primary-600;}
         }
-        [data-p-active="true"] {
+        [data-p-active="true"], .wizard-step.wizard-step-active {
             [data-pc-section="number"] {@apply border-primary-600 text-primary-600;}
             [data-pc-section="title"] {@apply font-medium text-[var(--neutral-400)];}
         }
+        .wizard-step {
+            &:before {content: '';}
+
+            &.wizard-step-active.wizard-step-completed {
+                [data-pc-section="number"] {@apply text-white;}
+            }
+            &.wizard-step-completed {
+                &:before {@apply bg-primary-600;}
+            }
+            &.wizard-step-disabled {@apply cursor-default;}
+        }
+    }
+}
+
+
+// Steps
+[data-pc-name="steps"] {@apply pb-3 overflow-auto;
+    [data-pc-section="menu"] {@apply justify-start;
+        li {
+            &:first-child {@apply ml-auto;}
+            &:last-child {@apply mr-auto;}
+        }
+    }
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[lg]')) {
+    .wizard-wrapper {
+        --wizard-content-padding: theme('padding[8]');
     }
 }

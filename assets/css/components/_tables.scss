@@ -47,14 +47,14 @@
         &:first-child {border-top-left-radius: 8px;}
         &:last-child {border-right: none; border-top-right-radius: 8px;}
     }
-    tbody tr {
+    tbody > tr {
         &:last-child {
-            td {border-bottom: none;
+            > td {border-bottom: none;
                 &:first-child {border-bottom-left-radius: 8px;}
                 &:last-child {border-bottom-right-radius: 8px;}
             }
         }
-        td {padding: var(--table-td-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border-light); border-right: 1px solid var(--table-border-light); font-size: 15px; line-height: 22px;
+        > td {padding: var(--table-td-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border-light); border-right: 1px solid var(--table-border-light); font-size: 15px; line-height: 22px;
             &:last-child {border-right: none;}
             button {@apply flex items-center gap-2;
                 svg {
@@ -62,9 +62,12 @@
                 }
             }
 
-            &[data-pc-section="rowexpansioncell"] {@apply px-8 py-8 bg-slate-50;}
+            &[data-pc-section="rowexpansioncell"] {@apply px-4 py-4 bg-slate-50 lg:px-8 lg:py-8;}
+            > span[data-pc-section] {display: none;}
         }
     }
+
+    // th.text-center > [data-pc-section="headercontent"] {justify-content: center;}
 }
 
 
@@ -85,7 +88,9 @@
 }
 
 
-.btn-wrapper-table {@apply flex gap-1 flex-wrap justify-center;}
+.table-btn-wrapper {@apply flex gap-1 flex-wrap justify-center;
+    &.flex-start {justify-content: flex-start;}
+}
 
 
 // Table Expansion
@@ -98,3 +103,35 @@
 }
 
 .table-exp-notice-danger {@apply text-sm text-red-600;}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (max-width: theme('screens[md]')) {
+    .table-custom {
+        .table {
+            > thead {@apply hidden;}
+            > tbody {
+                > tr {@apply py-4 block border-b;
+                    > td {@apply py-0.5 block border-r-0 border-b-0; width: 100% !important;
+                        > span[data-pc-section] {@apply mr-1 inline text-[var(--neutral-250)];
+                            &:after {content: ': '}
+                        }
+
+                        &.td-action {@apply pt-2;}
+                        &.td-hide-title {
+                            > span[data-pc-section] {@apply hidden;}
+                        }
+                        &.td-flexed {@apply flex flex-wrap items-center;}
+                        &.td-highlight {@apply my-3 py-5 border-y border-emerald-600 border-opacity-10 bg-emerald-600 bg-opacity-5;}
+                    }
+
+                    &[id*="expansion"] {@apply py-0;
+                        > td {@apply py-4;}
+                    }
+                }
+            }
+        }
+    }
+}

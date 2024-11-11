@@ -8,7 +8,7 @@
     }
 }
 
-.card-login {@apply mx-auto p-10 pb-0 w-[500px] max-w-full rounded-xl bg-white shadow;
+.card-login {@apply mx-auto pt-8 px-6 w-[500px] max-w-full rounded-xl bg-white shadow md:pt-10 md:px-10;
     #forgot-password & {@apply w-[600px];}
     #registration &, #bidder-details & {@apply w-[1080px];
         .page-header {@apply mb-6;}
@@ -48,7 +48,10 @@
     }
     .bs-item {@apply relative flex flex-col; padding: var(--padding-block) var(--padding-inline);
         &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
-        &:after {position: absolute; bottom: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        &:after {position: absolute; bottom: 0px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        > *:first-child {
+            &:after {position: absolute; top: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        }
     }
     .bs-label {@apply text-sm text-[var(--neutral-300)];}
     .bs-value {@apply text-[var(--neutral-600)];}
