@@ -9,8 +9,10 @@
 .fm-label-holder {@apply mb-1 flex gap-2 items-center justify-between;
     .fm-label {@apply mb-0;}
     a {@apply text-sm font-medium text-primary-600;}
+    a.link-primary {@apply text-secondary-600;}
 }
 .fm-label {@apply mb-1 text-sm font-semibold;
+    &.fm-label-lg {@apply text-base;}
     .required & {
         &:after {@apply text-red-600; content: '*';}
     }
@@ -66,14 +68,14 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
         span {@apply hidden;}
     }
 }
-// .fm-calender-panel {min-width: auto !important;}
+.fm-calender-panel {min-width: auto !important;}
 
 .fm-check-holder {@apply flex flex-wrap gap-x-5 gap-y-2 items-center;
     &.fm-check-vertical {@apply flex-col items-start;}
-    &.fm-check-center {@apply mx-auto justify-center w-3/4;}
+    &.fm-check-center {@apply mx-auto justify-center w-11/12 sm:w-3/4;}
 }
 .fm-checkbox, .fm-radiobox {@apply flex;
-    label {@apply ml-2 text-[15px] cursor-pointer;}
+    label {@apply pl-2 text-[15px] cursor-pointer;}
 }
 .fm-box {@apply w-6 h-6 flex items-center justify-center border border-[var(--fm-border-color)] rounded-[var(--fm-border-radius)] transition-colors duration-200;
     &-control {@apply w-full h-full absolute top-0 left-0 z-10 p-0 m-0 opacity-0 outline-none appearance-none cursor-pointer;}
@@ -94,13 +96,12 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
 }
 
 
-.fm-input-group-holder {@apply flex gap-3 items-center;
-    .fm-input-group {@apply grow;}
-    > button {@apply text-sm whitespace-nowrap;}
+.fm-input-group-holder {@apply flex gap-x-3 flex-col sm:flex-row sm:items-end;
+    .fm-input-group {@apply w-full grow;}
 }
 .fm-input-group {@apply flex;
     .fm-inner {@apply grow;}
-    button {@apply text-sm whitespace-nowrap first:rounded-r-none last:rounded-l-none;}
+    button {@apply text-sm first:rounded-r-none last:rounded-l-none;}
     &:has(.fm-input-group-addon) {
         // .fm-control {@apply first:rounded-r-none first:border-r-0 last:rounded-l-none last:border-l-0;
         //     &:not(:first-child):not(:last-child) {@apply border-x-0 rounded-none;}
@@ -122,6 +123,7 @@ textarea.fm-control {@apply pt-[0.55rem] min-h-20;}
         }
     }
 }
+.fm-button-addon {@apply text-sm;}
 
 .fm-buttons {@apply flex flex-wrap gap-1;}
 
