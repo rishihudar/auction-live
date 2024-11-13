@@ -20,6 +20,7 @@
             <InputGroup>
               <div class="fm-inner">
                 <InputText v-model="emailId" placeholder="Enter your Username" :disabled="emailchecked" />
+                <fa-user class="fm-icon fm-prefix"></fa-user>
               </div>
               <Button @click="isEmailExist" :disabled="!emailId || emailchecked">
                 <span>Verify<span class="hidden sm:inline"> Username</span></span>
@@ -57,8 +58,8 @@
             </div>
           </div>
           <div class="fm-group">
-                <Button label="Send OTP" class="fm-button-addon" severity="secondary" @click="sendOTPMobile" :disabled="isSmsOTPSent || !checkMobileNumber" />
-              </div>
+            <Button label="Send OTP" class="fm-button-addon" severity="secondary" @click="sendOTPMobile" :disabled="isSmsOTPSent || !checkMobileNumber" />
+          </div>
         </div>
         <div class="col-span-full">
           <div class="fm-group" v-if="mobileOtpEnable">
@@ -149,6 +150,7 @@ import MQLCdn from "@/plugins/mqlCdn.js";
 import faEmail from "../../assets/icons/envelope.svg";
 import faMobileButton from "../../assets/icons/mobile-button.svg";
 import faLock from "../../assets/icons/lock.svg";
+import faUser from '../../assets/icons/user.svg';
 import { useToast } from "primevue/usetoast";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 })

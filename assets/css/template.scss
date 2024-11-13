@@ -99,6 +99,8 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     h1.title {@apply text-4xl;}
     h2.title {@apply text-3xl;}
     .subtitle {@apply mt-1;}
+
+    &.centered {@apply justify-center;}
     
     .ph-action {@apply mt-4 flex flex-wrap gap-4 lg:mt-0;
         // .fm-control {@apply border-none;}

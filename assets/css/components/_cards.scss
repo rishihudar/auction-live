@@ -98,7 +98,7 @@ $roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
     .cr-title {@apply mb-2 text-2xl font-bold text-center text-[var(--neutral-600)]; transition: color 0.3s ease;}
     .cr-text {@apply text-center line-clamp-3; transition: color 0.3s ease;}
     .cr-action {@apply mt-6 text-center;}
-    .btn {@apply px-8 whitespace-nowrap xl:text-sm 2xl:text-base; transition: all 0.3s ease;}
+    .btn {@apply px-8 whitespace-nowrap text-sm 2xl:text-base; transition: all 0.3s ease;}
 
     &:hover {
         &:before {transform: translate3d(-20%, -20%, 0) rotate3d(0, 0, 1, -45deg)}
