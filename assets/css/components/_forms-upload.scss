@@ -43,7 +43,22 @@
 }
 
 
-.fm-upload-holder {position: relative;}
+.fm-upload-holder {position: relative;
+    [data-pc-name="fileupload"] {display: flex; flex-direction: column;}
+    .fm-upload {order: -1;}
+    [data-pc-name="messages"] {margin: 0; border: none; border-radius: 0; background: transparent;}
+    [data-pc-section="wrapper"] {padding: 0;}
+    [data-pc-section="icon"], [data-pc-section="closebutton"] {display: none;}
+    [data-pc-section="text"] {@extend .fm-error; width: 100%; overflow-wrap: break-word;}
+
+    // adjustments for input group with fileupload errors
+    .fm-input-group {
+        [data-pc-name="fileupload"] .fm-upload[data-pc-section="choosebutton"] {border-top-right-radius: var(--fm-border-radius); border-bottom-right-radius: var(--fm-border-radius);}
+        .fm-input-group-addon {position: absolute; top: 0; right: 0;
+            &:before {position: absolute; top: 1px; bottom: 1px; left: -10px; content: ''; width: 10px; background: #fff;}
+        }
+    }
+}
 .fm-upload-actions {position: absolute; inset-block: 1px; right: 1px; padding-inline: 5px; display: flex; align-items: center; border-radius: 0 4px 4px 0; background: #fff;
     .btn {padding-inline: 6px;}
 }

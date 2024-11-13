@@ -7,3 +7,7 @@
 }
 
 .box-grid {@apply grid gap-[var(--fm-grid-gap)] grid-cols-12;}
+
+.box-flexed {@apply flex justify-center;
+    .bf-item {@apply w-[700px] max-w-full;}
+}
