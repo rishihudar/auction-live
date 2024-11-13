@@ -239,6 +239,12 @@ const router = createRouter({
       meta: { title: "BidderActivityReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
     },
     {
+      path: "/T&CReport",
+      name:"T&CReport",
+      component: loadAdminView("T&CReport"),
+      meta: { title: "T&CReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/BidderDeactivation",
       name:"BidderDeactivation",
       component: loadAdminView("BidderDeactivation"),
