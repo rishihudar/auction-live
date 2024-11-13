@@ -83,8 +83,8 @@ function TnCUpload(event) {
     .setFormData(formData) // (required) sets file data
     .setFileName(timeStamp + "_" + event.files[0].name) // (optional field) if you want to set name to file that is being uploaded
     // FIXED: pass buckeyKey instead of name
-    .setBucketKey("2omyB9HP5KBT3ELyjwqgsfPGrdo") // (required) valid bucket key need to set in which file will be uploaded.
-    .setPurposeId("2okPzNEyKU3LiXrD45aKA3nLf7b") // (required) valid purposeId need to set in which file will be uploaded.
+    .setBucketKey("2on4J5OMa9tBUFCrkPOxo7vciVx") // (required) valid bucket key need to set in which file will be uploaded.
+    .setPurposeId("2on4GNT39IxEV85HKdAu2osTcLv") // (required) valid purposeId need to set in which file will be uploaded.
     .setClientId("2ZncVDPZRGYZwwteYYbB3aw4fr7") // (required) valid purposeId need to set in which file will be uploaded.
 
     .uploadFile("uploadtBtn")
