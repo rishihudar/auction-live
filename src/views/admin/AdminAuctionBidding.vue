@@ -422,7 +422,7 @@ function websocketConn() {
                 if (message.error === "You don't have enough EMD left to bid for a new property" ||
                     message.error === 'You have already joined this auction, If you have already left previous auction then please try again after 20 seconds') {
                     alert(message.error)
-                    window.close()
+                    goBack();
                 }
                 break
 
@@ -436,15 +436,16 @@ function websocketConn() {
             case message.typeCode === 500:
                 // Auction has ended redirect to dashboard
                 // self.leaveAuction()
-                alert('Auction Ended, Thank you for Participating!')
+                toaster.success('Auction Ended, Thank you for Participating!');
+                //alert('Auction Ended, Thank you for Participating!')
                 // self.$router.push({ name: 'vendorDashboard' })
-                window.close()
+                goBack();
 
                 break
             case message.typeCode === 600:
                 alert('The current auction has been cancelled abruptly by the department due to unavoidable circumstances. We regret for the inconvenience caused.')
                 // self.$router.push({ name: 'vendorDashboard' })
-                window.close()
+                goBack();
                 break
 
             default:
