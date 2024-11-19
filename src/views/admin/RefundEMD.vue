@@ -1,5 +1,7 @@
 <template>
     <div>
+        <Toast />
+        <ConfirmDialog></ConfirmDialog>
         <div class="page-header">
             <div class="ph-text">
                 <h2 class="title">Refund Panel</h2>
@@ -26,7 +28,7 @@
 </template>
 
 <script setup>
-
+import ConfirmDialog from 'primevue/confirmdialog';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 

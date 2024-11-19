@@ -872,6 +872,12 @@ const router = createRouter({
       name: "RejectedH1Refund",
       component: loadAdminView("RejectedH1Refund"),
       meta: { title: "RejectedH1Refund",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/settlement",
+      name: "SettlementUI",
+      component: loadAdminView("SettlementUI"),
+      meta: { title: "SettlementUI",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
     }
 
 

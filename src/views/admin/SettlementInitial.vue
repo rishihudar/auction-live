@@ -1,8 +1,10 @@
 <template>
     <div>
+        <Toast />
+        <ConfirmDialog></ConfirmDialog>
       <div class="page-header">
         <div class="ph-text">
-          <h2 class="title">Non H1 Refund</h2>
+          <h2 class="title">H1 Initial Settlement</h2>
         </div>
       </div>
       <!-- Sample Master tables-->
@@ -35,13 +37,13 @@
           </Column>
           <Column field="auctionStartDate" header="Auction StartDate/Time"></Column>
           <Column field="auctionEndDate" header="Auction EndDate/Time"></Column>
-            <Column header="Refund" style="width: 5rem">
+            <Column header="Settlement" style="width: 5rem">
                     <template #body="row">
                         <Button
-                            @click="startRefund(row.data.auctionCode)"
+                            @click="startSettlement(row.data.auctionCode)"
                             class="btn-sm"
                             label="Start"
-                            :disabled="row.data.refundStarted"
+                            :disabled="row.data.h1EMDSettlementStatus"
                         />
                     </template>
             </Column>
@@ -58,12 +60,12 @@
 
               <div class="table-custom">
                 <DataTable v-model:expandedRows="expandedRows" showGridlines :value="bidderDetails">
-                
+                <Column field="roundNumber" header="Round Number"></Column>
                 <Column field="bidderName" header="Bidder Name"></Column>
                 <Column field="bidderEmail" header="Bidder Email"></Column>
                 <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
                 <Column field="amount" header="Amount in Rs"></Column>
-                <Column field="refundStatus" header="Refund Status"></Column>
+                <Column field="settlementStatus" header="Settlement Status"></Column>
                 <Column expander header="Details" style="width: 5rem"></Column>
                 <template #expansion="slot">
                     <p><b>Auction Code:</b> {{slot.data.auctionId}}</p>
@@ -71,7 +73,7 @@
                     <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
                     <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
                     <p><b>No of Properties allocated:</b> {{slot.data.noOfPropertiesAllocated}}</p>
-                    <p><b>Refund Amount ( {{slot.data.amount}} - {{slot.data.auctionEmd}} * {{slot.data.noOfPropertiesAllocated}} ) = </b> {{slot.data.refundAmount}}</p>
+                    <p><b>Settlement Amount ( {{slot.data.auctionEmd}} * {{slot.data.noOfPropertiesAllocated}} ) = </b> {{slot.data.auctionEmd}}</p>
                 </template>
 
                 </DataTable>
@@ -79,30 +81,6 @@
                     
                 </template>
         </DataTable>
-
-        <Dialog v-model:visible="visible" modal header="Bidder Details"> 
-
-            <div class="table-custom">
-                <DataTable v-model:expandedRows="expandedRows" showGridlines :value="bidderDetails">
-                
-                <Column field="bidderName" header="Bidder Name"></Column>
-                <Column field="bidderEmail" header="Bidder Email"></Column>
-                <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
-                <Column field="amount" header="Amount in Rs"></Column>
-                <Column field="refundStatus" header="Refund Status"></Column>
-                <Column expander header="Details" style="width: 5rem"></Column>
-                <template #expansion="slot">
-                    <p><b>Auction Code:</b> {{slot.data.auctionId}}</p>
-                    <p><b>Auction EMD:</b> {{slot.data.auctionEmd}}</p>
-                    <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
-                    <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
-                    <p><b>No of Properties allocated:</b> {{slot.data.noOfPropertiesAllocated}}</p>
-                    <p><b>Refund Amount:</b> {{slot.data.amount}}</p>
-                </template>
-
-                </DataTable>
-            </div>
-        </Dialog>
 
         <Paginator class="pagination-down" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]" :totalRecords="totalRows"
           template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
@@ -113,13 +91,12 @@
   </template>
   
   <script setup>
-  import ConfirmDialog from 'primevue/confirmdialog';
-    import { useConfirm } from "primevue/useconfirm";
-    import { useToast } from "primevue/usetoast";
+  
+import ConfirmDialog from 'primevue/confirmdialog';
+
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import Dialog from 'primevue/dialog';
 import axios from "axios";
   import { ref, onMounted, computed } from "vue";
   import { FilterMatchMode } from "primevue/api";
@@ -127,9 +104,8 @@ import axios from "axios";
   import MQL from "@/plugins/mql.js";
   import { useRoute } from "vue-router";
   import { createToaster } from "@meforma/vue-toaster";
-
-  const confirm = useConfirm();
-const toast = useToast();
+  import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
   const toaster = createToaster({ position: "top-right", duration: 5000 });
   let loading=ref(false)
@@ -148,6 +124,12 @@ let bidderDetails=ref([])
   const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+
+
+
+const confirm = useConfirm();
+const toast = useToast();
+
   onMounted(() => {
     entityId.value = route.params.id;
     fetchConcludedAuctionsUser();
@@ -191,20 +173,21 @@ let bidderDetails=ref([])
       });
   }
 
-  function fetchNonH1AuctionBidderDetails(val) {
+  function FetchBidderSettlementDetails(val) {
     
 			new MQL()
             .useManagementServer()
-			.setActivity("r.[FetchNonH1BidderAuctionDetails]")
+			.setActivity("r.[FetchBidderSettlementDetails]")
 			.setData({"auctionCode":val})
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("FetchNonH1BidderAuctionDetails",true)
-			if (rs.isValid("FetchNonH1BidderAuctionDetails")) {
+			let res = rs.getActivity("FetchBidderSettlementDetails",true)
+			if (rs.isValid("FetchBidderSettlementDetails")) {
                 bidderDetails.value = res.result
+                console.log("bidderDetails is "+bidderDetails.value)
 			} else
 			 { 
-			rs.showErrorToast("FetchNonH1BidderAuctionDetails")
+			rs.showErrorToast("FetchBidderSettlementDetails")
 			}
 			})
 			
@@ -212,36 +195,34 @@ let bidderDetails=ref([])
 
   function viewDetails(value) {
     console.log("received value ",value)
-    fetchNonH1AuctionBidderDetails(value)
+    FetchBidderSettlementDetails(value)
     // visible.value=true
   }
 
-  let refundBidderList=ref([])
+  let settlementBidderList=ref([])
   let response = ref()
 
-  function UpdateRefundStatus(val) {
+  function UpdateH1EMDSettlementStatus(val) {
     
-					// Automatically generated
-			new MQL()
-      .useManagementServer()
-			.setActivity("r.[UpdateNonH1AuctionRefundStatus]")
+		    new MQL()
+            .useManagementServer()
+			.setActivity("r.[UpdateH1EMDSettlementStatus]")
 			.setData({"auctionCode":val})
 			.fetch()
 			 .then(rs => {
-			let res = rs.getActivity("UpdateNonH1AuctionRefundStatus",true)
-			if (rs.isValid("UpdateNonH1AuctionRefundStatus")) {
-        toaster.success("Refund Initiated");
-        window.location.reload();
+			let res = rs.getActivity("UpdateH1EMDSettlementStatus",true)
+			if (rs.isValid("UpdateH1EMDSettlementStatus")) {
+        toaster.success("Settlement Initiated");
 			} else
 			 { 
-			// rs.showErrorToast("UpdateNonH1AuctionRefundStatus")
-      toaster.error("Refund could not be Initiated Please try again after some time");
+			// rs.showErrorToast("UpdateH1EMDSettlementStatus")
+      toaster.error("Settlement could not be Initiated Please try again after some time");
 			}
 			})
 			
   }
 
-  async function startRefund(val) {
+  async function startSettlement(val) {
 
     confirm.require({
         message: 'Are you sure you want to proceed?',
@@ -251,36 +232,38 @@ let bidderDetails=ref([])
         rejectLabel: 'Cancel',
         acceptLabel: 'Save',
         accept: () => {
+            // toaster.success('You have accepted');
+        
 
     loading.value=true
     
             new MQL()
             .useManagementServer()
-			.setActivity("r.[FetchNonH1DetailsStartRefund]")
+			.setActivity("r.[FetchBidderDetailsStartSettlement]")
 			.setData({"auctionCode":val,"userId":parseInt(loginStore.loginId)})
         .fetch()
         .then(async rs => {
-            let res = rs.getActivity("FetchNonH1DetailsStartRefund", true)
-            if (rs.isValid("FetchNonH1DetailsStartRefund")) {
-                refundBidderList.value = res.result;
-                console.log("refundBidderList is ",refundBidderList.value)
+            let res = rs.getActivity("FetchBidderDetailsStartSettlement", true)
+            if (rs.isValid("FetchBidderDetailsStartSettlement")) {
+                settlementBidderList.value = res.result;
+                console.log("settlementBidderList is ",settlementBidderList.value)
 
                     try {
-                        const result = await axios.post("/refundsettlement-server/refund", refundBidderList.value);
-                        console.log("response.valueis "+result.data) //Refund processed successfully
-                        // toaster.success("Refund Initiated");
+                        const result = await axios.post("/refundsettlement-server/settlement", settlementBidderList.value);
+                        console.log("response.valueis "+result.data) 
+                        toaster.success("Settlement Initiated");
 
-                        if(result.data == "Refund processed successfully") {
-                          UpdateRefundStatus(val)
+                        if(result.data == "Settlement processed successfully") {
+                          UpdateH1EMDSettlementStatus(val)
                           
                         } else {
-                          toaster.error("Refund could not be Initiated Please try again after some time");
+                          toaster.error("Settlement could not be Initiated Please try again after some time");
                         }
 
                     } catch (err) {
 
                         console.error('API Error: ', err);
-                        toaster.success("Refund Error");
+                        toaster.error("Settlement API Error");
                         loading.value = false;
                         return
                     }
@@ -289,22 +272,20 @@ let bidderDetails=ref([])
 
 
             } else {
-                rs.showErrorToast("FetchNonH1DetailsStartRefund")
+                rs.showErrorToast("FetchBidderDetailsStartSettlement")
             }
         })
 
-      },
+    },
         reject: () => {
-            toaster.error('Refund Process Cancelled');
+            toaster.error('Settlement Process Cancelled');
         }
     });
-
-    
 
 }
   
 const onRowExpand = (event) => {
-  // console.log("Print here "+event.data.id)
+  console.log("Print here "+event.data.auctionCode)
   expandedRows.value = [event.data];
   viewDetails(event.data.auctionCode)
 };
