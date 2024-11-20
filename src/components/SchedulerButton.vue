@@ -12,7 +12,7 @@
       class="btn-sm"
       @click="display = true"
       :disabled="visibleReSchedule"
-      v-tooltip="{value:'Auction cannot be rescheduled at this stage'}"
+      v-tooltip="{ value: visibleReSchedule ? 'Auction cannot be rescheduled at this stage' : '' }"
     ></Button>
   </div>
   <Dialog
