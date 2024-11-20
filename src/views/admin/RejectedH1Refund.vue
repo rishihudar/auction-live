@@ -59,6 +59,7 @@
             <div class="table-custom">
               <DataTable v-model:expandedRows="expandedRows" showGridlines :value="bidderDetails">
               
+              <Column field="roundNumber" header="Round Number"></Column>
               <Column field="bidderName" header="Bidder Name"></Column>
               <Column field="bidderEmail" header="Bidder Email"></Column>
               <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
@@ -113,6 +114,9 @@
 </template>
 
 <script setup>
+import ConfirmDialog from 'primevue/confirmdialog';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
@@ -124,6 +128,9 @@ import { login } from "../../store/modules/login.js";
 import MQL from "@/plugins/mql.js";
 import { useRoute } from "vue-router";
 import { createToaster } from "@meforma/vue-toaster";
+
+const confirm = useConfirm();
+const toast = useToast();
 
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 let loading=ref(false)
@@ -188,11 +195,11 @@ function fetchConcludedAuctionsUser() {
 function FetchRejectedH1BidderAuctionDetails(val) {
   
     new MQL()
-          .useManagementServer()
+    .useManagementServer()
     .setActivity("r.[FetchRejectedH1BidderAuctionDetails]")
     .setData({"auctionCode":val})
     .fetch()
-     .then(rs => {
+    .then(rs => {
     let res = rs.getActivity("FetchRejectedH1BidderAuctionDetails",true)
     if (rs.isValid("FetchRejectedH1BidderAuctionDetails")) {
               bidderDetails.value = res.result
@@ -225,6 +232,7 @@ function UpdateRejectedRefundStatus(val) {
     let res = rs.getActivity("UpdateRejectedStatus",true)
     if (rs.isValid("UpdateRejectedStatus")) {
       toaster.success("Refund Initiated");
+      window.location.reload();
     } else
      { 
     // rs.showErrorToast("UpdateNonH1AuctionRefundStatus")
@@ -235,6 +243,16 @@ function UpdateRejectedRefundStatus(val) {
 }
 
 async function startRefund(val) {
+
+  confirm.require({
+        message: 'Are you sure you want to proceed?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Save',
+        accept: () => {
+
   loading.value=true
   
           new MQL()
@@ -276,10 +294,18 @@ async function startRefund(val) {
           }
       })
 
+    },
+        reject: () => {
+            toaster.error('Refund Process Cancelled');
+        }
+    });
+
+
 }
 
 const onRowExpand = (event) => {
 console.log("Print here "+event.data.auctionCode)
+expandedRows.value = [event.data];
 viewDetails(event.data.auctionCode)
 };
 

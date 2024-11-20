@@ -67,8 +67,10 @@
             <div class="bs-item col-span-6 2xl:col-span-4" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
                 <div class="bs-buttons">
                     <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                    <button @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                    <button v-if="doc.documentPath != '/' " @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
                     doc.documentTypeName }}</button>
+                    <button v-else class="btn btn-sm btn-secondary" v-tooltip.top="'Document Not Available'">{{
+                    doc.documentTypeName }} </button>
                 </div>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
