@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="col-span-full">
-          <div class="fm-group" v-if="mobileOtpEnable">
+          <div class="fm-group">
             <label class="fm-label" for="verifyMobileNumber">Enter OTP received on Mobile</label>
             <InputGroup>
               <div class="fm-inner">
@@ -255,7 +255,7 @@ async function sendOTPMobile() {
 
   await isMobileNumberExist();
   //console.log("countMobileNumberUser is ", countMobileNumberUser.value);
-  if (countMobileNumberUser.value === 1) {
+  if (countMobileNumberUser.value > 0) {
     toast.add({
       severity: "success",
       summary: "Success",
