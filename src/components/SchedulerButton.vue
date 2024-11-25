@@ -12,7 +12,7 @@
       class="btn-sm"
       @click="display = true"
       :disabled="visibleReSchedule"
-      v-tooltip="{value:'Auction cannot be rescheduled at this stage'}"
+      v-tooltip="{ value: visibleReSchedule ? 'Auction cannot be rescheduled at this stage' : '' }"
     ></Button>
   </div>
   <Dialog
@@ -196,6 +196,8 @@ function isValidEndDate(date) {
 
 const v$ = useVuelidate(rules, { startDate, endDate, users });
 
+import axios from 'axios';
+
 async function schedule() {
   // Schedule the auction
   // Automatically generated }
@@ -236,7 +238,14 @@ async function schedule() {
           // NotifyScheduledAuctionBidders()
           NotifyAuctionScheduledAndPasscodes();
           if (statusCode.value === "AUCTION_SCHEDULED") {
-            NotifyAuctionReScheduledAndPasscodes();
+            // remove hub logic here
+             try {
+    await removeHub(); // Wait for removeHub to complete
+    NotifyAuctionReScheduledAndPasscodes(); // Runs only if removeHub is successful
+  } catch (error) {
+    console.error("Failed to remove hub:", error.message);
+    alert("Failed to remove hub. Please try again."); // Handle errors
+  }
           }
 
           // NotifyAuctionReScheduledAndPasscodes()
@@ -251,6 +260,18 @@ async function schedule() {
       }
     });
 }
+const data = ref(null);
+const error = ref(null);
+
+const removeHub = async () => {
+  try {
+    const response = await axios.get(`/bidding-server-http/o/removeHubRoute/${props.auctionId}`);
+    return Promise.resolve(response.data); // Return a resolved Promise with the response data
+  } catch (err) {
+    console.error("Error removing hub:", err.message);
+    return Promise.reject(err); // Return a rejected Promise in case of an error
+  }
+};
 
 function formatDate(date) {
   const year = date.getFullYear();
