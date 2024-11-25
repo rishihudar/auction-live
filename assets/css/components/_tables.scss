@@ -88,7 +88,7 @@
 }
 
 
-.table-btn-wrapper {@apply flex gap-1 flex-wrap justify-center;
+.table-btn-wrapper {@apply flex gap-1 flex-wrap md:justify-center;
     &.flex-start {justify-content: flex-start;}
 }
 

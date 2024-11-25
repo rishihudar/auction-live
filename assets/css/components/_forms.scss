@@ -1,8 +1,8 @@
 .fm-group {@apply relative mb-4 flex flex-col;
     // small {@apply mt-2 text-[13px] leading-5 text-[var(--neutral-300)];}
 
-    .fm-error {@apply mt-0.5 text-[13px] leading-6 font-medium text-[var(--danger-400)];}
-    .fm-info {@apply mt-1 text-[13px] leading-5 text-[var(--neutral-300)];}
+    .fm-error {@apply mt-1 text-[13px] leading-normal font-medium text-[var(--danger-400)];}
+    .fm-info {@apply mt-1 text-[13px] leading-normal text-[var(--neutral-300)];}
 }
 
 

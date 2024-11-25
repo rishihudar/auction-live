@@ -38,13 +38,18 @@
     }
     .bs-title {@apply rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);}
     
-    .bs-item-image-holder {@apply grid grid-cols-[1fr_200px];}
+    .bs-item-image-holder {@apply grid grid-cols-1 lg:grid-cols-[1fr_200px];
+        > [class*="bs-item-"] {@apply relative;
+            &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
+            &:after {position: absolute; bottom: 0px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        }
+    }
     .bs-item-holder {@apply grid grid-cols-12 overflow-hidden;}
-    .bs-item-image {@apply flex items-center justify-center border-t border-l;}
-    .bs-item-buttons {@apply border-t; padding: var(--padding-block) var(--padding-inline);}
+    .bs-item-image {@apply flex items-center justify-center; padding: var(--padding-block) var(--padding-inline);}
+    // .bs-item-buttons {@apply border-t; padding: var(--padding-block) var(--padding-inline);}
 
     .bs-image {@apply w-36 h-36;
-        img {@apply w-full h-full object-contain;}
+        img {@apply w-full h-full object-contain font-semibold text-center text-[var(--neutral-200)];}
     }
     .bs-item {@apply relative flex flex-col; padding: var(--padding-block) var(--padding-inline);
         &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
@@ -55,7 +60,7 @@
     }
     .bs-label {@apply text-sm text-[var(--neutral-300)];}
     .bs-value {@apply text-[var(--neutral-600)];}
-    .bs-buttons {@apply flex gap-1 justify-center;
+    .bs-buttons {@apply flex gap-1 flex-wrap justify-center;
         &.bs-buttons-left {
             @apply justify-start;
         }
