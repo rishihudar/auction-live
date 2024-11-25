@@ -878,6 +878,12 @@ const router = createRouter({
       name: "SettlementUI",
       component: loadAdminView("SettlementUI"),
       meta: { title: "SettlementUI",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/renewal-feeReport",
+      name: "MISRenewalFeeReport",
+      component: loadAdminView("MISRenewalFeeReport"),
+      meta: { title: "MISRenewalFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
     }
 
 
