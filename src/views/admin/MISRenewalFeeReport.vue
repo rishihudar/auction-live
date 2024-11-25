@@ -64,6 +64,10 @@ function MISRenewalFeeReport() {
                 let res = rs.getActivity("MISRenewalFeeReport", true)
                 if (rs.isValid("MISRenewalFeeReport")) {
                     json_data.value = res.result;
+                    // console.log(json_data.value)
+                    if(json_data.value == '' ) {
+                        alert('No data found')
+                    }
                 } else {
                     rs.showErrorToast("MISRenewalFeeReport")
                 }
