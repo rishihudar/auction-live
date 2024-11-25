@@ -72,7 +72,41 @@
           </div>
         </div>
       </div>
+
+<!-- Rescheduling reason input field -->
+      <div class="col-span-full md:col-span-4">
+    <div class="fm-group">
+      <label for="ReschedulingReason" class="fm-label">Rescheduling Reason</label>
+      <div class="fm-inner">
+     <InputText
+     v-model="reschedulingReason"
+     id="reschedulingReason"
+     placeholder="Enter Rescheduling Reason"
+                />
+     </div>
+      <div class="fm-error" v-if="submitted && v$.reschedulingReason.$errors[0]">
+            {{ v$.reschedulingReason.$errors[0].$message }}
+          </div>
     </div>
+      </div>
+    </div>
+    
+    <!-- Rescheduling Reason File Upload -->
+    <div class="col-span-full md:col-span-4" v-if="!uploadedFile">
+      <div class="fm-group">
+        <label for="ReschedulingReasonDocument" class="fm-label">Rescheduling Reason Document</label>
+        <div class="fm-inner">
+     <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false" :fileLimit="1"
+                            :max-file-size="docSize * multiplyingFactor" :custom-upload="true" @uploader="onAdvancedUpload">
+                            <template #empty>
+                                <p>Drag and drop files to here to upload, Max. file size {{ docSize  }} KB , Only
+                                    {{docType}}  are allowed</p>
+                            </template></FileUpload>
+                        
+     </div>
+      </div>
+    </div>
+
     <div class="box-section">
       <div class="bs-header">Items List</div>
       <div
@@ -99,13 +133,14 @@
 </template>
 
 <script setup>
+import FileUpload from 'primevue/fileupload';
  import Tooltip from 'primevue/tooltip';
 import { onMounted, ref, watch,computed } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql.js";
 import { useVuelidate } from "@vuelidate/core";
-import { required, helpers, minLength } from "@vuelidate/validators";
+import { required, helpers, minLength, maxLength } from "@vuelidate/validators";
 import { fetchAuctionStatus } from "@/plugins/helpers.js";
 import moment from "moment";
 import { login } from "../store/modules/login";
@@ -128,7 +163,59 @@ const props = defineProps({
 
 let previousstartDate = props.startDate;
 
+const uploadedFile = ref('');
+
 const loginStore = login();
+
+const myFile = ref();
+const fileName = ref();
+const filePath = ref();
+const onAdvancedUpload = async (event) => {
+    let timeStamp = Date.now();
+    console.log(timeStamp, "timeStamp")
+    console.log("event", event.files[0])
+    myFile.value = event.files[0].name;
+    console.log("myFile", myFile.value)
+    const formData = new FormData();
+    formData.append('file', event.files[0]);
+    //new mqlCDN add-------------------------------------------------------------------------------
+    // new MQLCdn()
+    //     // .useManagementServer()
+    //     .enablePageLoader(true)// FIXED: change this to directory path
+    //     //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    //     .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
+    //     .setFormData(formData) // (required) sets file data
+    //     .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
+    //     // FIXED: pass buckeyKey instead of name
+    //     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+    //     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    //     .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    //     .uploadFile("uploadtBtn")
+    //     .then((res) => {
+            // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+            // if (res.isValid()) {
+            //     fileName.value = timeStamp + "_" + myFile.value;
+            //     filePath.value = res.uploadedFileURL().filePath;
+            //     // fullPath.value = Vue.getCDNBaseURL();
+            //     //console.log("fileName", fileName.value);
+            //     //console.log("filePath", filePath.value);
+            //     //console.log("fullPath", fullPath.value);
+            //     uploadedFile.value = true;
+            //     // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
+            //     //toaster.success("file uploaded.");
+            //     toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            //     // cropVisible.value=false
+            // } else {
+            //     res.showErrorToast();
+            // }
+        }
+
+   
+
+
+
+
+
 
 const emit = defineEmits(["update:modelValue"]);
 function emitModalValue() {
@@ -177,8 +264,14 @@ const rules = {
       minLength(3)
     ),
   },
+  reschedulingReason:{
+    required,
+    minLength: helpers.withMessage("Minimum 10 characters required",minLength(10)),
+    maxLength: helpers.withMessage("Maximum 100 characters allowed", maxLength(100))
+    
+  }
 };
-
+const reschedulingReason = ref();
 // Custom validation functions for start date
 function isValidStartDate(date) {
   const today = moment();
@@ -194,7 +287,7 @@ function isValidEndDate(date) {
   return inputDate.isAfter(today) && inputDate.isAfter(startDate.value);
 }
 
-const v$ = useVuelidate(rules, { startDate, endDate, users });
+const v$ = useVuelidate(rules, { startDate, endDate, users, reschedulingReason });
 
 import axios from 'axios';
 
@@ -368,10 +461,58 @@ function AuctionReScheduleTime() {
 // const isReScheduleDisabled = computed(() => {
 //   return rescheduleCompareTime.value < reScheduleTime.value;
 // });
+const docTypeId = ref(0);
+const docSize = ref();
+const docName = ref();
+const docType = ref();
+const docValidation = ref([]);
+
+function fetchReschedulingDocumentDetails() {
+    // Automatically generated
+    new MQL()
+        .useCoreServer()
+        .setActivity("o.[fetchDocumentsValidationDetails]")
+
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("fetchDocumentsValidationDetails", true)
+            docValidation.value = res.result.validation
+            docValidation.value.forEach(item => {
+                if (item.typeName == "RESCHEDULING_REASON_DOCUMENT") {
+                    docName.value = item.typeName;
+                    docSize.value = item.fileSize;
+                    docType.value = item.fileType;
+                    docTypeId.value = item.typeId;
+                    //console.log("docName.value", docName.value);
+                }
+            });
+        })
+}
+const multiplyingFactor = ref();
+function fetchMultiplyingFactor(){
+
+			new MQL()
+      .useCoreServer()
+			.setActivity("o.[FetchCustomValueByKey]")
+			.setData({"key":"MULTIPLYING_FACTOR"})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchCustomValueByKey",true)
+			if (rs.isValid("FetchCustomValueByKey")) {
+        multiplyingFactor.value = res.result.vsCustomParamValue
+			} else
+			 { 
+			rs.showErrorToast("FetchCustomValueByKey")
+			}
+			})
+			
+}
 
 onMounted(() => {
   // Fetch the users  to be shown in dropdown
   FetchUsers();
+  fetchReschedulingDocumentDetails();
+  fetchMultiplyingFactor();
   //console.log("Auc Code",props.auctionCode);
   //console.log(props.itemList);
   //console.log(props.auctionId);
