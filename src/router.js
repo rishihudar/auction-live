@@ -884,7 +884,7 @@ const router = createRouter({
       name: "MISRenewalFeeReport",
       component: loadAdminView("MISRenewalFeeReport"),
       meta: { title: "MISRenewalFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
-    },
+    }
 
 
   ],
