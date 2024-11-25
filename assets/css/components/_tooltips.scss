@@ -1,0 +1,17 @@
+/* alignment issues with this particular version of primevue (resolved in new versions) */
+.pv-tooltip {max-width: 300px;
+    &-text {padding: 10px 12px; font-size: 14px; line-height: 20px; text-align: center;}
+
+    &[data-p-position="top"] {padding-bottom: 8px;
+        .pv-tooltip-arrow {bottom: 4px !important; @apply border-x-[0.25rem] border-t-[0.25rem] border-b-0 border-t-surface-600;}
+    }
+    &[data-p-position="bottom"] {padding-bottom: 8px;
+        .pv-tooltip-arrow {bottom: 4px !important; @apply border-x-[0.25rem] border-b-[0.25rem] border-t-0 border-b-surface-600;}
+    }
+    &[data-p-position="left"] {padding-right: 8px;
+        .pv-tooltip-arrow {right: 4px !important; @apply border-y-[0.25rem] border-l-[0.25rem] border-r-0 border-l-surface-600;}
+    }
+    &[data-p-position="right"] {padding-left: 8px;
+        .pv-tooltip-arrow {left: 4px !important; @apply border-y-[0.25rem] border-r-[0.25rem] border-l-0 border-r-surface-600;}
+    }
+}

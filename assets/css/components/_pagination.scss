@@ -4,7 +4,7 @@
 
     .fm-select {@apply w-auto;}
 
-    .btn-page {@apply ml-0.5 w-9 h-10 inline-flex items-center justify-center rounded; transition: colors 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    .btn-page {@apply w-8 h-9 inline-flex items-center justify-center rounded text-sm lg:ml-0.5 lg:w-9 lg:h-10 lg:text-base; transition: colors 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
         svg {@apply w-auto h-4;}
         &:hover {@apply bg-white; box-shadow: inset 0 0 0 1px theme('colors.slate[200]');}
         &.btn-page-active {@apply text-white bg-primary-400;
@@ -24,4 +24,8 @@
 // }
 
 .pagination-up {@apply mb-3;}
-.pagination-down {@apply mt-3;}
+.pagination-down {@apply mt-3;
+    .box-pagination {@apply flex-wrap justify-center;
+        [data-pc-section="current"] {@apply mb-3 w-full text-center lg:mb-0 lg:w-auto lg:text-left;}
+    }
+}

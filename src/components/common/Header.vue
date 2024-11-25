@@ -1,14 +1,15 @@
 <template>
     <header id="header">
         <div class="navbar-brand">
-            <img src="../../../assets/images/logo_dulb.webp" alt="DULB logo">
+            <img class="logo" src="../../../assets/images/logo_dulb.webp" alt="DULB logo">
+            <img class="icon" src="../../../assets/images/logo_dulb_icon.webp" alt="DULB logo" v-tooltip="entityData?.entityName">
         </div>
         <div class="header-right">
             <button class="btn btn-sidebar-toggle" v-if="$route.meta.isSideBarVisible != false" @click="mainStore.toggleSidebar()">
                 <fa-bars></fa-bars>
             </button>
             <div v-else></div>
-            <div class="navbar-title">
+            <div class="navbar-title hidden lg:block">
                 {{ entityData?.entityName }}
             </div>
             <div class="dropdown dropdown-profile">
@@ -23,6 +24,14 @@
                     </span>
                 </Button>
                 <Menu ref="profilemenu" id="ddmenu_profile" class="w-full md:w-15rem" :model="items" :popup="true">
+                    <template #start>
+                        <div class="dp-intro">
+                            <span class="dp-text">
+                                <span class="dp-name">{{ loginStore.username }}</span>
+                                <span class="dp-info">{{ loginStore.role?.roleName }}</span>
+                            </span>
+                        </div>
+                    </template>
                     <template #item="{ item, props }">
                         <!-- <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
                             <a :href="href" v-bind="props.action" @click="navigate">

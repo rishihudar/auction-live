@@ -20,8 +20,11 @@
             <InputGroup>
               <div class="fm-inner">
                 <InputText v-model="emailId" placeholder="Enter your Username" :disabled="emailchecked" />
+                <fa-user class="fm-icon fm-prefix"></fa-user>
               </div>
-              <Button label="Verify Username" @click="isEmailExist" :disabled="!emailId || emailchecked" />
+              <Button @click="isEmailExist" :disabled="!emailId || emailchecked">
+                <span>Verify<span class="hidden sm:inline"> Username</span></span>
+              </Button>
             </InputGroup>
             <!-- <div v-if="$v.emailId.$error" class="fm-error">
                                 {{ $v.emailId.$errors[0].$message }}
@@ -32,7 +35,7 @@
                         </div> -->
           </div>
         </div>
-        <div class="col-span-full">
+        <div class="col-span-full fm-input-group-holder">
           <div class="fm-group">
             <label class="fm-label" for="mobileNumber">Enter Mobile Number</label>
             <div class="fm-input-group-holder">
@@ -42,11 +45,10 @@
                     :disabled="isSmsOTPSent || !emailVerification || !emailchecked" />
                   <fa-mobile-button class="fm-icon fm-prefix"></fa-mobile-button>
                 </div>
-                <Button label="Verify Mobile Number" severity="secondary" :disabled="!emailVerification || isSmsOTPSent"
-                  @click="verifyMobile" />
+                <Button severity="secondary" :disabled="!emailVerification || isSmsOTPSent" @click="verifyMobile">
+                    <span>Verify<span class="hidden sm:inline"> Mobile Number</span></span>
+                </Button>
               </InputGroup>
-              <Button label="Send OTP" severity="secondary" @click="sendOTPMobile"
-                :disabled="isSmsOTPSent || !checkMobileNumber" />
             </div>
             <div v-if="$v.mobileNumber.$error" class="fm-error">
               {{ $v.mobileNumber.$errors[0].$message }}
@@ -54,6 +56,9 @@
             <div v-if="OTPSmsVerified" :style="{ color: 'green', fontSize: 'small' }">
               Mobile Number verified
             </div>
+          </div>
+          <div class="fm-group">
+            <Button label="Send OTP" class="fm-button-addon" severity="secondary" @click="sendOTPMobile" :disabled="isSmsOTPSent || !checkMobileNumber" />
           </div>
         </div>
         <div class="col-span-full">
@@ -145,6 +150,7 @@ import MQLCdn from "@/plugins/mqlCdn.js";
 import faEmail from "../../assets/icons/envelope.svg";
 import faMobileButton from "../../assets/icons/mobile-button.svg";
 import faLock from "../../assets/icons/lock.svg";
+import faUser from '../../assets/icons/user.svg';
 import { useToast } from "primevue/usetoast";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 })

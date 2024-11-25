@@ -27,20 +27,20 @@
             </div>
         </div>
     </div> -->
-    <div class="page-header">
+    <div>
+        <div class="page-header">
             <div class="ph-text">
                 <h2 class="title">User Detail Report</h2>
             </div>
         
             <div class="ph-action">    
-                <JsonExcel :data="product" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" :name="fileName" >
+                <JsonExcel :data="product" :fields="processingReportFields" type="xlsx" class="btn btn-secondary cursor-pointer" worksheet="My Worksheet" :name="fileName">
+                    <fa-table></fa-table>
                     Excel Report
                 </JsonExcel>
-                <Button @click="navigateToAddUser">Add User</Button>
-
+                <Button @click="navigateToAddUser"><fa-plus></fa-plus>Add User</Button>
             </div>
-    </div> 
-    <div class="page-content">
+        </div> 
         <div class="table-custom">
             <Paginator
                 class="pagination-up"
@@ -136,6 +136,9 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import { useRouter } from "vue-router";
+
+import faPlus from '../../../assets/icons/plus.svg'
+import faTable from '../../../assets/icons/table.svg'
 
 const fileName = ref("");
 const router = useRouter();

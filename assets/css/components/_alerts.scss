@@ -1,0 +1,12 @@
+.alert {@apply flex gap-3 items-center text-sm;}
+.alert-note {@apply text-sm;}
+
+.al-icon {@apply shrink-0;
+    svg {@apply h-8;}
+}
+// .alert-icon {padding-left: 70px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM208 352c-8.8 0-16 7.2-16 16s7.2 16 16 16h96c8.8 0 16-7.2 16-16s-7.2-16-16-16H272V240c0-8.8-7.2-16-16-16H216c-8.8 0-16 7.2-16 16s7.2 16 16 16h24v96H208zm48-168a24 24 0 1 0 0-48 24 24 0 1 0 0 48z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 20px center; background-size: 40px auto;}
+
+.alert-info {@apply py-3 px-5 rounded-md text-sky-700 bg-sky-600 bg-opacity-15 fill-sky-700;}
+.alert-danger {@apply py-3 px-5 rounded-md text-red-700 bg-red-600 bg-opacity-15 fill-red-700;}
+.alert-warning {@apply py-3 px-5 rounded-md text-amber-700 bg-amber-600 bg-opacity-15 fill-amber-700;}
+.alert-success {@apply py-3 px-5 rounded-md text-emerald-700 bg-emerald-600 bg-opacity-15 fill-emerald-700;}

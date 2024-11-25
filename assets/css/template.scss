@@ -22,6 +22,7 @@
 @import "common/sidebar";
 @import "common/footer";
 
+@import "components/alerts";
 @import "components/breadcrumbs";
 @import "components/buttons";
 @import "components/cards";
@@ -34,13 +35,20 @@
 @import "components/modals";
 @import "components/pagination";
 @import "components/tables";
+@import "components/tags";
+@import "components/tooltips";
 @import "components/wizards";
 
 @import "pages/auction-bidding";
 @import "pages/login";
 @import "pages/payment";
 
+@import "print/print";
 
+
+// --------------------------------------------------------
+// STYLES
+// --------------------------------------------------------
 // $gray-lightest          : #85858d;
 // $blue                   : #B7CADB;
 // $yellow                 : #FAF4B7;
@@ -66,32 +74,36 @@ h1 {@apply text-4xl font-bold text-[var(--neutral-600)];}
 
 a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {background: linear-gradient(rgb(var(--primary-600)), rgb(var(--primary-600))) no-repeat left bottom / 0px 1px; transition: background 0.2s ease;
     &:hover {background-size: 100% 1px;}
+
+    &.link-primary {background-image: linear-gradient(rgb(var(--secondary-600)), rgb(var(--secondary-600)));}
 }
 
-.content-wrapper {@apply pt-[var(--header-height)] min-h-screen flex flex-col; transition: margin 0.2s ease;
-    .sidebar-open & {@apply ml-[var(--sidebar-width)];}
-}
-.content-holder {@apply p-12;}
+.backdrop {@apply fixed inset-0 z-10 bg-black bg-opacity-40 lg:hidden;}
+
+.content-wrapper {@apply pt-[var(--header-height)] min-h-screen flex flex-col; transition: margin 0.2s ease;}
+.content-holder {@apply py-6 px-4 md:p-8 lg:p-12;}
 
 .main-wrapper-full {
     .content-wrapper {@apply ml-0 pt-0;}
-    .content-holder {@apply p-4;}
+    .content-holder {@apply p-2 md:p-4;}
 }
 .sidebar-hidden {
     .content-wrapper {@apply ml-0;}
 }
 
-.page-header {@apply mb-6 flex items-center;
+.page-header {@apply mb-6 flex flex-col items-center justify-between lg:flex-row;
     .card-login & {@apply flex-col;}
     // &:has(h2.title) {@apply mb-6;}
 
-    .title {@apply font-bold text-[var(--neutral-600)];}
+    .title {@apply font-bold text-center text-[var(--neutral-600)] lg:text-left;}
     h1.title {@apply text-4xl;}
     h2.title {@apply text-3xl;}
     .subtitle {@apply mt-1;}
+
+    &.centered {@apply justify-center;}
     
-    .ph-action {@apply ml-auto flex flex-wrap gap-4;
-        .fm-control {@apply border-none;}
+    .ph-action {@apply mt-4 flex flex-wrap gap-4 lg:mt-0;
+        // .fm-control {@apply border-none;}
         .btn {@apply px-5;
             svg {@apply h-5;}
         }
@@ -106,89 +118,7 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     h3.title {@apply text-xl font-bold text-[var(--neutral-600)];}
 }
 
-// .subtext {
-//     @apply mt-0.5 ml-6 mb-6 text-slate-600;
-// }
 
-// Buttons
-// .btn {
-//     @apply px-4 inline-flex gap-2 items-center border-none rounded-lg outline-none text-base font-semibold text-[#212121] cursor-pointer;
-//     .isax {
-//         @apply text-xl;
-//     }
-//     &.btn-submit {
-//         background-color: $green;
-//     }
-//     &.btn-show {
-//         background-color: $orange;
-//     }
-// }
-
-
-// Home
-// .box {
-//     .bx-card {
-//         @apply p-5 flex gap-4 items-center rounded-xl text-[#212121] cursor-pointer;
-//         box-shadow: 0 1px 3px 0 rgba(#212121, 0.1);
-//         .icon-holder {
-//             .isax {
-//                 @apply text-3xl;
-//             }
-//         }
-//         &-name {
-//             @apply flex grow items-center justify-between text-xl font-bold;
-//             .isax {
-//                 @apply text-2xl;
-//             }
-//         }
-//         &-desc {
-//             display: none;
-//         }
-//     }
-
-//     .bx-card {
-//         $colors: $blue, $yellow, $pink, $green,$indigo, $orange;
-//         $repeat: 26;
-//         @for $i from 1 through $repeat {
-//             &:nth-child(#{length($colors)}n + #{$i}) {
-//                 background-color: (nth($colors, random(length($colors))));
-//             }
-//         }
-//     }
-// }
-
-
-// Login
-// .box-login {
-//     .json-wrapper {
-//         .jv-container.jv-light {
-//             font-family: var(--font-family);
-//         }
-//         .jv-container:hover {
-//             box-shadow: none;
-//             border-color: #eee;
-//         }
-//     }
-// }
-
-
-// form controls
-// .field {}
-
-// .p-inputtext {
-//     @apply w-full;
-// }
-
-// .p-float-label {
-//     @apply mt-8 mb-3;
-// }
-// .p-label {
-//     @apply mb-3;
-// }
-
-// select.formkit-input {
-//     @apply leading-6;
-// }
 
 
 // UI Loader
@@ -214,6 +144,17 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     img {margin: 0 auto;}
 }
 
+
+// fade - backdrop
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
 
 // slide-fade for cropper
 .slide-fade-enter-active {
@@ -262,11 +203,23 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
 
 
 
-
+.icon-info {height: 20px; display: inline-block; vertical-align: middle;
+    svg {height: 100%; fill: rgb(var(--secondary-600));}
+}
 
 
 
 .box-watermark {@apply text-lg font-semibold text-center text-[var(--neutral-200)];}
 .box-table-action {@apply mt-4 flex gap-1 items-center justify-center;
     .btn {@apply px-10;}
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[lg]')) {
+    .content-wrapper {
+        .sidebar-open & {@apply ml-[var(--sidebar-width)];}
+    }
 }

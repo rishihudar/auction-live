@@ -1,21 +1,24 @@
 <template>
     <div>
-        <div class="page-header">
+        <div class="page-header centered">
             <div class="ph-text">
                 <h2 class="title">Processing Fee Report</h2>
             </div>
         </div>
-        <div class="box-grid">
-            <div class="card col-span-6">
+        <div class="box-flexed centered">
+            <div class="card bf-item">
                 <div class="form-grid">
                     <div class="col-span-full">
                         <div class="fm-group">
-                            
                             <label class="fm-label">Select Entity</label>
                             <div class="fm-inner">
                                 <Dropdown v-model="selectedEntity" :options="entities" optionLabel="entityName"
                                     placeholder="Select Entity" />
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-span-full">
+                        <div class="fm-group">
                             <label class="fm-label">Select Date</label>
                             <div class="fm-inner">
                                 <Calendar v-model="dates" selectionMode="range" :manualInput="false" :maxDate="currentDate2" :show-icon="true"
@@ -23,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fm-action">
+                    <div class="fm-action justify-center">
                         <JsonExcel :data="json_data" :fields="processingReportFields" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="ProcessingFeeReport.xlsx">
                             Excel Report
                         </JsonExcel>

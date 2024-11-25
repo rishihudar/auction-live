@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="page-header">
+        <div class="page-header centered">
             <div class="ph-text">
                 <h2 class="title">Registration Fee Report</h2>
             </div>
         </div>
-        <div class="box-grid">
-            <div class="card col-span-6">
+        <div class="box-flexed centered">
+            <div class="card bf-item">
                 <div class="form-grid">
                     <div class="col-span-full">
                         <div class="fm-group">
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fm-action">
+                    <div class="fm-action justify-center">
                         <JsonExcel :data="json_data" type="xlsx" :fields="registrationReportFields" class="btn btn-primary cursor-pointer" worksheet="My Worksheet" name="RegistrationFeeReport.xlsx">
                             Excel Report
                         </JsonExcel>

@@ -2,7 +2,7 @@
     &.centered {@apply justify-center}
 }
 
-.btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] transition-all duration-200;
+.btn {@apply px-5 h-[var(--fm-height)] inline-flex gap-2 items-center justify-center rounded-[var(--fm-border-radius)] whitespace-nowrap transition-all duration-200;
     svg {@apply w-auto h-4;}
 
     &:focus {box-shadow: none; outline: none;}
@@ -35,6 +35,11 @@
 .btn-grey {@apply text-white bg-slate-400; box-shadow: none;
     svg {@apply fill-white;}
     &:hover, &:focus {@apply bg-slate-500; box-shadow: none;}
+}
+
+.btn-violet {@apply text-white bg-violet-500; box-shadow: none;
+    svg {@apply fill-white;}
+    &:hover, &:focus {@apply bg-violet-600; box-shadow: none;}
 }
 
 .btn-outline {@apply border bg-transparent;

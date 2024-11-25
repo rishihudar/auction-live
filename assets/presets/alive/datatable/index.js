@@ -36,7 +36,7 @@ export default {
     },
     wrapper: ({ props }) => ({
         class: [
-            'table-reponsive',
+            'table-responsive',
             { relative: props.scrollable, 'flex flex-col grow': props.scrollable && props.scrollHeight === 'flex' },
 
             // Size

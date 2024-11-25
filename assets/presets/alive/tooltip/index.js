@@ -2,8 +2,9 @@ export default {
     root: ({ context, props }) => ({
         class: [
             // Position and Shadows
+            'pv-tooltip',
             'absolute',
-            'shadow-md',
+            // 'shadow-md',
             'p-fadein',
             // Spacing
             {
@@ -15,7 +16,7 @@ export default {
     arrow: ({ context, props }) => ({
         class: [
             // Position
-
+            'pv-tooltip-arrow',
             'absolute',
 
             // Size
@@ -25,12 +26,12 @@ export default {
             // Shape
             'border-transparent',
             'border-solid',
-            {
-                'border-y-[0.25rem] border-r-[0.25rem] border-l-0 border-r-surface-600': context?.right || (!context?.right && !context?.left && !context?.top && !context?.bottom),
-                'border-y-[0.25rem] border-l-[0.25rem] border-r-0 border-l-surface-600': context?.left,
-                'border-x-[0.25rem] border-t-[0.25rem] border-b-0 border-t-surface-600': context?.top,
-                'border-x-[0.25rem] border-b-[0.25rem] border-t-0 border-b-surface-600': context?.bottom
-            },
+            // {
+            //     'border-y-[0.25rem] border-r-[0.25rem] border-l-0 border-r-surface-600': context?.right || (!context?.right && !context?.left && !context?.top && !context?.bottom),
+            //     'border-y-[0.25rem] border-l-[0.25rem] border-r-0 border-l-surface-600': context?.left,
+            //     'border-x-[0.25rem] border-t-[0.25rem] border-b-0 border-t-surface-600': context?.top,
+            //     'border-x-[0.25rem] border-b-[0.25rem] border-t-0 border-b-surface-600': context?.bottom
+            // },
 
             // Spacing
             {
@@ -41,6 +42,6 @@ export default {
         ]
     }),
     text: {
-        class: ['p-3', 'bg-surface-600 dark:bg-surface-700', 'text-white', 'leading-none', 'rounded-md', 'whitespace-pre-line', 'break-words']
+        class: ['pv-tooltip-text', 'p-3', 'bg-surface-600 dark:bg-surface-700', 'text-white', 'leading-none', 'rounded-md', 'whitespace-pre-line', 'break-words']
     }
 };
