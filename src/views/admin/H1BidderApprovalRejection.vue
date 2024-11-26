@@ -150,6 +150,22 @@
             </template>
           </Column>
         </DataTable>
+
+        <br> <p>Registration Documents</p>
+        <DataTable :value="registrationDocuments" showGridlines>
+          <Column field="docName" header="Document Name"></Column>
+          <Column field="docPath" header="View Document">
+            <template #body="row">
+              <!-- {{ row.data.docPath }} -->
+              <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
+              <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
+                      <!-- {{ row.data.docPath }} -->
+              <!-- <VPdfViewer :src="row.data.docPath"/> -->
+              <!-- <img :src="row.data.docPath"> -->
+            </template>
+          </Column>
+        </DataTable>
         
         <!-- <div :style="{ width: '1028px', height: '700px' }">
     <VPdfViewer
@@ -192,17 +208,16 @@
         </div>
       </Dialog> 
       
-      <Dialog v-model:visible="viewImageModalImage" modal header="View Image" :style="{ width: '30rem' }" >
+      <!-- <Dialog v-model:visible="viewImageModalImage" modal header="View Image" :style="{ width: '30rem' }" >
         <div class="form-group">
           <img :src="imagePath" alt="No preview available... Please download the file" target="_blank">
         </div>
-      </Dialog> 
-      <Dialog v-model:visible="viewImageModalPDF" modal header="View PDF" :style="{ width: '30rem' }" >
+      </Dialog>  -->
+      <!-- <Dialog v-model:visible="viewImageModalPDF" modal header="View PDF" :style="{ width: '30rem' }" >
         <div class="form-group">
-          <!-- <img :src="imagePath" alt="No preview available"> -->
           <PDF :src="imagePath" alt="No preview available... Please download the file"/>
         </div>
-      </Dialog> 
+      </Dialog>  -->
     <!-- Your Submit button component -->
     <div class="table-exp-action centered">
       <Button label="Submit" @click="submitForm" :disabled="disabled" />
@@ -658,6 +673,7 @@ function sendSmsH1Bidders() {
 
     let documentList=ref([])
     let jointHolderDocument=ref([])
+    let registrationDocuments=ref([])
     function viewDetails(roundNumberParam) {
       console.log(auctionId.value,roundNumberParam)
       // window.open('https://testcdncs.mkcl.org/2czAobDzoGCmipmIZOtO7LXyOEF/bidderBankDocuments/12/1236/1728973709525_save.png', '_blank');
@@ -672,11 +688,13 @@ function sendSmsH1Bidders() {
 			let res = rs.getActivity("FetchConcludedAuctionBidderDocuments",true)
 			if (rs.isValid("FetchConcludedAuctionBidderDocuments")) {
 
-        documentList.value = res.result.filter(doc => !doc.docName.includes('holder'));
+        documentList.value = res.result.fetchBidderUploadedDocuments.filter(doc => !doc.docName.includes('holder'));
         console.log(documentList.value);
 
-        jointHolderDocument.value = res.result.filter(doc => doc.docName.includes('holder'));
+        jointHolderDocument.value = res.result.fetchBidderUploadedDocuments.filter(doc => doc.docName.includes('holder'));
 console.log(jointHolderDocument.value);
+
+registrationDocuments.value = res.result.fetchBidderRegistrationDocuments
     //     documentList.value = res.result.map(doc => {
     //   if(!doc.docPath.startsWith('http')) {
     //     return {
