@@ -73,8 +73,9 @@
         </div>
       </div>
 
+<div v-if="statusCode === 'AUCTION_SCHEDULED'">
 <!-- Rescheduling reason input field -->
-      <div class="col-span-full md:col-span-4">
+      <div class="col-span-full">
     <div class="fm-group">
       <label for="ReschedulingReason" class="fm-label">Rescheduling Reason</label>
       <div class="fm-inner">
@@ -89,13 +90,12 @@
           </div>
     </div>
       </div>
-    </div>
     
-    <!-- Rescheduling Reason File Upload -->
-    <div class="col-span-full md:col-span-4" v-if="!uploadedFile">
-      <div class="fm-group">
+     <!-- Rescheduling Reason File Upload -->
+     <div class="fm-group">
         <label for="ReschedulingReasonDocument" class="fm-label">Rescheduling Reason Document</label>
         <div class="fm-inner">
+    <div class="col-span-full md:col-span-4" v-if="!uploadedFile">
      <FileUpload v-model="uploadedFile" :accept="docType" :multiple="false" :fileLimit="1"
                             :max-file-size="docSize * multiplyingFactor" :custom-upload="true" @uploader="onAdvancedUpload">
                             <template #empty>
@@ -105,6 +105,17 @@
                         
      </div>
       </div>
+    </div>
+<div class="col-span-full fm-action fm-action-center mb-3">
+                    <Button v-if="uploadedFile" severity="secondary" @click="viewImage(filePath)">
+                        <fa-eye></fa-eye> 
+                    </Button>
+                    <Button v-if="uploadedFile" severity="danger" @click="deleteDoc()">
+                        <fa-trash-can></fa-trash-can> 
+                    </Button>
+</div>
+
+    </div>
     </div>
 
     <div class="box-section">
@@ -145,6 +156,10 @@ import { fetchAuctionStatus } from "@/plugins/helpers.js";
 import moment from "moment";
 import { login } from "../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
+import MQLCdn from '@/plugins/mqlCdn.js';
+import { useToast } from "primevue/usetoast";
+
+
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 
 const props = defineProps({
@@ -166,56 +181,140 @@ let previousstartDate = props.startDate;
 const uploadedFile = ref('');
 
 const loginStore = login();
+const toast = useToast();
 
 const myFile = ref();
 const fileName = ref();
 const filePath = ref();
+const Vue = window.app;
+
 const onAdvancedUpload = async (event) => {
     let timeStamp = Date.now();
-    console.log(timeStamp, "timeStamp")
-    console.log("event", event.files[0])
+    //console.log(timeStamp, "timeStamp")
+    //console.log("event", event.files[0])
     myFile.value = event.files[0].name;
     console.log("myFile", myFile.value)
     const formData = new FormData();
     formData.append('file', event.files[0]);
     //new mqlCDN add-------------------------------------------------------------------------------
-    // new MQLCdn()
-    //     // .useManagementServer()
-    //     .enablePageLoader(true)// FIXED: change this to directory path
-    //     //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
-    //     .setDirectoryPath(auctionId + "/AuctionPreparation/ItemDocument") // (optional field) if you want to save  file to specific directory path
-    //     .setFormData(formData) // (required) sets file data
-    //     .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
-    //     // FIXED: pass buckeyKey instead of name
-    //     .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
-    //     .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    //     .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
-    //     .uploadFile("uploadtBtn")
-    //     .then((res) => {
+    new MQLCdn()
+        // .useManagementServer()
+        .enablePageLoader(true)// FIXED: change this to directory path
+        //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+        .setDirectoryPath(props.auctionId + "/AuctionRescheduling/") // (optional field) if you want to save  file to specific directory path
+        .setFormData(formData) // (required) sets file data
+        .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
+        // FIXED: pass buckeyKey instead of name
+        .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        .uploadFile("uploadtBtn")
+        .then((res) => {
             // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
-            // if (res.isValid()) {
-            //     fileName.value = timeStamp + "_" + myFile.value;
-            //     filePath.value = res.uploadedFileURL().filePath;
-            //     // fullPath.value = Vue.getCDNBaseURL();
-            //     //console.log("fileName", fileName.value);
-            //     //console.log("filePath", filePath.value);
-            //     //console.log("fullPath", fullPath.value);
-            //     uploadedFile.value = true;
-            //     // emits('childEvent', { fileName: fileName.value, filePath: filePath.value,fullPath: fullPath.value});
-            //     //toaster.success("file uploaded.");
-            //     toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-            //     // cropVisible.value=false
-            // } else {
-            //     res.showErrorToast();
-            // }
-        }
-
-   
+            if (res.isValid()) {
+                fileName.value = timeStamp + "_" + myFile.value;
+                filePath.value = res.uploadedFileURL().filePath;
+                
+                console.log("fileName", fileName.value);
+                console.log("filePath", filePath.value);
+                
+                uploadedFile.value = true;
+                toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            } else {
+                res.showErrorToast();
+            }
+        });
+}
 
 
+const deleteDoc = async () => {
+    await deleteFile(fileName.value)
+    fileName.value = null
+    filePath.value = ""
+    uploadedFile.value = false
+    
+    
+
+}
+
+const deleteFile = (url) => {
+    console.log("url is",url)
+    return new Promise((resolve) => {
+        new MQLCdn()
+        
+        .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb")
+        .setDirectoryPath(props.auctionId + "/AuctionRescheduling/")
+
+            .setFileName(url)
+            .enablePageLoader(true)
+            .deleteFile()
+            .then((res) => {
+                //console.log(res);
+                if (res.isValid()) {
+                    toaster.error("file deleted");
+                    
+                    resolve()
+                } else {
+                    res.showErrorToast();
+                }
+            });
+    })
+}
+
+    function viewImage(path) {
+      imagePath.value = path;
+
+      if(!path.startsWith('http')) {
+        console.log("Inside "+path)
+        imagePath.value =   Vue.getCDNBaseURL()+'/'+imagePath.value
+      }
+
+console.log("path is "+imagePath.value)
+      // if (path.endsWith('.pdf')) {
+      //   console.log("inside pdfs")
+        fetchImage(imagePath.value)
+//         viewImageModalPDF.value = true;
+// } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+// }
 
 
 
+    }
+
+
+
+const imagePath = ref();
+function fetchImage(url) {
+
+  const myHeaders = new Headers();
+
+myHeaders.append("Authorization", 'Bearer ' + sessionStorage.getItem('user-token'));
+myHeaders.append("Accept", "application/json, text/plain, */*");
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch(url, requestOptions)
+  .then((response) =>
+    response.blob())
+    .then((blob) => {
+    // Create a URL for the image
+    const imageUrl = URL.createObjectURL(blob);
+
+    imagePath.value =  imageUrl;
+    console.log("imagePath.value is",imagePath.value)
+    // viewImageModalImage.value=true
+    window.open(imageUrl);
+  })
+  .catch((error) => console.error(error));
+  
+}
 
 const emit = defineEmits(["update:modelValue"]);
 function emitModalValue() {
@@ -264,14 +363,19 @@ const rules = {
       minLength(3)
     ),
   },
-  reschedulingReason:{
-    required,
-    minLength: helpers.withMessage("Minimum 10 characters required",minLength(10)),
-    maxLength: helpers.withMessage("Maximum 100 characters allowed", maxLength(100))
+  reschedulingReason:
     
-  }
+    statusCode.value === "AUCTION_SCHEDULED"
+          ? { 
+            required, 
+            minLength: minLength(10),
+            maxLength: maxLength(100),
+            }
+          : {},
+    
+  
 };
-const reschedulingReason = ref();
+const reschedulingReason = ref(null);
 // Custom validation functions for start date
 function isValidStartDate(date) {
   const today = moment();
@@ -291,7 +395,34 @@ const v$ = useVuelidate(rules, { startDate, endDate, users, reschedulingReason }
 
 import axios from 'axios';
 
+function InsertReschedulingDocuments(){
+
+			new MQL()
+      .useManagementServer()
+			.setActivity("r.[InsertReschedulingDocuments]")
+			.setData({"auctionId":props.auctionId,"createdBy":loginStore.loginId,"documentFileName":fileName.value,"documentFilePath":filePath.value,"documentTypeId":20,"modifiedBy":loginStore.loginId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("InsertReschedulingDocuments",true)
+			if (rs.isValid("InsertReschedulingDocuments")) {
+			} else
+			 { 
+			rs.showErrorToast("InsertReschedulingDocuments")
+			}
+			})
+			
+}
+
 async function schedule() {
+
+  if (statusCode.value === "AUCTION_SCHEDULED"){
+    await removeHub()
+  }
+
+if (filePath){
+InsertReschedulingDocuments()
+}
+  
   // Schedule the auction
   // Automatically generated }
   v$.value.$touch();
@@ -309,6 +440,7 @@ async function schedule() {
     .setActivity("o.[ScheduleAuction]")
     .setData({
       auctionId: props.auctionId,
+      reschedulingReason:reschedulingReason.value,
       endDate: formatDate(endDate.value),
       startDate: formatDate(startDate.value),
       users: users.value,
@@ -331,14 +463,7 @@ async function schedule() {
           // NotifyScheduledAuctionBidders()
           NotifyAuctionScheduledAndPasscodes();
           if (statusCode.value === "AUCTION_SCHEDULED") {
-            // remove hub logic here
-             try {
-    await removeHub(); // Wait for removeHub to complete
-    NotifyAuctionReScheduledAndPasscodes(); // Runs only if removeHub is successful
-  } catch (error) {
-    console.error("Failed to remove hub:", error.message);
-    alert("Failed to remove hub. Please try again."); // Handle errors
-  }
+    NotifyAuctionReScheduledAndPasscodes(); // Rescheduling Passcodes email
           }
 
           // NotifyAuctionReScheduledAndPasscodes()
@@ -356,13 +481,15 @@ async function schedule() {
 const data = ref(null);
 const error = ref(null);
 
+
 const removeHub = async () => {
   try {
     const response = await axios.get(`/bidding-server-http/o/removeHubRoute/${props.auctionId}`);
-    return Promise.resolve(response.data); // Return a resolved Promise with the response data
+    return response.data // Return a resolved Promise with the response data
   } catch (err) {
+    toaster.error("Error removing hub");
     console.error("Error removing hub:", err.message);
-    return Promise.reject(err); // Return a rejected Promise in case of an error
+    throw err; // Rethrow the error to handle it in the calling function
   }
 };
 
