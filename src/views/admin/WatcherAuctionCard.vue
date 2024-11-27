@@ -738,7 +738,7 @@ function checkH1(incomingBid) {
 
 function webSocketConn() {
   wsConnection.value = new WebSocket(
-    `ws://${window.location.host}/bidding-server-ws/ws/admin-auction`
+    `wss://${window.location.host}/bidding-server-ws/ws/admin-auction`
   );
 
   // Error Event Listeners
