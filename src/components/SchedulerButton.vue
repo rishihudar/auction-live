@@ -12,7 +12,11 @@
       class="btn-sm"
       @click="display = true"
       :disabled="visibleReSchedule"
-      v-tooltip="{ value: visibleReSchedule ? 'Auction cannot be rescheduled at this stage' : '' }"
+      v-tooltip="{
+        value: visibleReSchedule
+          ? 'Auction cannot be rescheduled at this stage'
+          : '',
+      }"
     ></Button>
   </div>
   <Dialog
@@ -72,7 +76,74 @@
           </div>
         </div>
       </div>
+
+      <template v-if="statusCode === 'AUCTION_SCHEDULED'">
+        <!-- Rescheduling reason input field -->
+        <div class="col-span-6">
+          <div class="fm-group">
+            <label for="ReschedulingReason" class="fm-label"
+              >Rescheduling Reason</label
+            >
+            <div class="fm-inner">
+              <InputText
+                v-model="reschedulingReason"
+                id="reschedulingReason"
+                placeholder="Enter Rescheduling Reason"
+              />
+            </div>
+            <div
+              class="fm-error"
+              v-if="submitted && v$.reschedulingReason.$errors[0]"
+            >
+              {{ v$.reschedulingReason.$errors[0].$message }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Rescheduling Reason File Upload -->
+        <div class="col-span-6">
+          <div class="fm-group">
+            <label for="ReschedulingReasonDocument" class="fm-label"
+              >Rescheduling Reason Document</label
+            >
+            <div class="col-span-full fm-action fm-action-center mb-3">
+          <Button
+            v-if="uploadedFile"
+            severity="secondary"
+            @click="viewImage(filePath)"
+          >
+            <fa-eye></fa-eye>
+          </Button>
+          <Button v-if="uploadedFile" severity="danger" @click="deleteDoc()">
+            <fa-trash-can></fa-trash-can>
+          </Button>
+        </div>
+            <div class="fm-inner">
+              <div class="col-span-full md:col-span-4" v-if="!uploadedFile">
+                <FileUpload
+                  v-model="uploadedFile"
+                  :accept="docType"
+                  :multiple="false"
+                  :fileLimit="1"
+                  :max-file-size="docSize * multiplyingFactor"
+                  :custom-upload="true"
+                  @uploader="onAdvancedUpload"
+                >
+                  <template #empty>
+                    <p>
+                      Drag and drop files to here to upload, Max. file size
+                      {{ docSize }} KB , Only {{ docType }} are allowed
+                    </p>
+                  </template></FileUpload
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </template>
     </div>
+
     <div class="box-section">
       <div class="bs-header">Items List</div>
       <div
@@ -99,17 +170,23 @@
 </template>
 
 <script setup>
- import Tooltip from 'primevue/tooltip';
-import { onMounted, ref, watch,computed } from "vue";
+import FileUpload from "primevue/fileupload";
+import Tooltip from "primevue/tooltip";
+import { onMounted, ref, watch, computed } from "vue";
 import Calendar from "primevue/calendar";
 import Multiselect from "primevue/multiselect";
 import MQL from "@/plugins/mql.js";
 import { useVuelidate } from "@vuelidate/core";
-import { required, helpers, minLength } from "@vuelidate/validators";
+import { required, helpers, minLength, maxLength } from "@vuelidate/validators";
 import { fetchAuctionStatus } from "@/plugins/helpers.js";
 import moment from "moment";
 import { login } from "../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
+import MQLCdn from "@/plugins/mqlCdn.js";
+import { useToast } from "primevue/usetoast";
+import faEye from '../../assets/icons/eye.svg';
+import faTrashCan from '../../assets/icons/trash-can.svg';
+
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 
 const props = defineProps({
@@ -128,7 +205,139 @@ const props = defineProps({
 
 let previousstartDate = props.startDate;
 
+const uploadedFile = ref("");
+
 const loginStore = login();
+const toast = useToast();
+
+const myFile = ref();
+const fileName = ref();
+const filePath = ref();
+const Vue = window.app;
+
+const onAdvancedUpload = async (event) => {
+  let timeStamp = Date.now();
+  //console.log(timeStamp, "timeStamp")
+  //console.log("event", event.files[0])
+  myFile.value = event.files[0].name;
+  //console.log("myFile", myFile.value);
+  const formData = new FormData();
+  formData.append("file", event.files[0]);
+  //new mqlCDN add-------------------------------------------------------------------------------
+  new MQLCdn()
+    // .useManagementServer()
+    .enablePageLoader(true) // FIXED: change this to directory path
+    //.isPrivateBucket(true) // (optional field) if you want to upload file to private bucket
+    .setDirectoryPath(props.auctionId + "/AuctionRescheduling/") // (optional field) if you want to save  file to specific directory path
+    .setFormData(formData) // (required) sets file data
+    .setFileName(timeStamp + "_" + myFile.value) // (optional field) if you want to set name to file that is being uploaded
+    // FIXED: pass buckeyKey instead of name
+    .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+    .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+    .uploadFile("uploadtBtn")
+    .then((res) => {
+      // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+      if (res.isValid()) {
+        fileName.value = timeStamp + "_" + myFile.value;
+        filePath.value = res.uploadedFileURL().filePath;
+
+        //console.log("fileName", fileName.value);
+        //console.log("filePath", filePath.value);
+
+        uploadedFile.value = true;
+        toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "File Uploaded",
+          life: 3000,
+        });
+      } else {
+        res.showErrorToast();
+      }
+    });
+};
+
+const deleteDoc = async () => {
+  await deleteFile(fileName.value);
+  fileName.value = null;
+  filePath.value = "";
+  uploadedFile.value = false;
+};
+
+const deleteFile = (url) => {
+  console.log("url is", url);
+  return new Promise((resolve) => {
+    new MQLCdn()
+
+      .setBucketKey("2ciy8jTCjhcc6Ohu2hGHyY16nHn") // (required) valid bucket key need to set in which file will be uploaded.
+      .setPurposeId("2cixqU1nhJHru2m1S0uIxdKSgMb") // (required) valid purposeId need to set in which file will be uploaded.
+      .setClientId("2cixqU1nhJHru2m1S0uIxdKSgMb")
+      .setDirectoryPath(props.auctionId + "/AuctionRescheduling/")
+
+      .setFileName(url)
+      .enablePageLoader(true)
+      .deleteFile()
+      .then((res) => {
+        //console.log(res);
+        if (res.isValid()) {
+          toaster.error("file deleted");
+
+          resolve();
+        } else {
+          res.showErrorToast();
+        }
+      });
+  });
+};
+
+function viewImage(path) {
+  imagePath.value = path;
+
+  if (!path.startsWith("http")) {
+    console.log("Inside " + path);
+    imagePath.value = Vue.getCDNBaseURL() + "/" + imagePath.value;
+  }
+
+  console.log("path is " + imagePath.value);
+  // if (path.endsWith('.pdf')) {
+  //   console.log("inside pdfs")
+  fetchImage(imagePath.value);
+  //         viewImageModalPDF.value = true;
+  // } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+  // }
+}
+
+const imagePath = ref();
+function fetchImage(url) {
+  const myHeaders = new Headers();
+
+  myHeaders.append(
+    "Authorization",
+    "Bearer " + sessionStorage.getItem("user-token")
+  );
+  myHeaders.append("Accept", "application/json, text/plain, */*");
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(url, requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+      // Create a URL for the image
+      const imageUrl = URL.createObjectURL(blob);
+
+      imagePath.value = imageUrl;
+      console.log("imagePath.value is", imagePath.value);
+      // viewImageModalImage.value=true
+      window.open(imageUrl);
+    })
+    .catch((error) => console.error(error));
+}
 
 const emit = defineEmits(["update:modelValue"]);
 function emitModalValue() {
@@ -177,8 +386,16 @@ const rules = {
       minLength(3)
     ),
   },
+  reschedulingReason:
+    statusCode.value === "AUCTION_SCHEDULED"
+      ? {
+          required,
+          minLength: minLength(10),
+          maxLength: maxLength(100),
+        }
+      : {},
 };
-
+const reschedulingReason = ref(null);
 // Custom validation functions for start date
 function isValidStartDate(date) {
   const today = moment();
@@ -194,19 +411,51 @@ function isValidEndDate(date) {
   return inputDate.isAfter(today) && inputDate.isAfter(startDate.value);
 }
 
-const v$ = useVuelidate(rules, { startDate, endDate, users });
+const v$ = useVuelidate(rules, {
+  startDate,
+  endDate,
+  users,
+  reschedulingReason,
+});
 
-import axios from 'axios';
+import axios from "axios";
 
-async function schedule() {
+function InsertReschedulingDocuments() {
+  new MQL()
+    .useManagementServer()
+    .setActivity("r.[InsertReschedulingDocuments]")
+    .setData({
+      auctionId: props.auctionId,
+      createdBy: loginStore.loginId,
+      documentFileName: fileName.value,
+      documentFilePath: filePath.value,
+      documentTypeId: 20,
+      modifiedBy: loginStore.loginId,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("InsertReschedulingDocuments", true);
+      if (rs.isValid("InsertReschedulingDocuments")) {
+      } else {
+        rs.showErrorToast("InsertReschedulingDocuments");
+      }
+    });
+}
+
+async function schedule() { 
   // Schedule the auction
-  // Automatically generated }
   v$.value.$touch();
   submitted.value = true;
   if (v$.value.$error) {
     // show error message
     alert("Please fill all the fields");
     return;
+  }
+  if (statusCode.value === "AUCTION_SCHEDULED") {
+    await removeHub();
+  }
+  if (filePath) {
+    InsertReschedulingDocuments();
   }
   var bidderStatusId = await fetchAuctionStatus("AUCTION_EMD_FEES_PAID");
   var userStatusId = await fetchAuctionStatus("AUCTION_USER_SCHEDULED");
@@ -216,6 +465,7 @@ async function schedule() {
     .setActivity("o.[ScheduleAuction]")
     .setData({
       auctionId: props.auctionId,
+      reschedulingReason: reschedulingReason.value,
       endDate: formatDate(endDate.value),
       startDate: formatDate(startDate.value),
       users: users.value,
@@ -238,14 +488,7 @@ async function schedule() {
           // NotifyScheduledAuctionBidders()
           NotifyAuctionScheduledAndPasscodes();
           if (statusCode.value === "AUCTION_SCHEDULED") {
-            // remove hub logic here
-             try {
-    await removeHub(); // Wait for removeHub to complete
-    NotifyAuctionReScheduledAndPasscodes(); // Runs only if removeHub is successful
-  } catch (error) {
-    console.error("Failed to remove hub:", error.message);
-    alert("Failed to remove hub. Please try again."); // Handle errors
-  }
+            NotifyAuctionReScheduledAndPasscodes(); // Rescheduling Passcodes email
           }
 
           // NotifyAuctionReScheduledAndPasscodes()
@@ -265,11 +508,14 @@ const error = ref(null);
 
 const removeHub = async () => {
   try {
-    const response = await axios.get(`/bidding-server-http/o/removeHubRoute/${props.auctionId}`);
-    return Promise.resolve(response.data); // Return a resolved Promise with the response data
+    const response = await axios.get(
+      `/bidding-server-http/o/removeHubRoute/${props.auctionId}`
+    );
+    return response.data; // Return a resolved Promise with the response data
   } catch (err) {
+    toaster.error("Error removing hub");
     console.error("Error removing hub:", err.message);
-    return Promise.reject(err); // Return a rejected Promise in case of an error
+    throw err; // Rethrow the error to handle it in the calling function
   }
 };
 
@@ -343,21 +589,22 @@ function AuctionReScheduleTime() {
   new MQL()
     .useManagementServer()
     .setActivity("o.[AuctionReScheduleTime]")
-    .setData({auctionId: props.auctionId})
+    .setData({ auctionId: props.auctionId })
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("AuctionReScheduleTime", true);
       if (rs.isValid("AuctionReScheduleTime")) {
-        rescheduleCompareTime.value = res.result.auctionReScheduleTime.customParamValue;
+        rescheduleCompareTime.value =
+          res.result.auctionReScheduleTime.customParamValue;
         console.log("#########", rescheduleCompareTime.value);
-        reScheduleTime.value = res.result.fetchAuctionRescheduleTime.timeDifference;
+        reScheduleTime.value =
+          res.result.fetchAuctionRescheduleTime.timeDifference;
         console.log("reScheduleTime", reScheduleTime.value);
-        console.log("Time",rescheduleCompareTime<reScheduleTime);
+        console.log("Time", rescheduleCompareTime < reScheduleTime);
         if (rescheduleCompareTime.value < reScheduleTime.value) {
-          console.log("Time",rescheduleCompareTime<reScheduleTime);
+          console.log("Time", rescheduleCompareTime < reScheduleTime);
           visibleReSchedule.value = false;
-        }
-        else{
+        } else {
           visibleReSchedule.value = true;
         }
       } else {
@@ -368,10 +615,55 @@ function AuctionReScheduleTime() {
 // const isReScheduleDisabled = computed(() => {
 //   return rescheduleCompareTime.value < reScheduleTime.value;
 // });
+const docTypeId = ref(0);
+const docSize = ref();
+const docName = ref();
+const docType = ref();
+const docValidation = ref([]);
+
+function fetchReschedulingDocumentDetails() {
+  // Automatically generated
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[fetchDocumentsValidationDetails]")
+
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("fetchDocumentsValidationDetails", true);
+      docValidation.value = res.result.validation;
+      docValidation.value.forEach((item) => {
+        if (item.typeName == "RESCHEDULING_REASON_DOCUMENT") {
+          docName.value = item.typeName;
+          docSize.value = item.fileSize;
+          docType.value = item.fileType;
+          docTypeId.value = item.typeId;
+          //console.log("docName.value", docName.value);
+        }
+      });
+    });
+}
+const multiplyingFactor = ref();
+function fetchMultiplyingFactor() {
+  new MQL()
+    .useCoreServer()
+    .setActivity("o.[FetchCustomValueByKey]")
+    .setData({ key: "MULTIPLYING_FACTOR" })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchCustomValueByKey", true);
+      if (rs.isValid("FetchCustomValueByKey")) {
+        multiplyingFactor.value = res.result.vsCustomParamValue;
+      } else {
+        rs.showErrorToast("FetchCustomValueByKey");
+      }
+    });
+}
 
 onMounted(() => {
   // Fetch the users  to be shown in dropdown
   FetchUsers();
+  fetchReschedulingDocumentDetails();
+  fetchMultiplyingFactor();
   //console.log("Auc Code",props.auctionCode);
   //console.log(props.itemList);
   //console.log(props.auctionId);
