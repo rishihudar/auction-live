@@ -8,7 +8,7 @@
     }
 }
 
-.card-login {@apply mx-auto p-10 pb-0 w-[500px] max-w-full rounded-xl bg-white shadow;
+.card-login {@apply mx-auto pt-8 px-6 w-[500px] max-w-full rounded-xl bg-white shadow md:pt-10 md:px-10;
     #forgot-password & {@apply w-[600px];}
     #registration &, #bidder-details & {@apply w-[1080px];
         .page-header {@apply mb-6;}
@@ -38,21 +38,29 @@
     }
     .bs-title {@apply rounded-t-md text-xl font-medium text-[var(--neutral-600)] bg-slate-100; padding: 14px var(--padding-inline);}
     
-    .bs-item-image-holder {@apply grid grid-cols-[1fr_200px];}
+    .bs-item-image-holder {@apply grid grid-cols-1 lg:grid-cols-[1fr_200px];
+        > [class*="bs-item-"] {@apply relative;
+            &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
+            &:after {position: absolute; bottom: 0px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        }
+    }
     .bs-item-holder {@apply grid grid-cols-12 overflow-hidden;}
-    .bs-item-image {@apply flex items-center justify-center border-t border-l;}
-    .bs-item-buttons {@apply border-t; padding: var(--padding-block) var(--padding-inline);}
+    .bs-item-image {@apply flex items-center justify-center; padding: var(--padding-block) var(--padding-inline);}
+    // .bs-item-buttons {@apply border-t; padding: var(--padding-block) var(--padding-inline);}
 
     .bs-image {@apply w-36 h-36;
-        img {@apply w-full h-full object-contain;}
+        img {@apply w-full h-full object-contain font-semibold text-center text-[var(--neutral-200)];}
     }
     .bs-item {@apply relative flex flex-col; padding: var(--padding-block) var(--padding-inline);
         &:before {position: absolute; top: 0; bottom: 0; right: -1px; content: ''; width: 1px; background: var(--border-color);}
-        &:after {position: absolute; bottom: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        &:after {position: absolute; bottom: 0px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        > *:first-child {
+            &:after {position: absolute; top: -1px; left: 0; right: 0; content: ''; height: 1px; background: var(--border-color);}
+        }
     }
     .bs-label {@apply text-sm text-[var(--neutral-300)];}
     .bs-value {@apply text-[var(--neutral-600)];}
-    .bs-buttons {@apply flex gap-1 justify-center;
+    .bs-buttons {@apply flex gap-1 flex-wrap justify-center;
         &.bs-buttons-left {
             @apply justify-start;
         }
@@ -95,7 +103,7 @@ $roleColors: #2776ea, #bd62f8, #fa6977, #29d1e1, #05a475;
     .cr-title {@apply mb-2 text-2xl font-bold text-center text-[var(--neutral-600)]; transition: color 0.3s ease;}
     .cr-text {@apply text-center line-clamp-3; transition: color 0.3s ease;}
     .cr-action {@apply mt-6 text-center;}
-    .btn {@apply px-8 whitespace-nowrap xl:text-sm 2xl:text-base; transition: all 0.3s ease;}
+    .btn {@apply px-8 whitespace-nowrap text-sm 2xl:text-base; transition: all 0.3s ease;}
 
     &:hover {
         &:before {transform: translate3d(-20%, -20%, 0) rotate3d(0, 0, 1, -45deg)}

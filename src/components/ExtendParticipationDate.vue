@@ -12,6 +12,7 @@
       :position="position"
       :style="{ width: '50rem' }"
       :draggable="false"
+      class="modal-calendar"
     >
       <div class="modal-subtitle">
         Auction Code: <span> {{ auctionCode }}</span>
@@ -31,7 +32,7 @@
                 hourFormat="24"
                 :minDate="minDate"
                 :showIcon="true"
-                readonly="true"
+                :readonly="true"
               />
             </div>
             <div class="fm-info">
@@ -53,6 +54,7 @@
                 hourFormat="24"
                 :minDate="endMinDate"
                 :showIcon="true"
+                appendTo="self"
               />
             </div>
             <div class="fm-info">

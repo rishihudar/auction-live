@@ -10,6 +10,7 @@
     // --secondary-800            : #{darken(#3d81e7, 20%)};
 
     --neutral-200               : theme('colors.slate[400]');
+    --neutral-250               : #7f8b9e;
     --neutral-300               : theme('colors.slate[500]');
     --neutral-400               : theme('colors.slate[600]');
     --neutral-600               : theme('colors.slate[700]');
@@ -28,7 +29,7 @@
     --border-color              : #e0e6ed;
     --border-radius             : theme('borderRadius[lg]');
 
-    --header-height             : 90px;
+    --header-height             : 70px;
 
     --sidebar-width             : 260px;
     --sidebar-bg                : #0e1726;
@@ -90,4 +91,21 @@
     --primary-600               : 60 171 64;
 
     --sidebar-bg                : #19c09c;
+}
+
+
+// --------------------------------------------------------
+// RESPONSIVENESS
+// --------------------------------------------------------
+@media (min-width: theme('screens[md]')) {
+    :root {
+        --header-height                 : 80px;
+    }
+}
+
+
+@media (min-width: theme('screens[lg]')) {
+    :root {
+        --header-height                 : 90px;
+    }
 }

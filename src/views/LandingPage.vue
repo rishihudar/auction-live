@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="page-header pb-4 justify-center">
-            <div class="ph-text text-center">
+        <div class="page-header centered lg:pb-4">
+            <div class="ph-text">
                 <h2 class="title">Select Your Role</h2>
                 <!-- <div class="subtitle">Click on the card to login to the specific Role</div> -->
             </div>
