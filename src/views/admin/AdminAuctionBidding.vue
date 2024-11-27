@@ -205,8 +205,8 @@
                                 <div class="item">Amount: <strong>{{ currencyFormat(copyData.quoteAmount) }}</strong>
                                 </div>
                                 <div class="item">@ <strong>{{ copyData.quoteTime }}</strong></div>
-                            </div>
-                            <div class="item"><strong>{{ copyData.clientIPAddress }}</strong></div>
+                                <div class="item"><strong>{{ copyData.clientIPAddress }}</strong></div>
+                            </div>     
                         </li>
                     </ul>
                 </div>
