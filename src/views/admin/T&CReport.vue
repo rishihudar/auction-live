@@ -104,7 +104,7 @@ function fetchMultiplicativeFactor() {
       let res = rs.getActivity("FetchCustomValueByKey", true);
       if (rs.isValid("FetchCustomValueByKey")) {
         multiplicativeFactor.value = res.result.vsCustomParamValue;
-        console.log("multiplicativeFactor is ", multiplicativeFactor.value);
+        // console.log("multiplicativeFactor is ", multiplicativeFactor.value);
       } else {
         rs.showErrorToast("FetchCustomValueByKey");
       }

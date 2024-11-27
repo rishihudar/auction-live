@@ -17,13 +17,19 @@
                         <div class="text-sm text-green-700">Server Time</div>
                         <div class="text-2xl font-medium text-green-700">{{ latestTime }}</div>
                     </div>
+                    <div class="flex gap-1">
+                        <div class="px-6 inline-flex items-center justify-center rounded-lg text-center text-white bg-primary-400">Total: {{ totalCount }}</div>
+                        <div class="px-6 inline-flex items-center justify-center rounded-lg text-center text-white bg-primary-400">Joined: {{ totalJoined }}</div>
+                        <Button
+                            style="padding-inline: 30px"
+                            severity="danger"
+                            @click="leaveAuction()"
+                            class="ml-2"
+                            >Leave</Button
+                        >
+                    </div>
                     <!-- <Button style="padding-inline: 30px;" severity="danger" @click="leaveAuction()">Leave</Button> -->
-                    <Button
-            style="padding-inline: 30px"
-            severity="danger"
-            @click="leaveAuction()"
-            >Leave</Button
-          >
+                    
                 </div>
 
                 <!-- Auction Details -->
@@ -199,7 +205,8 @@
                                 <div class="item">Amount: <strong>{{ currencyFormat(copyData.quoteAmount) }}</strong>
                                 </div>
                                 <div class="item">@ <strong>{{ copyData.quoteTime }}</strong></div>
-                            </div>
+                                <div class="item"><strong>{{ copyData.clientIPAddress }}</strong></div>
+                            </div>     
                         </li>
                     </ul>
                 </div>
@@ -255,10 +262,15 @@ import { login } from "../../store/modules/login.js";
 import moment from 'moment';
 import axios from 'axios';
 import MQL from '../../plugins/mql.js';
-
+const timeleftInterval = ref(null);
 import { useRouter } from 'vue-router';
 const router = useRouter();
-
+const props = defineProps({
+  clientLoginIpAddress: {
+    type: String,
+    required: true,
+  },
+});
 const leaveAuctionVisible = ref(false);
 const timeLeft = ref(null)
 const auctionStore = useAuctionStore()
@@ -271,7 +283,8 @@ const auctionDetails = ref([{
     roundStartTime: null,
     roundEndTime: null,
     placeBid: "",
-    timeLeft: ""
+    timeLeft: "",
+    clientIPAddress:null
 }])
 const itemSelectionTimeLeft = ref(0)
 const time = ref(0)
@@ -291,6 +304,8 @@ const isHighestBidder = ref(false)
 const connectionStatus = ref(null)
 const clientLoginIpAddress = ref()
 const count = ref(1);
+const totalCount = ref();
+const totalJoined = ref(0);
 const properties = ref([])
 const itemDetails = ref({
     Description: "Therer bidder biddere ",
@@ -304,11 +319,12 @@ const itemDetails = ref({
 
 const latestTime = ref();
 const bidHistory = ref([]);
-
-
 onMounted(() => {
     connectionStatus.value = navigator.onLine
-    websocketConn()
+    websocketConn();
+    timeleftInterval.value = setInterval(() => {
+    fetchBiddersData();
+}, 1000);
 
 })
 
@@ -372,7 +388,8 @@ function updateHistory(bidObject) {
         let bidHistoryObj = {
             roundNumber: auctionDetails.value[0].roundNumber,
             quoteAmount: bidObject.bidAmount,
-            quoteTime: latestTime.value
+            quoteTime: latestTime.value,
+            clientIPAddress:bidObject.clientLoginIpAddress
         }
         bidHistory.value.unshift(bidHistoryObj)
     }
@@ -672,7 +689,7 @@ function fetchAuctionDetails() {
                     itemDetails.value.TotalNoOfBids = res.result.auctionHistory.length
                     itemDetails.value.numberOfRounds = res.result.inventoryDetails.numberOfRounds
                     itemDetails.value.itemSelectionTime = parseInt(res.result.inventoryDetails.itemSelectionTime)
-
+                    auctionDetails.value[0].clientIPAddress= res.result.auctionHistoryAdmin.clientIPAddress
                     auctionDetails.value[0].roundStartTime = res.result.inventoryDetails.currentRoundStartTime
                     auctionDetails.value[0].roundEndTime = res.result.inventoryDetails.currentRoundEndTime
                     auctionDetails.value[0].currentHigh = res.result.inventoryDetails.currentHigh
@@ -698,6 +715,28 @@ function fetchAuctionDetails() {
             })
     })
 
+}
+
+function fetchBiddersData() {
+  new MQL()
+    .useCoreServer()
+    .enablePageLoader(false)
+    .setActivity("r.[FetchCountAndIPofBidder]")
+    .setData({ auctionId: auctionStore.auctionObj.pklAuctionId, userId: loginStore.loginId })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("FetchCountAndIPofBidder", true);
+      if (rs.isValid("FetchCountAndIPofBidder")) {
+        console.log(res);
+        totalCount.value =
+          res.result.fetchParticipatedBidderCount.ParticipatedBidderCount;
+        console.log("totalCount", totalCount.value);
+        totalJoined.value = res.result.fetchJoinedBidderCount.JoinedBidderCount;
+        console.log("totalJoined", totalJoined.value);
+      } else {
+        rs.showErrorToast("FetchCountAndIPofBidder");
+      }
+    });
 }
 
 function getPreviousRoundHBid(roundNumber, auctionId, offset) {
