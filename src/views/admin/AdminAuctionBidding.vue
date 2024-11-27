@@ -401,7 +401,7 @@ function updateHistory(bidObject) {
 // }
 
 function websocketConn() {
-    wsConnection.value = new WebSocket(`ws://${window.location.host}/bidding-server-ws/ws/admin-auction`)
+    wsConnection.value = new WebSocket(`wss://${window.location.host}/bidding-server-ws/ws/admin-auction`)
 
     // opening connection
     wsConnection.value.onopen = function () {
