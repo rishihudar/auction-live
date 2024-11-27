@@ -429,7 +429,7 @@ function InsertReschedulingDocuments() {
       createdBy: loginStore.loginId,
       documentFileName: fileName.value,
       documentFilePath: filePath.value,
-      documentTypeId: 20,
+      documentTypeId: docTypeId.value,
       modifiedBy: loginStore.loginId,
     })
     .fetch()
