@@ -262,7 +262,7 @@ import { login } from "../../store/modules/login.js";
 import moment from 'moment';
 import axios from 'axios';
 import MQL from '../../plugins/mql.js';
-
+const timeleftInterval = ref(null);
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const props = defineProps({
@@ -322,7 +322,9 @@ const bidHistory = ref([]);
 onMounted(() => {
     connectionStatus.value = navigator.onLine
     websocketConn();
+    timeleftInterval.value = setInterval(() => {
     fetchBiddersData();
+}, 1000);
 
 })
 
