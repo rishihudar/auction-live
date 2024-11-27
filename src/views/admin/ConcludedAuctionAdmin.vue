@@ -182,7 +182,9 @@ function handlePageChange(event) {
 }
 
 function fetchConcludedAuctionsUser() {
-  //console.log("Selected Entity Id", login().loginDetails);
+//added collapse all expander on searching....
+    expandedRows.value = null;
+
   new MQL()
   .useManagementServer()
     .setActivity("r.[FetchConcludedAuctionsUser]")
