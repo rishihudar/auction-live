@@ -62,7 +62,7 @@
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4" >
                 <div class="bs-buttons">
-                    <button @click="fetchNonH1Details()" class="btn btn-sm btn-secondary">Refund Non-H1 Documents</button>
+                    <button @click="fetchNonH1Details()" class="btn btn-sm btn-secondary">Non-H1 Documents</button>
                 </div>
             </div>
         </div>
