@@ -1,7 +1,5 @@
 <template>
     <div>
-        <Toast />
-        <ConfirmDialog></ConfirmDialog>
       <div class="page-header">
         <div class="ph-text">
           <h2 class="title">H1 EMD Settlement</h2>
@@ -213,6 +211,7 @@ const toast = useToast();
 			let res = rs.getActivity("UpdateH1EMDSettlementStatus",true)
 			if (rs.isValid("UpdateH1EMDSettlementStatus")) {
         toaster.success("Settlement Initiated");
+        window.location.reload();
 			} else
 			 { 
 			// rs.showErrorToast("UpdateH1EMDSettlementStatus")
@@ -230,7 +229,7 @@ const toast = useToast();
         icon: 'pi pi-exclamation-triangle',
         rejectClass: 'p-button-secondary p-button-outlined',
         rejectLabel: 'Cancel',
-        acceptLabel: 'Save',
+        acceptLabel: 'Proceed',
         accept: () => {
             // toaster.success('You have accepted');
         
