@@ -249,7 +249,7 @@ let bidderDetails=ref([])
         icon: 'pi pi-exclamation-triangle',
         rejectClass: 'p-button-secondary p-button-outlined',
         rejectLabel: 'Cancel',
-        acceptLabel: 'Save',
+        acceptLabel: 'Proceed',
         accept: () => {
 
     loading.value=true

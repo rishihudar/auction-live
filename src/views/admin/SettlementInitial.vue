@@ -1,7 +1,5 @@
 <template>
     <div>
-        <Toast />
-        <ConfirmDialog></ConfirmDialog>
       <div class="page-header">
         <div class="ph-text">
           <h2 class="title">H1 Initial Settlement</h2>
