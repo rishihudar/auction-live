@@ -259,15 +259,15 @@ function changePassword() {
 async function sendOTPMobile() {
   // //console.log("$v.value.mobileNumber.$validate() is ",$v.value.mobileNumber.$invalid)
 
-  await isMobileNumberExist();
+  // await isMobileNumberExist();
   //console.log("countMobileNumberUser is ", countMobileNumberUser.value);
-  if (countMobileNumberUser.value > 0) {
-    toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "OTP Sent",
-      life: 3000,
-    });
+  // if (countMobileNumberUser.value > 0) {
+    // toast.add({
+    //   severity: "success",
+    //   summary: "Success",
+    //   detail: "OTP Sent",
+    //   life: 3000,
+    // });
     $v.value.mobileNumber.$validate();
 
     if (!$v.value.mobileNumber.$invalid) {
@@ -282,6 +282,13 @@ async function sendOTPMobile() {
           let res = rs.getActivity("SendOTPSMS", true);
           if (rs.isValid("SendOTPSMS")) {
             //console.log("Received OTP ", res.result);
+
+            toast.add({
+      severity: "success",
+      summary: "Success",
+      detail: "OTP Sent",
+      life: 3000,
+    });
 
             isSmsOTPSent.value = true;
             isSmsOTPVerified.value = false;
@@ -306,7 +313,7 @@ async function sendOTPMobile() {
     } else {
       toaster.error("Invalid Mobile Number");
     }
-  }
+  // }
 }
 function verifyOTPMobile() {
   // Automatically generated
