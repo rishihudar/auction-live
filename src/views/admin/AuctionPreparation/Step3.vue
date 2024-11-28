@@ -165,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="fm-row col-span-full" v-if="selectedModifierValueChange.modifierValueChangeId === '2'">
+                <div class="fm-row col-span-full" v-if="selectedModifierValueChange.modifierValueChangeId == '2'">
                     <div class="col-span-full md:col-span-6">
                         <div class="fm-group">
                             <label class="fm-label" for="Modifier Value After No. Of Extensions">No of extensions after Modifier value is Modified</label>
@@ -536,6 +536,7 @@ const onAdvancedUpload = async (event) => {
 
 
 const AddStep3AuctionData = async () => {
+    console.log('inside AddStep3AuctionData')
     // //console.log("auctionId", getLastInsertedAuctionId.value); 
     // //console.log("inventoryId", inventoryAreaDetails.value.inventoryId);
     // //console.log("modifierValue", modifierValue.value);
@@ -552,7 +553,7 @@ const AddStep3AuctionData = async () => {
     
     const result = await $v.value.$validate();
     let errorCount = $v.value.$errors.length;
-    if (selectedModifierValueChange.value.modifierValueChangeId === '1') {
+    if (selectedModifierValueChange.value.modifierValueChangeId == '1') {
         errorCount = errorCount - 2
     }
 

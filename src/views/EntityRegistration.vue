@@ -4,7 +4,7 @@
       <div class="ph-text">
         <h2 class="title">Entity Registration</h2>
       </div>
-      <div class="ph-action" v-if="flag === 0">
+      <div class="ph-action" v-if="flag == 0">
         <Button @click="changeFlag(1)" class="btn btn-primary btn-add">
           <fa-plus></fa-plus>
           Add New Entity
@@ -12,7 +12,7 @@
       </div>
     </div>
     <Toast />
-    <template v-if="flag === 0">
+    <template v-if="flag == 0">
       <div class="table-custom">
         <Paginator
           class="pagination-up"
@@ -216,7 +216,7 @@
       </div>
       <ConfirmDialog></ConfirmDialog>
     </template>
-    <template v-else-if="flag === 1">
+    <template v-else-if="flag == 1">
       <div class="card">
         <div class="card-header">
           <div class="ch-title">Add Entity</div>
@@ -708,7 +708,7 @@
       </div>
     </template>
 
-    <template v-else-if="flag === 2">
+    <template v-else-if="flag == 2">
       <div class="card">
         <div class="card-header">
           <div class="ch-title">Edit Entity</div>
@@ -1284,7 +1284,7 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
   if (response.isValid("CountEntityShortName")) {
     count.value = res?.result?.EntityId ?? 0; // Use optional chaining and nullish coalescing
 
-    //return count === 0; // Ensure to compare with 0
+    //return count == 0; // Ensure to compare with 0
     // console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
     if (count.value == 0 || count.value == (entityData?.value?.entityId ?? 0)) {
       return true;
