@@ -16,7 +16,7 @@
                 </Button>
             </div>
         </div>
-        <template v-if="flag === 0">
+        <template v-if="flag == 0">
             <div class="table-custom">
                 <Paginator
                     class="pagination-up"
@@ -109,7 +109,7 @@
             </div>
         </template>
 
-        <template v-else-if="flag === 3">
+        <template v-else-if="flag == 3">
             <div class="card">
                 <div class="card-header">
                     <div class="ch-title">Add</div>
@@ -279,7 +279,7 @@
             </div>
         </template>
 
-        <template v-else-if="flag === 4">
+        <template v-else-if="flag == 4">
             <div class="card">
                 <div class="card-header">
                     <div class="ch-title">Edit</div>

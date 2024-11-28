@@ -499,7 +499,7 @@ async function handleAddtoArray(id, Name) { //to add one by one id to array
  
   if( itemInCurrentAuction.value==0 ) { // meaning item is not  associated with current/upcoming auctions
     const index = data_to_delete.value.findIndex((item) => item.id === id); //cheking if itemid present already in array
-      if (index === -1 ){
+      if (index == -1 ){
       // If the id is not found in data_to_delete, add it and set accepted to false
       // console.log("Item Does not present in curent auction/upcomin auction")
       // console.log("result for curent item in curent auction:", itemInCurrentAuction.value)
