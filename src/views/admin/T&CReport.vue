@@ -16,26 +16,24 @@
             <div class="fm-upload-holder" :class="{ 'fm-upload-uploaded': !TnCButtonToggle }">
               <!-- File Input for Upload -->
 
-
               <!-- Upload Button -->
               <FileUpload v-model="uploadedFiles" :auto="true" mode="basic" name="uploadedFiles" :custom-upload="true"
                 @uploader="TnCUpload" :maxFileSize="TnCFileSize" :accept="TnCdocumentFileType"
                 :choose-label="TnCUploadButtonLabel" :disabled="!TnCButtonToggle" />
-              <div class="fm-upload-actions" v-if="!TnCButtonToggle">
+              <div v-if="!TnCButtonToggle">
+               
                Click here to view the uploaded file
+              
                 <button type="button" v-tooltip.top="'View File'" class="btn btn-view-file fill-secondary-600"
                   @click=viewImage(TnCFilePath)><pi-arrow-right></pi-arrow-right><fa-eye></fa-eye></button>
-                  <br>
+            
                   Click here to delete the uploaded file
+                  
                 <button type="button" v-tooltip.top="'Delete File'" class="btn btn-delete-file fill-rose-600"
                   @click="deleteTnC()"><pi-arrow-right></pi-arrow-right><fa-trash-can></fa-trash-can></button> 
-                  
+                  </div>
               </div>
-
-            </div>
-
-          </div>
-
+</div>
         </div>
       </div>
     </div>
@@ -75,17 +73,17 @@ function fetchDocumentDetails() {
   new MQL()
     .useCoreServer()
     .setActivity("o.[FetchDocumentDetails]")
-    .setData({ roleCode: "ROLE_APPROVER" })
+    .setData({ documentTypeName: "TERMS_AND_CONDITIONS" })
     .fetch()
     .then(rs => {
       let res = rs.getActivity("FetchDocumentDetails", true)
       if (rs.isValid("FetchDocumentDetails")) {
         documentDetails.value = res.result;
-        console.log("documentDetails.value is", documentDetails.value);
+       // console.log("documentDetails.value is", documentDetails.value);
         TnCFileSize.value = res.result.documentFileSize * 1 * multiplicativeFactor.value;
         TnCdocumentFileType.value = res.result.documentFileType;
         documentTypeId.value = res.result.documentTypeId;
-        console.log("TnCFileSize is", TnCFileSize.value);
+        //console.log("TnCFileSize is", TnCFileSize.value);
       } else {
         rs.showErrorToast("FetchDocumentDetails")
       }
