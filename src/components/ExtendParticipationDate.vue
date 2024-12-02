@@ -164,11 +164,17 @@ function fetchAllStepsAuctionPreview() {
     });
 }
 function UpdateExtendParticipationEndDate() {
+  // if (
+  //   moment(selectedEndDate.value).isSameOrBefore( // this if condition ensure the end date is after the start date
+  //     moment(selectedStartDate.value),
+  //     "minute"
+  //   )
+  // )
   if (
-    moment(selectedEndDate.value).isSameOrBefore(
-      moment(selectedStartDate.value),
-      "minute"
-    )
+    moment(selectedEndDate.value).isSameOrBefore( // this if condition ensure the end date is after the current date and time
+       moment(),
+       "minute"
+     )
   ) {
     // console.log(
     //   "log-",
@@ -177,7 +183,9 @@ function UpdateExtendParticipationEndDate() {
     //     "minute"
     //   )
     // );
-    alert(`Start Date should not be equal or after End Date !`);
+    //alert(`Start Date should not be equal or after End Date !`);
+    alert("End Date should be after the current date and time!");
+
   } else {
     extendParticipationEndDate();
     //iAgreeStatusUpdate();
