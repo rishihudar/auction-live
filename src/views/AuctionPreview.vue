@@ -207,14 +207,23 @@
               {{ auctionSummary[0].modifierValueChangeName }}
             </div>
           </div>
-          <div class="bs-item col-span-4" v-if="auctionItemDocumentPath != '/'">
+          <div class="bs-item col-span-4">
             <div class="bs-buttons bs-buttons-left">
-              <!-- <a class="btn btn-sm btn-secondary" :href="auctionItemDocumentPath" target="_blank"> Auction Item Document</a> -->
+              <!-- If document path is valid -->
               <button
+                v-if="auctionItemDocumentPath != '/'"
                 class="btn btn-sm btn-secondary"
                 @click="viewImage(auctionItemDocumentPath)"
               >
                 Auction Item Document
+              </button>
+              <!-- If document path is not valid -->
+              <button
+                v-else
+                class="btn btn-sm btn-secondary"
+                v-tooltip.top="'Document Not Available'"
+              >
+              Auction Item Document
               </button>
             </div>
           </div>
