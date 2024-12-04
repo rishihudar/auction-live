@@ -62,7 +62,7 @@
                 <Column field="bidderName" header="Bidder Name"></Column>
                 <Column field="bidderEmail" header="Bidder Email"></Column>
                 <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
-                <Column field="amount" header="Amount in Rs"></Column>
+                <Column field="refundAmount" header="Refund EMD Amount in Rs"></Column>
                 <Column field="refundStatus" header="Refund Status"></Column>
                 <Column expander header="Details" style="width: 5rem"></Column>
                 <template #expansion="slot">
@@ -162,7 +162,7 @@ let bidderDetails=ref([])
     //console.log("Selected Entity Id", login().loginDetails);
     new MQL()
     .useManagementServer()
-      .setActivity("r.[FetchConcludedAuctionsUser]")
+      .setActivity("r.[FetchConcludedAuctionsRefund]")
       .setData({
         entityId: login().loginDetails.entityId,
         organizationId: login().loginDetails.organizationId,
@@ -173,20 +173,20 @@ let bidderDetails=ref([])
       })
       .fetch()
       .then((rs) => {
-        let res = rs.getActivity("FetchConcludedAuctionsUser", true);
-        if (rs.isValid("FetchConcludedAuctionsUser")) {
+        let res = rs.getActivity("FetchConcludedAuctionsRefund", true);
+        if (rs.isValid("FetchConcludedAuctionsRefund")) {
           products.value = res.result.concludedAuctions;
           //console.log(res.result, "concluded result**********");
           //console.log(res.result.concludedAuctions,"concluded auction@@@@@@@")
           totalRows.value = res.result.rowCount.totalRows;
-          //console.log("totalRows@@@@",totalRows)
+          // console.log("totalRows@@@@",totalRows)
           //console.log("auctionDetails.value.length", products.value.length);
           for (var i = 0; i < products.value.length; i++) {
             products.value[i].srNo = currentPage.value * perPage.value + i + 1;
             //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
           }
         } else {
-          rs.showErrorToast("FetchConcludedAuctionsUser");
+          rs.showErrorToast("FetchConcludedAuctionsRefund");
         }
       });
   }
