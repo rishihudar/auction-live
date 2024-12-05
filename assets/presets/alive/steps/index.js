@@ -8,22 +8,22 @@ export default {
     menuitem: {
         class: [
             // Flexbox and Position
-            'relative',
-            'flex',
-            'justify-center',
-            'flex-1',
-            'overflow-hidden',
+            // 'relative',
+            // 'flex',
+            // 'justify-center',
+            // 'flex-1',
+            // 'overflow-hidden',
 
             // Before
-            'before:border-t',
-            'before:border-surface-200',
-            'before:dark:border-surface-700',
-            'before:w-full',
-            'before:absolute',
-            'before:top-1/2',
-            'before:left-0',
-            'before:transform',
-            'before:-mt-4'
+            // 'before:border-t',
+            // 'before:border-surface-200',
+            // 'before:dark:border-surface-700',
+            // 'before:w-full',
+            // 'before:absolute',
+            // 'before:top-1/2',
+            // 'before:left-0',
+            // 'before:transform',
+            // 'before:-mt-4'
         ]
     },
     action: ({ props }) => ({

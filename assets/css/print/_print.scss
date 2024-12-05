@@ -1,0 +1,46 @@
+.box-relay {
+    --table-border              : #333;
+
+    --table-th-p-block          : 8px;
+    --table-td-p-block          : 6px;
+    --table-p-inline            : 8px;
+}
+
+.box-relay {
+    .br-logo {@apply mb-6 h-20 text-center;
+        img {@apply mx-auto max-h-full;}
+    }
+    .br-title {margin-bottom: 10px; font-size: 24px; line-height: 32px; font-weight: 700; text-align: center;}
+    .br-info {text-align: center;}
+
+    .table {@apply rounded-sm;}
+}
+
+.table-relay {
+    thead {
+        tr {
+            &:first-child {
+                th:last-child {border-right: none;}
+            }
+            th {padding: var(--table-th-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border); border-right: 1px solid var(--table-border); font-size: 15px; line-height: 20px;
+                &:first-child {border-top-left-radius: 0;}
+                &:last-child {border-top-right-radius: 0;}
+            }
+        }
+    }
+    tbody tr {
+        &:last-child {
+            td {border-bottom: none;
+                &:first-child {border-bottom-left-radius: 0;}
+                &:last-child {border-bottom-right-radius: 0;}
+            }
+        }
+        td {padding: var(--table-td-p-block) var(--table-p-inline); border-bottom: 1px solid var(--table-border); border-right: 1px solid var(--table-border); font-size: 15px; line-height: 20px;
+            &:last-child {border-right: none;}
+        }
+    }
+}
+
+
+/* to resolve layout shift for pdf2html plugin */
+img {display: inline-block;}

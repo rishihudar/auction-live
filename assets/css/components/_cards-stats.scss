@@ -1,11 +1,11 @@
-.card-stat-wrapper {@apply grid gap-4 grid-cols-3 2xl:grid-cols-4;}
+.card-stat-wrapper {@apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4;}
 .card-stat {
     height: 150px;
     border-radius: 6px;
     background-color: #ef4770;
     overflow: hidden;
     position: relative;
-    transition: all 0.8s ease-in;
+    transition: all 0.4s ease-in;
     cursor: pointer;
     z-index: 1;
     .card-body {
@@ -23,7 +23,7 @@
         border-radius: 50%;
         background: rgba(#ffffff, 0.15);
         z-index: 1;
-        transition: all 0.8s ease-in;
+        transition: all 0.4s ease-in;
     }
     &::before {
         top: 10%;

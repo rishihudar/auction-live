@@ -180,7 +180,8 @@ export default {
             // { 'hover:bg-red-300/20': (props.text || props.outlined) && props.severity === 'danger' && !props.plain },
 
             // Disabled
-            { 'opacity-60 pointer-events-none cursor-default': context.disabled },
+            // { 'opacity-60 pointer-events-none cursor-default': context.disabled },
+            { 'opacity-60 cursor-default': context.disabled },
 
             // Transitions
             // 'transition duration-200 ease-in-out',

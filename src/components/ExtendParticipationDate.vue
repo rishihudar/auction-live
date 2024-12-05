@@ -12,6 +12,7 @@
       :position="position"
       :style="{ width: '50rem' }"
       :draggable="false"
+      class="modal-calendar"
     >
       <div class="modal-subtitle">
         Auction Code: <span> {{ auctionCode }}</span>
@@ -31,7 +32,7 @@
                 hourFormat="24"
                 :minDate="minDate"
                 :showIcon="true"
-                readonly="true"
+                :readonly="true"
               />
             </div>
             <div class="fm-info">
@@ -53,6 +54,7 @@
                 hourFormat="24"
                 :minDate="endMinDate"
                 :showIcon="true"
+                appendTo="self"
               />
             </div>
             <div class="fm-info">
@@ -162,11 +164,17 @@ function fetchAllStepsAuctionPreview() {
     });
 }
 function UpdateExtendParticipationEndDate() {
+  // if (
+  //   moment(selectedEndDate.value).isSameOrBefore( // this if condition ensure the end date is after the start date
+  //     moment(selectedStartDate.value),
+  //     "minute"
+  //   )
+  // )
   if (
-    moment(selectedEndDate.value).isSameOrBefore(
-      moment(selectedStartDate.value),
-      "minute"
-    )
+    moment(selectedEndDate.value).isSameOrBefore( // this if condition ensure the end date is after the current date and time
+       moment(),
+       "minute"
+     )
   ) {
     // console.log(
     //   "log-",
@@ -175,7 +183,9 @@ function UpdateExtendParticipationEndDate() {
     //     "minute"
     //   )
     // );
-    alert(`Start Date should not be equal or after End Date !`);
+    //alert(`Start Date should not be equal or after End Date !`);
+    alert("End Date should be after the current date and time!");
+
   } else {
     extendParticipationEndDate();
     //iAgreeStatusUpdate();

@@ -2,4 +2,8 @@
     .sidebar-holder {@apply h-full;}
 
     .sidebar-collapsed & {transform: translate3d(calc(-100% - 5px), 0, 0);}
+
+    .simplebar-scrollbar {
+        &:before {background: #fff;}
+    }
 }

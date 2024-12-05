@@ -70,6 +70,15 @@
             <!-- </div> -->
           </template>
         </Column>
+        <Column header="Bidder Documents" style="width: 5rem">
+                    <template #body="row">
+                        <Button
+                            @click="viewDetails(row.data.roundNumber)"
+                            class="btn-sm"
+                            label="Details"
+                        />
+                    </template>
+            </Column>
         <Column header="INTENT_LETTER">
           <template #body="slotProps">
             <span>Intent letter</span>
@@ -109,6 +118,65 @@
       </div>
     </Dialog>
 
+    <Dialog  v-model:visible="documentVisible" modal header="Bidder Documents" >
+      <div class="table-custom">
+<p>Bank Documents</p>
+        <DataTable :value="documentList" showGridlines>
+          <Column field="docName" header="Document Name"></Column>
+          <Column field="docPath" header="View Document">
+            <template #body="row">
+              <!-- {{ row.data.docPath }} -->
+              <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
+              <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
+                      <!-- {{ row.data.docPath }} -->
+              <!-- <VPdfViewer :src="row.data.docPath"/> -->
+              <!-- <img :src="row.data.docPath"> -->
+            </template>
+          </Column>
+        </DataTable>
+       <br> <p>Joint Holder Documents</p>
+        <DataTable :value="jointHolderDocument" showGridlines>
+          <Column field="docName" header="Document Name"></Column>
+          <Column field="docPath" header="View Document">
+            <template #body="row">
+              <!-- {{ row.data.docPath }} -->
+              <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
+              <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
+                      <!-- {{ row.data.docPath }} -->
+              <!-- <VPdfViewer :src="row.data.docPath"/> -->
+              <!-- <img :src="row.data.docPath"> -->
+            </template>
+          </Column>
+        </DataTable>
+
+        <br> <p>Registration Documents</p>
+        <DataTable :value="registrationDocuments" showGridlines>
+          <Column field="docName" header="Document Name"></Column>
+          <Column field="docPath" header="View Document">
+            <template #body="row">
+              <!-- {{ row.data.docPath }} -->
+              <Button @click="viewImage(row.data.docPath)" class="btn-sm" label="View"><fa-eye></fa-eye> </Button>
+              
+              <Button severity="secondary" @click="DownloadDocument(row.data.docPath)"><downloadIcon></downloadIcon></Button>
+                      <!-- {{ row.data.docPath }} -->
+              <!-- <VPdfViewer :src="row.data.docPath"/> -->
+              <!-- <img :src="row.data.docPath"> -->
+            </template>
+          </Column>
+        </DataTable>
+        
+        <!-- <div :style="{ width: '1028px', height: '700px' }">
+    <VPdfViewer
+      src="https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf"
+    />
+  </div> -->
+
+      
+      </div>
+    </Dialog>
+
       <!-- Existing content -->
       
       <!-- OTP Modal -->
@@ -138,7 +206,18 @@
             @click="closeOtpModal">
           </Button>
         </div>
-      </Dialog>  
+      </Dialog> 
+      
+      <!-- <Dialog v-model:visible="viewImageModalImage" modal header="View Image" :style="{ width: '30rem' }" >
+        <div class="form-group">
+          <img :src="imagePath" alt="No preview available... Please download the file" target="_blank">
+        </div>
+      </Dialog>  -->
+      <!-- <Dialog v-model:visible="viewImageModalPDF" modal header="View PDF" :style="{ width: '30rem' }" >
+        <div class="form-group">
+          <PDF :src="imagePath" alt="No preview available... Please download the file"/>
+        </div>
+      </Dialog>  -->
     <!-- Your Submit button component -->
     <div class="table-exp-action centered">
       <Button label="Submit" @click="submitForm" :disabled="disabled" />
@@ -156,6 +235,9 @@
 </template>
 
 <script setup>
+import faEye from '../../../assets/icons/eye.svg';
+import downloadIcon from '../../../assets/icons/download.svg';
+//import PDF from "pdf-vue3";
 import Dialog from "primevue/dialog";
 // import Tooltip from 'primevue/tooltip';
 import 'primeicons/primeicons.css';
@@ -173,9 +255,10 @@ import { storeToRefs } from "pinia";
 import { login } from "../../store/modules/login";
 import { createToaster } from "@meforma/vue-toaster";
 import Dropdown from "primevue/dropdown";
+import MQLCdn from '@/plugins/mqlCdn.js';
 // import faEye from '../../../assets/icons/eye.svg';
 const loginStore = login();
-
+const Vue = window.app
 const isOtpSubmitDisabled = computed(() => !enteredOtp.value.trim());
 let isSubmitButtonDisabled=ref(false);
 const emit = defineEmits(['close']);
@@ -193,7 +276,7 @@ const rejectionReason = ref('');
 const modalData = ref(null);
 let auctionId = ref(props.auctionId);
 const otp=ref ();
-const { organizationId, entityId, loginId ,currentRole,auctionCode} = storeToRefs(loginStore);
+const { organizationId, entityId, loginId ,currentRole,auctionCode,roleId} = storeToRefs(loginStore);
 let tick = ref();
 const resultList = reactive([]);
 const selectedRows = ref([]);
@@ -216,6 +299,13 @@ let disabled = ref(false);
 const approvalStatusResult = ref({ id: 0, approvalStatus: "" });
 const dropdownOptions = ref([]);
 
+let documentVisible=ref(false)
+const columns = [
+    { field: 'docName', header: 'Document Type' },
+    { field: 'docPath', header: 'File' }
+];
+let viewImageModalImage = ref(false)
+let viewImageModalPDF = ref(false)
 // const rejectionCount = computed(() => {
 //   return resultList.filter(item => item.data.approvalStatusResult === 'Reject').length;
 // });
@@ -280,7 +370,8 @@ function submitRejection() {
   }
 
   resultList[currentIndex.value] = { ...resultList[currentIndex.value], rejectionReason: rejectionReason.value };
-  console.log(resultList);
+  // console.log(resultList);
+  
   //sendRejectionEmailH1Bidders();
   // H1RejectionOtp(); // Send OTP for rejection 
   //validateH1RejectionOtp(); // Validate OTP for rejection 
@@ -292,7 +383,7 @@ function submitRejection() {
 }
 function H1RejectionOtp() {//rejection otp generator
 const rejectedItems = resultList.filter(item => {
-  console.log("item.value:", item); // Log item.data here
+  // console.log("item.value:", item); // Log item.data here
     if (item.ApprovalStatus == "Reject") {
       return true; // Include this item in the filtered array
     }
@@ -300,13 +391,13 @@ const rejectedItems = resultList.filter(item => {
   });
 
   const rejectionCount = rejectedItems.length;
-  console.log("count**********",rejectedItems.length)
+  // console.log("count**********",rejectedItems.length)
   // console.log("rejectionCount.value", resultList,rejectedItems,rejectionCount);
 					// Automatically generated
           new MQL()
           .useNotificationServer()
 			.setActivity("r.[SendH1RejectionOTP]")
-			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId,"rejectionCount":rejectionCount,resultList:resultList})
+			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId,"rejectionCount":rejectionCount,resultList:resultList,roleId:loginStore.currentRole.roleId})
       //console.log("rejectionCount",rejectionCount)
 			//.setHeaders({"Authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5NCIsImdyb3VwcyI6WyJSb2xlIE1ha2VyIiwiUm9sZSBDaGVja2VyIiwiUm9sZSBTY2hlZHVsZXIiLCJSb2xlIEFQUFJPVkVSIiwiUm9sZSBQdWJsaXNoZXIiLCJTdXBlckFkbWluIiwiT3JnYW5pemF0aW9uQWRtaW4iLCJSb2xlIFdhdGNoZXIiLCJSb2xlIEFkbWluIl0sImNsaWVudElQIjoiMTkyLjE2OC4xMC42MSIsImhpdHNDb3VudCI6MCwidG9rZW4iOiIiLCJtZXRhZGF0YSI6IntcImZ1bGxOYW1lXCI6XCJzaHdldGEgcGFuZGV5XCIsXCJtb2JpbGVOdW1iZXJcIjpcIjYzOTMzMDIyODRcIixcInVzZXJuYW1lXCI6XCJzaHdldGFAZ21haWwuY29tXCIsXCJlbnRpdHlJZFwiOjIsXCJvcmdhbml6YXRpb25JZFwiOjEsXCJvcmdhbml6YXRpb25OYW1lXCI6XCJEVUxCIEhhcnlhbmFcIixcInJlZ1N0YXR1c0lkXCI6MCxcInJlZ1N0YXR1c05hbWVcIjpcIlVTRVJfQVBQUk9WRURcIixcImxvZ2luSWRcIjpcIjk0XCJ9IiwiZXhwIjoxNzI3NDk4NDgyfQ.ayV0EAukhSr1h8P6tmTIzvrapE0Ud3C7yP38IpYb2u0"})
 			.fetch()
@@ -337,7 +428,8 @@ new MQL()
           disabled.value = true;
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
-         // sendEmailH1Bidders();
+         sendEmailH1Bidders();
+         sendEmailH1BidRejection();
           sendSmsH1Bidders();
         } else {
           rs.showErrorToast("UpdateH1BidderDetails");
@@ -475,14 +567,14 @@ function closeOtpModal() {
 }
 function submitForm() {
   const rejectedItems = resultList.filter(item => {
-  console.log("item.value:", item); // Log item.data here
+  // console.log("item.value:", item); // Log item.data here
     if (item.ApprovalStatus == "Reject") {
       return true; // Include this item in the filtered array
     }
     return false; // Exclude this item
   });
   const rejectionCount = rejectedItems.length;
-  console.log("rejectionCount.value", rejectionCount);
+  // console.log("rejectionCount.value", rejectionCount);
   const validation = $v.value.$validate();
   if (!$v.value.$error) {
     // Check if all dropdowns are selected
@@ -496,7 +588,7 @@ function submitForm() {
       );
       return;
     }
-   console.log("rejectionCount.value",rejectionCount);   
+  //  console.log("rejectionCount.value",rejectionCount);   
    if(rejectionCount>0){
     //console.log("approvalStatusResult.value",approvalStatusResult.value); 
     H1RejectionOtp();
@@ -545,6 +637,22 @@ function sendEmailH1Bidders() {
 			
 
 }
+function sendEmailH1BidRejection() {
+					// Automatically generated
+          new MQL()
+          .useNotificationServer()
+			.setActivity("r.[SendEmailH1BidRejection]")
+			.setData({auctionId:auctionId.value})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("SendEmailH1BidRejection",true)
+			if (rs.isValid("SendEmailH1BidRejection")) {
+			} else
+			 { 
+			rs.showErrorToast("SendEmailH1BidRejection")
+			}
+			})
+    }
 function sendSmsH1Bidders() {
 					// Automatically generated
           new MQL()
@@ -555,13 +663,139 @@ function sendSmsH1Bidders() {
 			 .then(rs => {
 			let res = rs.getActivity("FetchDetailsForH1Rejection",true)
 			if (rs.isValid("FetchDetailsForH1Rejection")) {
-        console.log("FetchDetailsForH1Rejection",res.result);
+        // console.log("FetchDetailsForH1Rejection",res.result);
 			} else
 			 { 
 			rs.showErrorToast("FetchDetailsForH1Rejection")
 			}
 			})
-    }		
+    }
+
+    let documentList=ref([])
+    let jointHolderDocument=ref([])
+    let registrationDocuments=ref([])
+    function viewDetails(roundNumberParam) {
+      // console.log(auctionId.value,roundNumberParam)
+      // window.open('https://testcdncs.mkcl.org/2czAobDzoGCmipmIZOtO7LXyOEF/bidderBankDocuments/12/1236/1728973709525_save.png', '_blank');
+      
+					// Automatically generated
+			new MQL()
+      .useManagementServer()
+			.setActivity("r.[FetchConcludedAuctionBidderDocuments]")
+			.setData({auctionId:auctionId.value,roundNumber:roundNumberParam})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchConcludedAuctionBidderDocuments",true)
+			if (rs.isValid("FetchConcludedAuctionBidderDocuments")) {
+
+        documentList.value = res.result.fetchBidderUploadedDocuments.filter(doc => !doc.docName.includes('holder'));
+        // console.log(documentList.value);
+
+        jointHolderDocument.value = res.result.fetchBidderUploadedDocuments.filter(doc => doc.docName.includes('holder'));
+// console.log(jointHolderDocument.value);
+
+registrationDocuments.value = res.result.fetchBidderRegistrationDocuments
+    //     documentList.value = res.result.map(doc => {
+    //   if(!doc.docPath.startsWith('http')) {
+    //     return {
+    //       ...doc,docPath:'https://testcdncs.mkcl.org/'+doc.docPath
+    //     };
+        
+    //   }
+    //   return doc;
+    // })
+
+
+        // console.log("-->",res.result)
+
+
+
+			} else
+			 { 
+			rs.showErrorToast("FetchConcludedAuctionBidderDocuments")
+			}
+			})
+			
+      documentVisible.value = true
+    }
+
+function DownloadDocument(url) {
+  // console.log("URL --->"+url)
+    if (url !== "") {
+        new MQLCdn()
+            .setCDNPath(url)
+            .enablePageLoader(true)
+            .downloadFile("downloadBtn")
+            .then((res) => {
+              // console.log("res0 is ",res)
+                if (!res.isValid()) {
+                  // console.log("res is ",res)
+                    res.showErrorToast();
+                }
+                // console.log("res1 is ",res)
+            });
+    } else {
+        toaster.error("File can'nt be downloaded!")
+    }
+};
+
+let imagePath=ref()
+    function viewImage(path) {
+      imagePath.value = path;
+
+      if(!path.startsWith('http')) {
+        // console.log("Inside "+path)
+        imagePath.value =   Vue.getCDNBaseURL()+'/'+imagePath.value
+      }
+
+// console.log("path is "+imagePath.value)
+      // if (path.endsWith('.pdf')) {
+      //   console.log("inside pdfs")
+        fetchImage(imagePath.value)
+//         viewImageModalPDF.value = true;
+// } else {
+  // fetchImage(path)
+  // viewImageModalImage.value=true;
+// }
+
+
+
+    }
+
+function fetchImage(url) {
+
+  const myHeaders = new Headers();
+
+myHeaders.append("Authorization", 'Bearer ' + sessionStorage.getItem('user-token'));
+myHeaders.append("Accept", "application/json, text/plain, */*");
+const requestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow"
+};
+
+fetch(url, requestOptions)
+  .then((response) =>
+    response.blob())
+    .then((blob) => {
+    // Create a URL for the image
+    const imageUrl = URL.createObjectURL(blob);
+
+    imagePath.value =  imageUrl;
+    // console.log("imagePath.value is",imagePath.value)
+    // viewImageModalImage.value=true
+    window.open(imageUrl);
+  })
+  .catch((error) => console.error(error));
+  
+}
+
+
+
+      
+      
+    
+    
 onMounted(() => {
   h1AuctionDetails();
   fetchH1ApprovalStatus();

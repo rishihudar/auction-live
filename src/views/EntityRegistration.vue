@@ -4,7 +4,7 @@
       <div class="ph-text">
         <h2 class="title">Entity Registration</h2>
       </div>
-      <div class="ph-action" v-if="flag === 0">
+      <div class="ph-action" v-if="flag == 0">
         <Button @click="changeFlag(1)" class="btn btn-primary btn-add">
           <fa-plus></fa-plus>
           Add New Entity
@@ -12,7 +12,7 @@
       </div>
     </div>
     <Toast />
-    <template v-if="flag === 0">
+    <template v-if="flag == 0">
       <div class="table-custom">
         <Paginator
           class="pagination-up"
@@ -140,6 +140,46 @@
               {{ data.watcherPasscode }}
             </template>
           </Column>
+          <Column field="refundClientCode" header="Refund Client Code">
+            <template #body="{ data }">
+              {{ data.refundClientCode }}
+            </template>
+          </Column>
+        <Column field="refundFCName" header="Refund FC Name">
+          <template #body="{ data }">
+            {{ data.refundFCName }}
+          </template>
+        </Column>
+        <Column field="settlementClientCode" header="Settlement Client Code">
+          <template #body="{ data }">
+            {{ data.settlementClientCode }}
+          </template>
+        </Column>
+        <Column field="settlementFCName" header="Settlement FC Name">
+          <template #body="{ data }">
+            {{ data.settlementFCName }}
+          </template>
+        </Column>
+        <Column field="settlementAccountName" header="Settlement Account Name">
+          <template #body="{ data }">
+            {{ data.settlementAccountName }}
+          </template>
+        </Column>
+        <Column field="vsBankAccountNumber" header="Settlement Account Number">
+          <template #body="{ data }">
+            {{ data.vsBankAccountNumber }}
+          </template>
+        </Column>
+        <Column field="settlementAccountIFSCCode" header="Settlement Account IFSC Code">
+          <template #body="{ data }">
+            {{ data.settlementIFSCCode }}
+          </template>
+        </Column>
+          <!-- <Column field="watcherPasscode" header="Watcher Passcode Required">
+            <template #body="{ data }">
+              {{ data.watcherPasscode }}
+            </template>
+          </Column> -->
           <Column header="Actions">
             <template #body="{ data }">
               <div class="btn-wrapper-table">
@@ -176,7 +216,7 @@
       </div>
       <ConfirmDialog></ConfirmDialog>
     </template>
-    <template v-else-if="flag === 1">
+    <template v-else-if="flag == 1">
       <div class="card">
         <div class="card-header">
           <div class="ch-title">Add Entity</div>
@@ -468,6 +508,158 @@
           </div>
           <div class="col-span-4">
             <div class="fm-group required">
+              <label class="fm-label" for="refundClientCode">
+                Refund Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundClientCode"
+                  v-model="entityData.refundClientCode"
+                  placeholder="Enter Refund Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundFCName"
+                >Refund FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundFCName"
+                  v-model="entityData.refundFCName"
+                  placeholder="Enter Refund FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementClientCode"
+                >Settlement Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementClientCode"
+                  v-model="entityData.settlementClientCode"
+                  placeholder="Enter Settlement Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementFCName"
+                >Settlement FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementFCName"
+                  v-model="entityData.settlementFCName"
+                  placeholder="Enter Settlement FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+        <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementAccountName"
+                >Settlement Account Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementAccountName"
+                  v-model="entityData.settlementAccountName"
+                  placeholder="Enter Settlement Account Name"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.settlementAccountName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementAccountName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+<div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="vsBankAccountNumber"
+                >Settlement Account Number</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="vsBankAccountNumber"
+                  v-model="entityData.vsBankAccountNumber"
+                  placeholder="Enter Settlement Account Number"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.vsBankAccountNumber.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.vsBankAccountNumber.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+
+<div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementIFSCCode"
+                >Settlement IFSC Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementIFSCCode"
+                  v-model="entityData.settlementIFSCCode"
+                  placeholder="Enter Settlement IFSC Code"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.settlementIFSCCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementIFSCCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-span-4">
+            <div class="fm-group required">
               <label class="fm-label" for="entityParent">Entity Parent</label>
               <div class="fm-check-holder">
                 <div class="fm-checkbox">
@@ -501,7 +693,7 @@
               </div>
             </div>
           </div>
-
+         
           <div class="fm-action">
             <Button @click="confirmADD(entityData)" label="Submit"></Button>
             <Button
@@ -516,7 +708,7 @@
       </div>
     </template>
 
-    <template v-else-if="flag === 2">
+    <template v-else-if="flag == 2">
       <div class="card">
         <div class="card-header">
           <div class="ch-title">Edit Entity</div>
@@ -802,6 +994,160 @@
               </div>
             </div>
           </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundClientCode">
+                Refund Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundClientCode"
+                  v-model="entityData.refundClientCode"
+                  placeholder="Enter Refund Client Code"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.refundClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="refundFCName"
+                >Refund FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="refundFCName"
+                  v-model="entityData.refundFCName"
+                  placeholder="Enter Refund FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.refundFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.refundFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementClientCode"
+                >Settlement Client Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementClientCode"
+                  v-model="entityData.settlementClientCode"
+                  placeholder="Enter Settlement Client Code"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementClientCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementClientCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementFCName"
+                >Settlement FC Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementFCName"
+                  v-model="entityData.settlementFCName"
+                  placeholder="Enter Settlement FC Name"
+                />
+                <!-- <small id="username-help">Enter Entity Event Processing Fees E.g 1000</small> -->
+              </div>
+              <div
+                v-if="$v.entityData.settlementFCName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementFCName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+<div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementAccountName"
+                >Settlement Account Name</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementAccountName"
+                  v-model="entityData.settlementAccountName"
+                  placeholder="Enter Settlement Account Name"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.settlementAccountName.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementAccountName.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+<div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="vsBankAccountNumber"
+                >Settlement Account Number</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="vsBankAccountNumber"
+                  v-model="entityData.vsBankAccountNumber"
+                  placeholder="Enter Settlement Account Number"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.vsBankAccountNumber.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.vsBankAccountNumber.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+
+<div class="col-span-4">
+            <div class="fm-group required">
+              <label class="fm-label" for="settlementIFSCCode"
+                >Settlement IFSC Code</label
+              >
+              <div class="fm-inner">
+                <InputText
+                  id="settlementIFSCCode"
+                  v-model="entityData.settlementIFSCCode"
+                  placeholder="Enter Settlement IFSC Code"
+                />
+              </div>
+              <div
+                v-if="$v.entityData.settlementIFSCCode.$error"
+                class="fm-error"
+              >
+                {{ $v.entityData.settlementIFSCCode.$errors[0].$message }}
+              </div>
+            </div>
+          </div>
+
+
+
+
 
           <div class="col-span-4">
             <div class="fm-group required">
@@ -841,6 +1187,7 @@
               </div> -->
             </div>
           </div>
+         
           <div class="fm-action">
             <Button
               @click="confirmEdit(entityData)"
@@ -880,6 +1227,7 @@ import {
   required,
   numeric,
   maxLength,
+ minLength,
   alphaNum,
 } from "@vuelidate/validators";
 import { login } from "../store/modules/login";
@@ -914,6 +1262,13 @@ let entityData = ref({
   passwordAttemptLimit: "",
   paymentPeriod: "",
   watcherPasscode: false,
+  refundClientCode: "",
+  refundFCName: "",
+  settlementClientCode: "",
+  settlementFCName: "",
+  settlementAccountName:"",
+  vsBankAccountNumber:"",
+  settlementIFSCCode:""
 });
 
 const isUniqueEntityShortName = helpers.withAsync(async (value) => {
@@ -929,7 +1284,7 @@ const isUniqueEntityShortName = helpers.withAsync(async (value) => {
   if (response.isValid("CountEntityShortName")) {
     count.value = res?.result?.EntityId ?? 0; // Use optional chaining and nullish coalescing
 
-    //return count === 0; // Ensure to compare with 0
+    //return count == 0; // Ensure to compare with 0
     // console.log("count", count.value,"entityData", entityData?.value?.entityId ?? 0)
     if (count.value == 0 || count.value == (entityData?.value?.entityId ?? 0)) {
       return true;
@@ -1077,6 +1432,40 @@ const rules = computed(() => ({
       required: helpers.withMessage("Payment period is required", required),
       numeric,
     },
+    refundClientCode: {
+      required: helpers.withMessage("Refund client code is required", required),
+      alphaNum,
+    },
+    refundFCName: {
+      required: helpers.withMessage("Refund FC name is required", required),
+      alphaNum,
+    },
+    settlementClientCode: {
+      required: helpers.withMessage("Settlement client code is required", required),
+      alphaNum,
+    },
+    settlementFCName: {
+      required: helpers.withMessage("Settlement FC name is required", required),
+      alphaNum,
+    },
+
+
+    settlementAccountName: {
+      required: helpers.withMessage("Settlement Account Name is required", required),
+      
+    },
+    vsBankAccountNumber: {
+      required: helpers.withMessage("Settlement Account Number is required", required),
+      numeric,
+    minLength: minLength(9),
+    maxLength: maxLength(32),
+      
+    },
+    settlementIFSCCode: {
+      required: helpers.withMessage("Settlement IFSC Code is required", required),
+      maxLength: maxLength(11),
+    },
+    
   },
 }));
 const $v = useVuelidate(rules, { entityData });
@@ -1188,15 +1577,17 @@ const fetchEntityTypesByOrganization = () => {
 
 function insertEntity(entityData) {
   console.log("entityData", entityData);
+  console.log("createdBy",loginStore.loginId)
+  //here entityData has insert data getting from frontend
   new MQL()
     .useCoreServer()
     .setActivity("o.[InsertEntity]")
-    .setData({ ...entityData.value, createdBy: loginStore.loginId })
+    .setData({ ...entityData.value, createdBy: loginStore.loginId ,refundClientCode:entityData.value.refundClientCode,refundFCName:entityData.value.refundFCName,settlementClientCode:entityData.value.settlementClientCode,settlementFCName:entityData.value.settlementFCName})
     .fetch()
     .then((rs) => {
       let res = rs.getActivity("InsertEntity", true);
       if (rs.isValid("InsertEntity")) {
-        //console.log(res.result);
+        console.log(res.result);
         //console.log("entityData from Insert", entityData);
         FetchEntities();
       } else {

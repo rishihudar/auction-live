@@ -1,0 +1,8 @@
+.tag-holder {display: flex; flex-wrap: wrap; align-items: center; justify-content: center;}
+
+.tag {@apply py-1.5 px-3 inline-flex gap-1 items-center rounded text-xs font-semibold uppercase text-slate-500 bg-slate-400 bg-opacity-30;
+    svg {@apply h-4;}
+    &-success {@apply text-primary-600 bg-primary-400 bg-opacity-30;}
+    &-danger {@apply text-red-600 bg-red-400 bg-opacity-30 fill-red-600;}
+    &-warning {@apply text-amber-600 bg-amber-400 bg-opacity-30 fill-amber-600;}
+}

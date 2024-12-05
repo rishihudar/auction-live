@@ -616,7 +616,7 @@ const onAdvancedUpload = async (event) => {
     myFile.value = event.files[0].name;
     //console.log("myFile", myFile.value)
     // Check if there are any selected files
-    if (userDataSheet.value.length === 0) {
+    if (userDataSheet.value.length == 0) {
       console.error('No files selected', userDataSheet);
       return;
     }
@@ -624,7 +624,7 @@ const onAdvancedUpload = async (event) => {
   try {
     const files = event.files;
 
-    if (files.length === 0) {
+    if (files.length == 0) {
       console.error('No files selected');
       return;
     }

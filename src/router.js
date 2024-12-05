@@ -285,6 +285,12 @@ const router = createRouter({
       meta: { title: "BidderActivityReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
     },
     {
+      path: "/T&CReport",
+      name:"T&CReport",
+      component: loadAdminView("T&CReport"),
+      meta: { title: "T&CReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
       path: "/BidderDeactivation",
       name:"BidderDeactivation",
       component: loadAdminView("BidderDeactivation"),
@@ -1054,6 +1060,7 @@ const router = createRouter({
     },
     {
       path: "/admin/AdminAuctionBidding",
+      name:"AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
       meta: {
         title: "Bidding",
@@ -1069,6 +1076,16 @@ const router = createRouter({
         isHeaderVisible: false,
       },
     },
+
+    {
+      path: "/admin/MultiScreenAdminAuctionBidding",
+      name:"MultiScreenAdminAuctionBidding",
+      component: loadAdminView("MultiScreenAdminAuctionBidding"),
+      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_WATCHER','ROLE_ADMIN'], isSideBarVisible: false,  isHeaderVisible: false },
+    },
+
+
+
     {
       path: "/current-auction",
       component: loadAdminView("CurrentAuction"),
@@ -1120,6 +1137,38 @@ const router = createRouter({
         icon: "mdi mdi-information-variant",
       },
     },
+    {
+      path: "/refund-emd",
+      name: "RefundEMD",
+      component: loadAdminView("RefundEMD"),
+      meta: { title: "RefundEMD",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/non-h1-refund",
+      name: "NonH1Refund",
+      component: loadAdminView("NonH1Refund"),
+      meta: { title: "NonH1Refund",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/rejected-h1-refund",
+      name: "RejectedH1Refund",
+      component: loadAdminView("RejectedH1Refund"),
+      meta: { title: "RejectedH1Refund",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/settlement",
+      name: "SettlementUI",
+      component: loadAdminView("SettlementUI"),
+      meta: { title: "SettlementUI",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+    },
+    {
+      path: "/renewal-feeReport",
+      name: "MISRenewalFeeReport",
+      component: loadAdminView("MISRenewalFeeReport"),
+      meta: { title: "MISRenewalFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
+    }
+
+
   ],
 });
 
