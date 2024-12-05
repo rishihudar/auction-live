@@ -163,7 +163,7 @@ function fetchAllStepsAuctionPreview() {
       }
     });
 }
-function UpdateExtendParticipationEndDate() {
+async function UpdateExtendParticipationEndDate() {
   // if (
   //   moment(selectedEndDate.value).isSameOrBefore( // this if condition ensure the end date is after the start date
   //     moment(selectedStartDate.value),
@@ -187,7 +187,7 @@ function UpdateExtendParticipationEndDate() {
     alert("End Date should be after the current date and time!");
 
   } else {
-    extendParticipationEndDate();
+    await extendParticipationEndDate();
     //iAgreeStatusUpdate();
     visible.value = false;
     //fetchAuctionWithApprovedStatus()
@@ -197,7 +197,9 @@ function UpdateExtendParticipationEndDate() {
       detail: "Extended Participation Date.",
       life: 3000,
     });
+    location.reload();
   }
+  
 }
 function extendParticipationEndDate() {
   // console.log(
@@ -205,7 +207,7 @@ function extendParticipationEndDate() {
   //   moment(selectedEndDate.value).format("YYYY/MM/DD HH:mm:ss")
   // );
   // console.log("auctionId-", props.auctionId);
-
+  return new Promise((resolve) => {
   new MQL()
     .useManagementServer()
     .setActivity("o.[UpdateExtendParticipationEndDate]")
@@ -223,10 +225,12 @@ function extendParticipationEndDate() {
       if (rs.isValid("UpdateExtendParticipationEndDate")) {
         NotifyBiddersParticipationEndDateExtension();
         NotifyAuctionExtensionBidders();
+        resolve(true);
       } else {
         rs.showErrorToast("UpdateExtendParticipationEndDate");
       }
     });
+  });
 }
 
 function NotifyBiddersParticipationEndDateExtension() {
