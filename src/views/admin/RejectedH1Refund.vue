@@ -72,7 +72,7 @@
                   <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
                   <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
                   <p><b>No of Properties rejected:</b> {{slot.data.noOfPropertiesRejected}}</p>
-                  <p><b>Refund Amount:</b> {{slot.data.rejectedAmount}}</p>
+                  <p><b>Refund Amount ( {{slot.data.auctionEmd}} * {{slot.data.noOfPropertiesRejected}} ) : </b> {{slot.data.rejectedAmount}}</p>
               </template>
 
               </DataTable>
