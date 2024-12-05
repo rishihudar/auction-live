@@ -86,6 +86,7 @@
                 </div> -->
             </form> 
             <Footer name="box"></Footer>
+            <p>Last updated on <b>{{ versionDate }}</b> Version: <b>{{ version }}</b></p>
         <!-- </div> -->
         <Dialog v-model:visible="visible">
             Oops! Make sure you're logging into the correct portal.<a :href="link">click here</a> to be redirected to
@@ -112,6 +113,9 @@ import faLock from '../../assets/icons/lock.svg';
 import faRotate from '../../assets/icons/rotate.svg';
 import faShieldCheck from '../../assets/icons/shield-check.svg';
 import faUser from '../../assets/icons/user.svg';
+
+let version = ref(__APP_VERSION__);
+let versionDate = ref(__APP_VERSION_DATE__);
 
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const loginStore = login();
