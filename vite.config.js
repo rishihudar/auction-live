@@ -3,11 +3,17 @@ import vue from "@vitejs/plugin-vue";
 import vitePluginCompression from "vite-plugin-compression";
 import svgLoader from 'vite-svg-loader';
 import path from "path";
+import packageInfo from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   publicDir: process.env.NODE_ENV = "/auction/",
   base: process.env.NODE_ENV ="/auction/",
+
+  define: {
+    __APP_VERSION__: JSON.stringify(packageInfo.version),
+    __APP_VERSION_DATE__: JSON.stringify(packageInfo["version date"]),
+  },
 
   resolve: {
     alias: {
