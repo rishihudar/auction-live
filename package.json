@@ -1,10 +1,12 @@
 {
   "name": "vue-3-template",
-  "version": "1.0.0",
+  "version": "26.0.1",
+  "version date": "5 Dec 2024 2:24 pm",
   "private": true,
   "scripts": {
-    "serve": "vite",
-    "build": "vite build",
+    "update-version-date": "node scripts/update-version-date.cjs",
+    "serve": "npm run update-version-date && vite",
+    "build": "npm run update-version-date && vite build",
     "geni18n": "gulp geni18n"
   },
   "dependencies": {

@@ -62,7 +62,7 @@
                 <Column field="bidderName" header="Bidder Name"></Column>
                 <Column field="bidderEmail" header="Bidder Email"></Column>
                 <Column field="bidderMobileNumber" header="Bidder Mobile number"></Column>
-                <Column field="amount" header="Amount in Rs"></Column>
+                <Column field="settlementAmount" header="Settlement Amount in Rs"></Column>
                 <Column field="settlementStatus" header="Settlement Status"></Column>
                 <Column expander header="Details" style="width: 5rem"></Column>
                 <template #expansion="slot">
@@ -71,7 +71,7 @@
                     <p><b>EMD Paid For:</b> {{slot.data.emdPaidFor}}</p>
                     <p><b>Total EMD Amount Paid:</b> {{slot.data.amount}}</p>
                     <p><b>No of Properties allocated:</b> {{slot.data.noOfPropertiesAllocated}}</p>
-                    <p><b>Settlement Amount ( {{slot.data.auctionEmd}} * {{slot.data.noOfPropertiesAllocated}} ) = </b> {{slot.data.auctionEmd}}</p>
+                    <p><b>Settlement Amount ( {{slot.data.auctionEmd}} * {{slot.data.noOfPropertiesAllocated}} ) = </b> {{slot.data.settlementAmount}}</p>
                 </template>
 
                 </DataTable>
@@ -142,7 +142,7 @@ const toast = useToast();
     //console.log("Selected Entity Id", login().loginDetails);
     new MQL()
     .useManagementServer()
-      .setActivity("r.[FetchConcludedAuctionsUser]")
+      .setActivity("r.[FetchConcludedAuctionsSettlement]")
       .setData({
         entityId: login().loginDetails.entityId,
         organizationId: login().loginDetails.organizationId,
@@ -153,8 +153,8 @@ const toast = useToast();
       })
       .fetch()
       .then((rs) => {
-        let res = rs.getActivity("FetchConcludedAuctionsUser", true);
-        if (rs.isValid("FetchConcludedAuctionsUser")) {
+        let res = rs.getActivity("FetchConcludedAuctionsSettlement", true);
+        if (rs.isValid("FetchConcludedAuctionsSettlement")) {
           products.value = res.result.concludedAuctions;
           //console.log(res.result, "concluded result**********");
           //console.log(res.result.concludedAuctions,"concluded auction@@@@@@@")
@@ -166,7 +166,7 @@ const toast = useToast();
             //console.log("SrNo-", currentPage.value * perPage.value + i + 1);
           }
         } else {
-          rs.showErrorToast("FetchConcludedAuctionsUser");
+          rs.showErrorToast("FetchConcludedAuctionsSettlement");
         }
       });
   }
