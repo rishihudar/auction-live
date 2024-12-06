@@ -532,8 +532,6 @@ async function insertInWorkflow() {
     //console.log(AUCTION_COMPLETED_ID);
 
     var data = {
-      assignedLoginId: null,
-      assignedRoleId: loginStore.role.roleId,
       auctionId: auctionId,
       comment: "Auction Completed",
       entityId: loginStore.entityId,

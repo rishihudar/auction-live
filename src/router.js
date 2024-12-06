@@ -1,4 +1,4 @@
-import { createToaster  } from "@meforma/vue-toaster";
+import { createToaster } from "@meforma/vue-toaster";
 import { createRouter, createWebHashHistory } from "vue-router";
 import { login } from "./store/modules/login";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
@@ -9,42 +9,68 @@ function loadView(view) {
 }
 function loadWorkflowView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/WorkflowManagement/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/WorkflowManagement/${view}.vue`
+    );
+}
+
+function loadWorkflowManagementView(view) {
+  return () =>
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/WorkflowManagement/${view}.vue`
+    );
 }
 function loadAuctionView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPreparation/${view}.vue`
+    );
 }
 function loadAuctionCancellationView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/CancelledAuction/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/CancelledAuction/${view}.vue`
+    );
 }
 function loadAuctionPublishView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPublishing/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionPublishing/${view}.vue`
+    );
 }
 function loadAuctionSchedulingView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionScheduling/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/AuctionScheduling/${view}.vue`
+    );
 }
 function loadAdminView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/admin/${view}.vue`
+    );
 }
 function loadDashboardView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/Dashboard/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/Dashboard/${view}.vue`
+    );
 }
 function loadMastersView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/masters/${view}.vue`
+    );
 }
 function loadManagementView(view) {
   return () =>
-    import(/* webpackChunkName: "view-[request]" */ `@/views/management/${view}.vue`);
+    import(
+      /* webpackChunkName: "view-[request]" */ `@/views/management/${view}.vue`
+    );
 }
 function loadUI(view) {
-    return () => import(/* webpackChunkName: "view-[request]" */ `@/views/ui/${view}.vue`)
+  return () =>
+    import(/* webpackChunkName: "view-[request]" */ `@/views/ui/${view}.vue`);
 }
 const router = createRouter({
   history: createWebHashHistory(),
@@ -65,14 +91,13 @@ const router = createRouter({
       path: "/home",
       name: "home",
       component: loadView("Home"),
-      meta: { title: "Home", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Home",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
-    // {
-    //   path: "/UserDashboard",
-    //   name: "ROLE_CHECKER",
-    //   component: loadDashboardView("UserDashboard"),
-    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , requiresAuth: true,roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
-    // },
     {
       path: "/add-menu",
       name: "AddMenuUI",
@@ -85,25 +110,6 @@ const router = createRouter({
       component: loadDashboardView("AdminComponent"),
       meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_GLOBAL_SUPERADMIN']},
     },
-    // {
-    //   path: "/auction-approval",
-    //   name: "ROLE_ADMIN",
-    //   component: loadDashboardView("AdminComponent"),
-    //   meta: { title: "AdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    // },
-    // {
-    //   path: "/AuctionMakerDashboard",
-    //   name: "ROLE_MAKER",
-    //   component: loadDashboardView("AuctionMakerComponent"),
-    //   meta: { title: "AuctionMakerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    // },
-    // {
-    //   path: "/UserDashboard",
-    //   name:"ROLE_MAKER",
-    //   component: loadDashboardView("UserDashboard"),
-    //   meta: { title: "UserDashboard",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
-    // },
-  
     {
       path: "/BidderDashboard",
       name: "ROLE_BIDDER",
@@ -116,15 +122,9 @@ const router = createRouter({
       component: loadDashboardView("SuperAdminComponent"),
       meta: { title: "SuperAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
     },
-    // {
-    //   path: "/UserDashboard",
-    //   name: "UserDashboard",
-    //   component: loadDashboardView("UserDashboard"),
-    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    // },
     {
       path: "/UpcomingAuction",
-      name:"UpcomingAuction",
+      name: "UpcomingAuction",
       component: loadDashboardView("UpcomingAuction"),
       meta: { title: "UpcomingAuction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER','ROLE_SCHEDULER','ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
     },
@@ -134,17 +134,16 @@ const router = createRouter({
       component: loadDashboardView("OrganizationAdminComponent"),
       meta: { title: "OrganizationAdminComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_ORGANIZATION_ADMIN']},
     },
-    // {
-    //   path: "/UserDashboard",
-    //   name: "ROLE_APPROVER",
-    //   component: loadDashboardView("UserDashboard"),
-    //   meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    // },
     {
       path: "/task-details",
       name: "MyTask",
       component: loadAdminView("MyTask"),
-      meta: { title: "MyTask",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "MyTask",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/MISReport-details",
@@ -186,27 +185,48 @@ const router = createRouter({
       path: "/UserExport",
       name: "UserExport",
       component: loadAdminView("UserExport"),
-      meta: { title: "UserExport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+      meta: {
+        title: "UserExport",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_APPROVER"],
+      },
     },
-  
+
     {
       path: "/UserRegistration",
       name: "UserRegistration",
       component: loadAdminView("UserRegistration"),
-      meta: { title: "UserRegistration",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+      meta: {
+        title: "UserRegistration",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_APPROVER"],
+      },
     },
-  
+
     {
       path: "/PublisherDashboard",
       name: "PublisherDashboard",
       component: loadDashboardView("PublisherComponent"),
-      meta: { title: "PublisherComponent", lang: "en", icon: "mdi mdi-home-outline",requiresAuth: true  , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_PUBLISHER']},
+      meta: {
+        title: "PublisherComponent",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        requiresAuth: true,
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_PUBLISHER",
+        ],
+      },
     },
     {
       path: "/UserDashboard",
       name: "UserDashboard",
       component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN','ROLE_PUBLISHER','ROLE_GLOBAL_SUPERADMIN']},
+      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" ,requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN','ROLE_PUBLISHER','ROLE_GLOBAL_SUPERADMIN','ROLE_DEVELOPER']},
     },
     {
       path: "/add-Dashboard",
@@ -218,19 +238,45 @@ const router = createRouter({
       path: "/UserDashboard",
       name: "ROLE_SUPERADMIN",
       component: loadDashboardView("UserDashboard"),
-      meta: { title: "UserDashboard", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER','ROLE_SUPERADMIN']},
+      meta: {
+        title: "UserDashboard",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_SCHEDULER",
+          "ROLE_SUPERADMIN",
+        ],
+      },
     },
     {
       path: "/SchedulerDashboard",
       name: "ROLE_SCHEDULER_",
       component: loadAuctionSchedulingView("SchedulerComponent"),
-      meta: { title: "SchedulerComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: {
+        title: "SchedulerComponent",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_SCHEDULER",
+        ],
+      },
     },
     {
       path: "/auction-concluded",
-      name:"Auction Concluded",
+      name: "Auction Concluded",
       component: loadAdminView("ConcludedAuctionAdmin"),
-      meta: { title: "ConcludedAuctionAdmin",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_APPROVER']},
+      meta: {
+        title: "ConcludedAuctionAdmin",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_SUPERADMIN", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/BidderActivityReport",
@@ -270,71 +316,125 @@ const router = createRouter({
     },
     {
       path: "/h1BiddersApproval",
-      name:"H1 Bidder Approval",
+      name: "H1 Bidder Approval",
       component: loadAdminView("H1BidderApprovalRejection"),
-      meta: { title: "H1BidderApprovalRejection",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER']},
+      meta: {
+        title: "H1BidderApprovalRejection",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_APPROVER"],
+      },
     },
     {
       path: "/WatcherDashboard",
       name: "ROLE_WATCHER",
       component: loadDashboardView("WatcherComponent"),
-      meta: { title: "WatcherComponent", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "WatcherComponent",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/role-select",
       name: "RoleSelection",
       component: loadView("LandingPage"),
-      meta: { title: "Role Selection", lang: "en", icon: "mdi mdi-home-outline", isSideBarVisible: false,isHeaderVisible: true, requiresAuth: false  },
-      beforeEnter: (to,from) => {
-        const loginStore = login()
-      //console.log(to.meta.roles,loginStore.roles);
-      if (loginStore.roles.findIndex((r) => r.roleCode == 'ROLE_BIDDER') > -1) {
-        toaster.error('Access Denied')
-        return false
-      }
-      }
+      meta: {
+        title: "Role Selection",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        isSideBarVisible: false,
+        isHeaderVisible: true,
+        requiresAuth: false,
+      },
+      beforeEnter: (to, from) => {
+        const loginStore = login();
+        //console.log(to.meta.roles,loginStore.roles);
+        if (
+          loginStore.roles.findIndex((r) => r.roleCode == "ROLE_BIDDER") > -1
+        ) {
+          toaster.error("Access Denied");
+          return false;
+        }
+      },
     },
     {
       path: "/TestVue",
       name: "TestVue",
       component: loadMastersView("TestVue"),
-      meta: { title: "TestVue", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "TestVue",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/master",
       name: "master",
       component: loadMastersView("master"),
-      meta: { title: "master", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "master",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/CountryMaster",
       name: "CountryMaster",
       component: loadMastersView("CountryMaster"),
-      meta: { title: "CountryMaster", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "CountryMaster",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/StateMaster",
       name: "StateMaster",
       component: loadMastersView("StateMaster"),
-      meta: { title: "StateMaster", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "StateMaster",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/DistrictMaster",
       name: "DistrictMaster",
       component: loadMastersView("DistrictMaster"),
-      meta: { title: "DistrictMaster", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "DistrictMaster",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/TalukaMaster",
       name: "TalukaMaster",
       component: loadMastersView("TalukaMaster"),
-      meta: { title: "TalukaMaster", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "TalukaMaster",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/ExcelViewer",
       name: "ExcelViewer",
       component: loadMastersView("ExcelViewer"),
-      meta: { title: "ExcelViewer", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "ExcelViewer",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/UserManagement",
@@ -346,49 +446,95 @@ const router = createRouter({
       path: "/CustomParamsManagement",
       name: "CustomParamsManagement",
       component: loadManagementView("CustomParamsManagement"),
-      meta: { title: "CustomParamsManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_SUPERADMIN']},
+      meta: {
+        title: "CustomParamsManagement",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_SUPERADMIN"],
+      },
     },
     {
       path: "/RoleManagement",
       name: "RoleManagement",
       component: loadManagementView("RoleManagement"),
-      meta: { title: "RoleManagement", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "RoleManagement",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/about",
       name: "about",
       component: loadView("About"),
-      meta: { title: "About", lang: "en", icon: "mdi mdi-information-variant" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "About",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/",
       name: "login",
       component: loadView("Login"),
-      meta: { title: "Login", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Login",
+        lang: "mr",
+        icon: "mdi mdi-account",
+        isSideBarVisible: false,
+        isHeaderVisible: false,
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/forgetPassword",
       name: "forgetPassword",
       component: loadView("forgotPassword"),
-      meta: { title: "forgotPassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false,  roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "forgotPassword",
+        lang: "mr",
+        icon: "mdi mdi-account",
+        isSideBarVisible: false,
+        isHeaderVisible: false,
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/changePassword",
       name: "changePassword",
       component: loadView("changePassword"),
-      meta: { title: "changePassword", lang: "mr", icon: "mdi mdi-account", isSideBarVisible: false, isHeaderVisible: false,  roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "changePassword",
+        lang: "mr",
+        icon: "mdi mdi-account",
+        isSideBarVisible: false,
+        isHeaderVisible: false,
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/registration",
       name: "registration",
       component: loadView("Registration"),
-      meta: { title: "Registration", lang: "mr", icon: "mdi mdi-account-edit" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Registration",
+        lang: "mr",
+        icon: "mdi mdi-account-edit",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/view-auction/:workflowStepDetailsId",
       name: "ViewAuction",
       component: loadWorkflowView("ViewAuction"),
-      meta: { title: "ViewAuction", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "ViewAuction",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
 
     {
@@ -397,7 +543,7 @@ const router = createRouter({
       component: loadView("MQLRequestDemo"),
       meta: {
         title: "MQLRequestDemo",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-presentation-play",
       },
@@ -408,7 +554,7 @@ const router = createRouter({
       component: loadView("I18Demo"),
       meta: {
         title: "Language Demo",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-eject-outline",
       },
@@ -417,19 +563,34 @@ const router = createRouter({
       path: "/validator",
       name: "validator",
       component: loadView("Validator"),
-      meta: { title: "Validator", lang: "en", icon: "mdi mdi-check-all" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Validator",
+        lang: "en",
+        icon: "mdi mdi-check-all",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/encryption",
       name: "encryption",
       component: loadView("Encryption"),
-      meta: { title: "Encrypt", lang: "en", icon: "mdi mdi-laptop" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Encrypt",
+        lang: "en",
+        icon: "mdi mdi-laptop",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/cdnUpload",
       name: "cdnUpload",
       component: loadView("CdnUpload"),
-      meta: { title: "Cdn Upload", lang: "en", icon: "mdi mdi-upload" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Cdn Upload",
+        lang: "en",
+        icon: "mdi mdi-upload",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/tableDemo",
@@ -437,7 +598,7 @@ const router = createRouter({
       component: loadView("TableDemo"),
       meta: {
         title: "Table Demo",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-file-table-outline",
       },
@@ -445,10 +606,10 @@ const router = createRouter({
     {
       path: "/vueMetaExample/:title",
       name: "vueMetaExample",
-      component: loadView("vueMetaExample",),
+      component: loadView("vueMetaExample"),
       meta: {
         title: "vueMetaExample",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-arrow-expand",
       },
@@ -457,14 +618,19 @@ const router = createRouter({
       path: "/clipboard",
       name: "clipboard",
       component: loadView("vueClipboard"),
-      meta: { title: "vueClipboard", lang: "en", icon: "mdi mdi-arrow-expand" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "vueClipboard",
+        lang: "en",
+        icon: "mdi mdi-arrow-expand",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/MqlAssetFDBDemo",
       name: "MqlAssetFDBDemo",
       component: loadView("MqlAssetFDBDemo"),
       meta: {
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Mql Request For Asset FDB Demo",
         lang: "en",
         icon: "mdi mdi-database-plus",
@@ -476,7 +642,7 @@ const router = createRouter({
       component: loadView("SessionManager"),
       meta: {
         title: "Session Manager Demo",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'] ,
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-compass",
       },
@@ -487,7 +653,7 @@ const router = createRouter({
       component: loadView("UploadManager"),
       meta: {
         title: "Upload Manager Demo",
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         lang: "en",
         icon: "mdi mdi-upload",
       },
@@ -497,7 +663,7 @@ const router = createRouter({
       name: "downloadmanager",
       component: loadView("DownloadManager"),
       meta: {
-        roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Download Manager Demo",
         lang: "en",
         icon: "mdi mdi-download",
@@ -508,7 +674,7 @@ const router = createRouter({
       name: "serversidepagination",
       component: loadView("ServerSidePagination"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Server Side Pagination Demo",
         lang: "en",
         icon: "mdi mdi-google-pages",
@@ -519,7 +685,7 @@ const router = createRouter({
       name: "keymapper",
       component: loadView("KeyMapper"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Key Mapper Demo",
         lang: "en",
         icon: "mdi mdi-sort",
@@ -530,7 +696,7 @@ const router = createRouter({
       name: "excel",
       component: loadView("Excel"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Excel Demo",
         lang: "en",
         icon: "mdi mdi-file-excel",
@@ -541,7 +707,7 @@ const router = createRouter({
       name: "lastinsertedId",
       component: loadView("LastInsertedId"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Last Inserted Id Demo",
         lang: "en",
         icon: "mdi  mdi-border-color",
@@ -552,7 +718,7 @@ const router = createRouter({
       name: "forloop",
       component: loadView("ForLoop"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "For Loop Demo",
         lang: "en",
         icon: "mdi  mdi-refresh",
@@ -563,7 +729,7 @@ const router = createRouter({
       name: "sendSms",
       component: loadView("sms"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "SMS Demo",
         lang: "en",
         icon: "mdi  mdi-comment-text-outline",
@@ -574,7 +740,7 @@ const router = createRouter({
       name: "sendEmail",
       component: loadView("email"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Email Demo",
         lang: "en",
         icon: "mdi  mdi-email",
@@ -585,7 +751,7 @@ const router = createRouter({
       name: "sendOtp",
       component: loadView("otp"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "OTP Demo",
         lang: "en",
         icon: "mdi  mdi-numeric-0-box",
@@ -596,7 +762,7 @@ const router = createRouter({
       name: "autoBL",
       component: loadView("autoBL"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "AutoBL Demo",
         lang: "en",
         icon: "mdi  mdi-code-array",
@@ -607,7 +773,7 @@ const router = createRouter({
       name: "updateUserDataUsingBL",
       component: loadView("updateUserDataUsingBL"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Update User Data Using BL Demo",
         lang: "en",
         icon: "mdi  mdi-crop-free",
@@ -618,7 +784,7 @@ const router = createRouter({
       name: "insertCustomMongoId",
       component: loadView("insertCustomMongoId"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Insert Custom Mongo Id",
         lang: "en",
         icon: "mdi  mdi-code-braces",
@@ -629,7 +795,7 @@ const router = createRouter({
       name: "classroom",
       component: loadView("Classroom"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Insert Custom Mongo Id",
         lang: "en",
         icon: "mdi  mdi-library-books",
@@ -640,7 +806,7 @@ const router = createRouter({
       name: "tailwindForm",
       component: loadView("tailwindForm"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "Insert Custom Mongo Id",
         lang: "en",
         icon: "mdi  mdi-library-books",
@@ -651,7 +817,7 @@ const router = createRouter({
       name: "FormKitComposition",
       component: loadView("FormKitCustomComposition"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "FormKitComposition",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -662,7 +828,7 @@ const router = createRouter({
       name: "FormKitOption",
       component: loadView("FormKitCustomOption"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "FormKitOption",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -673,7 +839,7 @@ const router = createRouter({
       name: "SendStaticMessages",
       component: loadView("sendStaticMessages"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "sendStaticMessages",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -684,7 +850,7 @@ const router = createRouter({
       name: "SendDynamicMessages",
       component: loadView("sendDynamicMessages"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "sendDynamicMessages",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -694,7 +860,7 @@ const router = createRouter({
       path: "/sendStaticEmails",
       component: loadView("sendStaticEmails"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "sendStaticEmails",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -704,7 +870,7 @@ const router = createRouter({
       path: "/sendDynamicEmails",
       component: loadView("sendDynamicEmails"),
       meta: {
-         roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'],
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
         title: "sendDynamicEmails",
         lang: "en",
         icon: "mdi mdi-home-outline",
@@ -713,29 +879,34 @@ const router = createRouter({
     {
       path: "/generateOTP",
       component: loadView("generateOTP"),
-      meta: { title: "generateOTP", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "generateOTP",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/validateOTP",
       component: loadView("validateOTP"),
-      meta: { title: "validateOTP", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "validateOTP",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     // UI
     {
-        path: "/ui/datatable",
-        name: "Datatable",
-        component: loadUI("datatable"),
-        meta: { title: "Datatable", lang: "mr", icon: "mdi mdi-account-edit" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    },
-    {
-      path: "/StateMaster",
-      component: loadMastersView("StateMaster"),
-      meta: { title: "stateMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
-    },
-    {
-      path: "/TalukaMaster",
-      component: loadMastersView("TalukaMaster"),
-      meta: { title: "talukaMaster", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      path: "/ui/datatable",
+      name: "Datatable",
+      component: loadUI("datatable"),
+      meta: {
+        title: "Datatable",
+        lang: "mr",
+        icon: "mdi mdi-account-edit",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/EntityRegistration",
@@ -744,91 +915,166 @@ const router = createRouter({
     },
     {
       path: "/auction-preparation",
-      name:"AuctionPreparation",
+      name: "AuctionPreparation",
       component: loadAdminView("AuctionPreparation"),
-      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
+      meta: {
+        title: "AuctionPreparation",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER"],
+      },
     },
     {
-        path: "/auction-list",
-        name:"AuctionList",
-        component: loadAdminView("AuctionList"),
-        meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER']},
-      meta: { title: "AuctionPreparation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER'], requiresAuth: true},
+      path: "/auction-list",
+      name: "AuctionList",
+      component: loadAdminView("AuctionList"),
+      meta: {
+        title: "AuctionList",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER"],
+      },
+      meta: {
+        title: "AuctionPreparation",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+        requiresAuth: true,
+      },
     },
     {
       path: "/test",
       component: loadAdminView("test"),
-      meta: { title: "test",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "test",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/Step1",
-      name:"Step",
+      name: "Step",
       component: loadAuctionView("Step1"),
-      meta: { title: "Step1",lang: "en", icon: "mdi mdi-home-outline", requiresAuth: true, roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Step1",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        requiresAuth: true,
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/Step2",
       name: "Step2",
       component: loadAuctionView("Step2"),
-      meta: { title: "Step2",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Step2",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/Step3",
       name: "Step3",
       component: loadAuctionView("Step3"),
-      meta: { title: "Step3",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Step3",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/Step4",
       name: "Step4",
       component: loadAuctionView("Step4"),
-      meta: { title: "Step4",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "Step4",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/CancelledAuction",
       name: "CancelledAuction",
       component: loadAuctionCancellationView("CancelledAuction"),
-      meta: { title: "CancelledAuction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_APPROVER', 'ROLE_SUPERADMIN']},
+      meta: {
+        title: "CancelledAuction",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_APPROVER", "ROLE_SUPERADMIN"],
+      },
     },
     {
       path: "/auction-publishing-details",
       name: "ROLE_PUBLISHER",
       component: loadAuctionPublishView("AuctionPublishingDetails"),
-      meta: { title: "AuctionPublishingDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER', 'ROLE_PUBLISHER']},
+      meta: {
+        title: "AuctionPublishingDetails",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_PUBLISHER",
+        ],
+      },
     },
-    
+
     // UI
     {
       path: "/AuctionPreview",
       name: "AuctionPreview",
       component: loadView("AuctionPreview"),
-      meta: { title: "AuctionPreview", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "AuctionPreview",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/History",
       name: "History",
       component: loadView("History"),
-      meta: { title: "History", lang: "en", icon: "mdi mdi-home-outline" , roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER']},
+      meta: {
+        title: "History",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_MAKER", "ROLE_CHECKER", "ROLE_APPROVER"],
+      },
     },
     {
       path: "/AuctionDetailsForAdmin",
       name: "AuctionDetailsForAdmin",
       component: loadAdminView("AuctionDetailsForAdmin"),
-      meta: { title: "AuctionDetailsForAdmin", lang: "en", icon: "mdi mdi-home-outline" },
-    },
-    
-
-    {
-      path: "/auction-list",
-      name:"AuctionList",
-      component: loadAdminView("AuctionList"),
-      meta: { title: "AuctionList",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SCHEDULER']},
+      meta: {
+        title: "AuctionDetailsForAdmin",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+      },
     },
     {
       path: "/admin/AdminAuctionBidding",
       name:"AdminAuctionBidding",
       component: loadAdminView("AdminAuctionBidding"),
-      meta: { title: "Bidding",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER'], isSideBarVisible: false,  isHeaderVisible: false },
+      meta: {
+        title: "Bidding",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_SCHEDULER",
+        ],
+        isSideBarVisible: false,
+        isHeaderVisible: false,
+      },
     },
 
     {
@@ -843,7 +1089,17 @@ const router = createRouter({
     {
       path: "/current-auction",
       component: loadAdminView("CurrentAuction"),
-      meta: { title: "Current Auction",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_MAKER','ROLE_CHECKER','ROLE_APPROVER','ROLE_SCHEDULER']},
+      meta: {
+        title: "Current Auction",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: [
+          "ROLE_MAKER",
+          "ROLE_CHECKER",
+          "ROLE_APPROVER",
+          "ROLE_SCHEDULER",
+        ],
+      },
     },
     {
       path: "/base64nonce",
@@ -860,6 +1116,26 @@ const router = createRouter({
       name: "GlobalMISReport",
       component: loadAdminView("GlobalMISReport"),
       meta: { title: "MISReportDetails",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_GLOBAL_SUPERADMIN']},
+    },
+    {
+      path: "/workflow-management",
+      name: "Workflow Management",
+      component: loadWorkflowManagementView("WorkflowManagement"),
+      meta: {
+        title: "Workflow Management",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+      },
+    },
+    {
+      path: "/workflow-step-master",
+      name: "Workflow Step Master",
+      component: loadWorkflowManagementView("WorkflowStepMaster"),
+      meta: {
+        title: "Workflow step master",
+        lang: "en",
+        icon: "mdi mdi-information-variant",
+      },
     },
     {
       path: "/refund-emd",
@@ -896,26 +1172,26 @@ const router = createRouter({
   ],
 });
 
-
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    if (!(!!sessionStorage.getItem('user-token'))) {
-      toaster.error('Please Login')
-        next({ path: '/' })
+    if (!!!sessionStorage.getItem("user-token")) {
+      toaster.error("Please Login");
+      next({ path: "/" });
     } else {
-      const loginStore = login()
+      const loginStore = login();
       //console.log(to.meta.roles,loginStore.role?.roleCode);
-      let allowed = to.meta.roles?.findIndex((r) => r == loginStore.role?.roleCode) > -1
+      let allowed =
+        to.meta.roles?.findIndex((r) => r == loginStore.role?.roleCode) > -1;
       if (!allowed) {
-        toaster.error('Access Denied')
-      next({path: from.path})
+        toaster.error("Access Denied");
+        next({ path: from.path });
       } else {
-        next()
+        next();
       }
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;
