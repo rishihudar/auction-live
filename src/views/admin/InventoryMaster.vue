@@ -68,13 +68,13 @@
               >
 
               <a
-                v-if="['2', '3', '4', '7'].includes(selectedCategory)"
+                v-if="[2, 3, 4, 7].includes(selectedCategory)"
                 :href="templateURL + '/InventoryTemplates/InventoryTemp.xlsx'"
                 download
                 >DOWNLOAD TEMPLATE</a
               >
               <a
-                v-if="['1', '5', '6', '8'].includes(selectedCategory)"
+                v-if="[1, 5, 6, 8].includes(selectedCategory)"
                 :href="
                   templateURL +
                   '/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx'
