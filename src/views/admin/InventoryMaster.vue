@@ -66,8 +66,7 @@
               <label for="chooseExcel" class="fm-label"
                 >Choose Excel File</label
               >
-
-              <a
+              <!-- <a
                 v-if="[2, 3, 4, 7].includes(selectedCategory)"
                 :href="templateURL + '/InventoryTemplates/InventoryTemp.xlsx'"
                 download
@@ -81,7 +80,11 @@
                 "
                 download
                 >DOWNLOAD TEMPLATE</a
-              >
+              > -->
+              <a v-if="selectedCategoryTemplateURL" :href="selectedCategoryTemplateURL" download>
+      DOWNLOAD TEMPLATE
+    </a>
+    <p v-else>No template available for this category.</p>
             </div>
             <FileUpload
               name="excelFile"
@@ -165,6 +168,17 @@ const isFileSelected = ref(false);
 const organizationId = ref(login().loginDetails.organizationId);
 const entityId = ref(login().loginDetails.entityId);
 const userID = ref(login().loginDetails.loginId);
+
+// Computed property to find the template URL
+const selectedCategoryTemplateURL = computed(() => {
+  // Find the selected category object by matching the propertyCategoryId with the selectedCategory value
+  const selectedCategoryObject = inventoryCategories.value.find(
+    (category) => category.propertyCategoryId == selectedCategory.value
+  );
+
+  // If a matching category is found, return its templateURL; otherwise, return null
+  return selectedCategoryObject ? selectedCategoryObject.templateTypeURL : null;
+});
 
 function fetchInventonryCategories() {
   new MQL()
