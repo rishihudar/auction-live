@@ -924,8 +924,8 @@ const router = createRouter({
         roles: ["ROLE_MAKER"],
       },
       path: "/itemlifeCycle-Report",
-      name: "ItemLifeCycleReport",
-      component: loadDashboardView("ItemLifeCycleReport"),
+      name: "ItemLifecycleReport",
+      component: loadDashboardView("ItemLifecycleReport"),
       meta: {
         title: "ItemLifeCycleReport",
         lang: "en",
