@@ -66,22 +66,25 @@
               <label for="chooseExcel" class="fm-label"
                 >Choose Excel File</label
               >
-
-              <a
-                v-if="['2', '3', '4', '7'].includes(selectedCategory)"
+              <!-- <a
+                v-if="[2, 3, 4, 7].includes(selectedCategory)"
                 :href="templateURL + '/InventoryTemplates/InventoryTemp.xlsx'"
                 download
                 >DOWNLOAD TEMPLATE</a
               >
               <a
-                v-if="['1', '5', '6', '8'].includes(selectedCategory)"
+                v-if="[1, 5, 6, 8].includes(selectedCategory)"
                 :href="
                   templateURL +
                   '/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx'
                 "
                 download
                 >DOWNLOAD TEMPLATE</a
-              >
+              > -->
+              <a v-if="selectedCategoryTemplateURL" :href="selectedCategoryTemplateURL" download>
+      DOWNLOAD TEMPLATE
+    </a>
+    <p v-else>No template available for this category.</p>
             </div>
             <FileUpload
               name="excelFile"
@@ -166,6 +169,17 @@ const organizationId = ref(login().loginDetails.organizationId);
 const entityId = ref(login().loginDetails.entityId);
 const userID = ref(login().loginDetails.loginId);
 
+// Computed property to find the template URL
+const selectedCategoryTemplateURL = computed(() => {
+  // Find the selected category object by matching the propertyCategoryId with the selectedCategory value
+  const selectedCategoryObject = inventoryCategories.value.find(
+    (category) => category.propertyCategoryId == selectedCategory.value
+  );
+
+  // If a matching category is found, return its templateURL; otherwise, return null
+  return selectedCategoryObject ? selectedCategoryObject.templateTypeURL : null;
+});
+
 function fetchInventonryCategories() {
   new MQL()
     .useCoreServer()
@@ -183,28 +197,28 @@ function fetchInventonryCategories() {
     });
 }
 
-const templateURL = ref();
+//const templateURL = ref();
 const organizations = ref();
 const OrganizationId= ref();
-function fetchInventonryTemplates() {
-  new MQL()
-    .useCoreServer()
-    .setActivity("o.[FetchInventoryTemplatesURL]")
-    .setData({ assetName: "INVENTORY_TEMPLATE_URL" })
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("FetchInventoryTemplatesURL", true);
-      if (rs.isValid("FetchInventoryTemplatesURL")) {
-        templateURL.value = res.result.cdnURL;
-        console.log(templateURL.value);
-      } else {
-        rs.showErrorToast("FetchInventoryTemplatesURL");
-      }
-    });
-}
+// function fetchInventonryTemplates() {
+//   new MQL()
+//     .useCoreServer()
+//     .setActivity("o.[FetchInventoryTemplatesURL]")
+//     .setData({ assetName: "INVENTORY_TEMPLATE_URL" })
+//     .fetch()
+//     .then((rs) => {
+//       let res = rs.getActivity("FetchInventoryTemplatesURL", true);
+//       if (rs.isValid("FetchInventoryTemplatesURL")) {
+//         templateURL.value = res.result.cdnURL;
+//         console.log(templateURL.value);
+//       } else {
+//         rs.showErrorToast("FetchInventoryTemplatesURL");
+//       }
+//     });
+// }
 
 function fetchOrganizations() {
-  console.log('orgId',organizationId.value)
+  //console.log('orgId',organizationId.value)
   new MQL()
     .useCoreServer()
     .setActivity("o.[FetchOrganizations]")
@@ -213,7 +227,7 @@ function fetchOrganizations() {
     .then((rs) => {
       let res = rs.getActivity("FetchOrganizations", true);
       if (rs.isValid("FetchOrganizations")) {
-        console.log('Organizations List',res.result)
+        //console.log('Organizations List',res.result)
         organizations.value = res.result;
         // OrganizationId.value = res.result[0].OrganizationId;
       } else {
@@ -224,18 +238,18 @@ function fetchOrganizations() {
 onBeforeMount(() => {
   fetchInventonryCategories();
  // fetchEntitiesList();
-  fetchInventonryTemplates();
+ // fetchInventonryTemplates();
   fetchOrganizations();
 });
 
 function showSelectedMC() {
-  console.log("selectedEntity", selectedEntity.value);
-  console.log("selectedCategory", selectedCategory.value);
+  // console.log("selectedEntity", selectedEntity.value);
+  // console.log("selectedCategory", selectedCategory.value);
 }
 
 const onChangeEntityList = (event) =>  {
-  console.log('event',event)
-  console.log(OrganizationId.value,"OrganizationId for Entity")
+  // console.log('event',event)
+  // console.log(OrganizationId.value,"OrganizationId for Entity")
   fetchEntitiesList();
 }
 
@@ -428,8 +442,8 @@ function fetchInventoryTempColumns() {
 const mcNames = ref();
 const selectedEntity = ref();
 function fetchEntitiesList() {
-  console.log('orgId',OrganizationId.value)
-  console.log("function called")
+  // console.log('orgId',OrganizationId.value)
+  // console.log("function called")
   new MQL()
     .useCoreServer()
     .setActivity("o.[FetchEntitiesForInventoryMaster]")
@@ -487,7 +501,7 @@ function fetchMultiplyingFactor() {
       let res = rs.getActivity("FetchCustomParam", true);
       if (rs.isValid("FetchCustomParam")) {
         multiplyingFactor.value = res.result.customParam;
-        console.log("#########", multiplyingFactor.value);
+        //console.log("#########", multiplyingFactor.value);
       } else {
         rs.showErrorToast("FetchCustomParam");
       }
