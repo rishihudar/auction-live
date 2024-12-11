@@ -473,11 +473,22 @@ function websocketConn() {
 
     // adding error listener
     wsConnection.value.addEventListener('error', function (e) {
+       
+        location.reload();
+    console.log(
+      `ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+    );
         //console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
     })
 
     // adding close listener
     wsConnection.value.addEventListener('close', function (e) {
+        if (!manuallyLeave.value) {
+      location.reload();
+    }
+    console.log(
+      `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+    );
         //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
     })
 }
