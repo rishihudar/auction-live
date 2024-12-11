@@ -92,8 +92,8 @@
 
 
 
-    <div class="content-holder">
-      <div class="fm-action">
+    <div class="mt-10">
+      <div class="flex flex-wrao gap-2">
         <JsonExcel
     :data="softDeletedItemsDb"
     type="xlsx"
@@ -103,6 +103,9 @@
   >
     Deleted Items Report
   </JsonExcel>
+  <Button  @click="navigateToRoute" class="btn btn-primary cursor-pointer">
+    Item Lifecycle Report
+      </Button >
       </div>
     </div>
 
@@ -145,10 +148,10 @@
                 name="filename.xlsx">
                 Download Data
               </JsonExcel>
-            </div>
-          </div>
-        </div>
+         </div>
+       </div>
       </div>
+     </div>
     </div>
     <Toast />
   </div>
@@ -191,6 +194,10 @@ let DataNames_to_delete = ref([]);
 const accepted = ref(true);
 // let categoryListMql = ref()
 let majorModal = ref(true);
+// function navigateToRoute use to push to ItemLifeCycleReport page
+function navigateToRoute() {
+  router.push({ path: "/itemlifeCycle-Report" });
+}
 function navigateInventotyUpload() {
   router.push({ path: "/inventoryMaster" });
 }
