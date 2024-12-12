@@ -54,6 +54,10 @@ const h1ReportFields = {
     'Approved H1/Non-H1/Rejected H1': 'approval',
     'Payment Status': 'statusCode',
     'Property Selected': 'Property',
+    'Settlement Status':'Settlement Status',
+    'Settlement Transaction Initiated date and Time':'Settlement Transaction Initiated date and Time',
+    'Settlement Transaction Updated date and Time':'Settlement Transaction Updated date and Time'
+    
 
 };
 
