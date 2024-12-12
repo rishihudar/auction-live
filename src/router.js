@@ -923,6 +923,8 @@ const router = createRouter({
         icon: "mdi mdi-home-outline",
         roles: ["ROLE_MAKER"],
       },
+    },
+    {
       path: "/itemlifeCycle-Report",
       name: "ItemLifecycleReport",
       component: loadDashboardView("ItemLifecycleReport"),
