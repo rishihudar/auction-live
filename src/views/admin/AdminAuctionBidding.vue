@@ -361,6 +361,7 @@ function close() {
 //   auctionLeavingLog(); 
 //   console.log("Auction Leaving Log after auctionLeavingLog fuction");
   //window.close();
+  manuallyLeave.value = true;
   goBack();
 }
 
@@ -401,7 +402,7 @@ function updateHistory(bidObject) {
 //         isItemSelectionBtnDisable.value = false
 //     }
 // }
-
+let manuallyLeave = ref(false)
 function websocketConn() {
     wsConnection.value = new WebSocket(`wss://${window.location.host}/bidding-server-ws/ws/admin-auction`)
 
@@ -453,6 +454,8 @@ function websocketConn() {
             case message.typeCode === 500:
                 // Auction has ended redirect to dashboard
                 // self.leaveAuction()
+                manuallyLeave.value=true
+                clearInterval(timeInterval.value)
                 toaster.success('Auction Ended, Thank you for Participating!');
                 //alert('Auction Ended, Thank you for Participating!')
                 // self.$router.push({ name: 'vendorDashboard' })

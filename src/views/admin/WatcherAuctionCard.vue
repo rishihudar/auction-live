@@ -606,8 +606,9 @@ const roundHasEnded = computed(() =>
 function leaveAuction() {
   leaveAuctionVisible.value = true;
 }
-
+let manuallyLeave = ref(false)
 function leaveAuctionFinal() {
+  manuallyLeave.value=true;
   console.log(`Final leave auction ${auctionDetails.value.auctionId}`);
   toast.add({
     severity: "success",
@@ -741,19 +742,6 @@ function webSocketConn() {
     `wss://${window.location.host}/bidding-server-ws/ws/admin-auction`
   );
 
-  // Error Event Listeners
-  wsConnection.value.addEventListener("error", function (e) {
-    console.log(
-      `ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
-    );
-  });
-
-  // Close Event Listener
-  wsConnection.value.addEventListener("close", function (e) {
-    console.log(
-      `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
-    );
-  });
 
   // OnOpen Event Listener
   wsConnection.value.onopen = function (e) {
@@ -823,9 +811,11 @@ function webSocketConn() {
       case message.typeCode === 500:
         // Auction has ended redirect to dashboard
         // self.leaveAuction()
-        alert(
-          `${auctionDetails.value.auctionCode} Auction Ended, Thank you for Participating!`
-        );
+        // alert(
+        //   `${auctionDetails.value.auctionCode} Auction Ended, Thank you for Participating!`
+        // );
+        manuallyLeave.value=true
+        toast.add({ severity: 'success', detail: `${auctionDetails.value.auctionCode} Auction Ended, Thank you for Participating!`, life: 3000 })
         // self.$router.push({ name: 'vendorDashboard' })
         // window.close()
         auctionLeavingFunctionality();
@@ -852,7 +842,30 @@ function webSocketConn() {
         updateHistory(message);
     }
   });
+
+    // adding error listener
+    wsConnection.value.addEventListener('error', function (e) {
+       
+       location.reload();
+   console.log(
+     `ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+   );
+       //console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+   })
+
+   // adding close listener
+   wsConnection.value.addEventListener('close', function (e) {
+       if (!manuallyLeave.value) {
+     location.reload();
+   }
+   console.log(
+     `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+   );
+       //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+   })
 }
+
+
 
 function currencyFormat(value) {
   return new Intl.NumberFormat("en-IN", {
