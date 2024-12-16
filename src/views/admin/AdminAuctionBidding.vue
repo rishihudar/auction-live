@@ -264,6 +264,9 @@ import axios from 'axios';
 import MQL from '../../plugins/mql.js';
 const timeleftInterval = ref(null);
 import { useRouter } from 'vue-router';
+
+// let manuallyLeave = ref(false)
+
 const router = useRouter();
 const props = defineProps({
   clientLoginIpAddress: {
@@ -355,13 +358,14 @@ function leaveAuction() {
     leaveAuctionVisible.value = true;
 }
 
+
 function close() {
 //   console.log("Auction Leaving Log inside close fuction");
   // Auction Leaving Log
 //   auctionLeavingLog(); 
 //   console.log("Auction Leaving Log after auctionLeavingLog fuction");
   //window.close();
-  manuallyLeave.value = true;
+ // manuallyLeave.value = true;
   goBack();
 }
 
@@ -402,7 +406,7 @@ function updateHistory(bidObject) {
 //         isItemSelectionBtnDisable.value = false
 //     }
 // }
-let manuallyLeave = ref(false)
+
 function websocketConn() {
     wsConnection.value = new WebSocket(`wss://${window.location.host}/bidding-server-ws/ws/admin-auction`)
 
@@ -454,8 +458,6 @@ function websocketConn() {
             case message.typeCode === 500:
                 // Auction has ended redirect to dashboard
                 // self.leaveAuction()
-                manuallyLeave.value=true
-                clearInterval(timeInterval.value)
                 toaster.success('Auction Ended, Thank you for Participating!');
                 //alert('Auction Ended, Thank you for Participating!')
                 // self.$router.push({ name: 'vendorDashboard' })
@@ -486,9 +488,9 @@ function websocketConn() {
 
     // adding close listener
     wsConnection.value.addEventListener('close', function (e) {
-        if (!manuallyLeave.value) {
-      location.reload();
-    }
+    //     if (!manuallyLeave.value) {
+    //   location.reload();
+    // }
     console.log(
       `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
     );
