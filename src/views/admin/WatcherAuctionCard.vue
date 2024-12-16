@@ -606,9 +606,9 @@ const roundHasEnded = computed(() =>
 function leaveAuction() {
   leaveAuctionVisible.value = true;
 }
-let manuallyLeave = ref(false)
+//let manuallyLeave = ref(false)
 function leaveAuctionFinal() {
-  manuallyLeave.value=true;
+//  manuallyLeave.value=true;
   console.log(`Final leave auction ${auctionDetails.value.auctionId}`);
   toast.add({
     severity: "success",
@@ -814,7 +814,7 @@ function webSocketConn() {
         // alert(
         //   `${auctionDetails.value.auctionCode} Auction Ended, Thank you for Participating!`
         // );
-        manuallyLeave.value=true
+       // manuallyLeave.value=true
         toast.add({ severity: 'success', detail: `${auctionDetails.value.auctionCode} Auction Ended, Thank you for Participating!`, life: 3000 })
         // self.$router.push({ name: 'vendorDashboard' })
         // window.close()
@@ -854,15 +854,15 @@ function webSocketConn() {
    })
 
    // adding close listener
-   wsConnection.value.addEventListener('close', function (e) {
-       if (!manuallyLeave.value) {
-     location.reload();
-   }
-   console.log(
-     `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
-   );
-       //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
-   })
+  //  wsConnection.value.addEventListener('close', function (e) {
+  //      if (!manuallyLeave.value) {
+  //    location.reload();
+  //  }
+  //  console.log(
+  //    `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+  //  );
+  //      //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
+  //  })
 }
 
 
