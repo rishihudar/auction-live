@@ -741,7 +741,19 @@ function webSocketConn() {
   wsConnection.value = new WebSocket(
     `wss://${window.location.host}/bidding-server-ws/ws/admin-auction`
   );
+// Error Event Listeners
+wsConnection.value.addEventListener("error", function (e) {
+    console.log(
+      `ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+    );
+  });
 
+  // Close Event Listener
+  wsConnection.value.addEventListener("close", function (e) {
+    console.log(
+      `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
+    );
+  });
 
   // OnOpen Event Listener
   wsConnection.value.onopen = function (e) {
@@ -843,26 +855,7 @@ function webSocketConn() {
     }
   });
 
-    // adding error listener
-    wsConnection.value.addEventListener('error', function (e) {
-       
-       location.reload();
-   console.log(
-     `ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
-   );
-       //console.log(`ERROR: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
-   })
-
-   // adding close listener
-  //  wsConnection.value.addEventListener('close', function (e) {
-  //      if (!manuallyLeave.value) {
-  //    location.reload();
-  //  }
-  //  console.log(
-  //    `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
-  //  );
-  //      //console.log(`CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`);
-  //  })
+   
 }
 
 
