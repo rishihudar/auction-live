@@ -259,6 +259,7 @@ const isOpen = ref(true);
 const clientLoginIpAddress = ref("192.168.10.69");
 const activeAuction = ref(null);
 
+let compareTime = ref([]);
 const scheduledAuctions = ref([]);
 // const auctions = ref([
 //     {
@@ -474,14 +475,40 @@ function syncTime() {
 }
 
 function joinAuction(auction_) {
+  console.log("Auction Join Time");
+  const auctionCode = auction_.vsAuctionCode;
+  console.log(auctionCode);
+  new MQL()
+    .useBidderServer()
+    .setActivity("o.[AuctionJoinTime]")
+    .setData({ auctionCode: auctionCode })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("AuctionJoinTime", true);
+      if (rs.isValid("AuctionJoinTime")) {
+
+        let joinTime = res.result.fetchAuctionJoinTime.timeDifference;
+        compareTime = res.result.customParamValue.auctionJoinTime;
+
+        // console.log("joinTime is "+joinTime)
+        // console.log("compareTime is "+compareTime)
+
+        // console.log("out inside  is ",compareTime.value < joinTime)
+        if (compareTime < joinTime) {
+            // console.log("inside  is "+compareTime.value < joinTime)
+          joinAuctionVisible.value = true;
+          return;
+        } else {
+
   if (auctionStore.auctionList.length < maxAuctionJoinLimit.value) {
     console.log(auction_);
     auction.value = auction_;
+    console.log("auction_ is 2" , auction_);
     auctionPasswordModal.value = true;
 
 
     auction.value = auction_
-  visible.value = true
+  //sible.value = true
   auctionPassword.value = ''
   v$.value.$reset()
   } else {
@@ -492,6 +519,11 @@ function joinAuction(auction_) {
       life: 3000,
     });
   }
+        }
+      } else {
+        rs.showErrorToast("AuctionJoinTime");
+      }
+    }); 
 }
 
 function fetchScheduledAuctionsBidder() {

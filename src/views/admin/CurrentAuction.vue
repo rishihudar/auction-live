@@ -36,7 +36,7 @@
         </Column>
         <Column field="details" header="Action">
           <template #body="data">
-            <Button class="btn-sm" @click="joinAuction(data.data)">Join</Button>
+            <Button class="btn-sm" @click="auctionJoinTime(data.data)">Join</Button>
           </template>
         </Column>
       </DataTable>
@@ -94,6 +94,15 @@
         </div>
       </div>
     </Dialog>
+    <Dialog
+      v-model:visible="joinAuctionVisible"
+      modal
+      :style="{ width: '40rem' }" 
+    >
+    <div>
+        <span>Users can only join within the {{ compareTime/60 }} hour(s) before the auction starts.</span>
+      </div>
+  </Dialog>
   </div>
 </template>
 
@@ -112,7 +121,7 @@ import faTrashCan from '../../../assets/icons/trash-can.svg';
 // import moment from 'moment'; // Import Moment.js
 
 let isWatcherPasscodeEnabled=ref()
-
+let joinAuctionVisible=ref(false);
 const toast = useToast()
 const auctionStore = useAuctionStore()
 const totalEMDPaid = ref('')
@@ -131,6 +140,8 @@ const filter = ref("");
 const auction = ref(null)
 const auctionPassword = ref("")
 const products = ref([{}])
+const joinTime = ref([]);
+const compareTime = ref([]);
 const aucdata = ref({
   AuctionUsersStatusId: 34,
   AuctionUsersStatusName: "These status should be used to add users during scheduling for the auc",
@@ -351,7 +362,34 @@ function fetchScheduledAuctionsBidder() {
       }
     });
 }
+function auctionJoinTime(val) {
+  const auctionCode = val.vsAuctionCode;
+  console.log("Auction Join Time");
+  console.log(auctionCode);
+  new MQL()
+    .useManagementServer()
+    .setActivity("o.[AuctionJoinTimeWatcherScreen]")
+    .setData({ auctionCode: auctionCode })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("AuctionJoinTimeWatcherScreen", true);
+      if (rs.isValid("AuctionJoinTimeWatcherScreen")) {
+        //console.log("Join Result", res.result.fetchAuctionJoinTime);
+        joinTime.value = res.result.fetchAuctionJoinTime.timeDifference;
+        //console.log("Join Time ***", joinTime.value);
+        //console.log("AuctionJoinTime Result", res.result.customParamValue.auctionJoinTime);
+        compareTime.value = res.result.customParamValue.auctionJoinTime;
 
+        if (compareTime.value < joinTime.value) {
+          joinAuctionVisible.value = true;
+        } else {
+          joinAuction(val);
+        }
+      } else {
+        rs.showErrorToast("AuctionJoinTimeWatcherScreen");
+      }
+    });
+}
 function joinAuction(auction_) {
   //console.log(auction_);
   auction.value = auction_
