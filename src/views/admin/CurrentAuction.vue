@@ -100,7 +100,7 @@
       :style="{ width: '40rem' }" 
     >
     <div>
-        <span>Users can only join within the {{ compareTime/60 }} hour(s) before the auction starts.</span>
+        <span>Users can only join within the last {{ compareTime/60 }} hour(s) before the auction starts.</span>
       </div>
   </Dialog>
   </div>
@@ -122,6 +122,7 @@ import faTrashCan from '../../../assets/icons/trash-can.svg';
 
 let isWatcherPasscodeEnabled=ref()
 let joinAuctionVisible=ref(false);
+
 const toast = useToast()
 const auctionStore = useAuctionStore()
 const totalEMDPaid = ref('')

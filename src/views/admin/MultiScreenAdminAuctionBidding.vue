@@ -213,6 +213,16 @@
         </div>
       </div>
     </div>
+
+    <Dialog
+      v-model:visible="joinAuctionVisible"
+      modal
+      :style="{ width: '40rem' }" 
+    >
+    <div>
+        <span>Users can only join within the last {{ compareTime/60 }} hour(s) before the auction starts.</span>
+      </div>
+  </Dialog>
   </div>
 </template>
 
@@ -258,7 +268,7 @@ const maxAuctionJoinLimit = ref(4);
 const isOpen = ref(true);
 const clientLoginIpAddress = ref("192.168.10.69");
 const activeAuction = ref(null);
-
+let joinAuctionVisible=ref(false);
 let compareTime = ref([]);
 const scheduledAuctions = ref([]);
 // const auctions = ref([
@@ -479,13 +489,13 @@ function joinAuction(auction_) {
   const auctionCode = auction_.vsAuctionCode;
   console.log(auctionCode);
   new MQL()
-    .useBidderServer()
-    .setActivity("o.[AuctionJoinTime]")
+    .useManagementServer()
+    .setActivity("o.[AuctionJoinTimeWatcherScreen]")
     .setData({ auctionCode: auctionCode })
     .fetch()
     .then((rs) => {
-      let res = rs.getActivity("AuctionJoinTime", true);
-      if (rs.isValid("AuctionJoinTime")) {
+      let res = rs.getActivity("AuctionJoinTimeWatcherScreen", true);
+      if (rs.isValid("AuctionJoinTimeWatcherScreen")) {
 
         let joinTime = res.result.fetchAuctionJoinTime.timeDifference;
         compareTime = res.result.customParamValue.auctionJoinTime;
@@ -521,7 +531,7 @@ function joinAuction(auction_) {
   }
         }
       } else {
-        rs.showErrorToast("AuctionJoinTime");
+        rs.showErrorToast("AuctionJoinTimeWatcherScreen");
       }
     }); 
 }
