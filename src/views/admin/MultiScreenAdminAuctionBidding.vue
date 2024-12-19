@@ -516,6 +516,7 @@ function joinAuction(auction_) {
     console.log("auction_ is 2" , auction_);
     auctionPasswordModal.value = true;
 
+    visible.value = true
 
     auction.value = auction_
   //sible.value = true
