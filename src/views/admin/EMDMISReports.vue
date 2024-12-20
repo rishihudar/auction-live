@@ -53,6 +53,9 @@ const emdReportFields = {
     'Email Id': 'Email Id',
     'Approved H1/Non-H1/Rejected H1': 'approval',
     'Property': 'Property',
+    'Refund/Settlement Status': 'RefundSettlementStatus',
+    'Refund/Settlement Transaction Initiated date and Time':'RefundSettlementInitiatedDateTime',
+    'Refund/Settlement Transaction Updated date and Time':'UpdatedDateAndTime'
 
 };
 
