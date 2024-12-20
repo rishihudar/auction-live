@@ -1177,6 +1177,12 @@ const router = createRouter({
       name: "MISRenewalFeeReport",
       component: loadAdminView("MISRenewalFeeReport"),
       meta: { title: "MISRenewalFeeReport",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
+    },
+    {
+      path: "/emiPolicyCreation",
+      name: "EMIPolicyCreation",
+      component: loadAdminView("EMIPolicyCreation"),
+      meta: { title: "EMIPolicyCreation",lang: "en", icon: "mdi mdi-home-outline", roles: ['ROLE_SUPERADMIN','ROLE_GLOBAL_SUPERADMIN']},
     }
 
 
