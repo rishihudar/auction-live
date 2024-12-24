@@ -526,7 +526,7 @@ function fetchFilteredData() {
     .then((rs) => {
       let res = rs.getActivity("DownloadInventoryList", true);
       if (rs.isValid("DownloadInventoryList")) {
-        json_data.value = res.result;
+        json_data.value = res.result.downloadInventoryList;
         console.log("json_data ", json_data.value);
       } else {
         rs.showErrorToast("DownloadInventoryList");
