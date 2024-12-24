@@ -56,6 +56,7 @@
                 optionLabel="propertyCategoryName"
                 optionValue="propertyCategoryId"
                 @change="fetchInventoryTempColumns"
+                @click="fetchFilteredData"
               ></Dropdown>
             </div>
           </div>
@@ -66,21 +67,7 @@
               <label for="chooseExcel" class="fm-label"
                 >Choose Excel File</label
               >
-              <!-- <a
-                v-if="[2, 3, 4, 7].includes(selectedCategory)"
-                :href="templateURL + '/InventoryTemplates/InventoryTemp.xlsx'"
-                download
-                >DOWNLOAD TEMPLATE</a
-              >
-              <a
-                v-if="[1, 5, 6, 8].includes(selectedCategory)"
-                :href="
-                  templateURL +
-                  '/InventoryTemplates/InventoryTemp_Booth_VacantLand_Industrial.xlsx'
-                "
-                download
-                >DOWNLOAD TEMPLATE</a
-              > -->
+       
               <a v-if="selectedCategoryTemplateURL" :href="selectedCategoryTemplateURL" download>
       DOWNLOAD TEMPLATE
     </a>
@@ -99,6 +86,23 @@
               @uploader="onChange"
             ></FileUpload>
           </div>
+
+          <div class="card">
+          <div class="card-header">
+            <div class="ch-title">Download Master</div>
+          </div>
+          <div class="form-grid">
+            <!-- <div class="col-span-3">
+              <Button label="Apply filter" severity="secondary" @click="fetchFilteredData" class="w-full" />
+            </div> -->
+            <div class="fm-action">
+              <JsonExcel :data="json_data" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet"
+                name="filename.xlsx">
+                Download Data
+              </JsonExcel>
+         </div>
+       </div>
+      </div>
         </div>
         <div class="fm-action">
           <Button label="Upload" v-if="isFileSelected" @click="handleUpload"
@@ -144,6 +148,7 @@ import { ref, onBeforeMount, computed } from "vue";
 import Dropdown from "primevue/dropdown";
 import FileUpload from "primevue/fileupload";
 import * as XLSX from "xlsx";
+import JsonExcel from "vue-json-excel3";
 import MQL from "@/plugins/mql.js";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -159,7 +164,7 @@ let docName = ref();
 let docTypeId = ref();
 let docType = ref();
 let docSize = ref();
-
+let json_data = ref([]);
 let multiplyingFactor = ref();
 const loginStore = login();
 const inventoryCategories = ref();
@@ -317,7 +322,7 @@ async function handleUpload() {
   const formData = new FormData();
   formData.append("myFile", myFile.value); // Assuming you only allow one file to be uploaded
   formData.append("categoryId", selectedCategory.value);
-  formData.append("organizationId", organizationId.value);
+  formData.append("organizationId", OrganizationId.value);
   formData.append("entityId", selectedEntity.value);
   axios
     .post("/upload-server/upload", formData, {
@@ -504,6 +509,27 @@ function fetchMultiplyingFactor() {
         //console.log("#########", multiplyingFactor.value);
       } else {
         rs.showErrorToast("FetchCustomParam");
+      }
+    });
+}
+function fetchFilteredData() {
+  console.log("selectedCategory", selectedCategory.value);
+  console.log("entityId", selectedEntity.value);
+  new MQL()
+    .useManagementServer()
+    .setActivity("r.[DownloadInventoryList]")
+    .setData({
+      entityId: selectedEntity.value,
+      inventoryCategoryName: selectedCategory.value,
+    })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("DownloadInventoryList", true);
+      if (rs.isValid("DownloadInventoryList")) {
+        json_data.value = res.result.downloadInventoryList;
+        console.log("json_data ", json_data.value);
+      } else {
+        rs.showErrorToast("DownloadInventoryList");
       }
     });
 }
