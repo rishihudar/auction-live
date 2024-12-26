@@ -56,7 +56,6 @@
                 optionLabel="propertyCategoryName"
                 optionValue="propertyCategoryId"
                 @change="fetchInventoryTempColumns"
-                @click="fetchFilteredData"
               ></Dropdown>
             </div>
           </div>
@@ -92,9 +91,9 @@
             <div class="ch-title">Download Master</div>
           </div>
           <div class="form-grid">
-            <!-- <div class="col-span-3">
+            <div class="col-span-3">
               <Button label="Apply filter" severity="secondary" @click="fetchFilteredData" class="w-full" />
-            </div> -->
+            </div>
             <div class="fm-action">
               <JsonExcel :data="json_data" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet"
                 name="filename.xlsx">
