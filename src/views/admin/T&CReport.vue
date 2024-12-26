@@ -33,6 +33,12 @@
                   @click="deleteTnC()"><pi-arrow-right></pi-arrow-right><fa-trash-can></fa-trash-can></button> 
                   </div>
               </div>
+              <div class="fm-action py-5">
+                <button @click=viewImage(documentPath) class="btn btn-primary cursor-pointer">
+               Click here to view Latest Updated Terms and Conditions Document
+                </button>
+              </div>
+              
 </div>
         </div>
       </div>
@@ -60,15 +66,11 @@ let TnCButtonToggle = ref(true);
 let documentDetails = ref();
 let multiplicativeFactor = ref();
 let TnCdocumentFileType = ref();
-let createdBy = ref();
-let modifiedBy = ref();
-let updatedBy = ref();
-let entityId = ref();
 const loginStore = login();
 const documentTypeId = ref(0);
 let bVersion = ref(0);
 const Vue = window.app
-
+let documentPath = ref();
 function fetchDocumentDetails() {
   new MQL()
     .useCoreServer()
@@ -90,6 +92,28 @@ function fetchDocumentDetails() {
     })
 
 };
+function fetchupdatedDocumentDetails() {
+					// Automatically generated
+          new MQL()
+          .useCoreServer()
+			.setActivity("o.[TermsAndConditionsDocument]")
+			.setData({})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("TermsAndConditionsDocument",true)
+			if (rs.isValid("TermsAndConditionsDocument")) {
+        documentPath.value = res.result.documentFilePath;
+       // console.log("documentPath is", documentPath.value);
+        TnCFilePath.value = res.result.documentFilePath;
+        TnCPath.value = res.result.cdnServer + "/" + TnCFilePath.value;
+        TnCUploadButtonLabel.value = res.result.documentFileName;
+      
+			} else
+			 { 
+			rs.showErrorToast("TermsAndConditionsDocument")
+			}
+			})
+    };
 function fetchMultiplicativeFactor() {
   // Automatically generated
   new MQL()
@@ -232,5 +256,7 @@ const deleteTnC = async () => {
 onBeforeMount(() => {
   fetchMultiplicativeFactor();
   fetchDocumentDetails();
+  fetchupdatedDocumentDetails();
 })
 </script>
+
