@@ -91,7 +91,7 @@
           <div class="bs-item col-span-4">
             <div class="bs-label">Reference Number:</div>
             <div class="bs-value">
-              {{ auctionSummary[0].auctionType }}
+              {{ auctionSummary[0].referenceNumber }}
             </div>
           </div>
           <div class="bs-item col-span-4">
