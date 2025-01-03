@@ -14,7 +14,7 @@
       </div>
 
         <div>
-            <label for="percent">Total EMI Percent </label>
+            <label for="percent">Total Payment Percent </label>
             <InputNumber 
                 v-model="totalEMIPercent" 
                 inputId="percent" 
@@ -47,19 +47,19 @@
         {{ $v.selectedStartDate.$errors[0].$message }}
       </div>
 
-        <Button label="Add EMI" @click="visible=true" />
+        <Button label="Add Payment" @click="visible=true" />
 
-        <Dialog v-model:visible="visible" modal header="ADD EMI" :style="{ width: '25rem' }">
-            <span><b>EMI Payment {{ emiDataList.length + 1 }}</b></span>
+        <Dialog v-model:visible="visible" modal header="ADD Payment" :style="{ width: '25rem' }">
+            <span><b>Payment {{ emiDataList.length + 1 }}</b></span>
             <div>
-                <label for="emiName">EMI Name</label>
+                <label for="emiName">Payment Name</label>
                 <InputText id="emiName" v-model="emiData.emiName" autocomplete="off" />
                 <div v-if="$vEmiRules.emiData.emiName.$error" class="fm-error">
         {{ $vEmiRules.emiData.emiName.$errors[0].$message }}
       </div>
             </div>
             <div>
-                <label for="emiPercent">EMI Percent</label>
+                <label for="emiPercent">Payment Percent</label>
                 <InputNumber 
                     id="emiPercent" 
                     v-model="emiData.emiPercent" 
@@ -73,7 +73,7 @@
       </div>
             </div>
             <div>
-                <label for="emiPeriod">EMI Period</label>
+                <label for="emiPeriod">Payment Period</label>
                 <InputNumber 
                     id="emiPeriod" 
                     v-model="emiData.emiPeriod" 
@@ -112,18 +112,18 @@
                 editMode="row" 
                 @row-edit-save="onRowEditSave"
             >
-                <Column field="emiName" header="EMI Name">
+                <Column field="emiName" header="Payment Name">
                     <!-- <template #editor="{ data, field }">
                         <InputText v-model="data[field]" />
                     </template> -->
                 </Column>
-                <Column field="emiPercent" header="EMI Percent"></Column>
-                <Column field="emiPeriod" header="EMI Period">
+                <Column field="emiPercent" header="Payment Percent"></Column>
+                <Column field="emiPeriod" header="Payment Period">
                     <!-- <template #editor="{ data, field }">
                         <InputText type="number" v-model="data[field]" />
                     </template> -->
                 </Column>
-                <Column field="emiPeriodType" header="EMI Period Type">
+                <Column field="emiPeriodType" header="Payment Period Type">
                     <!-- <template #editor="{ data, field }">
                         <Dropdown
                     v-model="data[field]" 
@@ -152,12 +152,40 @@
             </DataTable>
         </div>
 
-        <Button type="button" label="Save EMI Policy" @click="saveEMIPolicy()"></Button>
+        <Button type="button" label="Save Payment Policy" @click="saveEMIPolicy()"></Button>
+
+        <div>
+            <b>Current Payment Policy Applied</b>
+        </div>
+
+        <div class="table-custom">
+            <DataTable 
+                :value="currPaymentPolicy" 
+                showGridlines
+            >
+            <Column field="startDate" header="Start Date"></Column>
+            <Column field="policyStartDate" header="Policy Start Date"></Column> 
+            <Column field="createdBy" header="Created By"></Column>   
+            </DataTable>
+        </div>
+
+        <div class="table-custom">
+            <DataTable 
+                :value="currPaymentPolicyDetails" 
+                showGridlines
+            >
+            <Column field="paymentName" header="Payment Name"></Column>
+            <Column field="paymentNumber" header="Payment Number"></Column> 
+            <Column field="paymentPercentage" header="Payment Percent"></Column> 
+            <Column field="paymentPeriod" header="Payment Period"></Column> 
+            <Column field="paymentPeriodType" header="Payment Period Type"></Column>    
+            </DataTable>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref,computed,watch} from "vue";
+import { ref,computed,watch,onMounted} from "vue";
 import MQL from "@/plugins/mql.js";
 import { login } from "../../store/modules/login.js";
 import faTrashCan from '../../../assets/icons/trash-can.svg';
@@ -173,6 +201,8 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, numeric, minValue } from "@vuelidate/validators";
 import { useToast } from "primevue/usetoast";
 
+let currPaymentPolicy=ref()
+let currPaymentPolicyDetails=ref()
 let isTotal=ref(false)
 const toast = useToast();
 const editingRows = ref([]);
@@ -251,7 +281,7 @@ function saveEMIData() {
 
     let sumEmiPercent = emiDataList.value.reduce((sum, item) => sum + item.emiPercent, 0)+emiData.value.emiPercent;
     if (sumEmiPercent > totalEMIPercent.value) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'EMI Percentage exceeds the limit ', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Payment Percentage exceeds the limit ', life: 3000 });
         return
     }
 
@@ -273,7 +303,7 @@ function saveEMIPolicy() {
     
     let sumEmiPercent = emiDataList.value.reduce((sum, item) => sum + item.emiPercent, 0);
     if (sumEmiPercent > totalEMIPercent.value) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'EMI Percentage exceeds the limit ', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Payment Percentage exceeds the limit ', life: 3000 });
         return
     }
 
@@ -301,7 +331,7 @@ function saveEMIPolicy() {
             let res = rs.getActivity("InsertEMIPolicy", true);
             if (rs.isValid("InsertEMIPolicy")) {
                 // console.log("Policy saved successfully!");
-                toast.add({ severity: 'success', summary: 'Success', detail: 'New EMI Policy Created', life: 3000 });
+                toast.add({ severity: 'success', summary: 'Success', detail: 'New Payment Policy Created', life: 3000 });
                 selectedOrg.value=null;
                 totalEMIPercent.value=null;
                 isTotal.value=null;
@@ -312,7 +342,7 @@ function saveEMIPolicy() {
         });
 
     } else {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Added EMI Percentage does not match with Total EMI Percentage ', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Added Payment Percentage does not match with Total Payment Percentage ', life: 3000 });
         return
     }
 }
@@ -328,4 +358,35 @@ const deleteRowData = (data) => {
         emiDataList.value.splice(index, 1);
     }
 };
+
+function fetchLastPolicy() {
+    return new Promise((resolve) => {
+			new MQL()
+            .useManagementServer()
+			.setActivity("r.[FetchLatestEMIPolicy]")
+			.setData({})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("FetchLatestEMIPolicy",true)
+			if (rs.isValid("FetchLatestEMIPolicy")) {
+
+                currPaymentPolicy.value = res.result.fetchEmiPolicyId;
+                currPaymentPolicyDetails.value = res.result.fetchEmiDetails;
+
+                resolve();
+			} else
+			 { 
+			rs.showErrorToast("FetchLatestEMIPolicy")
+			}
+			})
+        })
+			
+}
+
+onMounted(() => {
+
+    fetchLastPolicy();
+  
+});
+
 </script>
