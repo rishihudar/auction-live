@@ -46,7 +46,7 @@
 
         <!-- --------------------------------------------------------------------------------------- -->
         <Toast />
-        <Dialog v-model:visible="visible" modal header="Add Item" :style="{ width: '75rem' }">
+        <Dialog v-model:visible="visible" modal header="Add Item" :style="{ width: '75rem' }" :closable="false">
             <div class="form-grid">
                 <Toast />
                 <div class="col-span-full md:col-span-4">
@@ -220,7 +220,7 @@
                     </Button>
                 </div>
                 <div class="fm-action  fm-action-center">
-                    <Button @click="visible = false" label="Close"></Button>
+                    <Button @click="resetForm" label="Close"></Button>
                     <Button @click="AddStep3AuctionData" label="Add" v-if="propertyCount != 0"></Button>
                 </div>
             </div>
@@ -534,6 +534,26 @@ const onAdvancedUpload = async (event) => {
 
 }
 
+const resetForm = () => {
+    visible.value = false;
+    inventoryDistrictDetails.value.inventoryId = null;
+    inventoryMcDetails.value.inventoryId = null;
+    inventoryLocationDetails.value.inventoryId = null;
+    inventoryAreaDetails.value = {
+        inventoryId: null,
+        inventoryReservePrice: "",
+        inventoryUnit: "",
+        inventoryEMDAmount: "",
+    };
+    modifierValue.value = "";
+    selectedModifierValueChange.value = { modifierValueChangeId: null };
+    modifierValueExtentionCount.value = null;
+    modifierValueAfterExtention.value = null;
+    propertyCount.value = 0;
+    uploadedFile.value = null;
+};
+
+
 
 const AddStep3AuctionData = async () => {
     console.log('inside AddStep3AuctionData')
@@ -563,6 +583,7 @@ const AddStep3AuctionData = async () => {
 
         //console.log("################EntityId: ", entityId.value)
         // Automatically generated
+        await FetchAuctionStatus('AUCTION_ITEM_PENDING');
         new MQL()
             .useManagementServer()
             .setActivity("o.[InsertStep3AuctionData]")
@@ -593,8 +614,8 @@ const AddStep3AuctionData = async () => {
                 if (rs.isValid("InsertStep3AuctionData")) {
                     addItem();
                     // handleClick(true);
-                    visible.value = false
                     //console.log("Response of Step 3 Data insert : ", res.result)
+                    resetForm();
                 } else {
                     rs.showErrorToast("InsertStep3AuctionData")
                 }
