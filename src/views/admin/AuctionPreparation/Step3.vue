@@ -551,6 +551,11 @@ const resetForm = () => {
     modifierValueAfterExtention.value = null;
     propertyCount.value = 0;
     uploadedFile.value = null;
+    //districtDetail.value = [];
+    mcDetail.value = [];
+    locationDetail.value = [];
+    areaDetail.value = [];
+    $v.value.$reset(); // Reset validation state
 };
 
 
