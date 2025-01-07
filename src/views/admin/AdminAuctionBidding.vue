@@ -264,6 +264,9 @@ import axios from 'axios';
 import MQL from '../../plugins/mql.js';
 const timeleftInterval = ref(null);
 import { useRouter } from 'vue-router';
+
+// let manuallyLeave = ref(false)
+
 const router = useRouter();
 const props = defineProps({
   clientLoginIpAddress: {
@@ -355,12 +358,14 @@ function leaveAuction() {
     leaveAuctionVisible.value = true;
 }
 
+
 function close() {
 //   console.log("Auction Leaving Log inside close fuction");
   // Auction Leaving Log
 //   auctionLeavingLog(); 
 //   console.log("Auction Leaving Log after auctionLeavingLog fuction");
   //window.close();
+ // manuallyLeave.value = true;
   goBack();
 }
 
@@ -483,9 +488,9 @@ function websocketConn() {
 
     // adding close listener
     wsConnection.value.addEventListener('close', function (e) {
-        if (!manuallyLeave.value) {
-      location.reload();
-    }
+    //     if (!manuallyLeave.value) {
+    //   location.reload();
+    // }
     console.log(
       `CLOSE: ${e} REASON ${e.reason} CODE ${e.code} WASCLEAN ${e.wasClean} MESSAGE ${e.message}`
     );
