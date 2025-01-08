@@ -71,6 +71,7 @@ const router = useRouter()
 
 
 const logout = () => {
+    forceLogout();
     loginStore.AUTH_LOGOUT()
     AuctionStore.$reset()
 
@@ -142,7 +143,22 @@ function loadEntityAndOrganization() {
 			})
 			
 }
+function forceLogout(){
 
+console.log("forceLogout username", loginStore.username);
+ new MQL()
+   .useLoginServer()
+   .setActivity("o.[ForceLogout]")
+   .setData({userId:loginStore.username})
+   .fetch()
+   .then((rs) => {
+     let res = rs.getActivity("ForceLogout", true);
+     if (rs.isValid("ForceLogout")) {
+     } else {
+       rs.showErrorToast("ForceLogout");
+     }
+   });
+}
 
 
 onMounted (() => {

@@ -77,8 +77,40 @@ export const login = defineStore("login", {
           });
       });
     },
+    checkSessionExists(payload) {
+      return new Promise((resolve, reject) => {
+        // API call to check if a session exists for the user
+        new MQL()
+          .useLoginServer()
+          .setActivity("o.[SessionExist]")
+          .setData({ userId:payload.userId })
+          .fetch()
+          .then(rs => {
+            let res = rs.getActivity("SessionExist", true);
+            if (rs.isValid("SessionExist")) {
+              let response = res.result;
+              console.log("Session exists: ", response);
+            //  resolve(response); // Resolve the promise with the response
+              // If session exists is null, resolve to allow login
+          if (!response || !response.sessionId) {
+            resolve(false);  // No session exists, allow login
+          } else {
+            resolve(true);  // Session exists, deny login
+          }
+            } else {
+              rs.showErrorToast("SessionExist");
+              reject("Error checking session existence");
+            }
+          })
+          .catch((error) => {
+            reject(error); // Reject the promise on error
+          });
+      });
+    },
     userLogin(user) {
       return new Promise((resolve, reject) => {
+        // Check if a session already exists for the user 
+        this.checkSessionExists({ userId: user.userName }).then((sessionExists) => {
         // //console.log('login.js',user)
         new MQL()
           .useLoginServer()
@@ -103,6 +135,11 @@ export const login = defineStore("login", {
                   'error': "BIDDER_LOGIN"
                 })
               }
+              if (sessionExists) {
+                // toaster.error("You already have an active session. Please log out first.");
+                 resolve(sessionExists);
+                 return; // Stop further execution if session exists
+               }
               let token = rs.getHeaders().authorization;
               //console.log("token", token);
               sessionStorage.setItem("user-token", token);
@@ -113,6 +150,10 @@ export const login = defineStore("login", {
               this.menus = res.result.rolesMenuData;
               this.roles = res.result.roles;
               this.SET_LOGIN_USER_DETAILS(loginUserDetails);
+              this.storeSessionInDatabase({
+                userId: loginUserDetails.username,
+                sessionId: token,
+              });
               resolve(res);
             } else {
               // rs.showErrorToast("UserLogin");
@@ -127,8 +168,11 @@ export const login = defineStore("login", {
               reject(res);
             }
           });
+        });
       });
     },
+          
+
     invalidAttempts(user) {
 
       return new Promise((resolve,reject) => {
@@ -194,6 +238,34 @@ export const login = defineStore("login", {
             rs.showErrorToast("LogoutLog");
           }
         });
+    },
+
+    storeSessionInDatabase(sessionData) {
+      console.log("Storing session in database", sessionData);
+      console.log("userName", this.loginDetails.username);
+      return new Promise((resolve, reject) => {
+        new MQL()
+          .useLoginServer()
+          .setActivity("o.[StoreSessionId]") // Replace with your actual API activity name
+          .setData(sessionData)
+          .fetch()
+          .then((rs) => {
+            let res = rs.getActivity("StoreSessionId", true);
+            if (rs.isValid("StoreSessionId")) {
+             // toaster.success("Session stored successfully");
+              resolve(res);
+             // console.log("Session stored successfully");
+              //console.log("Session stored successfully", res);
+            } else {
+              rs.showErrorToast("StoreSessionId");
+              reject(res);
+            }
+          })
+          .catch((error) => {
+            toaster.error("Failed to store session");
+            reject(error);
+          });
+      });
     },
 
     AUTH_LOGOUT() {
