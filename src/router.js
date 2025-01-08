@@ -936,6 +936,17 @@ const router = createRouter({
       },
     },
     {
+      path: "/smsManagement",
+      name: "SmsManagement",
+      component: loadDashboardView("SmsManagement"),
+      meta: {
+        title: "SmsManagement",
+        lang: "en",
+        icon: "mdi mdi-home-outline",
+        roles: ["ROLE_SUPERADMIN"],
+      },
+    },
+    {
       path: "/auction-list",
       name: "AuctionList",
       component: loadAdminView("AuctionList"),
