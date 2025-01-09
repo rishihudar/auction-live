@@ -257,6 +257,7 @@ function openCancelAuctionModal(data_) {
 }
 
 async function cancelAuction(){
+  await removeHub(); // Remove the hub route
     const result = await v$.value.$validate();
     //console.log("#############", result)
     if (reason.value!="") {
@@ -291,6 +292,24 @@ async function cancelAuction(){
         })                
     }
 }
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 });
+import axios from "axios";
+
+
+const removeHub = async () => {
+  //console.log(aucdata.value.pklAuctionId)
+  try {
+    const response = await axios.get(
+      `/bidding-server-http/o/removeHubRoute/${aucdata.value.pklAuctionId}` // Make a GET request to the specified URL
+    );
+    return response.data; // Return a resolved Promise with the response data
+  } catch (err) {
+    toaster.error("Error removing hub");
+    console.error("Error removing hub:", err.message);
+    throw err; // Rethrow the error to handle it in the calling function
+  }
+};
 
 function auctionCancellationNotification(auctionCode){
   new MQL()
