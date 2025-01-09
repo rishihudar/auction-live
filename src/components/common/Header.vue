@@ -112,7 +112,7 @@ const items = ref([
 ])
 const mainStore = main();
 const loginStore = login();
-const {organizationId, entityId, loginId } = storeToRefs(loginStore);
+const {organizationId, entityId, loginId ,fullname} = storeToRefs(loginStore);
 
 const entityData = ref({})
 const organizationData = ref({})
@@ -145,11 +145,11 @@ function loadEntityAndOrganization() {
 }
 function forceLogout(){
 
-console.log("forceLogout username", loginStore.username);
+console.log("forceLogout username",fullname.value );
  new MQL()
    .useLoginServer()
    .setActivity("o.[ForceLogout]")
-   .setData({userId:loginStore.username})
+.setData({ userId: fullname.value  })
    .fetch()
    .then((rs) => {
      let res = rs.getActivity("ForceLogout", true);

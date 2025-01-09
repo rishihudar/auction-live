@@ -1232,11 +1232,14 @@ async function checkSessionExists() {
       let res = rs.getActivity("SessionExist", true);
       if (rs.isValid("SessionExist")) {
         let response = res.result.sessionId;
-        console.log("Session exists: ", response);
-
+        // console.log("response token exists: ", response);
+        // console.log("Session token exist: ", sessionStorage.getItem("user-token"));
+        // console.log("Response token: ", response.length);
+        // console.log("Session token: ", sessionStorage.getItem("user-token").length);
         // Check if the response does not matches the session token
-        if (response !== sessionStorage.getItem("user-token")) {
+        if (response!=null && response !="" && response != sessionStorage.getItem("user-token")) {
           // Redirect to login page if match found
+
           toaster.error("This session has expired as it is active on another device/tab/browser.");
           router.push({ path: "/" }); // Redirect to the login page
         }

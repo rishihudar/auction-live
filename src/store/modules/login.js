@@ -24,6 +24,7 @@ export const login = defineStore("login", {
     authStatus: (state) => state.status,
     roleNames: (state) => state.roles,
     username: (state) => state.loginDetails.fullName,
+    fullname: (state) => state.loginDetails.username,
     role: (state) => state.currentRole,
     menu: (state) => state.menus,
     loginId: (state) => state.loginDetails.loginId,
@@ -140,22 +141,25 @@ export const login = defineStore("login", {
                  resolve(sessionExists);
                  return; // Stop further execution if session exists
                }
-              let token = rs.getHeaders().authorization;
-              //console.log("token", token);
-              sessionStorage.setItem("user-token", token);
-              this.token = token;
-              let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
-              //console.log("metaDATA", JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata));
-              //console.log(loginUserDetails);
-              this.menus = res.result.rolesMenuData;
-              this.roles = res.result.roles;
-              this.SET_LOGIN_USER_DETAILS(loginUserDetails);
-              this.storeSessionInDatabase({
-                userId: loginUserDetails.username,
-                sessionId: token,
-              });
-              resolve(res);
-            } else {
+               else{
+                let token = rs.getHeaders().authorization;
+                //console.log("token", token);
+                sessionStorage.setItem("user-token", token);
+                this.token = token;
+                let loginUserDetails = JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata);
+                //console.log("metaDATA", JSON.parse(JSON.parse(atob(token.split(".")[1])).metadata));
+                //console.log(loginUserDetails);
+                this.menus = res.result.rolesMenuData;
+                this.roles = res.result.roles;
+                this.SET_LOGIN_USER_DETAILS(loginUserDetails);
+                this.storeSessionInDatabase({
+                  userId: loginUserDetails.username,
+                  sessionId: token,
+                });
+                resolve(res);
+              }
+               }
+           else {
               // rs.showErrorToast("UserLogin");
               try {
                 let lockStatus = JSON.parse(res.error).messageIds[0];
@@ -242,7 +246,6 @@ export const login = defineStore("login", {
 
     storeSessionInDatabase(sessionData) {
       console.log("Storing session in database", sessionData);
-      console.log("userName", this.loginDetails.username);
       return new Promise((resolve, reject) => {
         new MQL()
           .useLoginServer()

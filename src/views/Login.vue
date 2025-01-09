@@ -163,7 +163,7 @@ import faLock from "../../assets/icons/lock.svg";
 import faRotate from "../../assets/icons/rotate.svg";
 import faShieldCheck from "../../assets/icons/shield-check.svg";
 import faUser from "../../assets/icons/user.svg";
-
+let isForceLogout = ref(false);
 let version = ref(__APP_VERSION__);
 let versionDate = ref(__APP_VERSION_DATE__);
 
@@ -192,7 +192,7 @@ let rules = computed(() => ({
 }));
 const count = ref([]);
 const $v = useVuelidate(rules, { user });
-let isForceLogout = ref(false);
+
 const isFormValid = computed(() => {
   console.log("isFormValid", $v.value.$pending);
   return (
@@ -203,6 +203,26 @@ const isFormValid = computed(() => {
     user.value.enteredCaptcha !== ""
   );
 });
+let linkVisible = ref(true);
+
+function forceLogout(username) {
+  linkVisible.value = false; // Hide the link after it's clicked
+
+  console.log("forceLogout username", username);
+  new MQL()
+    .useLoginServer()
+    .setActivity("o.[ForceLogout]")
+    .setData({ userId: username })
+    .fetch()
+    .then((rs) => {
+      let res = rs.getActivity("ForceLogout", true);
+      if (rs.isValid("ForceLogout")) {
+      } else {
+        rs.showErrorToast("ForceLogout");
+      }
+    });
+}
+
 // <----Functions---->
 function authenticate() {
   submitted.value = true;
@@ -225,14 +245,24 @@ function authenticate() {
         enabled: 1,
       })
       .then(async (res) => {
-        let roles = loginStore.roleNames;
-           isForceLogout.value = res; // Update isForceLogout based on login result
+        // Check if res is boolean and handle force logout
+        if (typeof res === "boolean") {
+          isForceLogout.value = res; // Update isForceLogout based on login result
 
-        if (isForceLogout.value==true) {
-          console.log("isForceLogout", isForceLogout.value);
-          //toaster.error("You have been logged out. Please login again.");
-          return;
+          if (isForceLogout.value === true) {
+            console.log("isForceLogout", isForceLogout.value);
+            // toaster.error("You have been logged out. Please login again.");
+            return;
+          }
         }
+        // isForceLogout.value =res; // Update isForceLogout based on login result
+
+        // if (isForceLogout.value == true) {
+        //   console.log("isForceLogout", isForceLogout.value);
+        //   //toaster.error("You have been logged out. Please login again.");
+        //   return;
+        // }
+        let roles = loginStore.roleNames;
 
         toaster.success("Login Successfully");
         const passwordCount = await FetchPasswordCount();
@@ -313,25 +343,6 @@ function fetchCaptchaCustomParam() {
         }
       } else {
         rs.showErrorToast("FetchCustomValueByKey");
-      }
-    });
-}
-let linkVisible = ref(true);
-
-function forceLogout(username){
-  linkVisible.value = false;  // Hide the link after it's clicked
-  
-  console.log("forceLogout username", username);
-  new MQL()
-    .useLoginServer()
-    .setActivity("o.[ForceLogout]")
-    .setData({userId:username})
-    .fetch()
-    .then((rs) => {
-      let res = rs.getActivity("ForceLogout", true);
-      if (rs.isValid("ForceLogout")) {
-      } else {
-        rs.showErrorToast("ForceLogout");
       }
     });
 }
