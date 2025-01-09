@@ -43,8 +43,8 @@
           </div>
         </div>
         <div class="col-span-full 2xl:col-span-6">
-          <div class="fm-group">
-            <label class="fm-label"> Auction Document </label>
+          <div class="fm-group required">
+            <label class="fm-label"> Auction Document  </label>
             <div class="fm-inner">
               <div class="col-span-full" v-if="!auctionCheck">
                 <FileUpload :disabled="config?.docNameReadonly" v-model="docName" :accept="docType" :multiple="false"
@@ -77,8 +77,8 @@
           </div>
         </div>
         <div class="col-span-full 2xl:col-span-6">
-          <div class="fm-group">
-            <label class="fm-label"> Notice Document </label>
+          <div class="fm-group required">
+            <label class="fm-label"> Notice Document  </label>
             <!-- multiplying Factor :- {{ multiplyingFactor }} -->
             <div class="fm-inner">
               <div class="col-span-full" v-if="!noticeCheck">
