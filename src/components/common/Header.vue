@@ -71,6 +71,7 @@ const router = useRouter()
 
 
 const logout = () => {
+    forceLogout();
     loginStore.AUTH_LOGOUT()
     AuctionStore.$reset()
 
@@ -111,7 +112,7 @@ const items = ref([
 ])
 const mainStore = main();
 const loginStore = login();
-const {organizationId, entityId, loginId } = storeToRefs(loginStore);
+const {organizationId, entityId, loginId ,fullname} = storeToRefs(loginStore);
 
 const entityData = ref({})
 const organizationData = ref({})
@@ -142,7 +143,22 @@ function loadEntityAndOrganization() {
 			})
 			
 }
+function forceLogout(){
 
+console.log("forceLogout username",fullname.value );
+ new MQL()
+   .useLoginServer()
+   .setActivity("o.[ForceLogout]")
+.setData({ userId: fullname.value  })
+   .fetch()
+   .then((rs) => {
+     let res = rs.getActivity("ForceLogout", true);
+     if (rs.isValid("ForceLogout")) {
+     } else {
+       rs.showErrorToast("ForceLogout");
+     }
+   });
+}
 
 
 onMounted (() => {

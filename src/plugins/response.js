@@ -5,9 +5,9 @@ class Response {
     this.headers = objRaw.headers
     this.isReactive = false
     if (this.headers !== undefined) {
-      if (this.headers.authorization !== undefined) {
-        sessionStorage.setItem('user-token', this.headers.authorization)
-      }
+      // if (this.headers.authorization !== undefined) {
+      //   sessionStorage.setItem('user-token', this.headers.authorization)
+      // }
     }
 
     this.setReactivity = isReactive => {
