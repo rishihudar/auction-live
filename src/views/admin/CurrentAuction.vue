@@ -192,7 +192,7 @@ function fetchWatcherPasscodeSet() {
 			let res = rs.getActivity("fetchWatcherPasscode",true)
 			if (rs.isValid("fetchWatcherPasscode")) {
 
-        console.log("res.result is ",res.result.isWatcherPasscodeEnabled)
+        //console.log("res.result is ",res.result.isWatcherPasscodeEnabled)
 
         if(res.result.isWatcherPasscodeEnabled == 1) {
           isWatcherPasscodeEnabled.value = true
@@ -213,9 +213,9 @@ function fetchWatcherPasscodeSet() {
 onMounted(() => {
   // ProductService.getProductsMini().then((data) => (products.value = data));
   entityId.value = route.params.id
-   setInterval(() => {
+   //setInterval(() => {
     fetchScheduledAuctionsBidder()
-     }, 1000);
+     //}, 1000);
      fetchWatcherPasscodeSet()
      fetchMultiScreenBiddingParam();
   // fetchCustomParam()
@@ -256,8 +256,49 @@ function openCancelAuctionModal(data_) {
   
 }
 
+
+function  checkAuctionRoundExists ()  {
+  return new Promise((resolve, reject ) => {
+			new MQL()
+      .useManagementServer()
+			.setActivity("o.[CheckAuctionRoundExists]")
+			.setData({"auctionId": aucdata.value.pklAuctionId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("CheckAuctionRoundExists",true)
+			if (rs.isValid("CheckAuctionRoundExists")) {
+        //console.log("count",res.result.counts)
+        //console.log("whyyyyy",res.result.counts > 0)
+        if(res.result.counts > 0){
+          //console.log("Inside if")
+          resolve( true)
+
+        } else {
+          //console.log("Inside else")
+          resolve( false)
+        }
+			} else
+			 { 
+			rs.showErrorToast("CheckAuctionRoundExists")
+			}
+			})
+
+      .catch((err) => {
+        console.error("Error in CheckAuctionRoundExists:", err);
+        reject(err); // Reject promise on error
+      });
+
+  })
+			}
+
 async function cancelAuction(){
+  
+  const response = await checkAuctionRoundExists(); // Check if auction round exists
+  //Step 1: Remove Hub if it exists
+if (response) {
   await removeHub(); // Remove the hub route
+}
+    // Step 2: Validate and execute the CancelAuction activity 
     const result = await v$.value.$validate();
     //console.log("#############", result)
     if (reason.value!="") {
@@ -291,6 +332,7 @@ async function cancelAuction(){
             }
         })                
     }
+
 }
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
@@ -384,8 +426,8 @@ function fetchScheduledAuctionsBidder() {
 }
 function auctionJoinTime(val) {
   const auctionCode = val.vsAuctionCode;
-  console.log("Auction Join Time");
-  console.log(auctionCode);
+  //console.log("Auction Join Time");
+  //console.log(auctionCode);
   new MQL()
     .useManagementServer()
     .setActivity("o.[AuctionJoinTimeWatcherScreen]")
@@ -432,14 +474,14 @@ const submitAuctionPassword = async () => {
 
      await fetchWatcherPasscodeDetails()
      if (multiScreenParam.value == "NO") {
-      console.log("multiScreenParam.value")
+      //console.log("multiScreenParam.value")
       router.push({ name: "AdminAuctionBidding" });
     } else if (multiScreenParam.value=="YES") {
-      console.log("Pushed Data", {
-        auctionId: auction.value.pklAuctionId,
-        password: auctionPassword.value,
-        auctionUserId: auction.value.pklAuctionUserId,
-      });
+      // console.log("Pushed Data", {
+      //   auctionId: auction.value.pklAuctionId,
+      //   password: auctionPassword.value,
+      //   auctionUserId: auction.value.pklAuctionUserId,
+      // });
       //window.open('/applicant/#/v2/bidder/bidderAuctionBidding','_blank')
       router.push({ name: "MultiScreenAdminAuctionBidding" });
      
@@ -482,7 +524,7 @@ function fetchWatcherPasscodeDetails() {
 			let res = rs.getActivity("fetchMasterPasscodeDetails",true)
 			if (rs.isValid("fetchMasterPasscodeDetails")) {
         auctionPassword.value = res.result.passCode;
-        console.log("test auctionPassword.value ",auctionPassword.value)
+        //console.log("test auctionPassword.value ",auctionPassword.value)
         resolve()
 			} else
 			 { 

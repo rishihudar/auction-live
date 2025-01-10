@@ -237,7 +237,7 @@ async function FetchAuctionDetailsByAuctionIdAdmin() {
 
                 res.result.fetchAuctionDetails.users = res.result.users.map(el => el.userId);
                 const auctionDetailObj = res.result.fetchAuctionDetails;
-                console.log(auctionDetailObj, "auctionDetails")
+                //console.log(auctionDetailObj, "auctionDetails")
 
                 // Map documents to an object with documentTypeName as key and documentPath as value
                 const documentsMap = {};
