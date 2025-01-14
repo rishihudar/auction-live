@@ -131,9 +131,17 @@
 
     <Dialog  v-model:visible="paymentListVisible" modal header="Bidder Payment Status" >
       <div class="table-custom">
-        <DataTable :value="paymentList" showGridlines>
+        <DataTable :value="paymentList" showGridlines >
           <Column field="paymentNumber" header="Payment Number"></Column>
-          <Column field="paymentAmount" header="Payment Amount"></Column>
+          <Column header="Payment Amount">
+          
+            <template #body="row">
+              <span :style="{ color: row.data.paymentstatus === 'Transaction Success' ? 'green' : row.data.paymentstatus === 'Cancelled' ? 'red' : 'grey' }">
+                <b>{{ row.data.paymentAmount }}</b>
+              </span>
+            </template>
+          
+          </Column>
           <Column field="paymentPeriod" header="Payment Period"></Column>
           <Column field="emiPeriodType" header="Period Type"></Column>
           <Column field="paymentExpiryDate" header="Payment Expiry Date"></Column>
