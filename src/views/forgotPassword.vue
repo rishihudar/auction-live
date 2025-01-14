@@ -307,7 +307,7 @@ async function sendOTPMobile() {
               }
             }, 30000);
           } else {
-            rs.showErrorToast("SendOTPSMS");
+           // rs.showErrorToast("SendOTPSMS");
           }
         });
     } else {
@@ -556,18 +556,16 @@ function passwordChangedSms(){
           new MQL()
           .useNotificationServer()
 			.setActivity("o.[AcccountPasswordChangeSms]")
-			.setData({"mobileNumber": mobileNumber.value})
+			.setData({"mobileNumber": mobileNumber.value,"templateName":"PASSWORD_CHANGED"})
 			//.setHeaders({})
 			.fetch()
 			 .then(rs => {
 			let res = rs.getActivity("AcccountPasswordChangeSms",true)
 			if (rs.isValid("AcccountPasswordChangeSms")) {
-			} else
-			 { 
-			rs.showErrorToast("AcccountPasswordChangeSms")
-			}
-			})
-			
+			} else{
+			// rs.showErrorToast("AcccountPasswordChangeSms")
+    }
+    });
 }
 function resetPasswordWithHashing() {
   // Automatically generated

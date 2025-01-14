@@ -943,7 +943,7 @@ const router = createRouter({
         title: "SmsManagement",
         lang: "en",
         icon: "mdi mdi-home-outline",
-        roles: ["ROLE_SUPERADMIN"],
+        roles: ["ROLE_GLOBAL_SUPERADMIN"],
       },
     },
     {

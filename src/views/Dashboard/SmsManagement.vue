@@ -24,10 +24,10 @@
                 <Column field="SMSType" header="SMS Type" sortable></Column>
                 <Column field="Body" header="Body" sortable></Column>
                 <Column field="vsTemplateId" header="Template Id" sortable></Column>
-                <Column field="SMSStatus" header="SMS Status" sortable>
+                <Column field="bActive" header="SMS Status" sortable>
                     <template #body="slotProps">
                         <ToggleButton 
-                            v-model="slotProps.data.SMSstatus" 
+                            v-model="slotProps.data.bActive" 
                             class="w-6rem" 
                             onLabel="Active" 
                             offLabel="Inactive" 
@@ -36,10 +36,10 @@
                         />
                     </template>
                 </Column>
-                <Column field="SMSOnOff" header="SMS ON/OFF" sortable>
+                <Column field="bEnabled" header="SMS ON/OFF" sortable>
                     <template #body="slotProps">
                         <ToggleButton 
-                            v-model="slotProps.data.SMSOnOff" 
+                            v-model="slotProps.data.bEnabled" 
                             class="w-8rem" 
                             onLabel="On" 
                             offLabel="Off" 
@@ -63,12 +63,14 @@ import DataTable from "primevue/datatable"; // PrimeVue DataTable component
 import Column from "primevue/column"; // PrimeVue Column component
 import ToggleButton from 'primevue/togglebutton';
 import toast from "../../../assets/presets/alive/toast";
+import { createToaster } from "@meforma/vue-toaster";
+const toaster = createToaster({ position: "top-right", duration: 3000 });
 const smsDetails = ref([]); // Data to be displayed in the table
 const expandedRows = ref([]); // Expanded rows for the DataTable
-const bactive = ref(true);
 const bEnabled = ref(true);
-// Function to handle page change events from the paginator
-
+const bActive= ref([]);
+import { login } from "@/store/modules/login.js"; // Importing login store module
+const loginStore = login();  
 // Function to fetch SMS details from the server
 function fetchSMSDetails(){   
     new MQL()
@@ -79,29 +81,53 @@ function fetchSMSDetails(){
         .then(rs => {
             let res = rs.getActivity("FetchSMSDetails", true);
             if (rs.isValid("FetchSMSDetails")) {
-                smsDetails.value = res.result.smsDetails; // Update table data
+                smsDetails.value = res.result.smsDetails.map(item => ({
+                    ...item,
+                })); // Update table data with original status values
             } else {
                 rs.showErrorToast("FetchSMSDetails"); // Show error message on failure
             }
         });
 }
-	
+    
 // Function to save changes
 function saveChanges() {
-    const processedData = smsDetails.value.map(item => ({
-        ...item,
-        SMSstatus: item.SMSstatus ? 1 : 0,
-        SMSOnOff: item.SMSOnOff ? 1 : 0
-    }));
-    console.log("Processed Data:", processedData);
+    const processedData = smsDetails.value
+        .map((item) => ({
+            vsTemplateId: item.vsTemplateId,
+            bActive: item.bActive ? 1 : 0,
+            bEnabled: item.bEnabled ? 1 : 0,
+            loginId: loginStore.loginDetails.loginId,
+        }));
+        if (processedData.length > 0) {
+        // Update reactive references
+        bActive.value = processedData.map(item => item.bActive);
+        bEnabled.value = processedData.map(item => item.bEnabled);
+        UpdateSmsStatus(processedData, loginStore.loginDetails.loginId);
+    }  else {
+        toaster.info("No changes found.");
+    }
 
-    // Save bactive and bEnabled values
-  
 }
 
+function UpdateSmsStatus(processedData, loginId){
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[ForloopforTemplateId]")
+        .setData({ "processedData": processedData,"loginId": loginId })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("ForloopforTemplateId", true);
+            if (rs.isValid("ForloopforTemplateId")) {
+                fetchSMSDetails();
+                toaster.success("Changes saved successfully.");
+            } else {
+                rs.showErrorToast("ForloopforTemplateId");
+            }
+        });
+}	
 // Fetch initial data when the component is mounted
 onMounted(() => {
     fetchSMSDetails(); // Fetch initial SMS details
-    
 });
 </script>
