@@ -99,8 +99,9 @@
                 <Button v-if="!upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
                         <fa-trash-can></fa-trash-can> Cancel Auction
                     </Button>
-                
-                <ExtendButton v-if="upcomingAuctionFlag" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
+                <!-- {{upcomingAuctionFlag}}
+                {{auctionDetails.statusCode}} -->
+                <ExtendButton v-if="upcomingAuctionFlag && auctionDetails.statusCode != 'AUCTION_SCHEDULED'" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
             </div>
             <div class="bs-item col-span-6 2xl:col-span-4">
                 <p v-if="(auctionDetails.participants < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
