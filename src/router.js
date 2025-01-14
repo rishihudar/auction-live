@@ -1222,4 +1222,46 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+import MQL from "@/plugins/mql.js";
+router.beforeEach(async (to, from, next) => {
+  // Call checkSessionExists before routing
+  await checkSessionExists(); // Check if session exists
+
+  // Continue with the route navigation if the session doesn't exist
+  next();
+});
+
+
+async function checkSessionExists() {
+  const loginStore = login();
+  new MQL()
+    .useLoginServer()
+    .setActivity("o.[SessionExist]")
+    .setData({ userId: loginStore.loginDetails.username })
+    .fetch()
+    .then(rs => {
+      let res = rs.getActivity("SessionExist", true);
+      if (rs.isValid("SessionExist")) {
+        let response = res.result.sessionId;
+        // console.log("response token exists: ", response);
+        // console.log("Session token exist: ", sessionStorage.getItem("user-token"));
+        // console.log("Response token: ", response.length);
+        // console.log("Session token: ", sessionStorage.getItem("user-token").length);
+        // Check if the response does not matches the session token
+        if (response!=null && response !="" && response != sessionStorage.getItem("user-token")) {
+          // Redirect to login page if match found
+
+          toaster.error("This session has expired as it is active on another device/tab/browser.");
+          router.push({ path: "/" }); // Redirect to the login page
+        }
+      } else {
+        rs.showErrorToast("SessionExist");
+        console.error("Error checking session existence");
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching session existence:", error);
+    });
+}
+
 export default router;
