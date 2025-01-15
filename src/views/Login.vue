@@ -17,16 +17,18 @@
         <h1 class="title">Login</h1>
       </div>
       <form class="form-login form-grid">
+        <div class="col-span-full" v-if="isForceLogout">
+            <div class="alert alert-danger mb-5">
+                <div v-if="linkVisible"
+                >You are already logged in on another device/tab/browser. You will
+                need to logout the current session.
+                <button class="underline" @click.prevent="forceLogout(user.username)"
+                    >Click here to Logout</button
+                ></div
+                >
+            </div>
+        </div>
         <div class="col-span-full">
-          <div v-if="isForceLogout" class="error-message">
-            <span v-if="linkVisible"
-              >You are already logged in on another device/tab/browser. You will
-              need to logout the current session.
-              <a @click.prevent="forceLogout(user.username)"
-                >Click here to Logout</a
-              ></span
-            >
-          </div>
           <div class="fm-group">
             <label class="fm-label" for="username">Username</label>
             <div class="fm-inner">
@@ -130,10 +132,12 @@
                     <router-link to="/registration">New User? Register here</router-link>
                 </div> -->
       </form>
-      <Footer name="box"></Footer>
-      <p>
-        Last updated on <b>{{ versionDate }}</b> Version: <b>{{ version }}</b>
-      </p>
+      <Footer name="box">
+        <template #text>
+            <div>Last updated on <strong>{{ versionDate }}</strong></div>
+            <div class="mb-2">Version: <strong>{{ version }}</strong></div>
+        </template>
+      </Footer>
       <!-- </div> -->
       <Dialog v-model:visible="visible">
         Oops! Make sure you're logging into the correct portal.<a :href="link"
