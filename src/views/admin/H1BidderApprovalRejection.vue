@@ -145,7 +145,7 @@
           <Column field="paymentPeriod" header="Payment Period"></Column>
           <Column field="emiPeriodType" header="Period Type"></Column>
           <Column field="paymentExpiryDate" header="Payment Expiry Date"></Column>
-          <Column field="paymentstatus" header="Payment Status"></Column>
+          <!-- <Column field="paymentstatus" header="Payment Status"></Column> -->
         </DataTable>      
       </div>
     </Dialog>
