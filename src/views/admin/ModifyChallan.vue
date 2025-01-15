@@ -1,107 +1,111 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <div class="ch-title">Modify Challan</div>
+    <div>
+        <div class="page-header">
+            <div class="ph-text">
+                <h2 class="title">Modify Challan</h2>
+            </div>
         </div>
         <Toast/>
-        <div class="form-grid">
-            <div class="col-span-6">
-                <div class="fm-group">
-                    <label class="fm-label" for="clientTransactionId">Client Transaction ID</label>
-                    <div class="fm-inner">
-                        <!-- <InputText id="clientTransactionId" v-model="challanDetails.clientTransactionId"  @change="onChange"/> -->
-                        <Dropdown 
-                                v-model="challanDetails.clientTransactionId" option-value="clientTransactionId"
-                                variant="filled" :options="clientTransacId" optionLabel="clientTransactionId"
-                                placeholder="Select Client Transaction Id" 
-                                @change="onChange"
-                                />
+        <div class="card">
+            <div class="form-grid">
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="clientTransactionId">Client Transaction ID</label>
+                        <div class="fm-inner">
+                            <!-- <InputText id="clientTransactionId" v-model="challanDetails.clientTransactionId"  @change="onChange"/> -->
+                            <Dropdown 
+                                    v-model="challanDetails.clientTransactionId" option-value="clientTransactionId"
+                                    variant="filled" :options="clientTransacId" optionLabel="clientTransactionId"
+                                    placeholder="Select Client Transaction Id" 
+                                    @change="onChange"
+                                    />
+                        </div>
+                        <!-- <div id="clientTransactionId-help" class="fm-info">Enter Client Transaction ID</div> -->
+                        <div v-if="$v.challanDetails.clientTransactionId.$error" class="fm-error">
+                        {{ $v.challanDetails.clientTransactionId.$errors[0].$message }}
                     </div>
-                    <!-- <div id="clientTransactionId-help" class="fm-info">Enter Client Transaction ID</div> -->
-                    <div v-if="$v.challanDetails.clientTransactionId.$error" class="fm-error">
-                    {{ $v.challanDetails.clientTransactionId.$errors[0].$message }}
-                </div>
-                </div>
-            </div>
-            <div class="col-span-6">
-                <div class="fm-group">
-                    <label class="fm-label" for="challanModificationRequestId">Challan Modification Request ID</label>
-                    <div class="fm-inner">
-                        <InputText id="challanModificationRequestId" v-model="challanDetails.challanModificationRequestId" readonly />
                     </div>
-                    <!-- <div id="challanModificationRequestId-help" class="fm-info">Enter your challanModificationRequestId</div> -->
-                    <div v-if="$v.challanDetails.challanModificationRequestId.$error" class="fm-error">
-                    {{ $v.challanDetails.challanModificationRequestId.$errors[0].$message }}
                 </div>
-                </div>
-            </div>
-            <div class="col-span-6">
-                <div class="fm-group">
-                    <label class="fm-label" for="challanNumber">Challan No./Virtual Account No</label>
-                    <div class="fm-inner">
-                        <InputText id="challanNumber" v-model="challanDetails.challanNumber"  readonly/>
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="challanModificationRequestId">Challan Modification Request ID</label>
+                        <div class="fm-inner">
+                            <InputText id="challanModificationRequestId" v-model="challanDetails.challanModificationRequestId" readonly />
+                        </div>
+                        <!-- <div id="challanModificationRequestId-help" class="fm-info">Enter your challanModificationRequestId</div> -->
+                        <div v-if="$v.challanDetails.challanModificationRequestId.$error" class="fm-error">
+                        {{ $v.challanDetails.challanModificationRequestId.$errors[0].$message }}
                     </div>
-                    <!-- <div id="challanNumber-help" class="fm-info">Enter your full name</div> -->
-                    <div v-if="$v.challanDetails.challanNumber.$error" class="fm-error">
-                    {{ $v.challanDetails.challanNumber.$errors[0].$message }}
+                    </div>
                 </div>
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="challanNumber">Challan No./Virtual Account No</label>
+                        <div class="fm-inner">
+                            <InputText id="challanNumber" v-model="challanDetails.challanNumber"  readonly/>
+                        </div>
+                        <!-- <div id="challanNumber-help" class="fm-info">Enter your full name</div> -->
+                        <div v-if="$v.challanDetails.challanNumber.$error" class="fm-error">
+                        {{ $v.challanDetails.challanNumber.$errors[0].$message }}
+                    </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-span-6">
-                <div class="fm-group">
-                    <label class="fm-label" for="challanAmount">Challan Amount</label>
-                    <div class="fm-inner">
-                        <!-- <Dropdown v-model="challanDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select challanAmount" /> -->
-                    </div><InputText id="fullName" v-model="challanDetails.challanAmount" readonly/>
-                    <!-- <div id="fullName-help" class="fm-info">Select your challanAmount</div> -->
-                    <div v-if="$v.challanDetails.challanAmount.$error" class="fm-error">
-                    {{ $v.challanDetails.challanAmount.$errors[0].$message }}
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="challanAmount">Challan Amount</label>
+                        <div class="fm-inner">
+                            <!-- <Dropdown v-model="challanDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select challanAmount" /> -->
+                        </div><InputText id="fullName" v-model="challanDetails.challanAmount" readonly/>
+                        <!-- <div id="fullName-help" class="fm-info">Select your challanAmount</div> -->
+                        <div v-if="$v.challanDetails.challanAmount.$error" class="fm-error">
+                        {{ $v.challanDetails.challanAmount.$errors[0].$message }}
+                    </div>
+                    </div>
                 </div>
-                </div>
-            </div>
-            <div class="col-span-6">
-                <div class="fm-group">
-                    <label class="fm-label" for="calendar-12h">Challan Expiry Date</label>
-                    <div class="fm-inner">
-                    <Calendar
-                        id="calendar-24h"
-                        v-model="challanDetails.challanExpiryDate"
-                        showTime
-                        dateFormat="yy/mm/dd"
-                        hourFormat="24"
-                        :minDate="minDate"
-                        :showIcon="true"
-                    />
-                    <!-- <div id="fullName-help" class="fm-info">Select your Entity</div> -->
-                    <span v-if="$v.challanDetails.challanExpiryDate.$error" class="fm-error">{{
-                        $v.challanDetails.challanExpiryDate.$errors[0].$message
-                    }}</span>
-                </div>
-                </div>
-            </div>
-            <div class="col-span-6">
-                 <div class="fm-group">
-                    <label class="fm-label" for="calendar-12h">Request Modification Date & Time</label>
-                    <div class="fm-inner">
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="calendar-12h">Challan Expiry Date</label>
+                        <div class="fm-inner">
                         <Calendar
-                            id="calendar"
-                            v-model="challanDetails.requestModificationDate"
-                            :showTime="true"
+                            id="calendar-24h"
+                            v-model="challanDetails.challanExpiryDate"
+                            showTime
                             dateFormat="yy/mm/dd"
                             hourFormat="24"
+                            :minDate="minDate"
                             :showIcon="true"
-                            readonly
                         />
-                        </div>
-                    <!-- <div id="fullName-help" class="fm-info">Select your organization</div> -->
-                    <span v-if="$v.challanDetails.requestModificationDate.$error" class="fm-error">{{
-                        $v.challanDetails.requestModificationDate.$errors[0].$message
-                    }}</span>
+                        <!-- <div id="fullName-help" class="fm-info">Select your Entity</div> -->
+                        <span v-if="$v.challanDetails.challanExpiryDate.$error" class="fm-error">{{
+                            $v.challanDetails.challanExpiryDate.$errors[0].$message
+                        }}</span>
+                    </div>
+                    </div>
                 </div>
-            </div>
-            <div class="fm-action">
-                <Button @click="modifyChallan" label="Submit"></Button>
-                <Button @click="reloadPage" severity="danger" label="Cancel"></Button>
+                <div class="col-span-full md:col-span-6 xl:col-span-4">
+                    <div class="fm-group">
+                        <label class="fm-label" for="calendar-12h">Request Modification Date & Time</label>
+                        <div class="fm-inner">
+                            <Calendar
+                                id="calendar"
+                                v-model="challanDetails.requestModificationDate"
+                                :showTime="true"
+                                dateFormat="yy/mm/dd"
+                                hourFormat="24"
+                                :showIcon="true"
+                                readonly
+                            />
+                            </div>
+                        <!-- <div id="fullName-help" class="fm-info">Select your organization</div> -->
+                        <span v-if="$v.challanDetails.requestModificationDate.$error" class="fm-error">{{
+                            $v.challanDetails.requestModificationDate.$errors[0].$message
+                        }}</span>
+                    </div>
+                </div>
+                <div class="fm-action">
+                    <Button @click="modifyChallan" label="Submit"></Button>
+                    <Button @click="reloadPage" severity="danger" label="Cancel"></Button>
+                </div>
             </div>
         </div>
     </div>

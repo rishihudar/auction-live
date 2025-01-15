@@ -4,82 +4,89 @@
             Auction Details
         </div>
         <div class="bs-item-holder">
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Auction Type:</div>
                 <div class="bs-value">{{ auctionDetails.auctionType }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Auction Method:</div>
                 <div class="bs-value">{{ auctionDetails.auctionMethodName }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Auction Process:</div>
                 <div class="bs-value">{{ auctionDetails.auctionProcessName }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Bid Placement:</div>
                 <div class="bs-value">{{ auctionDetails.bidPlacementName }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">District:</div>
                 <div class="bs-value">{{ auctionDetails.district }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">MC:</div>
                 <div class="bs-value">{{ auctionDetails.mcName }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Location:</div>
                 <div class="bs-value">{{ auctionDetails.location }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Area:</div>
                 <div class="bs-value">{{ auctionDetails.area }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Participants:</div>
                 <div class="bs-value">{{ auctionDetails.participants }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Total Joining Fees Paid For:</div>
                 <div class="bs-value">{{ auctionDetails.joiningPaid }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Total EMD Paid For:</div>
                 <div class="bs-value">{{ auctionDetails.emdPaid }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Properties Available:</div>
                 <div class="bs-value">Upto {{ auctionDetails.itemCount }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">EMD:</div>
                 <div class="bs-value">{{ auctionDetails.eventEmdProcessingFees }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Reserve Price:</div>
                 <div class="bs-value">{{ auctionDetails.reservePrice }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                 <div class="bs-label">Modifier Value:</div>
                 <div class="bs-value">{{ auctionDetails.modifierValue }}</div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4" v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
+            <div class="bs-item col-span-full">
                 <div class="bs-buttons">
-                    <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
-                    <button v-if="doc.documentPath != '/' " @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
-                    doc.documentTypeName }}</button>
-                    <button v-else class="btn btn-sm btn-secondary" v-tooltip.top="'Document Not Available'">{{
-                    doc.documentTypeName }} </button>
+                    <template v-for="(doc, index) in auctionDetails.auctionDocuments" :key="index">
+                        <!-- <a :href="doc.documentPath" class="btn btn-sm btn-secondary">{{ doc.documentTypeName }}</a> -->
+                        <button v-if="doc.documentPath != '/' " @click="viewImage(doc.documentPath)" class="btn btn-sm btn-secondary">{{
+                        doc.documentTypeName }}</button>
+                        <!-- <button v-else class="btn btn-sm btn-secondary" v-tooltip.top="'Document Not Available'">{{
+                        doc.documentTypeName }} </button> -->
+                    </template>
                 </div>
             </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
+            <div class="bs-item col-span-full">
                 <div class="bs-buttons">
                     <Button @click="visible6 = true" class="btn-sm">
                         Available Properties
                     </Button>
                     <Dialog v-model:visible="visible6" modal header="Available Properties" :style="{ width: '50rem' }">
-                        <div class="box-section">
+                        <div class="dh-tags flex flex-wrap gap-2 items-center">
+                            <span class="px-3 py-1 rounded text-sm font-medium text-emerald-700 bg-emerald-700 bg-opacity-20" v-for="item in auctionDetails.item" :key="item.id">
+                                {{ item.item }}
+                            </span>
+                        </div>
+                        <!-- <div class="box-section">
                             <div class="bs-item-holder">
                                 <div class="bs-item col-span-6" v-for="item in auctionDetails.item"
                                     :key="item.id">
@@ -90,67 +97,67 @@
                         </div>
                         <span>
                             {{ item }}
-                        </span>
+                        </span> -->
                     </Dialog>
-                </div>
-            </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
-              
-                <Button v-if="!upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
-                        <fa-trash-can></fa-trash-can> Cancel Auction
-                    </Button>
-                <!-- {{upcomingAuctionFlag}}
-                {{auctionDetails.statusCode}} -->
-                <ExtendButton v-if="upcomingAuctionFlag && auctionDetails.statusCode != 'AUCTION_SCHEDULED'" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
-            </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
-                <p v-if="(auctionDetails.participants < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
-                    Minimum {{ auctionDetails.roundRule }} participants are required to schedule the auction.
-                </p>
-                <div class="bs-buttons" v-if="dataFetched">
-                    <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.participants < auctionDetails.roundRule"
-                        :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
-                        :auctionCode ="auctionDetails.auctionCode"
-                        :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
-                        v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode"
-                        :totalEmdPaid="auctionDetails.emdPaid"
-                        :propertiesAvailable="auctionDetails.itemCount"/>
-                </div>
-            </div>
-            <div class="bs-item col-span-6 2xl:col-span-4">
-                <div class="bs-buttons">
-                    <Button v-if="upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
-                        <fa-trash-can></fa-trash-can> Cancel Auction
-                    </Button>
-                    <Toast />
-                    <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
-                        <div class="box-section">
-                            <div class="bs-item-holder">
-                                <div class="bs-item col-span-12 text-center" >
-                                   <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionCode }} </h6> 
-                                   <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
-                                </div>
-                                <div class="bs-item col-span-12 text-center">
-                                    <h6><strong>Cancellation Reason</strong></h6>
-                                    <InputText id="reason" v-model="reason" class="text-center"
-                                placeholder="Please enter Auction Cancellation Reason"  />
-                                <div v-if="$v.reason.$error" class="fm-error">
-                                    {{ $v.reason.$errors[0].$message }}
-                                </div>
-                                </div>
-                                <div class="bs-item col-span-6 text-center">
-                                    <Button  severity="danger" @click="cancelAuction">
-                                        <fa-trash-can></fa-trash-can> Cancel Auction
-                                    </Button>
-                                </div>
-                                <div class="bs-item col-span-6 text-center">
-                                    <Button  severity="secondary" @click="visible7 = false">
-                                        Close
-                                    </Button>
+
+                    <div>
+                        <Button v-if="!upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
+                            <fa-trash-can></fa-trash-can> Cancel Auction
+                        </Button>
+                        <!-- {{upcomingAuctionFlag}}
+                        {{auctionDetails.statusCode}} -->
+                        <ExtendButton v-if="upcomingAuctionFlag && auctionDetails.statusCode != 'AUCTION_SCHEDULED'" :auctionId="auctionId" :auctionCode="auctionCode"></ExtendButton>
+                    </div>
+
+                    <div>
+                        <template v-if="dataFetched">
+                            <schedule-button v-if="upcomingAuctionFlag" :disabled="auctionDetails.participants < auctionDetails.roundRule"
+                                :entity-id="loginStore.loginDetails.entityId" :auction-id="auctionDetails.auctionId" 
+                                :auctionCode ="auctionDetails.auctionCode"
+                                :item-list="auctionDetails.item" v-model:startDate="auctionDetails.auctionStartDate"
+                                v-model:endDate="auctionDetails.auctionEndDate" v-model:users="auctionDetails.users" :statusCode="auctionDetails.statusCode"
+                                :totalEmdPaid="auctionDetails.emdPaid"
+                                :propertiesAvailable="auctionDetails.itemCount"/>
+                        </template>
+                        <p v-if="(auctionDetails.participants < auctionDetails.roundRule) && upcomingAuctionFlag" class="text-red-400 m-auto">
+                            Minimum {{ auctionDetails.roundRule }} participants are required to schedule the auction.
+                        </p>
+                    </div>
+
+                    <div>
+                        <Button v-if="upcomingAuctionFlag && userRole == 'ROLE_APPROVER'" severity="danger" @click="fetchEMDCount">
+                            <fa-trash-can></fa-trash-can> Cancel Auction
+                        </Button>
+                        <Toast />
+                        <Dialog v-model:visible="visible7" modal header="Cancel Auction" :style="{ width: '50rem' }">
+                            <div class="box-section">
+                                <div class="bs-item-holder">
+                                    <div class="bs-item col-span-12 text-center" >
+                                        <h6> <strong> Cancel Auction:</strong> {{ auctionDetails.auctionCode }} </h6> 
+                                        <h6> Are you sure? <strong>(EMD Paid: {{ totalEMDPaid }})</strong> </h6>
+                                    </div>
+                                    <div class="bs-item col-span-12 text-center">
+                                        <h6><strong>Cancellation Reason</strong></h6>
+                                        <InputText id="reason" v-model="reason" class="text-center"
+                                    placeholder="Please enter Auction Cancellation Reason"  />
+                                    <div v-if="$v.reason.$error" class="fm-error">
+                                        {{ $v.reason.$errors[0].$message }}
+                                    </div>
+                                    </div>
+                                    <div class="bs-item col-span-6 text-center">
+                                        <Button  severity="danger" @click="cancelAuction">
+                                            <fa-trash-can></fa-trash-can> Cancel Auction
+                                        </Button>
+                                    </div>
+                                    <div class="bs-item col-span-6 text-center">
+                                        <Button  severity="secondary" @click="visible7 = false">
+                                            Close
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Dialog>
+                        </Dialog>
+                    </div>
                 </div>
             </div>
         </div>
@@ -515,11 +522,11 @@ onMounted(() => {
     /* Add border to separate fields */
 }
 </style> -->
-<style scoped>
+<!-- <style scoped>
 .text-center {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%; /* Ensures vertical centering */
 }
-</style>
+</style> -->
