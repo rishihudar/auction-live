@@ -18,8 +18,8 @@
       </div>
       <form class="form-login form-grid">
         <div class="col-span-full" v-if="isForceLogout">
-            <div class="alert alert-danger mb-5">
-                <div v-if="linkVisible"
+            <div class="alert alert-danger mb-5" v-if="linkVisible">
+                <div
                 >You are already logged in on another device/tab/browser. You will
                 need to logout the current session.
                 <button class="underline" @click.prevent="forceLogout(user.username)"
