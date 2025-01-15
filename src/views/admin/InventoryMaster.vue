@@ -1,145 +1,149 @@
 <template>
-  <div id="inventoryMaster">
-    <div class="page-header">
-      <div class="ph-text">
-        <h2 class="title">Inventory Master</h2>
-      </div>
-    </div>
-
-    <form></form>
-    <div class="card">
-      <div class="form-grid">
-        <div class="col-span-4">
-          <div class="fm-group">
-            <label for="selectOrganization" class="fm-label">Select Organization</label>
-            <div class="fm-inner">
-              <!-- Organization Dropdown -->
-              <Dropdown
-                v-model="OrganizationId"
-                :options="organizations"
-                placeholder="Select Organization"
-                optionLabel="organizationName"
-                optionValue="OrganizationId"
-                @change="onChangeEntityList"
-              ></Dropdown>
-          </div>
+    <div id="inventoryMaster">
+      <div class="page-header">
+        <div class="ph-text">
+          <h2 class="title">Inventory Master</h2>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="form-grid">
-        <div class="col-span-4">
-          <div class="fm-group">
-            <label for="selectEntity" class="fm-label">Select Entity</label>
-            <div class="fm-inner">
-              <!-- Entity Dropdown -->
-              <Dropdown
-                v-model="selectedEntity"
-                :options="mcNames"
-                placeholder="Select Entity"
-                optionLabel="mcEntityName"
-                optionValue="mcEntityId"
-                @change="showSelectedMC"
-              ></Dropdown>
-            </div>
-          </div>
-        </div>
-        <div class="col-span-4" v-if="selectedEntity">
-          <div class="fm-group">
-            <label for="selectCategory" class="fm-label">Select Category</label>
-            <div class="fm-inner">
-              <!-- Category Dropdown -->
-              <Dropdown
-                v-model="selectedCategory"
-                :options="inventoryCategories"
-                placeholder="Select Category"
-                optionLabel="propertyCategoryName"
-                optionValue="propertyCategoryId"
-                @change="fetchInventoryTempColumns"
-              ></Dropdown>
-            </div>
-          </div>
-        </div>
-        <div class="col-span-4" v-if="selectedCategory">
-          <div class="fm-group">
-            <div class="fm-label-holder">
-              <label for="chooseExcel" class="fm-label"
-                >Choose Excel File</label
-              >
-       
-              <a v-if="selectedCategoryTemplateURL" :href="selectedCategoryTemplateURL" download>
-      DOWNLOAD TEMPLATE
-    </a>
-    <p v-else>No template available for this category.</p>
-            </div>
-            <FileUpload
-              name="excelFile"
-              label="Choose Excel File"
-              v-model="isFileSelected"
-              :accept="docType"
-              :multiple="false"
-              :max-file-size="docSize * multiplyingFactor"
-              mode="basic"
-              :auto="true"
-              :custom-upload="true"
-              @uploader="onChange"
-            ></FileUpload>
-          </div>
-
-          <div class="card">
-          <div class="card-header">
-            <div class="ch-title">Download Master</div>
-          </div>
+  
+      <form></form>
+      <div class="card">
           <div class="form-grid">
-            <div class="col-span-3">
-              <Button label="Apply filter" severity="secondary" @click="fetchFilteredData" class="w-full" />
+              <div class="col-span-4">
+                  <div class="fm-group">
+                      <label for="selectOrganization" class="fm-label">Select Organization</label>
+                      <div class="fm-inner">
+                          <!-- Organization Dropdown -->
+                          <Dropdown
+                              v-model="OrganizationId"
+                              :options="organizations"
+                              placeholder="Select Organization"
+                              optionLabel="organizationName"
+                              optionValue="OrganizationId"
+                              @change="onChangeEntityList"
+                          ></Dropdown>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-span-4">
+                  <div class="fm-group">
+                      <label for="selectEntity" class="fm-label">Select Entity</label>
+                      <div class="fm-inner">
+                      <!-- Entity Dropdown -->
+                      <Dropdown
+                          v-model="selectedEntity"
+                          :options="mcNames"
+                          placeholder="Select Entity"
+                          optionLabel="mcEntityName"
+                          optionValue="mcEntityId"
+                          @change="showSelectedMC"
+                      ></Dropdown>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-span-4" v-if="selectedEntity">
+                  <div class="fm-group">
+                      <label for="selectCategory" class="fm-label">Select Category</label>
+                      <div class="fm-inner">
+                      <!-- Category Dropdown -->
+                      <Dropdown
+                          v-model="selectedCategory"
+                          :options="inventoryCategories"
+                          placeholder="Select Category"
+                          optionLabel="propertyCategoryName"
+                          optionValue="propertyCategoryId"
+                          @change="fetchInventoryTempColumns"
+                      ></Dropdown>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="mt-6 grid gap-6 grid-cols-2" v-if="selectedCategory">
+          <div class="card">
+              <div class="card-header">
+                  <div class="ch-title">Download Master</div>
+              </div>
+              <div class="form-grid">
+                  <div class="fm-action">
+                      <Button label="Apply filter" severity="secondary" @click="fetchFilteredData" />
+                      <JsonExcel :data="json_data" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet"
+                      name="filename.xlsx">
+                        Download Data
+                      </JsonExcel>
+                  </div>
+              </div>
+          </div>
+          <div class="card">
+              <div class="card-header">
+                  <div class="ch-title">Upload to Master</div>
+              </div>
+              <div class="form-grid">
+                  <div class="col-span-full" >
+                      <div class="fm-group">
+                          <div class="fm-label-holder">
+                              <label for="chooseExcel" class="fm-label"
+                                  >Choose Excel File</label
+                              >
+                              <a v-if="selectedCategoryTemplateURL" :href="selectedCategoryTemplateURL" download>
+                                  DOWNLOAD TEMPLATE
+                              </a>
+                              <p class="text-sm" v-else>No template available for this category.</p>
+                          </div>
+                          <FileUpload
+                              name="excelFile"
+                              label="Choose Excel File"
+                              v-model="isFileSelected"
+                              :accept="docType"
+                              :multiple="false"
+                              :max-file-size="docSize * multiplyingFactor"
+                              mode="basic"
+                              :auto="true"
+                              :custom-upload="true"
+                              @uploader="onChange"
+                          ></FileUpload>
+                      </div>
+                  </div>
+                  <div class="fm-action" v-if="isFileSelected">
+                      <Button label="Preview Data" severity="secondary" @click="visible = true" />
+                      <Button label="Upload" @click="handleUpload"
+                          >Upload</Button
+                      >
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+    <Dialog v-model:visible="visible" modal header="Preview Excel Data" :style="{ width: '90vw' }">
+        <!-- <div class="block-header" v-if="isFileSelected">
+            <div class="sh-text">
+            <h3 class="title">Uploaded Excel List</h3>
             </div>
-            <div class="fm-action">
-              <JsonExcel :data="json_data" type="xlsx" class="btn btn-primary cursor-pointer" worksheet="My Worksheet"
-                name="filename.xlsx">
-                Download Data
-              </JsonExcel>
-         </div>
-       </div>
-      </div>
+        </div> -->
+        <div class="table-custom" v-if="isFileSelected">
+            <DataTable :value="sheet">
+                <Column
+                    v-for="col of transformedColumns"
+                    :key="col.field"
+                    :field="col.field"
+                    :header="col.field"
+                >
+                </Column>
+            </DataTable>
         </div>
-        <div class="fm-action">
-          <Button label="Upload" v-if="isFileSelected" @click="handleUpload"
-            >Upload</Button
-          >
-        </div>
-      </div>
+    </Dialog>
+  
+      <!-- Upload Inventory Templates CDN  -->
+      <!-- <FileUpload 
+      v-model="fileUploadTemp" 
+      mode="basic" 
+      name="fileUploadTemp" 
+      :auto="true" 
+      :custom-upload="true"
+      @uploader="cdnProfileUpload" 
+      class="w-full md:w-14rem"
+      /> -->
     </div>
-
-    <div class="block-header" v-if="isFileSelected">
-      <div class="sh-text">
-        <h3 class="title">Uploaded Excel List</h3>
-      </div>
-    </div>
-    <div class="table-custom" v-if="isFileSelected">
-      <DataTable :value="sheet">
-        <Column
-          v-for="col of transformedColumns"
-          :key="col.field"
-          :field="col.field"
-          :header="col.field"
-        >
-        </Column>
-      </DataTable>
-    </div>
-
-    <!-- Upload Inventory Templates CDN  -->
-    <!-- <FileUpload 
-    v-model="fileUploadTemp" 
-    mode="basic" 
-    name="fileUploadTemp" 
-    :auto="true" 
-    :custom-upload="true"
-    @uploader="cdnProfileUpload" 
-    class="w-full md:w-14rem"
-    /> -->
-  </div>
-  </div>
 </template>
 
 <script setup>
@@ -158,6 +162,7 @@ import { login } from "../../store/modules/login";
 import router from "../../router";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
+const visible = ref(false);
 let docValidation = ref([]);
 let docName = ref();
 let docTypeId = ref();

@@ -182,7 +182,7 @@
           </Column> -->
           <Column header="Actions">
             <template #body="{ data }">
-              <div class="btn-wrapper-table">
+              <div class="table-btn-wrapper">
                 <Button
                   @click="editEntity(data), changeFlag(2)"
                   severity="secondary"

@@ -72,8 +72,8 @@ body {font-size: 16px; line-height: 24px; font-family: var(--font-family); color
 
 h1 {@apply text-4xl font-bold text-[var(--neutral-600)];}
 
-a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {background: linear-gradient(rgb(var(--primary-600)), rgb(var(--primary-600))) no-repeat left bottom / 0px 1px; transition: background 0.2s ease;
-    &:hover {background-size: 100% 1px;}
+a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link):not(.cm-title) {background: linear-gradient(rgb(var(--primary-600)), rgb(var(--primary-600))) no-repeat left bottom / 0px 1px; transition: color 0.2s ease, background 0.2s ease;
+    &:hover {color: rgb(var(--primary-600)); background-size: 100% 1px;}
 
     &.link-primary {background-image: linear-gradient(rgb(var(--secondary-600)), rgb(var(--secondary-600)));}
 }
@@ -87,7 +87,7 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     .content-wrapper {@apply ml-0 pt-0;}
     .content-holder {@apply p-2 md:p-4;}
 }
-.sidebar-hidden {
+.sidebar-open.sidebar-hidden {
     .content-wrapper {@apply ml-0;}
 }
 
@@ -99,8 +99,6 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
     h1.title {@apply text-4xl;}
     h2.title {@apply text-3xl;}
     .subtitle {@apply mt-1;}
-
-    &.centered {@apply justify-center;}
     
     .ph-action {@apply mt-4 flex flex-wrap gap-4 lg:mt-0;
         // .fm-control {@apply border-none;}
@@ -108,6 +106,8 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
             svg {@apply h-5;}
         }
     }
+
+    &.centered {@apply justify-center;}
 }
 
 .section-header {@apply relative mt-6 mb-4 flex gap-2 items-center after:bg-slate-300 after:h-[1px] after:grow;
@@ -212,6 +212,15 @@ a:not(.btn):not(.navbar-brand):not(.dropdown-item):not(.breadcrumb-link) {backgr
 .box-watermark {@apply text-lg font-semibold text-center text-[var(--neutral-200)];}
 .box-table-action {@apply mt-4 flex gap-1 items-center justify-center;
     .btn {@apply px-10;}
+}
+
+
+// --------------------------------------------------------
+// PDF-VUE3
+// --------------------------------------------------------
+.pdf-view-holder {@apply border border-slate-300 rounded-lg overflow-hidden;}
+.pdf-vue3-main {@apply bg-slate-100; width: 100%; height: 100%; overflow: auto;
+    canvas {@apply border rounded-lg; margin: 8px !important; width: calc(100% - 16px) !important; box-shadow: 0 0 10px 0 rgb(0 0 0 / 0.1) !important;}
 }
 
 
