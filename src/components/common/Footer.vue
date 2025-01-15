@@ -1,5 +1,6 @@
 <template>
     <div class="box-footer" v-if="name == 'box'">
+        <slot name="text"></slot>
         &copy; {{ new Date().getFullYear() }} Haryana Knowledge Corporation Limited. All Rights Reserved.
     </div>
     <footer id="footer" v-else>

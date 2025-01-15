@@ -41,3 +41,8 @@
 .modal-calendar {
     .modal-body {overflow: visible;}
 }
+
+.modal-max-height {
+    .modal-body {display: grid; grid-template-rows: 1fr auto;}
+}
+.modal-w-50 {@apply w-[95%] lg:w-[75vw] xl:w-[50vw];}

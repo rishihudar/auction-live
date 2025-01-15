@@ -440,7 +440,7 @@ const rejectedItems = resultList.filter(item => {
        openOtpModal();
 			 }else
 			 { 
-			rs.showErrorToast("SendH1RejectionOTP")
+			//rs.showErrorToast("SendH1RejectionOTP")
 			}
 			})
 }	
@@ -724,7 +724,7 @@ function sendSmsH1Bidders() {
         // console.log("FetchDetailsForH1Rejection",res.result);
 			} else
 			 { 
-			rs.showErrorToast("FetchDetailsForH1Rejection")
+		//	rs.showErrorToast("FetchDetailsForH1Rejection")
 			}
 			})
     }

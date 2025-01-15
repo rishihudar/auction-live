@@ -32,7 +32,7 @@
         }
     }
 
-    .cm-title {position: relative; padding: 12px 15px 12px 15px; display: flex; align-items: center; grid-column-start: 1; grid-row-start: 1; border-radius: var(--fm-border-radius); font-weight: 500; color: var(--menu-color); transition: background-color 0.2s ease;
+    .cm-title {position: relative; padding: 10px 15px 10px 15px; display: flex; align-items: center; grid-column-start: 1; grid-row-start: 1; border-radius: var(--fm-border-radius); font-weight: 500; color: var(--menu-color); transition: background-color 0.2s ease;
         .cm-title-text {font-size: 15px;}
         svg {fill: var(--menu-color);}
 

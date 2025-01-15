@@ -63,11 +63,18 @@
             }
 
             &[data-pc-section="rowexpansioncell"] {@apply px-4 py-4 bg-slate-50 lg:px-8 lg:py-8;}
-            > span[data-pc-section] {display: none;}
         }
     }
 
     // th.text-center > [data-pc-section="headercontent"] {justify-content: center;}
+
+    &.table-stacked {
+        tbody > tr {
+            > td {
+                > span[data-pc-section="columntitle"] {display: none;}
+            }
+        }
+    }
 }
 
 
@@ -109,7 +116,7 @@
 // RESPONSIVENESS
 // --------------------------------------------------------
 @media (max-width: theme('screens[md]')) {
-    .table-custom {
+    .table-stacked {
         .table {
             > thead {@apply hidden;}
             > tbody {

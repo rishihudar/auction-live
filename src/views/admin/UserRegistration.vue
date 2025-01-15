@@ -11,43 +11,40 @@
             </div> -->
             <Toast/>
             <div class="form-grid">
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="loginEmail">Username</label>
                         <div class="fm-inner">
                             <InputText id="loginEmail" v-model="userDetails.loginEmail" />
                         </div>
-                        <div id="loginEmail-help" class="fm-info">Enter your Username</div>
                         <div v-if="$v.userDetails.loginEmail.$error" class="fm-error">
                         {{ $v.userDetails.loginEmail.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="password">Password</label>
                         <div class="fm-inner">
                             <InputText id="password" v-model="userDetails.password" type="password" />
                         </div>
-                        <div id="password-help" class="fm-info">Enter your password</div>
                         <div v-if="$v.userDetails.password.$error" class="fm-error">
                         {{ $v.userDetails.password.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="fullName">Full Name</label>
                         <div class="fm-inner">
                             <InputText id="fullName" v-model="userDetails.fullName" />
                         </div>
-                        <div id="fullName-help" class="fm-info">Enter your full name</div>
                         <div v-if="$v.userDetails.fullName.$error" class="fm-error">
                         {{ $v.userDetails.fullName.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <!-- <div class="col-span-4">
+                <!-- <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="entityName">Entity Name</label>
                         <div class="fm-inner">
@@ -59,7 +56,7 @@
                     </div>
                     </div>
                 </div> -->
-                <!-- <div class="col-span-4"> -
+                <!-- <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3"> -
                     <div class="fm-group">
                         <label class="fm-label" for="fullName">organization</label>
                         <div class="fm-inner">
@@ -71,31 +68,29 @@
                     </div>
                     </div>
                 </div> -->
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="email">Email ID</label>
                         <div class="fm-inner">
                             <InputText id="email" v-model="userDetails.email" />
                         </div>
-                        <div id="email-help" class="fm-info">Enter your email address</div>
                         <div v-if="$v.userDetails.email.$error" class="fm-error">
                         {{ $v.userDetails.email.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="mobileNumber">Mobile Number</label>
                         <div class="fm-inner">
                             <InputText id="mobileNumber" v-model="userDetails.mobile" />
                         </div>
-                        <div id="mobileNumber-help" class="fm-info">Enter your mobile number</div>
                         <div v-if="$v.userDetails.mobile.$error" class="fm-error">
                         {{ $v.userDetails.mobile.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="role">Role</label>
                         <div class="fm-inner">
@@ -103,77 +98,64 @@
                             <MultiSelect v-model="selectedRoles" :options="roleMaster" optionLabel="label"
                             placeholder="Select Roles" class="w-full md:w-20rem"/>
                         </div>
-                        <div id="fullName-help" class="fm-info">Select your Role</div>
                         <div v-if="$v.userDetails.roleId.$error" class="fm-error">
                         {{ $v.userDetails.roleId.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="district">District</label>
                         <div class="fm-inner">
                             <Dropdown v-model="userDetails.districtName" option-value="districtName" :options="districtMaster" optionLabel="districtName" placeholder="Select District" />
                         </div>
-                        <div id="fullName-help" class="fm-info">Select your District</div>
                         <div v-if="$v.userDetails.districtName.$error" class="fm-error">
                         {{ $v.userDetails.districtName.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="branch">Branch/Department</label>
                         <div class="fm-inner">
                             <!-- <InputText id="branch" v-model="userDetails.departmentId" /> -->
                             <Dropdown v-model="userDetails.departmentId" option-value="departmentId" :options="departmentMaster" optionLabel="departmentName" placeholder="Select Branch/Department"/>
                         </div>
-                        <div id="branch-help" class="fm-info">Enter your branch/department</div>
                         <div v-if="$v.userDetails.departmentId.$error" class="fm-error">
                         {{ $v.userDetails.departmentId.$errors[0].$message }}
                         <!-- {{ $v }} -->
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="designation">Designation</label>
                         <div class="fm-inner">
                             <!-- <InputText id="designation" v-model="userDetails.designationId" /> -->
                             <Dropdown v-model="userDetails.designationId" option-value="designationId" :options="designationMaster" optionLabel="designationName" placeholder="Select Designation"/>
                         </div>
-                        <div id="designation-help" class="fm-info">Enter your designation</div>
                         <div v-if="$v.userDetails.designationId.$error" class="fm-error">
                         {{ $v.userDetails.designationId.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <div class="col-span-6">
+                <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                     <div class="fm-group">
                         <label class="fm-label" for="cadre">Cadre</label>
                         <div class="fm-inner">
                             <!-- <InputText id="cadre" v-model="userDetails.cadreId" /> -->
                             <Dropdown v-model="userDetails.cadreId" option-value="cadreId" :options="cadreMaster" optionLabel="cadreName" placeholder="Select Cadre" />
                         </div>
-                        <div id="cadre-help" class="fm-info">Enter your cadre</div>
                         <div v-if="$v.userDetails.cadreId.$error" class="fm-error">
                         {{ $v.userDetails.cadreId.$errors[0].$message }}
                     </div>
                     </div>
                 </div>
-                <!-- <div class="fm-action"> -->
-                    <div class="col-span-6">
-                        <div class="fm-group">
-                            <Button @click="InsertUserData" label="Submit"></Button>
-                        </div>
-                    </div>
-                    <div class="col-span-6">
-                        <div class="fm-group">
-                            <Button @click="navigateToAddUser" severity="danger" label="Cancel"></Button>
-                        </div>
-                    </div>
+                <div class="fm-action">
+                    <Button @click="InsertUserData" label="Submit"></Button>
+                    <Button @click="navigateToAddUser" severity="danger" label="Cancel"></Button>
                     <!-- <Button @click="changeFlag(0), reloadPage()" severity="danger" label="Cancel"></Button> -->
-                <!-- </div> -->
+                </div>
             </div>
         </div>
     </div>
