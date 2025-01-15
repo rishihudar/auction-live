@@ -72,9 +72,9 @@
           "
         >
           <div class="fm-group">
-            <label class="fm-error" for="">
+            <div class="fm-error text-center">
               Start Date should not be equal or after End Date !
-            </label>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="content-holder-p-0" :class="{ 'sidebar-open': mbidSidebar }">
+  <div class="content-holder-p-0" :class="{ 'aside-open': mbidSidebar }">
     <Toast position="top-center" />
     <!-- Internet Connection Dialog -->
     <Dialog
@@ -697,7 +697,7 @@ onBeforeMount(() => {
 .mbid-main-content {
   transition: margin-left 0.3s ease;
 }
-.content-holder:not(.sidebar-open) {
+.content-holder:not(.aside-open) {
   .mbid-sidebar {
     transform: translate3d(calc(var(--mbid-sidebar-width) * -1), 0, 0);
   }

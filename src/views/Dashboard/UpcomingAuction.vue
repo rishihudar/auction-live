@@ -5,7 +5,7 @@
                 <h2 class="title">Upcoming Auction Details</h2>
             </div>
         </div>
-        <div class="table-custom">
+        <div class="table-custom table-stacked">
             <Paginator class="pagination-up" :rows="perPage" :rowsPerPageOptions="[10, 20, 30]"
                 :totalRecords="totalRows" template="RowsPerPageDropdown" @page="handlePageChange">
                 <template #start>
@@ -16,7 +16,7 @@
                     </div>
                 </template>
             </Paginator>
-            <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines>
+            <DataTable v-model:expandedRows="expandedRows" :value="auctionData" showGridlines responsiveLayout="stack" breakpoint="768px">
                 <template #empty>
                     <div class="box-watermark">
                         No Auctions Found
@@ -37,7 +37,7 @@
                 </Column>
                 <Column field="auctionRegEndDate" header="Processing and EMD Fee Pay End Date/Time">
                 </Column>
-                <Column expander header="Action" style="width: 5rem">
+                <Column expander header="Action" style="width: 5rem" class="td-hide-title td-action">
                     <template #rowtogglericon="">
                         <fa-webhook></fa-webhook>
                         Details
