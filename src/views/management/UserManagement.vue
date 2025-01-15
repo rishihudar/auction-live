@@ -12,7 +12,7 @@
                 </Button>
                 <Button @click="changeFlag(3)" class="btn btn-primary btn-add">
                     <fa-plus></fa-plus>
-                    Add
+                    Add User
                 </Button>
             </div>
         </div>
@@ -112,11 +112,11 @@
         <template v-else-if="flag == 3">
             <div class="card">
                 <div class="card-header">
-                    <div class="ch-title">Add</div>
+                    <div class="ch-title">Add User</div>
                 </div>
                 <Toast/>
                 <div class="form-grid">
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="loginEmail">Username</label>
                             <div class="fm-inner">
@@ -128,7 +128,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="password">Password</label>
                             <div class="fm-inner">
@@ -140,7 +140,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="fullName">Full Name</label>
                             <div class="fm-inner">
@@ -152,7 +152,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="district">District</label>
                             <div class="fm-inner">
@@ -164,7 +164,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="entityName">Entity Name</label>
                             <div class="fm-inner">
@@ -176,15 +176,14 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <!-- <div class="fm-group">
                             <label class="fm-label" for="entityType">Entity Type</label>
                             <div class="fm-inner">
                                 <Dropdown v-model="userDetails.entityType" option-value="entityType" :options="entityTypeMaster" placeholder="Select Entity Type" />
                             </div>
                         </div> -->
-
-                         <div class="fm-group">
+                        <div class="fm-group">
                             <label class="fm-label" for="fullName">organization</label>
                             <div class="fm-inner">
                                 <Dropdown v-model="userDetails.organizationId" option-value="organizationId" :options="organizationMaster" optionLabel="organizationName" placeholder="Select Cadre"/>
@@ -195,7 +194,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="role">Role</label>
                             <div class="fm-inner">
@@ -207,7 +206,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="email">Email ID</label>
                             <div class="fm-inner">
@@ -219,7 +218,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="mobileNumber">Mobile Number</label>
                             <div class="fm-inner">
@@ -231,7 +230,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="branch">Branch/Department</label>
                             <div class="fm-inner">
@@ -245,7 +244,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="designation">Designation</label>
                             <div class="fm-inner">
@@ -258,7 +257,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="cadre">Cadre</label>
                             <div class="fm-inner">
@@ -282,11 +281,11 @@
         <template v-else-if="flag == 4">
             <div class="card">
                 <div class="card-header">
-                    <div class="ch-title">Edit</div>
+                    <div class="ch-title">Edit User</div>
                 </div>
                 <Toast/>
                 <div class="form-grid">
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="loginEmail">Username</label>
                             <div class="fm-inner">
@@ -298,7 +297,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="password">Password</label>
                             <div class="fm-inner">
@@ -310,7 +309,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="fullName">Full Name</label>
                             <div class="fm-inner">
@@ -322,7 +321,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="district">District</label>
                             <div class="fm-inner">
@@ -334,7 +333,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="entityName">Entity Name</label>
                             <div class="fm-inner">
@@ -346,15 +345,14 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <!-- <div class="fm-group">
                             <label class="fm-label" for="entityType">Entity Type</label>
                             <div class="fm-inner">
                                 <Dropdown v-model="userDetails.entityType" option-value="entityType" :options="entityTypeMaster" placeholder="Select Entity Type" />
                             </div>
                         </div> -->
-
-                         <div class="fm-group">
+                        <div class="fm-group">
                             <label class="fm-label" for="fullName">organization</label>
                             <div class="fm-inner">
                                 <Dropdown v-model="userDetails.organizationId" option-value="organizationId" :options="organizationMaster" optionLabel="organizationName" placeholder="Select Cadre"/>
@@ -365,7 +363,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="role">Role</label>
                             <div class="fm-inner">
@@ -377,7 +375,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="email">Email ID</label>
                             <div class="fm-inner">
@@ -389,7 +387,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="mobileNumber">Mobile Number</label>
                             <div class="fm-inner">
@@ -401,7 +399,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="branch">Branch/Department</label>
                             <div class="fm-inner">
@@ -414,7 +412,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="designation">Designation</label>
                             <div class="fm-inner">
@@ -427,7 +425,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="col-span-full md:col-span-6 lg:col-span-4 2xl:col-span-3">
                         <div class="fm-group">
                             <label class="fm-label" for="cadre">Cadre</label>
                             <div class="fm-inner">
@@ -468,6 +466,9 @@ import { storeToRefs } from 'pinia'
 import { useVuelidate } from '@vuelidate/core';
 import { useToast } from "primevue/usetoast";
 import { helpers, required } from '@vuelidate/validators'
+
+import faPenToSquare from "../../../assets/icons/pen-to-square.svg";
+import faPlus from "../../../assets/icons/plus.svg";
 
 const loginStore = login()
 const { loginId } = storeToRefs(loginStore)

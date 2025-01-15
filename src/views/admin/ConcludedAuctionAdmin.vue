@@ -39,7 +39,7 @@
 
         <Column expander field="" header="Report">
           <template #body="{ data }">
-            <div class="btn-wrapper-table">
+            <div class="table-btn-wrapper">
               <Button class="btn-sm" @click="showModal(data.auctionId)">Auction Report</Button>
               <Button severity="secondary" class="btn-sm" @click="showModalForH1(data.auctionId)">H1 Report</Button>
             </div>
