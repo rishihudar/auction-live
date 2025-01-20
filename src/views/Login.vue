@@ -212,7 +212,7 @@ const count = ref([]);
 const $v = useVuelidate(rules, { user });
 
 const isFormValid = computed(() => {
-  console.log("isFormValid", $v.value.$pending);
+ // console.log("isFormValid", $v.value.$pending);
   return (
     $v.value.$pending === false &&
     !($v.value.user.username.$error || $v.value.user.password.$error) &&
@@ -226,7 +226,7 @@ let linkVisible = ref(true);
 function forceLogout(username) {
   linkVisible.value = false; // Hide the link after it's clicked
 
-  console.log("forceLogout username", username);
+ // console.log("forceLogout username", username);
   new MQL()
     .useLoginServer()
     .setActivity("o.[ForceLogout]")
@@ -275,14 +275,14 @@ function authenticate() {
         // }
         if (typeof res === "object" && res !== null) {
           if (res.sessionExists) {
-            console.log("Active session detected. Prompting user to log out.");
+           // console.log("Active session detected. Prompting user to log out.");
             isForceLogout.value = true; // Handle session-related behavior
             // toaster.error("You already have an active session. Please log out first.");
             return;
           }
 
           if (res.passwordExpired) {
-            console.log("Password expired. Prompting user to reset password.");
+           // console.log("Password expired. Prompting user to reset password.");
             isPasswordExpired.value = true; // Add state for password expiration
             // toaster.error("Your password has expired. Please reset it.");
             return;
@@ -301,9 +301,9 @@ function authenticate() {
       .catch((err) => {
         if (err && err.errorCode) {
           // Handle the error based on errorCode
-          console.log(err.errorCode);
+          //console.log(err.errorCode);
         } else {
-          console.error("An error occurred, but errorCode is undefined");
+        //  console.error("An error occurred, but errorCode is undefined");
         }
         //console.log(err);
         if (err.error == "BIDDER_LOGIN") {

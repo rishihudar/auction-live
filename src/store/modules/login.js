@@ -153,7 +153,7 @@ export const login = defineStore("login", {
             let res = rs.getActivity("SessionExist", true);
             if (rs.isValid("SessionExist")) {
               let response = res.result;
-              console.log("Session exists: ", response);
+             // console.log("Session exists: ", response);
             //  resolve(response); // Resolve the promise with the response
               // If session exists is null, resolve to allow login
           if (!response || !response.sessionId) {
@@ -317,7 +317,7 @@ export const login = defineStore("login", {
     },
 
     storeSessionInDatabase(sessionData) {
-      console.log("Storing session in database", sessionData);
+     // console.log("Storing session in database", sessionData);
       return new Promise((resolve, reject) => {
         new MQL()
           .useLoginServer()

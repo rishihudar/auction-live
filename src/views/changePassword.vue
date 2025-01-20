@@ -171,7 +171,7 @@ if (passwordCount === 0) {
   router.push({ path: "/" });
 }
 function UpdatePasswordChangedCount() {
-    console.log("UpdatePasswordChangedCount", loginStore.loginDetails.username);
+  //  console.log("UpdatePasswordChangedCount", loginStore.loginDetails.username);
   new MQL()
     .useLoginServer()
     .setActivity("o.[UpdatePasswordChangedCount]")
@@ -187,7 +187,7 @@ function UpdatePasswordChangedCount() {
 }
 function UpdatePasswordExpiryDate() {
   // Automatically generated
-  console.log("UpdatePasswordExpiryDate", loginStore.loginDetails.username);
+  //console.log("UpdatePasswordExpiryDate", loginStore.loginDetails.username);
   new MQL()
     .useLoginServer()
     .setActivity("o.[UpdatePasswordExpiryDate]")
@@ -214,13 +214,13 @@ const verifyOldPassword = async () => {
     .fetch();
   const res = rs.getActivity("VerifyPassword", true);
   if (rs.isValid("VerifyPassword")) {
-    console.log("Password exist", res.result.entriesPresent);
+  //  console.log("Password exist", res.result.entriesPresent);
     if (res.result.entriesPresent!== 1) {
       passwordExist.value = true;
     } else {
       passwordExist.value = false;
     }
-    console.log("Password exist", passwordExist.value);
+  //  console.log("Password exist", passwordExist.value);
   } else {
     rs.showErrorToast("VerifyPassword");
    
