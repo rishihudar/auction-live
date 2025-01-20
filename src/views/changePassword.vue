@@ -78,7 +78,7 @@
             type="button"
             @click="resetPassword"
             :disabled="
-              password !== confirmPassword || !confirmPassword || !oldPassword
+              password !== confirmPassword || !confirmPassword || !oldPassword|| passwordExist
             "
           >
             Change Password</Button
