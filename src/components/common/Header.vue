@@ -145,7 +145,7 @@ function loadEntityAndOrganization() {
 }
 function forceLogout(){
 
-console.log("forceLogout username",fullname.value );
+//console.log("forceLogout username",fullname.value );
  new MQL()
    .useLoginServer()
    .setActivity("o.[ForceLogout]")

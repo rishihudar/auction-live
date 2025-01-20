@@ -502,7 +502,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/changePassword",
+      path: "/resetPassword",
       name: "changePassword",
       component: loadView("changePassword"),
       meta: {
@@ -1256,11 +1256,11 @@ async function checkSessionExists() {
         }
       } else {
         rs.showErrorToast("SessionExist");
-        console.error("Error checking session existence");
+       // console.error("Error checking session existence");
       }
     })
     .catch(error => {
-      console.error("Error fetching session existence:", error);
+      //console.error("Error fetching session existence:", error);
     });
 }
 

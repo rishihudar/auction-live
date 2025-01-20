@@ -18,15 +18,24 @@
       </div>
       <form class="form-login form-grid">
         <div class="col-span-full" v-if="isForceLogout">
-            <div class="alert alert-danger mb-5" v-if="linkVisible">
-                <div
-                >You are already logged in on another device/tab/browser. You will
-                need to logout the current session.
-                <button class="underline" @click.prevent="forceLogout(user.username)"
-                    >Click here to Logout</button
-                ></div
-                >
+          <div class="alert alert-danger mb-5" v-if="linkVisible">
+            <div>
+              You are already logged in on another device/tab/browser. You will
+              need to logout the current session.
+              <button
+                class="underline"
+                @click.prevent="forceLogout(user.username)"
+              >
+                Click here to Logout
+              </button>
             </div>
+          </div>
+        </div>
+        <div v-if="isPasswordExpired" class="error-message">
+          <span
+            >Your password is expired, please
+            <router-link to="/resetPassword">reset.</router-link>
+          </span>
         </div>
         <div class="col-span-full">
           <div class="fm-group">
@@ -134,8 +143,12 @@
       </form>
       <Footer name="box">
         <template #text>
-            <div>Last updated on <strong>{{ versionDate }}</strong></div>
-            <div class="mb-2">Version: <strong>{{ version }}</strong></div>
+          <div>
+            Last updated on <strong>{{ versionDate }}</strong>
+          </div>
+          <div class="mb-2">
+            Version: <strong>{{ version }}</strong>
+          </div>
         </template>
       </Footer>
       <!-- </div> -->
@@ -168,6 +181,7 @@ import faRotate from "../../assets/icons/rotate.svg";
 import faShieldCheck from "../../assets/icons/shield-check.svg";
 import faUser from "../../assets/icons/user.svg";
 let isForceLogout = ref(false);
+let isPasswordExpired = ref(false);
 let version = ref(__APP_VERSION__);
 let versionDate = ref(__APP_VERSION_DATE__);
 
@@ -198,7 +212,7 @@ const count = ref([]);
 const $v = useVuelidate(rules, { user });
 
 const isFormValid = computed(() => {
-  console.log("isFormValid", $v.value.$pending);
+ // console.log("isFormValid", $v.value.$pending);
   return (
     $v.value.$pending === false &&
     !($v.value.user.username.$error || $v.value.user.password.$error) &&
@@ -212,7 +226,7 @@ let linkVisible = ref(true);
 function forceLogout(username) {
   linkVisible.value = false; // Hide the link after it's clicked
 
-  console.log("forceLogout username", username);
+ // console.log("forceLogout username", username);
   new MQL()
     .useLoginServer()
     .setActivity("o.[ForceLogout]")
@@ -249,29 +263,37 @@ function authenticate() {
         enabled: 1,
       })
       .then(async (res) => {
-        // Check if res is boolean and handle force logout
-        if (typeof res === "boolean") {
-          isForceLogout.value = res; // Update isForceLogout based on login result
+        // // Check if res is boolean and handle force logout
+        // if (typeof res === "boolean") {
+        //   isForceLogout.value = res; // Update isForceLogout based on login result
 
-          if (isForceLogout.value === true) {
-            console.log("isForceLogout", isForceLogout.value);
-            // toaster.error("You have been logged out. Please login again.");
+        //   if (isForceLogout.value === true) {
+        //     console.log("isForceLogout", isForceLogout.value);
+        //     // toaster.error("You have been logged out. Please login again.");
+        //     return;
+        //   }
+        // }
+        if (typeof res === "object" && res !== null) {
+          if (res.sessionExists) {
+           // console.log("Active session detected. Prompting user to log out.");
+            isForceLogout.value = true; // Handle session-related behavior
+            // toaster.error("You already have an active session. Please log out first.");
+            return;
+          }
+
+          if (res.passwordExpired) {
+           // console.log("Password expired. Prompting user to reset password.");
+            isPasswordExpired.value = true; // Add state for password expiration
+            // toaster.error("Your password has expired. Please reset it.");
             return;
           }
         }
-        // isForceLogout.value =res; // Update isForceLogout based on login result
-
-        // if (isForceLogout.value == true) {
-        //   console.log("isForceLogout", isForceLogout.value);
-        //   //toaster.error("You have been logged out. Please login again.");
-        //   return;
-        // }
         let roles = loginStore.roleNames;
 
         toaster.success("Login Successfully");
         const passwordCount = await FetchPasswordCount();
         if (passwordCount == 0) {
-          router.push("/changePassword");
+          router.push("/resetPassword");
         } else {
           router.push("/role-select");
         }
@@ -279,9 +301,9 @@ function authenticate() {
       .catch((err) => {
         if (err && err.errorCode) {
           // Handle the error based on errorCode
-          console.log(err.errorCode);
+          //console.log(err.errorCode);
         } else {
-          console.error("An error occurred, but errorCode is undefined");
+        //  console.error("An error occurred, but errorCode is undefined");
         }
         //console.log(err);
         if (err.error == "BIDDER_LOGIN") {
@@ -311,11 +333,12 @@ function generateCaptcha() {
 }
 
 function FetchPasswordCount() {
+  //console.log("FetchPasswordCount", loginStore.loginDetails.username);
   return new Promise((resolve, reject) => {
     new MQL()
       .useLoginServer()
       .setActivity("o.[FetchPasswordCount]")
-      .setData({ userId: loginStore.loginDetails.loginId })
+      .setData({ userId: loginStore.loginDetails.username })
       .fetch()
       .then((rs) => {
         let res = rs.getActivity("FetchPasswordCount", true);
