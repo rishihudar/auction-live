@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fm-group">
+    <!-- <div class="fm-group">
       <label class="fm-label" for="horizontal-buttons">Number of Hours</label>
       <InputNumber
         v-model="noOfDays"
@@ -15,7 +15,7 @@
       <div v-if="$v.noOfDays.$error" class="fm-error">
         {{ $v.noOfDays.$errors[0].$message }}
       </div>
-    </div>
+    </div> -->
 
     <div class="table-custom">
       <DataTable :value="resultList" dataKey="id" :disabled="disabled">
@@ -25,10 +25,10 @@
           field="highestQuotedValue"
           header="HIGHEST QUOTED VALUE (₹)"
         ></Column>
-        <Column
+        <!-- <Column
           field="firstPayment"
           header="1st payment TO BE PAID (₹)"
-        ></Column>
+        ></Column> -->
         <Column header="ELIGIBLE ?">
           <template #body="rowData" v-if="!disabled">
             <Dropdown
@@ -70,6 +70,17 @@
             <!-- </div> -->
           </template>
         </Column>
+        <Column
+          header="Post Auction Payment Status"
+        >
+        <template #body="row">
+                        <Button
+                            @click="viewPaymentDetails(row.data.roundNumber)"
+                            class="btn-sm"
+                            label="Details"
+                        />
+        </template>
+      </Column>
         <Column header="Bidder Documents" style="width: 5rem">
                     <template #body="row">
                         <Button
@@ -115,6 +126,27 @@
           severity="danger"
           @click="closeModal(true)">
         </Button>
+      </div>
+    </Dialog>
+
+    <Dialog  v-model:visible="paymentListVisible" modal header="Bidder Payment Status" >
+      <div class="table-custom">
+        <DataTable :value="paymentList" showGridlines >
+          <Column field="paymentNumber" header="Payment Number"></Column>
+          <Column header="Payment Amount">
+          
+            <template #body="row">
+              <span :style="{ color: row.data.paymentstatus === 'Transaction Success' ? 'green' : row.data.paymentstatus === 'Cancelled' ? 'red' : 'grey' }">
+                <b>{{ row.data.paymentAmount }}</b>
+              </span>
+            </template>
+          
+          </Column>
+          <Column field="paymentPeriod" header="Payment Period"></Column>
+          <Column field="emiPeriodType" header="Period Type"></Column>
+          <Column field="paymentExpiryDate" header="Payment Expiry Date"></Column>
+          <!-- <Column field="paymentstatus" header="Payment Status"></Column> -->
+        </DataTable>      
       </div>
     </Dialog>
 
@@ -281,17 +313,17 @@ let tick = ref();
 const resultList = reactive([]);
 const selectedRows = ref([]);
 let accepted = ref();
-let noOfDays = ref(98);
-let rules = computed(() => ({
-  noOfDays: {
-    required,
-    numeric,
-    minLength: minLength(1),
-    minValue: minValue(98, 'The minimum value for "Number of Hours" is 98'),
-  },
-}));
+// let noOfDays = ref(98);
+// let rules = computed(() => ({
+//   noOfDays: {
+//     required,
+//     numeric,
+//     minLength: minLength(1),
+//     minValue: minValue(98, 'The minimum value for "Number of Hours" is 98'),
+//   },
+// }));
 const status = ref('');
-const $v = useVuelidate(rules, { noOfDays });
+// const $v = useVuelidate(rules, { noOfDays });
 const isConfirmDisabled = computed(() => {
   return !rejectionReason.value.trim(); // Check if rejectionReason is empty or only whitespace
 });
@@ -412,14 +444,37 @@ const rejectedItems = resultList.filter(item => {
 			}
 			})
 }	
+
+function calculateBidderPaymentConfigurations() {
+  return new Promise((resolve) => {
+					// Automatically generated
+          new MQL()
+          .useManagementServer()
+			.setActivity("r.[CalculateBidderPaymentConfigurations]")
+			.setData({auctionId:auctionId.value,"loginId":loginStore.loginId})
+			.fetch()
+			 .then(rs => {
+			let res = rs.getActivity("CalculateBidderPaymentConfigurations",true)
+			if (rs.isValid("CalculateBidderPaymentConfigurations")) {
+        resolve(true);
+			} else
+			 { 
+			rs.showErrorToast("CalculateBidderPaymentConfigurations")
+			}
+			})
+    });
+			
+}
+
 function UpdateH1BidderDetails() {
+  
 new MQL()
       .useManagementServer()
       .setActivity("r.[UpdateH1BidderDetails]")
       .setData({
         auctionId: auctionId.value,
-        h1ApprovedBidders: resultList,
-        noOfDays: noOfDays.value,
+        loginId:loginStore.loginId,
+        h1ApprovedBidders: resultList
       })
       .fetch()
       .then((rs) => {
@@ -428,6 +483,7 @@ new MQL()
           disabled.value = true;
           toaster.success("Successfully Updated");
           //isSubmitButtonDisabled.value = true;
+          //await calculateBidderPaymentConfigurations();
          sendEmailH1Bidders();
          sendEmailH1BidRejection();
           sendSmsH1Bidders();
@@ -435,6 +491,8 @@ new MQL()
           rs.showErrorToast("UpdateH1BidderDetails");
         }
       });
+
+    
     }
 function validateH1RejectionOtp() {
 					// Automatically generated
@@ -505,10 +563,10 @@ function h1AuctionDetails() {
         // console.log("resultList is **** ", resultList);
 
         if (
-          res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours > 0
+          res.result.fetchH1BidderAuctionDetailsIndentDays[0].approvalDate != null
         ) {
-          noOfDays.value =
-            res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours;
+          // noOfDays.value =
+          //   res.result.fetchH1BidderAuctionDetailsIndentDays[0].indentHours;
           // console.log("indentDays is ", noOfDays.value);
           disabled.value = true;
         } else {
@@ -575,8 +633,8 @@ function submitForm() {
   });
   const rejectionCount = rejectedItems.length;
   // console.log("rejectionCount.value", rejectionCount);
-  const validation = $v.value.$validate();
-  if (!$v.value.$error) {
+  // const validation = $v.value.$validate();
+  // if (!$v.value.$error) {
     // Check if all dropdowns are selected
     const allDropdownsSelected = resultList.every(
       (item) => item.approvalStatusResult
@@ -595,10 +653,10 @@ function submitForm() {
     } else {
       UpdateH1BidderDetails();
     }
-  }
-    else {
-    toaster.error("Invalid Number of Hours");
-  }
+  // }
+  //   else {
+  //   toaster.error("Invalid Number of Hours");
+  // }
 }
 
 function sendRejectionEmailH1Bidders(){
@@ -673,7 +731,8 @@ function sendSmsH1Bidders() {
 
     let documentList=ref([])
     let jointHolderDocument=ref([])
-    let registrationDocuments=ref([])
+    let registrationDocuments=ref([]) 
+    
     function viewDetails(roundNumberParam) {
       // console.log(auctionId.value,roundNumberParam)
       // window.open('https://testcdncs.mkcl.org/2czAobDzoGCmipmIZOtO7LXyOEF/bidderBankDocuments/12/1236/1728973709525_save.png', '_blank');
@@ -790,6 +849,32 @@ fetch(url, requestOptions)
   
 }
 
+let paymentList=ref()
+let paymentListVisible=ref(false)
+function viewPaymentDetails(r) {
+
+  
+					// Automatically generated
+          new MQL()
+          .useManagementServer()
+			.setActivity("r.[FetchBidderEMIPaymentStatus]")
+			.setData({auctionId:auctionId.value,roundNumber:r})
+			.fetch()
+			 .then(async rs => {
+			let res = rs.getActivity("FetchBidderEMIPaymentStatus",true)
+			if (rs.isValid("FetchBidderEMIPaymentStatus")) {
+        paymentList.value = res.result;
+        console.log("paymentList.value is ",paymentList.value)
+			} else
+			 { 
+			rs.showErrorToast("FetchBidderEMIPaymentStatus")
+			}
+			})
+
+      paymentListVisible.value = true;
+			
+
+}
 
 
       
