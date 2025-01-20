@@ -333,11 +333,12 @@ function generateCaptcha() {
 }
 
 function FetchPasswordCount() {
+  //console.log("FetchPasswordCount", loginStore.loginDetails.username);
   return new Promise((resolve, reject) => {
     new MQL()
       .useLoginServer()
       .setActivity("o.[FetchPasswordCount]")
-      .setData({ userId: loginStore.loginDetails.loginId })
+      .setData({ userId: loginStore.loginDetails.username })
       .fetch()
       .then((rs) => {
         let res = rs.getActivity("FetchPasswordCount", true);
