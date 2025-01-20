@@ -502,7 +502,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/changePassword",
+      path: "/resetPassword",
       name: "changePassword",
       component: loadView("changePassword"),
       meta: {

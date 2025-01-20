@@ -2,6 +2,7 @@ import router from "../../router";
 import { defineStore } from "pinia";
 import MQL from "@/plugins/mql.js";
 import axios from "axios";
+import moment from "moment/moment.js";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 import { getActivePinia } from "pinia"
@@ -78,6 +79,68 @@ export const login = defineStore("login", {
           });
       });
     },
+        // Fetch password expiry date
+        passwordExpiryDate(payload) {
+          return new Promise((resolve, reject) => {
+            // console.log("Fetching password expiry date...",  payload.userId );
+            new MQL()
+              .useLoginServer()
+              .setActivity("o.[FetchPasswordExpiryFromCustomParam]")
+              .setData({ userId: payload.userId })
+              .fetch()
+              .then((rs) => {
+                let res = rs.getActivity("FetchPasswordExpiryFromCustomParam", true);
+                if (rs.isValid("FetchPasswordExpiryFromCustomParam")) {
+                  //console.log("Password Expiry result", res.result.fetchChangePaawordTime.passwordExpiryDate);
+                  this.passwordExpiry = res.result.fetchChangePaawordTime.passwordExpiryDate;
+                  //console.log("Password expiry date: ", this.passwordExpiry);
+    
+                  // Compare password expiry with current date
+                  this.serverDateAndTime().then((currentDate) => {
+                    const expiryDate = moment(this.passwordExpiry);
+                    const current = moment(currentDate);
+                    //console.log("expiryDate", expiryDate);
+                    // Check if password is expired
+                    if (expiryDate.isSameOrBefore(current)) {
+                      //console.log("expiryDate.isSameOrBefore(current)");
+                      resolve(true); // Password expired
+                    } else {
+                     // console.log("Password is still valid.");
+                      resolve(false); // Password not expired
+                    }
+                  }).catch((error) => {
+                    reject("Error fetching current date and time: " + error);
+                  });
+    
+                } else {
+                  rs.showErrorToast("FetchPasswordExpiryFromCustomParam");
+                  reject("Error fetching password expiry date");
+                }
+              });
+          });
+        },
+    
+        // Fetch current server date and time
+        serverDateAndTime() {
+          return new Promise((resolve, reject) => {
+            new MQL()
+              .useCoreServer()
+              .setActivity("o.[GetCurrentDateAndTimeFromServer]")
+              .setData({})
+              .fetch()
+              .then((rs) => {
+                let res = rs.getActivity("GetCurrentDateAndTimeFromServer", true);
+                if (rs.isValid("GetCurrentDateAndTimeFromServer")) {
+                  this.currentDate = res.result.currentDateTime;
+                 // console.log("Current date and time: ", this.currentDate);
+                  resolve(this.currentDate);
+                } else {
+                  rs.showErrorToast("GetCurrentDateAndTimeFromServer");
+                  reject("Error fetching server date and time");
+                }
+              });
+          });
+        },
     checkSessionExists(payload) {
       return new Promise((resolve, reject) => {
         // API call to check if a session exists for the user
@@ -113,6 +176,7 @@ export const login = defineStore("login", {
         // Check if a session already exists for the user 
         this.checkSessionExists({ userId: user.userName }).then((sessionExists) => {
         // //console.log('login.js',user)
+        this.passwordExpiryDate({ userId: user.userName }).then((passwordExpired) => {
         new MQL()
           .useLoginServer()
           .setActivity("o.[UserLogin]")
@@ -138,9 +202,16 @@ export const login = defineStore("login", {
               }
               if (sessionExists) {
                 // toaster.error("You already have an active session. Please log out first.");
-                 resolve(sessionExists);
-                 return; // Stop further execution if session exists
-               }
+                //console.log("You already have an active session. Please log out first.");
+                resolve({ "sessionExists": true }); // Session exists, return early
+
+                return; // Stop further execution if session exists
+              } if (passwordExpired) {
+                this.SET_LOGIN_USER_DETAILS({ ...this.loginDetails, username: user.userName });
+                //console.log("Password has expired. Please change your password.");
+                resolve({ "passwordExpired": true }); // Password expired, return early
+                return;
+              }
                else{
                 let token = rs.getHeaders().authorization;
                 //console.log("token", token);
@@ -173,6 +244,7 @@ export const login = defineStore("login", {
             }
           });
         });
+      });
       });
     },
           
