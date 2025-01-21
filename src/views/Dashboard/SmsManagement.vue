@@ -4,15 +4,23 @@
             <div class="ph-text">
                 <h2 class="title">SMS Management</h2>
             </div>
+            <div class="ph-action">
+                <Button @click="saveChanges">
+                    <fa-floppy-disk></fa-floppy-disk>
+                    Save
+                </Button>
+            </div>
         </div>
 
         <!-- Wrapper for the entire table with custom styles -->
-        <div class="table-custom">
+        <div class="table-custom table-stacked">
             <!-- Data table for displaying SMS details -->
             <DataTable
                 v-model:expandedRows="expandedRows"
                 :value="smsDetails"
                 sortMode="multiple"
+                responsiveLayout="stack"
+                breakpoint="768px"
             >
                 <!-- Display message when no data is available -->
                 <template #empty>
@@ -24,34 +32,31 @@
                 <Column field="SMSType" header="SMS Type" sortable></Column>
                 <Column field="Body" header="Body" sortable></Column>
                 <Column field="vsTemplateId" header="Template Id" sortable></Column>
-                <Column field="bActive" header="SMS Status" sortable>
+                <Column field="bActive" header="SMS Status" sortable class="td-hide-title md:text-center">
                     <template #body="slotProps">
                         <ToggleButton 
                             v-model="slotProps.data.bActive" 
-                            class="w-6rem" 
                             onLabel="Active" 
                             offLabel="Inactive" 
                             :onValue="1" 
                             :offValue="0" 
+                            class="w-24"
                         />
                     </template>
                 </Column>
-                <Column field="bEnabled" header="SMS ON/OFF" sortable>
+                <Column field="bEnabled" header="SMS ON/OFF" sortable class="td-hide-title md:text-center">
                     <template #body="slotProps">
                         <ToggleButton 
                             v-model="slotProps.data.bEnabled" 
-                            class="w-8rem" 
+                            class="w-16" 
                             onLabel="On" 
                             offLabel="Off" 
                             :onValue="1" 
-                            :offValue="0" 
+                            :offValue="0"
                         />
                     </template>
                 </Column>
             </DataTable>
-            <div class="card flex justify-content-center">
-                <Button label="Save" @click="saveChanges" />
-            </div>
         </div>
     </div>
 </template>
@@ -64,6 +69,9 @@ import Column from "primevue/column"; // PrimeVue Column component
 import ToggleButton from 'primevue/togglebutton';
 import toast from "../../../assets/presets/alive/toast";
 import { createToaster } from "@meforma/vue-toaster";
+
+import faFloppyDisk from "../../../assets/icons/floppy-disk.svg"
+
 const toaster = createToaster({ position: "top-right", duration: 3000 });
 const smsDetails = ref([]); // Data to be displayed in the table
 const expandedRows = ref([]); // Expanded rows for the DataTable

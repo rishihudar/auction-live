@@ -1,0 +1,16 @@
+.box-togglebutton {@apply relative p-1 inline-flex align-bottom rounded-md bg-slate-100 cursor-pointer select-none;
+    .tb-button {@apply py-1.5 px-4 w-full flex gap-1 items-center justify-center rounded-md transition-all duration-200;
+        &-active {@apply bg-primary-400 text-white;}
+        &-inactive {@apply bg-rose-500 text-white;}
+
+        // &-invalid {@apply bg-white text-slate-600;}
+    }
+    .tb-input {
+        &:hover {
+            + .tb-button {
+                &-active {@apply bg-primary-600;}
+                &-inactive {@apply bg-rose-600;}
+            }
+        }
+    }
+}
