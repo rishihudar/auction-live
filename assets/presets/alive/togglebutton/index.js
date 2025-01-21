@@ -1,58 +1,62 @@
 export default {
     root: {
         class: [
-            'relative',
+            'box-togglebutton',
+            // 'relative',
 
             // Alignment
-            'inline-flex',
-            'align-bottom',
+            // 'inline-flex',
+            // 'align-bottom',
 
             // Misc
-            'cursor-pointer',
-            'select-none'
+            // 'cursor-pointer',
+            // 'select-none'
         ]
     },
     box: ({ props }) => ({
         class: [
+            'tb-button',
             // Alignments
-            'items-center inline-flex flex-1 text-center align-bottom justify-center',
+            // 'items-center inline-flex flex-1 text-center align-bottom justify-center',
 
             // Sizes & Spacing
-            'px-4 py-3 leading-none',
+            // 'px-4 py-3 leading-none',
 
             // Shapes
-            'rounded-md border',
+            // 'rounded-md border',
 
             // Colors
             {
-                'bg-surface-0 dark:bg-surface-900 ': !props.modelValue,
-                'border-surface-200 dark:border-surface-700 ': !props.modelValue && !props.invalid,
-                'text-surface-700 dark:text-white/80': !props.modelValue,
-                'bg-primary-500 dark:bg-primary-400 border-primary-500 dark:border-primary-400 text-white dark:text-surface-900': props.modelValue
+                'tb-button-inactive': !props.modelValue,
+                'tb-button-invalid border-surface-200 ': !props.modelValue && !props.invalid,
+                // 'text-surface-700': !props.modelValue,
+                'tb-button-active': props.modelValue
             },
 
             // Invalid State
-            { 'border-red-500 dark:border-red-400': props.invalid },
+            { 'tb-button-invalid': props.invalid },
 
             // States
             {
-                'peer-hover:bg-surface-50 dark:peer-hover:bg-surface-800/80 peer-hover:border-surface-200 dark:peer-hover:bg-surface-700 peer-hover:text-surface-700 dark:peer-hover:text-white/80': !props.modelValue && !props.invalid,
-                'peer-hover:bg-primary-600 peer-hover:border-primary-600 dark:peer-hover:bg-primary-300 dark:peer-hover:border-primary-300': props.modelValue,
-                'peer-focus-visible:ring peer-focus-visible:ring-primary-400/50 dark:peer-focus-visible:ring-primary-300/50': !props.disabled
+                // 'peer-hover:bg-surface-50 peer-hover:border-surface-200 peer-hover:text-surface-700': !props.modelValue && !props.invalid,
+                // 'peer-hover:bg-primary-600 peer-hover:border-primary-600': props.modelValue,
+                // 'peer-focus-visible:ring peer-focus-visible:ring-primary-400/50': !props.disabled
             },
 
             // Transitions
-            'transition-all duration-200',
+            // 'transition-all duration-200',
 
             // Misc
             { 'cursor-pointer': !props.disabled, 'opacity-60 select-none pointer-events-none cursor-default': props.disabled }
         ]
     }),
     label: {
-        class: 'font-bold text-center w-full'
+        class: 'tb-label'
+        // class: 'font-semibold text-center w-full'
     },
     input: {
         class: [
+            'tb-input',
             'peer',
 
             // Size
@@ -81,6 +85,7 @@ export default {
     },
     icon: ({ props }) => ({
         class: [
+            ' tb-icon',
             ' mr-2',
             {
                 'text-surface-600 dark:text-white/70': !props.modelValue,
