@@ -1248,7 +1248,7 @@ async function checkSessionExists() {
         // console.log("Response token: ", response.length);
         // console.log("Session token: ", sessionStorage.getItem("user-token").length);
         // Check if the response does not matches the session token
-        if (response!=null && response !="" && response != sessionStorage.getItem("user-token")) {
+        if (response!=null && response !="" && !sessionStorage.getItem("userToken") && sessionStorage.getItem("userToken") !="" && response != sessionStorage.getItem("user-token")) {
           // Redirect to login page if match found
 
           toaster.error("This session has expired as it is active on another device/tab/browser.");
