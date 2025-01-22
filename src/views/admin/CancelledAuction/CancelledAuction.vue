@@ -24,6 +24,7 @@
                         No Auctions Found
                     </div>
                 </template>
+                <!-- {{ auctionBidderDetails.length==0 }} -->
                 <Column field="entityName" header="Entity Name"> </Column>
                 <Column field="auctionCode" header="Auction Code"> </Column>
                 <!-- <Column header="Auction Category - Auction Description"> -->
@@ -107,6 +108,7 @@ const loginStore = login();
 
 const toaster = createToaster({ position: "top-right", duration: 5000 });
 const auctionData = ref([]);
+const auctionId = ref();
 const expandedRows = ref([]);
 
 const auction = ref([])
@@ -148,6 +150,12 @@ toaster.error("Refund could not be Initiated Please try again after some time");
 
 async function startRefund(val) {
    // console.log("Start Refund called with:", val);
+   console.log("fetchAuctionBidderDetails(val) is ",fetchAuctionBidderDetails(val))
+   if(auctionBidderDetails) {
+    alert("No Bidders found for this Auction")
+    return
+   }
+
 confirm.require({
     message: 'Are you sure you want to proceed?',
     header: 'Confirmation',
@@ -228,6 +236,7 @@ function fetchCancelledAuctions() {
             let res = rs.getActivity("FetchCancelledAuctionDetails", true)
             if (rs.isValid("FetchCancelledAuctionDetails")) {
                 auctionData.value = res.result.auctionDetails;
+                auctionId.value = res.result.auctionDetails.auctionId;
                 totalRows.value = res.result.rowCount.totalRows;
                 //console.log("auctionDetails.value.length", auctionData.value.length);
                 for (var i = 0; i < auctionData.value.length; i++) {
@@ -240,10 +249,33 @@ function fetchCancelledAuctions() {
         })
 
 };
+const auctionBidderDetails = ref([]);
 
+function fetchAuctionBidderDetails(args) {
+    console.log("fetchAuctionBidderDetails called")
+    new MQL()
+        .useManagementServer()
+        .setActivity("o.[FetchCancelledAuctionBidderDetails]")
+        .setData({
+            
+        auctionId: args
+    })
+        .fetch()
+        .then(rs => {
+            let res = rs.getActivity("FetchCancelledAuctionBidderDetails", true);
+            if (rs.isValid("FetchCancelledAuctionBidderDetails")) {
+                 auctionBidderDetails.value = res.result.length;
+                // console.log("auctionBidderDetails.value",auctionBidderDetails.value)
+                return auctionBidderDetails;
+            } else {
+                rs.showErrorToast("FetchCancelledAuctionBidderDetails");
+            }
+        });
+}
 onMounted(() => {
     //upcomingAuctionFlag.value=true
     ////console.log("upcomingAuctionFlag",upcomingAuctionFlag.value)
     fetchCancelledAuctions();
+    fetchAuctionBidderDetails();
 });
 </script>
