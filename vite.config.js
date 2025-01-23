@@ -52,6 +52,7 @@ export default defineConfig({
     sourcemap: true,
   },
   server: {
+    host: '0.0.0.0', // Ensure the server listens on all network interfaces
     port: 8080,
     proxy: {
       "/core-server": {
@@ -63,19 +64,14 @@ export default defineConfig({
       },
       "/cdn-server": {
         target: "https://testcdncs.mkcl.org",
-        // target: "http://localhost:8082",
         ws: true,
         secure: false,
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/cdn-server/, ""),
       },
-
       '/ups-server/o/': {
         target: 'http://localhost:5000/o/',
         changeOrigin: true,
-        // pathRewrite: {
-        //   '^/ups-server/o/': ''
-        // },
         rewrite: (p) => p.replace(/^\/ups-server\/o/, "")
       },
       "/login-server": {
@@ -99,26 +95,26 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/management-server/, ""),
       },
-      "/bidding-server-ws":{
-        target:"ws://localhost:4700/",
+      "/bidding-server-ws": {
+        target: "ws://localhost:4700/",
         ws: true,
-        secure:false,
+        secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/bidding-server-ws/,"")
+        rewrite: (p) => p.replace(/^\/bidding-server-ws/, "")
       },
-      "/bidding-server-http":{
-        target:"http://localhost:4700/",
+      "/bidding-server-http": {
+        target: "http://localhost:4700/",
         ws: true,
-        secure:false,
+        secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/bidding-server-http/,"")
+        rewrite: (p) => p.replace(/^\/bidding-server-http/, "")
       },
-      "/upload-server":{
-        target:"http://localhost:8001/",
+      "/upload-server": {
+        target: "http://localhost:8001/",
         ws: true,
-        secure:false,
+        secure: false,
         changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/upload-server/,"")
+        rewrite: (p) => p.replace(/^\/upload-server/, "")
       },
       "/notification-server": {
         target: "https://cs.mkcl.org/2hAwmxyTGxs6k0bMgWdECSJUoit",
@@ -130,12 +126,8 @@ export default defineConfig({
       '/refundsettlement-server': {
         target: 'http://localhost:6002/',
         changeOrigin: true,
-        // pathRewrite: {
-        //   '^/ups-server/o/': ''
-        // },
         rewrite: (p) => p.replace(/^\/refundsettlement-server/, "")
       }
-      
     },
   },
 });
