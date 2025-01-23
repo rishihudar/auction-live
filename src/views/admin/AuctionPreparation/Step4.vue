@@ -169,7 +169,7 @@ import moment from "moment";
 import Calendar from "primevue/calendar";
 import FileUpload from "primevue/fileupload";
 import Button from "primevue/button";
-import MQLCdn from "@/plugins/MQLCdn.js";
+import MQLCdn from "@/plugins/mqlCdn.js";
 import MQL from "@/plugins/mql.js";
 import { fetchAuctionStatus } from "../../../plugins/helpers";
 import { useRouter } from "vue-router";
