@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "update-version-date": "node scripts/update-version-date.cjs",
-    "serve": "npm run update-version-date && vite",
+    "serve": "npm run update-version-date && vite --host",
     "build": "npm run update-version-date && vite build",
     "geni18n": "gulp geni18n"
   },
