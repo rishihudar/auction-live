@@ -1,10 +1,10 @@
-# Use Node.js 16 slim as the base image
-FROM node:16-slim
+# Use a Node.js base image
+FROM node:16
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json (if they exist)
 COPY package*.json ./
 
 # Install dependencies
@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the Vue.js app
-RUN npm run build
+# Expose the port your app is running on (default for Vite is 5173)
+EXPOSE 5173
 
-# Expose port 8080 (or the port your Vue app listens on)
-EXPOSE 8080
-
-# Run the Vue.js app (using vue-cli-service)
+# Define the start command (use npm run serve for Vite)
 CMD ["npm", "run", "serve"]
