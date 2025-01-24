@@ -5,10 +5,9 @@ import svgLoader from 'vite-svg-loader';
 import path from "path";
 import packageInfo from './package.json';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  publicDir: process.env.NODE_ENV = "/auction/",
-  base: process.env.NODE_ENV ="/auction/",
+  publicDir: "/auction/",
+  base: "/auction/",
 
   define: {
     __APP_VERSION__: JSON.stringify(packageInfo.version),
@@ -20,39 +19,24 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
-  chainWebpack: (config) => {
-    config.plugins.delete("prefetch");
-  },
-  pluginOptions: {
-    webpackBundleAnalyzer: {
-      analyzerMode: "disabled",
-    },
-  },
+
   plugins: [vue(), vitePluginCompression(), svgLoader()],
+
   build: {
     assetsInlineLimit: 0,
     minify: "terser",
     terserOptions: {
-      ecma: undefined,
-      warnings: false,
-      parse: {},
       compress: {},
       mangle: true,
-      module: false,
       output: {
         comments: false,
       },
-      toplevel: false,
-      nameCache: null,
-      ie8: false,
-      keep_classnames: undefined,
-      keep_fnames: false,
-      safari10: false,
     },
     sourcemap: true,
   },
+
   server: {
-    host: '0.0.0.0', // Ensure the server listens on all network interfaces
+    host: '0.0.0.0', // Listen on all interfaces
     port: 8080,
     proxy: {
       "/core-server": {
