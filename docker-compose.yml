@@ -5,7 +5,7 @@ services:
     build: .
     container_name: auctionlive-cont
     ports:
-      - "8080:8080"  # Exposes container's 8080 port to host's 8080 port
+      - "8090:8090"  # Exposes container's 8090 port to host's 8080 port
     environment:
       - NODE_ENV=production
     networks:
