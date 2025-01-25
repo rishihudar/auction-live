@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port that the app will run on (default port for Vite is 8080)
-EXPOSE 8080
+EXPOSE 8090
 
 # Run the application using npm run serve with --host to expose it on all network interfaces
 CMD ["npm", "run", "serve", "--", "--host", "0.0.0.0"]
