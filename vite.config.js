@@ -37,7 +37,7 @@ export default defineConfig({
 
   server: {
     host: '0.0.0.0', // Listen on all interfaces
-    port: 8080,
+    port: 8090,
     proxy: {
       "/core-server": {
         target: "https://cs.mkcl.org/2ZnbEg2SCTvOZwAFylfCVFdMOlz",
