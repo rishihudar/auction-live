@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: zomato
+  name: auction-live
   labels:
-    app: zomato
+    app: auction-live
 spec:
   type: NodePort
   ports:
@@ -11,4 +11,4 @@ spec:
     targetPort: 8090
     nodePort: 30001
   selector:
-    app: zomato
+    app: auction-live
